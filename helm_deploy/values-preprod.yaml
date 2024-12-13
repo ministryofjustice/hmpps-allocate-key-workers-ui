@@ -5,10 +5,10 @@ generic-service:
   replicaCount: 2
 
   ingress:
-    host: allocate-key-workers-ui-preprod.hmpps.service.justice.gov.uk
+    host: allocate-key-workers-preprod.hmpps.service.justice.gov.uk
 
   env:
-    INGRESS_URL: "https://allocate-key-workers-ui-preprod.hmpps.service.justice.gov.uk"
+    INGRESS_URL: "https://allocate-key-workers-preprod.hmpps.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in-preprod.hmpps.service.justice.gov.uk/auth"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-preprod.prison.service.justice.gov.uk"
     ENVIRONMENT_NAME: PRE-PRODUCTION
