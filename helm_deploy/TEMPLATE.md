@@ -1,4 +1,4 @@
-# hmpps-template-typescript
+# hmpps-allocate-key-workers-ui
 
 [![repo standards badge](https://img.shields.io/badge/endpoint.svg?&style=flat&logo=github&url=https%3A%2F%2Foperations-engineering-reports.cloud-platform.service.justice.gov.uk%2Fapi%2Fv1%2Fcompliant_public_repositories%2Fhmpps-template-kotlin)](https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/public-report/hmpps-template-kotlin "Link to report")
 [![Docker Repository on ghcr](https://img.shields.io/badge/ghcr.io-repository-2496ED.svg?logo=docker)](https://ghcr.io/ministryofjustice/hmpps-template-kotlin)
@@ -16,7 +16,7 @@ within GitHub.
 This project is community managed by the mojdt `#typescript` slack channel.
 Please raise any questions or queries there. Contributions welcome!
 
-Our security policy is located [here](https://github.com/ministryofjustice/hmpps-template-typescript/security/policy).
+Our security policy is located [here](https://github.com/ministryofjustice/hmpps-allocate-key-workers-ui/security/policy).
 
 ## Creating a Cloud Platform namespace
 

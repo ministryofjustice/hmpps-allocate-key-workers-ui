@@ -1,8 +1,8 @@
 {
-  "name": "hmpps-template-typescript",
+  "name": "hmpps-allocate-key-workers-ui",
   "version": "0.0.1",
-  "description": "HMPPS Typescript Template",
-  "repository": "git@github.com:ministryofjustice/hmpps-template-typescript.git",
+  "description": "HMPPS Allocate Key Workers Ui",
+  "repository": "git@github.com:ministryofjustice/hmpps-allocate-key-workers-ui.git",
   "license": "MIT",
   "scripts": {
     "prepare": "husky",
