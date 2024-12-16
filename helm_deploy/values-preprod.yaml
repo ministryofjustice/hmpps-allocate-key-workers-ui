@@ -2,8 +2,6 @@
 # Per environment values which override defaults in hmpps-allocate-key-workers-ui/values.yaml
 
 generic-service:
-  replicaCount: 2
-
   ingress:
     host: allocate-key-workers-preprod.hmpps.service.justice.gov.uk
 
