@@ -1,7 +1,5 @@
 import express from 'express'
 
-import createError from 'http-errors'
-
 import nunjucksSetup from './utils/nunjucksSetup'
 import errorHandler from './errorHandler'
 import { appInsightsMiddleware } from './utils/azureAppInsights'
@@ -37,10 +35,14 @@ export default function createApp(services: Services): express.Application {
   app.use(authorisationMiddleware())
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
+  app.use((_req, res, next) => {
+    res.notFound = () => res.status(404).render('pages/not-found')
+    next()
+  })
 
   app.use(routes(services))
 
-  app.use((req, res, next) => next(createError(404, 'Not found')))
+  app.use((_req, res) => res.notFound())
   app.use(errorHandler(process.env.NODE_ENV === 'production'))
 
   return app

@@ -1,3 +1,4 @@
+import { CsrfTokenGenerator } from 'csrf-sync'
 import { HmppsUser } from '../../interfaces/hmppsUser'
 
 export declare module 'express-session' {
@@ -22,8 +23,22 @@ export declare global {
       logout(done: (err: unknown) => void): void
     }
 
+    interface Response {
+      notFound(): void
+    }
+
     interface Locals {
+      cspNonce: string
+      csrfToken: ReturnType<CsrfTokenGenerator>
       user: HmppsUser
+      digitalPrisonServicesUrl: string
+      breadcrumbs: Breadcrumbs
+      prisoner?: PrisonerSummary
+      buildNumber?: string
+      asset_path: string
+      applicationName: string
+      environmentName: string
+      environmentNameColour: string
     }
   }
 }
