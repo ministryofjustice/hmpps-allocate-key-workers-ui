@@ -1,3 +1,5 @@
+import { expect } from 'chai'
+
 context('Healthcheck', () => {
   context('All healthy', () => {
     beforeEach(() => {

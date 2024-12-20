@@ -6,15 +6,35 @@
     "sourceMap": true,
     "skipLibCheck": true,
     "noEmit": false,
-    "allowJs": false,
-    "strict": false,
+    "lib": ["dom", "es2015.promise", "DOM.Iterable", "ESNext"],
+    "types": ["cypress", "express", "express-session", "@testing-library/cypress"],
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
     "experimentalDecorators": true,
-    "typeRoots": ["./server/@types", "./node_modules/@types"]
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "inlineSources": true,
+    // This improves issue grouping in Sentry.
+    "sourceRoot": "/"
   },
-  "exclude": ["node_modules", "assets/**/*.js", "integration_tests", "dist", "cypress.config.ts", "esbuild", "eslint.config.mjs"],
+  "exclude": [
+    "node_modules",
+    "assets/**/*.js",
+    "dist",
+    "cypress.config.ts",
+    "coverage",
+    "codecov_reports",
+    "esbuild",
+    "server/@types/csip/index.d.ts",
+    "test_results"
+  ],
   "include": ["**/*.js", "**/*.ts"]
 }

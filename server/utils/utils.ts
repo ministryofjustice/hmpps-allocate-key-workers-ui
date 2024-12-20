@@ -1,5 +1,5 @@
 const properCase = (word: string): string =>
-  word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
+  word.length >= 1 && word[0] ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
 
 const isBlank = (str: string): boolean => !str || /^\s*$/.test(str)
 
@@ -11,13 +11,20 @@ const isBlank = (str: string): boolean => !str || /^\s*$/.test(str)
  */
 const properCaseName = (name: string): string => (isBlank(name) ? '' : name.split('-').map(properCase).join('-'))
 
-export const convertToTitleCase = (sentence: string): string =>
-  isBlank(sentence) ? '' : sentence.split(' ').map(properCaseName).join(' ')
+export const convertToTitleCase = (sentence: string | null | undefined): string =>
+  !sentence || isBlank(sentence) ? '' : sentence.split(' ').map(properCaseName).join(' ')
 
-export const initialiseName = (fullName?: string): string | null => {
+export const initialiseName = (fullName: string | undefined | null): string | null => {
   // this check is for the authError page
   if (!fullName) return null
 
   const array = fullName.split(' ')
-  return `${array[0][0]}. ${array.reverse()[0]}`
+  if (array.length < 1) {
+    return null
+  }
+  const firstName = array[0]
+  if (!firstName) {
+    return null
+  }
+  return `${firstName[0]}. ${array.reverse()[0]}`
 }
