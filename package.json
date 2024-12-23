@@ -70,6 +70,8 @@
     "@aws-sdk/client-sqs": "^3.714.0",
     "@ministryofjustice/frontend": "^3.2.1",
     "@ministryofjustice/hmpps-monitoring": "^0.0.1-beta.2",
+    "@sentry/cli": "^2.39.1",
+    "@sentry/node": "^8.47.0",
     "agentkeepalive": "^4.5.0",
     "applicationinsights": "^2.9.6",
     "body-parser": "^1.20.3",

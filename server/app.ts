@@ -1,9 +1,11 @@
 import express from 'express'
+import { setupExpressErrorHandler } from '@sentry/node'
 
 import nunjucksSetup from './utils/nunjucksSetup'
 import errorHandler from './errorHandler'
 import { appInsightsMiddleware } from './utils/azureAppInsights'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
+import sentryMiddleware from './middleware/sentryMiddleware'
 
 import setUpAuthentication from './middleware/setUpAuthentication'
 import setUpCsrf from './middleware/setUpCsrf'
@@ -14,6 +16,8 @@ import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import setUpWebSecurity from './middleware/setUpWebSecurity'
 import setUpWebSession from './middleware/setUpWebSession'
 
+import './sentry'
+import config from './config'
 import routes from './routes'
 import type { Services } from './services'
 
@@ -24,6 +28,7 @@ export default function createApp(services: Services): express.Application {
   app.set('trust proxy', true)
   app.set('port', process.env.PORT || 3000)
 
+  app.use(sentryMiddleware())
   app.use(appInsightsMiddleware())
   app.use(setUpHealthChecks(services.applicationInfo))
   app.use(setUpWebSecurity())
@@ -42,6 +47,7 @@ export default function createApp(services: Services): express.Application {
 
   app.use(routes(services))
 
+  if (config.sentry.dsn) setupExpressErrorHandler(app)
   app.use((_req, res) => res.notFound())
   app.use(errorHandler(process.env.NODE_ENV === 'production'))
 
