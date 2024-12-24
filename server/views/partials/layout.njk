@@ -1,16 +1,35 @@
 {% extends "govuk/template.njk" %}
+{% from "partials/miniProfile/macro.njk" import miniProfile %}
 
 {% block head %}
   <link href="{{ '/assets/css/app.css' | assetMap }}" rel="stylesheet"/>
+
+  {% for js in feComponents.jsIncludes %}
+    <script src="{{ js }}" nonce="{{ cspNonce }}"></script>
+  {% endfor %}
+
+  {% for css in feComponents.cssIncludes %}
+    <link href="{{ css }}" nonce="{{ cspNonce }}" rel="stylesheet" />
+  {% endfor %}
 {% endblock %}
 
 {% block pageTitle %}{{pageTitle | default(applicationName)}}{% endblock %}
 
 {% block header %}
-  {% include "./header.njk" %}
+  {{ feComponents.header | safe }}
+{% endblock %}
+
+{% block beforeContent %}
+  {% if prisoner %}
+    {{ miniProfile(prisoner, '/prisoner-image/' + prisoner.prisonerNumber, prisonerProfileUrl + '/prisoner/' + prisoner.prisonerNumber) }}
+  {% endif %}
 {% endblock %}
 
 {% block bodyStart %}
+{% endblock %}
+
+{% block footer %}
+  {{ feComponents.footer | safe }}
 {% endblock %}
 
 {% block bodyEnd %}
