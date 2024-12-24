@@ -11,6 +11,7 @@ generic-service:
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
     ENVIRONMENT_NAME: DEV
     AUDIT_ENABLED: "false"
+    SENTRY_ENVIRONMENT: DEV
 
 generic-prometheus-alerts:
   alertSeverity: move-and-improve-alerts-non-prod

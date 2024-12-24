@@ -11,6 +11,7 @@ generic-service:
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-preprod.prison.service.justice.gov.uk"
     ENVIRONMENT_NAME: PRE-PRODUCTION
     AUDIT_ENABLED: "false"
+    SENTRY_ENVIRONMENT: PRE-PRODUCTION
 
 generic-prometheus-alerts:
   alertSeverity: move-and-improve-alerts-non-prod
