@@ -2,7 +2,10 @@ import express from 'express'
 import * as Sentry from '@sentry/node'
 import './sentry'
 import config from './config'
+import dpsComponents from '@ministryofjustice/hmpps-connect-dps-components'
+
 import nunjucksSetup from './utils/nunjucksSetup'
+import logger from '../logger'
 import errorHandler from './errorHandler'
 import { appInsightsMiddleware } from './utils/azureAppInsights'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
@@ -39,6 +42,18 @@ export default function createApp(services: Services): express.Application {
   app.use(authorisationMiddleware())
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
+  app.get(
+    '*',
+    dpsComponents.getPageComponents({
+      logger,
+      includeMeta: true,
+      dpsUrl: config.serviceUrls.digitalPrison,
+      timeoutOptions: {
+        response: config.apis.componentApi.timeout.response,
+        deadline: config.apis.componentApi.timeout.deadline,
+      },
+    }),
+  )
   app.use((_req, res, next) => {
     res.notFound = () => res.status(404).render('pages/not-found')
     next()
