@@ -120,7 +120,7 @@
     "audit-ci": "^7.1.0",
     "aws-sdk-client-mock": "^4.1.0",
     "chai": "^5.1.2",
-    "chokidar": "^3.6.0",
+    "chokidar": "^4.0.3",
     "concurrently": "^9.1.2",
     "cypress": "^13.17.0",
     "cypress-multi-reporters": "^2.0.4",
