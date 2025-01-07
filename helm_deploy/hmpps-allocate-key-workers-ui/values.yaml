@@ -51,6 +51,9 @@ generic-service:
       REDIS_AUTH_TOKEN: 'auth_token'
     application-insights:
       APPLICATIONINSIGHTS_CONNECTION_STRING: "APPLICATIONINSIGHTS_CONNECTION_STRING"
+    hmpps-allocate-key-workers-sentry:
+      SENTRY_DSN: "SENTRY_DSN"
+      SENTRY_LOADER_SCRIPT_ID: "SENTRY_LOADER_SCRIPT_ID"
     # This secret will need to be created in your namespace (note it isn't in hmpps-templates-dev)
     # IRSA configuration in your namespace will also be required, and then uncomment serviceAccountName above.
     # sqs-hmpps-audit-secret:
