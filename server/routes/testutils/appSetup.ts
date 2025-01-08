@@ -1,6 +1,9 @@
 import express, { Express } from 'express'
+import dpsComponents from '@ministryofjustice/hmpps-connect-dps-components'
 
 import { randomUUID } from 'crypto'
+import logger from '../../../logger'
+import config from '../../config'
 import routes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
@@ -21,6 +24,7 @@ export const user: HmppsUser = {
   authSource: 'nomis',
   staffId: 1234,
   userRoles: [],
+  caseloads: [],
 }
 
 export const flashProvider = jest.fn()
@@ -47,6 +51,15 @@ function appSetup(services: Services, production: boolean, userSupplier: () => H
   })
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
+  app.get(
+    '*',
+    dpsComponents.getPageComponents({
+      logger,
+      includeMeta: true,
+      dpsUrl: config.serviceUrls.digitalPrison,
+      timeoutOptions: { response: 50, deadline: 50 },
+    }),
+  )
   app.use((_req, res, next) => {
     res.notFound = () => res.status(404).render('pages/not-found')
     next()

@@ -1,8 +1,12 @@
 import express from 'express'
 import * as Sentry from '@sentry/node'
+import dpsComponents from '@ministryofjustice/hmpps-connect-dps-components'
+
 import './sentry'
 import config from './config'
+
 import nunjucksSetup from './utils/nunjucksSetup'
+import logger from '../logger'
 import errorHandler from './errorHandler'
 import { appInsightsMiddleware } from './utils/azureAppInsights'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
@@ -19,6 +23,8 @@ import sentryMiddleware from './middleware/sentryMiddleware'
 
 import routes from './routes'
 import type { Services } from './services'
+import checkPopulateUserCaseloads from './middleware/checkPopulateUserCaseloads'
+import populateClientToken from './middleware/populateSystemClientToken'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -39,11 +45,25 @@ export default function createApp(services: Services): express.Application {
   app.use(authorisationMiddleware())
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
+  app.use(populateClientToken())
+  app.get(
+    '*',
+    dpsComponents.getPageComponents({
+      logger,
+      includeMeta: true,
+      dpsUrl: config.serviceUrls.digitalPrison,
+      timeoutOptions: {
+        response: config.apis.componentApi.timeout.response,
+        deadline: config.apis.componentApi.timeout.deadline,
+      },
+    }),
+  )
   app.use((_req, res, next) => {
     res.notFound = () => res.status(404).render('pages/not-found')
     next()
   })
 
+  app.use(checkPopulateUserCaseloads(services.prisonApiService))
   app.use(routes(services))
 
   if (config.sentry.dsn) Sentry.setupExpressErrorHandler(app)

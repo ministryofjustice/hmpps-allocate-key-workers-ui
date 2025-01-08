@@ -20,7 +20,10 @@ export declare global {
     interface Request {
       verified?: boolean
       id: string
+      journeyData: JourneyData
+
       logout(done: (err: unknown) => void): void
+      systemClientToken: string
     }
 
     interface Response {
@@ -39,6 +42,17 @@ export declare global {
       applicationName: string
       environmentName: string
       environmentNameColour: string
+      feComponentsMeta?: {
+        activeCaseLoad: CaseLoad
+        caseLoads: CaseLoad[]
+        services: {
+          id: string
+          heading: string
+          description: string
+          href: string
+          navEnabled: boolean
+        }[]
+      }
     }
   }
 }
