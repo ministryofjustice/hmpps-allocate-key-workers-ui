@@ -126,10 +126,44 @@ const token = (userToken: UserToken) =>
     },
   })
 
+const stubGetCaseLoads = () => {
+  return stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/prison-api/api/users/me/caseLoads',
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: [
+        {
+          currentlyActive: true,
+          caseLoadId: 'LEI',
+          description: 'Leeds (HMP)',
+        },
+        {
+          currentlyActive: false,
+          caseLoadId: 'MDI',
+          description: 'Moorland',
+        },
+      ],
+    },
+  })
+}
+
 export default {
   getSignInUrl,
   stubAuthPing: ping,
   stubAuthManageDetails: manageDetails,
-  stubSignIn: (userToken: UserToken = {}): Promise<[Response, Response, Response, Response, Response]> =>
-    Promise.all([favicon(), redirect(), signOut(), token(userToken), tokenVerification.stubVerifyToken()]),
+  stubSignIn: (userToken: UserToken = {}): Promise<[Response, Response, Response, Response, Response, Response]> =>
+    Promise.all([
+      favicon(),
+      redirect(),
+      signOut(),
+      token(userToken),
+      tokenVerification.stubVerifyToken(),
+      stubGetCaseLoads(),
+    ]),
 }
