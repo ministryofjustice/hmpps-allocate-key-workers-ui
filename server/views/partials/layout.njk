@@ -1,5 +1,4 @@
 {% extends "govuk/template.njk" %}
-{% from "partials/miniProfile/macro.njk" import miniProfile %}
 
 {% block head %}
   <link href="{{ '/assets/css/app.css' | assetMap }}" rel="stylesheet"/>
@@ -20,9 +19,6 @@
 {% endblock %}
 
 {% block beforeContent %}
-  {% if prisoner %}
-    {{ miniProfile(prisoner, '/prisoner-image/' + prisoner.prisonerNumber, prisonerProfileUrl + '/prisoner/' + prisoner.prisonerNumber) }}
-  {% endif %}
 {% endblock %}
 
 {% block bodyStart %}
