@@ -1,8 +1,9 @@
 import express from 'express'
 import * as Sentry from '@sentry/node'
+import dpsComponents from '@ministryofjustice/hmpps-connect-dps-components'
+
 import './sentry'
 import config from './config'
-import dpsComponents from '@ministryofjustice/hmpps-connect-dps-components'
 
 import nunjucksSetup from './utils/nunjucksSetup'
 import logger from '../logger'
@@ -22,6 +23,8 @@ import sentryMiddleware from './middleware/sentryMiddleware'
 
 import routes from './routes'
 import type { Services } from './services'
+import checkPopulateUserCaseloads from './middleware/checkPopulateUserCaseloads'
+import populateClientToken from './middleware/populateSystemClientToken'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -42,6 +45,7 @@ export default function createApp(services: Services): express.Application {
   app.use(authorisationMiddleware())
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
+  app.use(populateClientToken())
   app.get(
     '*',
     dpsComponents.getPageComponents({
@@ -59,6 +63,7 @@ export default function createApp(services: Services): express.Application {
     next()
   })
 
+  app.use(checkPopulateUserCaseloads(services.prisonApiService))
   app.use(routes(services))
 
   if (config.sentry.dsn) Sentry.setupExpressErrorHandler(app)
