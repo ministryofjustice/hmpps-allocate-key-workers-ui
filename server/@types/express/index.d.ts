@@ -35,6 +35,7 @@ export declare global {
       csrfToken: ReturnType<CsrfTokenGenerator>
       user: HmppsUser
       digitalPrisonServicesUrl: string
+      legacyKeyWorkersUiUrl: string
       breadcrumbs: Breadcrumbs
       prisoner?: PrisonerSummary
       buildNumber?: string

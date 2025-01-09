@@ -25,6 +25,14 @@ const buildConfig = {
         from: path.join(cwd, 'server/views/**/*'),
         to: path.join(cwd, 'dist/server/views'),
       },
+      {
+        from: path.join(cwd, 'server/routes/journeys/**/*'),
+        to: path.join(cwd, 'dist/server/routes/journeys'),
+      },
+      {
+        from: path.join(cwd, 'server/routes/**/*'),
+        to: path.join(cwd, 'dist/server/routes'),
+      },
     ],
   },
 
@@ -60,14 +68,14 @@ const main = () => {
 
   if (args.includes('--dev-server')) {
     let serverProcess = null
-    chokidar.watch(['dist']).on('all', () => {
+    chokidar.watch(['dist'], { ignored: ['**/*.cy.ts'] }).on('all', () => {
       if (serverProcess) serverProcess.kill()
       serverProcess = spawn('node', ['--env-file=.env', 'dist/server.js'], { stdio: 'inherit' })
     })
   }
   if (args.includes('--dev-test-server')) {
     let serverProcess = null
-    chokidar.watch(['dist']).on('all', () => {
+    chokidar.watch(['dist'], { ignored: ['**/*.cy.ts'] }).on('all', () => {
       if (serverProcess) serverProcess.kill()
       serverProcess = spawn('node', ['--env-file=feature.env', 'dist/server.js'], { stdio: 'inherit' })
     })
@@ -82,7 +90,7 @@ const main = () => {
 
     // App
     chokidar
-      .watch(['server/**/*'], { ...chokidarOptions, ignored: ['**/*.test.ts'] })
+      .watch(['server/**/*'], { ...chokidarOptions, ignored: ['**/*.test.ts', '**/*.cy.ts'] })
       .on('all', () => buildApp(buildConfig).catch(e => process.stderr.write(`${e}\n`)))
   }
 }

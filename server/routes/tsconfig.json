@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": ["**/*.cy.ts"],
+  "exclude": [],
+  "compilerOptions": {
+    "types": [
+      "cypress",
+      "express",
+      "express-session",
+      "@testing-library/cypress",
+      "../../integration_tests/index.d.ts",
+      "../@types/environment.d.ts"
+    ]
+  }
+}
