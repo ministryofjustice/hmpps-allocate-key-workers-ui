@@ -1,0 +1,76 @@
+{% extends "partials/layout.njk" %}
+
+{% set pageTitle = "Key workers" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-6">Key workers</h1>
+
+  <div class="homepage-content-container">
+      <div class="homepage-content">
+          <div class="govuk-width-container">
+              <div class="govuk-grid-row">
+                  <div class="govuk-grid-column-full">
+                      <div class="card-group govuk-grid-row">
+
+                          <div class="govuk-grid-column-one-third card-group__item">
+                              <div class="card card--clickable">
+                                  <h2 class="govuk-heading-m card__heading">
+                                      <a class="govuk-link govuk-link--no-visited-state card__link" href="{{ legacyKeyWorkersUiUrl }}/manage-key-workers/allocate-key-worker">View all without a key worker</a>
+                                  </h2>
+                                  <p class="govuk-body card__description">You can allocate key workers to these prisoners. You can also automatically allocate a key worker to these prisoners if your establishment allows it.</p>
+                              </div>
+                          </div>
+
+                          <div class="govuk-grid-column-one-third card-group__item">
+                              <div class="card card--clickable">
+                                  <h2 class="govuk-heading-m card__heading">
+                                      <a class="govuk-link govuk-link--no-visited-state card__link" href="{{ legacyKeyWorkersUiUrl }}/manage-key-workers/view-residential-location">View by residential location</a>
+                                  </h2>
+                                  <p class="govuk-body card__description">View all prisoners in a residential location and allocate or change key workers. You can also see high complexity prisoners</p>
+                              </div>
+                          </div>
+
+                        <div class="govuk-grid-column-one-third card-group__item">
+                          <div class="card card--clickable">
+                            <h2 class="govuk-heading-m card__heading">
+                              <a class="govuk-link govuk-link--no-visited-state card__link" href="{{ legacyKeyWorkersUiUrl }}/manage-key-workers/search-for-prisoner">Search for a prisoner</a>
+                            </h2>
+                            <p class="govuk-body card__description">You can allocate or change a key worker after searching for a prisoner. You will need the prisoner’s name or prison number.</p>
+                          </div>
+                        </div>
+
+                        <div class="govuk-grid-column-one-third card-group__item">
+                          <div class="card card--clickable">
+                            <h2 class="govuk-heading-m card__heading">
+                              <a class="govuk-link govuk-link--no-visited-state card__link" href="{{ legacyKeyWorkersUiUrl }}/key-worker-search">View key workers in your establishment</a>
+                            </h2>
+                            <p class="govuk-body card__description">You can manage a key worker’s availability, reassign their prisoners and check their individual statistics.</p>
+                          </div>
+                        </div>
+
+                        <div class="govuk-grid-column-one-third card-group__item">
+                          <div class="card card--clickable">
+                            <h2 class="govuk-heading-m card__heading">
+                              <a class="govuk-link govuk-link--no-visited-state card__link" href="{{ legacyKeyWorkersUiUrl }}/key-worker-statistics">Key worker statistics</a>
+                            </h2>
+                            <p class="govuk-body card__description">View the statistics for your establishment’s key workers.</p>
+                          </div>
+                        </div>
+
+                        <div class="govuk-grid-column-one-third card-group__item">
+                          <div class="card card--clickable">
+                            <h2 class="govuk-heading-m card__heading">
+                              <a class="govuk-link govuk-link--no-visited-state card__link" href="{{ legacyKeyWorkersUiUrl }}/manage-key-worker-settings">Manage your establishment’s key worker settings</a>
+                            </h2>
+                            <p class="govuk-body card__description">Allow auto-allocation, edit key worker capacity and session frequency.</p>
+                          </div>
+                        </div>
+
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+{% endblock %}

@@ -1,4 +1,6 @@
 {% extends "govuk/template.njk" %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
 {% block head %}
   <link href="{{ '/assets/css/app.css' | assetMap }}" rel="stylesheet"/>
@@ -19,6 +21,32 @@
 {% endblock %}
 
 {% block beforeContent %}
+  {% if backUrl %}
+    {{ govukBackLink({
+      text: "Back",
+      href: backUrl
+    }) }}
+  {% endif %}
+
+  {% if showBreadcrumbs and breadcrumbs and (not backUrl) %}
+    <div class="csip-breadcrumbs govuk-!-display-none-print">
+      <div class="csip-breadcrumbs__breadcrumbs">
+        {{ govukBreadcrumbs({
+          items: breadcrumbs.items
+        }) }}
+      </div>
+    </div>
+  {% endif %}
+
+  {% block pageHeader %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="{% if fullWidth %}govuk-grid-column-full{% else %}govuk-grid-column-two-thirds{% endif %}">
+      {% block innerContent %}{% endblock %}
+    </div>
+  </div>
 {% endblock %}
 
 {% block bodyStart %}

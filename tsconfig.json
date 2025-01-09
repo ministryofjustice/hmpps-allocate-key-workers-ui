@@ -33,8 +33,10 @@
     "coverage",
     "codecov_reports",
     "esbuild",
-    "server/@types/csip/index.d.ts",
-    "test_results"
+    "server/@types/keyWorker/index.d.ts",
+    "test_results",
+    "integration_tests",
+    "**/*.cy.ts"
   ],
   "include": ["**/*.js", "**/*.ts"]
 }

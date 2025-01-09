@@ -25,9 +25,18 @@ export default function nunjucksSetup(app: express.Express): void {
     }
   }
 
+  app.use((_req, res, next) => {
+    res.locals.digitalPrisonServicesUrl = config.serviceUrls.digitalPrison
+    res.locals.legacyKeyWorkersUiUrl = config.serviceUrls.legacyKeyWorkersUI
+    res.locals['prisonerProfileUrl'] = config.serviceUrls.prisonerProfile
+    return next()
+  })
+
   const njkEnv = nunjucks.configure(
     [
       path.join(__dirname, '../../server/views'),
+      path.join(__dirname, '../../server/routes/journeys'),
+      path.join(__dirname, '../../server/routes'),
       'node_modules/govuk-frontend/dist/',
       'node_modules/@ministryofjustice/frontend/',
       'node_modules/@ministryofjustice/hmpps-connect-dps-components/dist/assets/',

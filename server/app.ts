@@ -25,6 +25,7 @@ import routes from './routes'
 import type { Services } from './services'
 import checkPopulateUserCaseloads from './middleware/checkPopulateUserCaseloads'
 import populateClientToken from './middleware/populateSystemClientToken'
+import breadcrumbs from './middleware/breadcrumbs'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -62,7 +63,7 @@ export default function createApp(services: Services): express.Application {
     res.notFound = () => res.status(404).render('pages/not-found')
     next()
   })
-
+  app.use(breadcrumbs())
   app.use(checkPopulateUserCaseloads(services.prisonApiService))
   app.use(routes(services))
 
