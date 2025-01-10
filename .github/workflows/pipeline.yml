@@ -55,6 +55,11 @@ jobs:
         npx junit-to-ctrf artifacts/npm_unit_test_artifacts/jest/junit.xml -o artifacts/npm_unit_test_artifacts/jest/ctrf.json
         npx github-actions-ctrf tests artifacts/npm_unit_test_artifacts/jest/ctrf.json
         npx github-actions-ctrf failed-folded artifacts/npm_unit_test_artifacts/jest/ctrf.json
+    - uses: actions/checkout@v4
+    - name: Upload results to Codecov
+      uses: codecov/codecov-action@v5
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     needs:
       - node_integration_tests
       - node_unit_tests
