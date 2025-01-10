@@ -44,22 +44,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: download artifacts
+    - name: download test artifacts
       uses: actions/download-artifact@v4
       with:
         path: artifacts
-    - name: Display structure of downloaded files
-      run: ls -R artifacts
+        pattern: npm_*_test_artifacts
     - name: create reports
       shell: bash
       run: |
         npx junit-to-ctrf artifacts/npm_unit_test_artifacts/jest/junit.xml -o artifacts/npm_unit_test_artifacts/jest/ctrf.json
         npx github-actions-ctrf tests artifacts/npm_unit_test_artifacts/jest/ctrf.json
         npx github-actions-ctrf failed-folded artifacts/npm_unit_test_artifacts/jest/ctrf.json
-    - name: Upload results to Codecov
+    - name: Upload coverage results to Codecov
       uses: codecov/codecov-action@v5
-      with:
-        files: ./artifacts/npm_unit_test_artifacts/jest/coverage-final.json,./artifacts/npm_unit_test_artifacts/jest/lcov.info
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     needs:

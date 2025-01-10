@@ -1,4 +1,5 @@
 import { defineConfig } from 'cypress'
+import coverageTask from '@cypress/code-coverage/task'
 import { resetStubs } from './integration_tests/mockApis/wiremock'
 import auth from './integration_tests/mockApis/auth'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
@@ -17,7 +18,8 @@ export default defineConfig({
   },
   taskTimeout: 60000,
   e2e: {
-    setupNodeEvents(on) {
+    setupNodeEvents(on, config) {
+      coverageTask(on, config)
       on('task', {
         reset: resetStubs,
         ...auth,
@@ -26,12 +28,18 @@ export default defineConfig({
         ...prisonApi,
         ...componentsApi,
       })
+      return config
     },
     baseUrl: 'http://localhost:3007',
     excludeSpecPattern: ['dist', '**/!(*.cy).ts'],
     specPattern: '**/*.cy.{js,jsx,ts,tsx}',
     supportFile: 'integration_tests/support/index.ts',
     experimentalRunAllSpecs: true,
+    env: {
+      codeCoverage: {
+        url: 'http://localhost:3007/__coverage__',
+      },
+    },
     retries: {
       runMode: 2,
     },

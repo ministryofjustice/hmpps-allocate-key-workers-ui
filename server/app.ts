@@ -2,6 +2,9 @@ import express from 'express'
 import * as Sentry from '@sentry/node'
 import dpsComponents from '@ministryofjustice/hmpps-connect-dps-components'
 
+// @ts-expect-error Import untyped middleware for cypress coverage
+import cypressCoverage from '@cypress/code-coverage/middleware/express'
+
 import './sentry'
 import config from './config'
 
@@ -29,6 +32,10 @@ import breadcrumbs from './middleware/breadcrumbs'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
+
+  if (process.env.NODE_ENV === 'e2e-test') {
+    cypressCoverage(app)
+  }
 
   app.set('json spaces', 2)
   app.set('trust proxy', true)
