@@ -33,21 +33,31 @@ jobs:
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_unit_tests.yml@v2 # WORKFLOW_VERSION
     needs: [node_build]
     secrets: inherit
-  generate_unit_tests_report:
-    name: generate unit tests report
-    shell: bash
-    run: |
-      npx junit-to-ctrf test_results/jest/junit.xml -o test_results/jest/ctrf.json
-      npx github-actions-ctrf tests test_results/jest/ctrf.json
-      npx github-actions-ctrf failed-folded test_results/jest/ctrf.json
-    needs:
-      - node_unit_tests
   # generic node integration tests using wiremock - feel free to override with local tests if required
   node_integration_tests:
     name: node integration tests
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_integration_tests.yml@v2 # WORKFLOW_VERSION
     needs: [node_build]
     secrets: inherit
+  generate_unit_tests_report:
+    name: generate unit tests report
+    runs-on: ubuntu-latest
+    steps:
+    - name: download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts
+    - name: Display structure of downloaded files
+      run: ls -R artifacts
+    - name: create reports
+      shell: bash
+      run: |
+        npx junit-to-ctrf artifacts/npm_unit_test_artifacts/jest/junit.xml -o artifacts/npm_unit_test_artifacts/jest/ctrf.json
+        npx github-actions-ctrf tests artifacts/npm_unit_test_artifacts/jest/ctrf.json
+        npx github-actions-ctrf failed-folded artifacts/npm_unit_test_artifacts/jest/ctrf.json
+    needs:
+      - node_integration_tests
+      - node_unit_tests
   helm_lint:
     strategy:
       matrix:
