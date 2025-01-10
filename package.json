@@ -28,6 +28,14 @@
     "npm": "^10"
   },
   "jest": {
+    "transform": {
+      "^.+\\.tsx?$": [
+        "ts-jest",
+        {
+          "isolatedModules": true
+        }
+      ]
+    },
     "collectCoverage": true,
     "collectCoverageFrom": [
       "server/**/*.{ts,js,jsx,mjs}"
@@ -37,6 +45,10 @@
       "json",
       "lcov"
     ],
+    "testMatch": [
+      "<rootDir>/(server|job)/**/?(*.)(test).{ts,js,jsx,mjs}"
+    ],
+    "testEnvironment": "node",
     "reporters": [
       "default",
       [
@@ -52,9 +64,21 @@
         }
       ]
     ],
-    "projects": [
-      "./server",
-      "./server/routes/journeys"
+    "moduleFileExtensions": [
+      "web.js",
+      "js",
+      "json",
+      "node",
+      "ts"
+    ],
+    "coveragePathIgnorePatterns": [
+      ".*.test.ts",
+      "node_modules",
+      "server/@types",
+      ".*jest.config.js",
+      "server/app.ts",
+      "server/index.ts",
+      ".*.cy.ts"
     ]
   },
   "lint-staged": {
