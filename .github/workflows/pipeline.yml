@@ -58,6 +58,8 @@ jobs:
     - uses: actions/checkout@v4
     - name: Upload results to Codecov
       uses: codecov/codecov-action@v5
+      with:
+        files: ./artifacts/npm_unit_test_artifacts/jest/coverage-final.json,./artifacts/npm_unit_test_artifacts/jest/lcov.info
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     needs:
