@@ -1,6 +1,5 @@
 {
   "extends": "@istanbuljs/nyc-config-typescript",
-  "report-dir": "./integration_tests/videos/coverage",
   "check-coverage": true,
   "inPlace": true,
   "compact": false,

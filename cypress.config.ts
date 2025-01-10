@@ -1,5 +1,6 @@
 import { defineConfig } from 'cypress'
 import coverageTask from '@cypress/code-coverage/task'
+import { GenerateCtrfReport } from 'cypress-ctrf-json-reporter'
 import { resetStubs } from './integration_tests/mockApis/wiremock'
 import auth from './integration_tests/mockApis/auth'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
@@ -27,6 +28,10 @@ export default defineConfig({
         ...keyworkerApi,
         ...prisonApi,
         ...componentsApi,
+      })
+      // eslint-disable-next-line no-new
+      new GenerateCtrfReport({
+        on,
       })
       return config
     },
