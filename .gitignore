@@ -120,6 +120,7 @@ dist
 .vscode
 dist/
 test_results/
+ctrf/
 integration_tests/videos/
 integration_tests/screenshots/
 */*.iml

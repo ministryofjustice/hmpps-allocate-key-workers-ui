@@ -35,6 +35,7 @@
     "esbuild",
     "server/@types/keyWorker/index.d.ts",
     "test_results",
+    "ctrf",
     "integration_tests",
     "**/*.cy.ts"
   ],
