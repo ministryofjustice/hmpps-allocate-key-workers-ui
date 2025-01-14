@@ -33,7 +33,7 @@ const stubGetOneCaseLoad = () => {
   return stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/prison-api/api/users/me/caseLoads',
+      urlPattern: '/prison-api/api/users/me/caseLoads\\?allCaseloads=true',
     },
     response: {
       status: 200,
@@ -54,7 +54,7 @@ const stubGetCaseloadsNoneActive = () => {
   return stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/prison-api/api/users/me/caseLoads',
+      urlPattern: '/prison-api/api/users/me/caseLoads\\?allCaseloads=true',
     },
     response: {
       status: 200,
@@ -75,7 +75,7 @@ const stubGetCaseLoadsFail = () => {
   return stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/prison-api/api/users/me/caseLoads',
+      urlPattern: '/prison-api/api/users/me/caseLoads\\?allCaseloads=true',
     },
     response: {
       status: 500,

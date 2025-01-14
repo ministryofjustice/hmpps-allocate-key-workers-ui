@@ -43,16 +43,18 @@ export declare global {
       applicationName: string
       environmentName: string
       environmentNameColour: string
-      feComponentsMeta?: {
-        activeCaseLoad: CaseLoad
-        caseLoads: CaseLoad[]
-        services: {
-          id: string
-          heading: string
-          description: string
-          href: string
-          navEnabled: boolean
-        }[]
+      feComponents?: {
+        sharedData?: {
+          activeCaseLoad: CaseLoad
+          caseLoads: CaseLoad[]
+          services: {
+            id: string
+            heading: string
+            description: string
+            href: string
+            navEnabled: boolean
+          }[]
+        }
       }
     }
   }

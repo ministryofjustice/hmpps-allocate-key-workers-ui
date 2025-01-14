@@ -26,7 +26,6 @@ import sentryMiddleware from './middleware/sentryMiddleware'
 
 import routes from './routes'
 import type { Services } from './services'
-import checkPopulateUserCaseloads from './middleware/checkPopulateUserCaseloads'
 import populateClientToken from './middleware/populateSystemClientToken'
 import breadcrumbs from './middleware/breadcrumbs'
 
@@ -58,7 +57,7 @@ export default function createApp(services: Services): express.Application {
     '*',
     dpsComponents.getPageComponents({
       logger,
-      includeMeta: true,
+      includeSharedData: true,
       dpsUrl: config.serviceUrls.digitalPrison,
       timeoutOptions: {
         response: config.apis.componentApi.timeout.response,
@@ -71,7 +70,7 @@ export default function createApp(services: Services): express.Application {
     next()
   })
   app.use(breadcrumbs())
-  app.use(checkPopulateUserCaseloads(services.prisonApiService))
+  app.use(dpsComponents.retrieveCaseLoadData({ logger }))
   app.use(routes(services))
 
   if (config.sentry.dsn) Sentry.setupExpressErrorHandler(app)

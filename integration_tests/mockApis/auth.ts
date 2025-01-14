@@ -117,6 +117,7 @@ const token = (userToken: UserToken) =>
       },
       jsonBody: {
         access_token: createToken(userToken),
+        auth_source: 'nomis',
         token_type: 'bearer',
         user_name: 'USER1',
         expires_in: 599,
@@ -130,7 +131,7 @@ const stubGetCaseLoads = () => {
   return stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/prison-api/api/users/me/caseLoads',
+      urlPattern: '/prison-api/api/users/me/caseLoads\\?allCaseloads=true',
     },
     response: {
       status: 200,
