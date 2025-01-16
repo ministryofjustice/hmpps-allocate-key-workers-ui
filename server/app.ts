@@ -28,6 +28,7 @@ import routes from './routes'
 import type { Services } from './services'
 import populateClientToken from './middleware/populateSystemClientToken'
 import breadcrumbs from './middleware/breadcrumbs'
+import populateUserPermissions from './middleware/permissionsMiddleware'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -71,6 +72,7 @@ export default function createApp(services: Services): express.Application {
   })
   app.use(breadcrumbs())
   app.use(dpsComponents.retrieveCaseLoadData({ logger }))
+  app.use(populateUserPermissions())
   app.use(routes(services))
 
   if (config.sentry.dsn) Sentry.setupExpressErrorHandler(app)

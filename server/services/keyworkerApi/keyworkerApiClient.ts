@@ -1,5 +1,6 @@
 import RestClient from '../../data/restClient'
 import config from '../../config'
+import type { components } from '../../@types/keyWorker'
 
 export interface ServiceConfigInfo {
   git: {
@@ -34,5 +35,13 @@ export default class KeyworkerApiClient {
     return this.restClient.get<ServiceConfigInfo>({
       path: `/info`,
     })
+  }
+
+  async isKeyworker(prisonCode: string, username: string): Promise<boolean> {
+    const response = await this.restClient.get<components['schemas']['UsernameKeyworker']>({
+      path: `/prisons/${prisonCode}/key-workers/${username}/status`,
+    })
+
+    return response.isKeyworker
   }
 }
