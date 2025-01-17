@@ -72,6 +72,12 @@ export default function createApp(services: Services): express.Application {
   })
   app.use(breadcrumbs())
   app.use(dpsComponents.retrieveCaseLoadData({ logger }))
+
+  app.get('/not-authorised', (_, res) => {
+    res.status(403)
+    res.render('not-authorised', { showBreadcrumbs: true })
+  })
+
   app.use(populateUserPermissions())
   app.use(routes(services))
 

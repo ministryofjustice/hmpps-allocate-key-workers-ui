@@ -40,14 +40,20 @@
                           </div>
                         </div>
 
-                        <div class="govuk-grid-column-one-third card-group__item">
-                          <div class="card card--clickable">
-                            <h2 class="govuk-heading-m card__heading">
-                              <a class="govuk-link govuk-link--no-visited-state card__link" href="{{ legacyKeyWorkersUiUrl }}/key-worker-search">View key workers in your establishment</a>
-                            </h2>
-                            <p class="govuk-body card__description">You can manage a key worker’s availability, reassign their prisoners and check their individual statistics.</p>
+                        {% if hasViewPermission or hasAllocatePermission %}
+                          <div class="govuk-grid-column-one-third card-group__item">
+                            <div class="card card--clickable">
+                              <h2 class="govuk-heading-m card__heading">
+                                <a class="govuk-link govuk-link--no-visited-state card__link" href="{{ legacyKeyWorkersUiUrl }}/key-worker-search">View key workers in your establishment</a>
+                              </h2>
+                              {% if hasAllocatePermission %}
+                                <p class="govuk-body card__description">You can manage a key worker’s availability, reassign their prisoners and check their individual statistics.</p>
+                              {% else %}
+                                <p class="govuk-body card__description">You can view a key worker’s availability and check their individual statistics.</p>
+                              {% endif %}
+                            </div>
                           </div>
-                        </div>
+                        {% endif %}
 
                         <div class="govuk-grid-column-one-third card-group__item">
                           <div class="card card--clickable">
@@ -57,15 +63,16 @@
                             <p class="govuk-body card__description">View the statistics for your establishment’s key workers.</p>
                           </div>
                         </div>
-
-                        <div class="govuk-grid-column-one-third card-group__item">
-                          <div class="card card--clickable">
-                            <h2 class="govuk-heading-m card__heading">
-                              <a class="govuk-link govuk-link--no-visited-state card__link" href="{{ legacyKeyWorkersUiUrl }}/manage-key-worker-settings">Manage your establishment’s key worker settings</a>
-                            </h2>
-                            <p class="govuk-body card__description">Allow auto-allocation, edit key worker capacity and session frequency.</p>
+                        {% if hasAllocatePermission %}
+                          <div class="govuk-grid-column-one-third card-group__item">
+                            <div class="card card--clickable">
+                              <h2 class="govuk-heading-m card__heading">
+                                <a class="govuk-link govuk-link--no-visited-state card__link" href="{{ legacyKeyWorkersUiUrl }}/manage-key-worker-settings">Manage your establishment’s key worker settings</a>
+                              </h2>
+                              <p class="govuk-body card__description">Allow auto-allocation, edit key worker capacity and session frequency.</p>
+                            </div>
                           </div>
-                        </div>
+                        {% endif %}
 
                       </div>
                   </div>

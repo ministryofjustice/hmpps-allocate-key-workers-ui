@@ -23,10 +23,14 @@ export default function populateUserPermissions(): RequestHandler {
         res.locals.user.permissions.push('view')
       }
 
-      next()
+      if (!res.locals.user.permissions.length) {
+        return res.redirect('/not-authorised')
+      }
+
+      return next()
     } catch (e) {
       logger.error(e, `Failed to retrieve keyworker status: ${res.locals.user?.username}`)
-      next()
+      return next(e)
     }
   }
 }

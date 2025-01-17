@@ -5,6 +5,8 @@ export class HomePageController {
     res.locals.breadcrumbs.popLastItem()
 
     return res.render('view', {
+      hasViewPermission: res.locals.user.permissions.includes('view'),
+      hasAllocatePermission: res.locals.user.permissions.includes('allocate'),
       showBreadcrumbs: true,
     })
   }
