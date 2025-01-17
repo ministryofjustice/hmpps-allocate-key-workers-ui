@@ -7,11 +7,13 @@ export default function populateUserPermissions(): RequestHandler {
 
   return async (req, res, next) => {
     try {
-      const userIsKeyworker = await keyworkerApiService.isKeyworker(
-        req,
-        res.locals.user.activeCaseLoad!.caseLoadId!,
-        res.locals.user.username,
-      )
+      const userIsKeyworker =
+        res.locals.user.userRoles.includes('KEYWORKER_MONITOR') ||
+        (await keyworkerApiService.isKeyworker(
+          req,
+          res.locals.user.activeCaseLoad!.caseLoadId!,
+          res.locals.user.username,
+        ))
 
       res.locals.user.permissions = []
 
