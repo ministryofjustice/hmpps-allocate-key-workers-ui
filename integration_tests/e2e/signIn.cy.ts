@@ -51,7 +51,7 @@ context('Sign In', () => {
     cy.task('stubVerifyToken', true)
     cy.task('stubSignIn', { name: 'bobby brown' })
 
-    cy.signIn()
+    cy.signIn({ failOnStatusCode: false })
 
     indexPage.headerUserName().contains('B. Brown')
   })

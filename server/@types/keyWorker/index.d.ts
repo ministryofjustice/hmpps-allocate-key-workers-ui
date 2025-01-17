@@ -243,8 +243,11 @@ export interface paths {
       path?: never
       cookie?: never
     }
-    /** Returns all data associated to subject in JSON format */
-    get: operations['subjectAccessRequest']
+    /**
+     * Provides content for a prisoner to satisfy the needs of a subject access request on their behalf
+     * @description Requires role SAR_DATA_ACCESS
+     */
+    get: operations['getSarContentByReference']
     put?: never
     post?: never
     delete?: never
@@ -261,6 +264,23 @@ export interface paths {
       cookie?: never
     }
     get: operations['getDlqMessages']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/prisons/{prisonCode}/key-workers/{username}/status': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description To determine if a user is a keyworker */
+    get: operations['userIsKeyworker']
     put?: never
     post?: never
     delete?: never
@@ -608,6 +628,7 @@ export interface components {
       /**
        * Format: date-time
        * @description Date and time migration of key workers was done for this prison
+       * @example 2018-10-02T01:12:55.000
        */
       migratedDateTime: string
     }
@@ -652,14 +673,29 @@ export interface components {
         | 'DUPLICATE'
         | 'MANUAL'
     }
-    JsonNode: Record<string, never>
-    /** @description Success Response */
-    SuccessResponse: {
-      content: components['schemas']['JsonNode']
+    SarKeyWorker: {
+      /** Format: date-time */
+      allocatedAt: string
+      /** Format: date-time */
+      allocationExpiredAt?: string
+      prisonCode: string
+      allocationType: string
+      allocationReason: string
+      deallocationReason?: string
+      keyworker: components['schemas']['StaffMember']
+      activeAllocation: boolean
+    }
+    StaffMember: {
+      firstName: string
+      lastName: string
+    }
+    SubjectAccessResponse: {
+      prn: string
+      content: components['schemas']['SarKeyWorker'][]
     }
     DlqMessage: {
       body: {
-        [key: string]: Record<string, never>
+        [key: string]: unknown
       }
       messageId: string
     }
@@ -669,6 +705,10 @@ export interface components {
       /** Format: int32 */
       messagesReturnedCount: number
       messages: components['schemas']['DlqMessage'][]
+    }
+    UsernameKeyworker: {
+      username: string
+      isKeyworker: boolean
     }
     KeyworkerDto: {
       /**
@@ -828,6 +868,7 @@ export interface components {
        * @description The date and time of deallocation.
        */
       expired?: string
+      /** @description The user who created the allocation. */
       userId: components['schemas']['StaffUser']
       /** @description Whether allocation is active. */
       active: boolean
@@ -845,12 +886,14 @@ export interface components {
        * @description The date and time of creation.
        */
       creationDateTime?: string
+      /** @description The user who created the allocation. */
       createdByUser: components['schemas']['StaffUser']
       /**
        * Format: date-time
        * @description Last date and time of modification.
        */
       modifyDateTime?: string
+      /** @description The user who last modified the allocation. */
       lastModifiedByUser: components['schemas']['StaffUser']
     }
     OffenderKeyWorkerHistory: {
@@ -899,7 +942,6 @@ export interface components {
       receptionDate: string
       inPrison?: boolean
     }
-    /** @description The user who last modified the allocation. */
     StaffUser: {
       /**
        * Format: int64
@@ -914,13 +956,13 @@ export interface components {
       username: string
     }
     KeyworkerStatSummary: {
+      /** @description Summary of all prisons specified */
       summary: components['schemas']['PrisonStatsDto']
       /** @description Individual prison stats */
       prisons: {
         [key: string]: components['schemas']['PrisonStatsDto']
       }
     }
-    /** @description Individual prison stats */
     PrisonStatsDto: {
       /**
        * Format: date
@@ -931,10 +973,12 @@ export interface components {
       /**
        * Format: date
        * @description Requested end date for data set
-       * @example 2018-05-01
+       * @example 2018-04-31
        */
       requestedToDate: string
+      /** @description Summary of Prison Statistics for the period requested. */
       current: components['schemas']['SummaryStatistic']
+      /** @description Summary of Prison Statistics for the previous period requested. */
       previous: components['schemas']['SummaryStatistic']
       /** @description Date and percentage compliance key value pair of up to 1 years data before requestedToDate */
       complianceTimeline?: {
@@ -956,7 +1000,6 @@ export interface components {
        */
       avgOverallKeyworkerSessions?: number
     }
-    /** @description Summary of Prison Statistics for the previous period requested. */
     SummaryStatistic: {
       /**
        * Format: date
@@ -1611,17 +1654,19 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': Record<string, never>
+          'application/json': unknown
         }
       }
     }
   }
-  subjectAccessRequest: {
+  getSarContentByReference: {
     parameters: {
       query?: {
+        /** @description NOMIS Prison Reference Number */
         prn?: string
-        crn?: string
+        /** @description Optional parameter denoting minimum date of event occurrence which should be returned in the response */
         fromDate?: string
+        /** @description Optional parameter denoting maximum date of event occurrence which should be returned in the response */
         toDate?: string
       }
       header?: never
@@ -1630,22 +1675,22 @@ export interface operations {
     }
     requestBody?: never
     responses: {
-      /** @description Adjudication returned */
+      /** @description Request successfully processed - content found */
       200: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['SuccessResponse']
+          'application/json': components['schemas']['SubjectAccessResponse']
         }
       }
-      /** @description No content found */
+      /** @description Request successfully processed - no content found */
       204: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          '*/*': components['schemas']['SuccessResponse']
+          'application/json': components['schemas']['SubjectAccessResponse']
         }
       }
       /** @description Subject Identifier is not recognised by this service */
@@ -1654,7 +1699,34 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          '*/*': components['schemas']['SuccessResponse']
+          'application/json': components['schemas']['SubjectAccessResponse']
+        }
+      }
+      /** @description The client does not have authorisation to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unexpected error occurred */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -1679,6 +1751,65 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['GetDlqResult']
+        }
+      }
+    }
+  }
+  userIsKeyworker: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        prisonCode: string
+        username: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK - staff recorded verified */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['UsernameKeyworker']
+        }
+      }
+      /** @description Bad request - username not valid */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Not found - staff not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -1883,7 +2014,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': Record<string, never>
+          'application/json': unknown
         }
       }
       /** @description Invalid request. */

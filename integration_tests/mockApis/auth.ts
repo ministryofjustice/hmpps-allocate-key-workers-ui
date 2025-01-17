@@ -158,7 +158,9 @@ export default {
   getSignInUrl,
   stubAuthPing: ping,
   stubAuthManageDetails: manageDetails,
-  stubSignIn: (userToken: UserToken = {}): Promise<[Response, Response, Response, Response, Response, Response]> =>
+  stubSignIn: (
+    userToken: UserToken = { roles: ['KEYWORKER_MONITOR'] },
+  ): Promise<[Response, Response, Response, Response, Response, Response]> =>
     Promise.all([
       favicon(),
       redirect(),
