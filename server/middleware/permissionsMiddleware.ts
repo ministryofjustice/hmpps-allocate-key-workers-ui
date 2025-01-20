@@ -1,6 +1,8 @@
 import { RequestHandler } from 'express'
 import { services } from '../services'
 import logger from '../../logger'
+import AuthorisedRoles from '../authentication/authorisedRoles'
+import Permissions from '../authentication/permissions'
 
 export default function populateUserPermissions(): RequestHandler {
   const { keyworkerApiService } = services()
@@ -8,7 +10,7 @@ export default function populateUserPermissions(): RequestHandler {
   return async (req, res, next) => {
     try {
       const userIsKeyworker =
-        res.locals.user.userRoles.includes('KEYWORKER_MONITOR') ||
+        res.locals.user.userRoles.includes(AuthorisedRoles.KEYWORKER_MONITOR) ||
         (await keyworkerApiService.isKeyworker(
           req,
           res.locals.user.activeCaseLoad!.caseLoadId!,
@@ -17,12 +19,12 @@ export default function populateUserPermissions(): RequestHandler {
 
       res.locals.user.permissions = []
 
-      if (res.locals.user.userRoles.includes('OMIC_ADMIN')) {
-        res.locals.user.permissions.push('allocate')
+      if (res.locals.user.userRoles.includes(AuthorisedRoles.OMIC_ADMIN)) {
+        res.locals.user.permissions.push(Permissions.Allocate)
       }
 
       if (userIsKeyworker) {
-        res.locals.user.permissions.push('view')
+        res.locals.user.permissions.push(Permissions.View)
       }
 
       if (!res.locals.user.permissions.length) {

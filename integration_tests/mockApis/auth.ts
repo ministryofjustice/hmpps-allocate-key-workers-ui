@@ -3,6 +3,7 @@ import type { Response } from 'superagent'
 
 import { stubFor, getMatchingRequests } from './wiremock'
 import tokenVerification from './tokenVerification'
+import AuthorisedRoles from '../../server/authentication/authorisedRoles'
 
 interface UserToken {
   name?: string
@@ -159,7 +160,7 @@ export default {
   stubAuthPing: ping,
   stubAuthManageDetails: manageDetails,
   stubSignIn: (
-    userToken: UserToken = { roles: ['KEYWORKER_MONITOR'] },
+    userToken: UserToken = { roles: [AuthorisedRoles.KEYWORKER_MONITOR] },
   ): Promise<[Response, Response, Response, Response, Response, Response]> =>
     Promise.all([
       favicon(),

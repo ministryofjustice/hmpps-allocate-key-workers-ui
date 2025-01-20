@@ -1,3 +1,5 @@
+import AuthorisedRoles from '../authentication/authorisedRoles'
+
 context('test / homepage', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -41,7 +43,7 @@ context('test / homepage', () => {
 
     it('should show correct services when user has allocate permission', () => {
       cy.task('stubSignIn', {
-        roles: ['OMIC_ADMIN'],
+        roles: [AuthorisedRoles.OMIC_ADMIN],
       })
       cy.task('stubKeyworkerApiStatusIsNotKeyworker')
       navigateToTestPage()
@@ -68,7 +70,7 @@ context('test / homepage', () => {
 
   it('shows all tiles when user has all required roles', () => {
     cy.task('stubSignIn', {
-      roles: ['OMIC_ADMIN', 'KEYWORKER_MONITOR'],
+      roles: [AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KEYWORKER_MONITOR],
     })
     navigateToTestPage()
 
