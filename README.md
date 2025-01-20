@@ -217,6 +217,10 @@ Or run tests with the cypress UI:
 
 `npm run int-test-ui`
 
+## Syncing API types with swagger
+
+Run `npm run swagger` to pull the latest typedefs from the api backend.
+
 ## Change log
 
 A changelog for the service is available [here](./CHANGELOG.md)
