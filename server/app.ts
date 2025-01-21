@@ -78,13 +78,14 @@ export default function createApp(services: Services): express.Application {
     res.render('not-authorised', { showBreadcrumbs: true })
   })
 
+  app.use(errorHandler(process.env.NODE_ENV === 'production'))
+
   app.use(populateUserPermissions())
   app.use(routes(services))
 
   if (config.sentry.dsn) Sentry.setupExpressErrorHandler(app)
 
   app.use((_req, res) => res.notFound())
-  app.use(errorHandler(process.env.NODE_ENV === 'production'))
 
   return app
 }

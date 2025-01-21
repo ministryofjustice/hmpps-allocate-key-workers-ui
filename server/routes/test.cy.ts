@@ -6,6 +6,15 @@ context('test / homepage', () => {
   })
 
   describe('Role based access', () => {
+    it('should show an error screen if the has no roles and the call to the backend fails', () => {
+      cy.task('stubSignIn', {
+        roles: [],
+      })
+      cy.task('stubKeyworkerApiStatusFail')
+      navigateToTestPage()
+      cy.findByText('Sorry, there is a problem with the service').should('be.visible')
+    })
+
     it('should redirect to not-authorised page if user has no permission', () => {
       cy.task('stubSignIn', {
         roles: [],

@@ -2,14 +2,13 @@ import { RequestHandler } from 'express'
 import { services } from '../services'
 import logger from '../../logger'
 import AuthorisedRoles from '../authentication/authorisedRoles'
-import Permissions from '../authentication/permissions'
 
 export default function populateUserPermissions(): RequestHandler {
   const { keyworkerApiService } = services()
 
   return async (req, res, next) => {
     try {
-      const userIsKeyworker =
+      const userViewPermission =
         res.locals.user.userRoles.includes(AuthorisedRoles.KEYWORKER_MONITOR) ||
         (await keyworkerApiService.isKeyworker(
           req,
@@ -17,24 +16,21 @@ export default function populateUserPermissions(): RequestHandler {
           res.locals.user.username,
         ))
 
-      res.locals.user.permissions = []
-
-      if (res.locals.user.userRoles.includes(AuthorisedRoles.OMIC_ADMIN)) {
-        res.locals.user.permissions.push(Permissions.Allocate)
+      res.locals.user.permissions = {
+        view: userViewPermission,
+        allocate: res.locals.user.userRoles.includes(AuthorisedRoles.OMIC_ADMIN),
       }
 
-      if (userIsKeyworker) {
-        res.locals.user.permissions.push(Permissions.View)
-      }
-
-      if (!res.locals.user.permissions.length) {
+      if (!res.locals.user.permissions.view && !res.locals.user.permissions.allocate) {
         return res.redirect('/not-authorised')
       }
 
       return next()
     } catch (e) {
       logger.error(e, `Failed to retrieve keyworker status: ${res.locals.user?.username}`)
-      return next(e)
+      return res.render('pages/errorServiceProblem', {
+        showBreadcrumbs: true,
+      })
     }
   }
 }
