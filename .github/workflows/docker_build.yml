@@ -15,10 +15,6 @@ on:
         description: Additional docker tag that can be used to specify stable tags
         required: false
         type: string
-      additional_docker_build_args:
-          description: Additional docker build arguments
-          required: false
-          type: string
       push:
         description: Push docker image to registry flag
         required: true
@@ -34,6 +30,8 @@ on:
         required: false 
       HMPPS_QUAYIO_TOKEN:
         required: false 
+      SENTRY_AUTH_TOKEN:
+        required: true
 
     outputs:
       app_version:
@@ -54,24 +52,24 @@ jobs:
       - id: app_version
         name: Application version creators
         uses: ministryofjustice/hmpps-github-actions/.github/actions/build-test-and-deploy/create_app_version@v2 # WORKFLOW_VERSION
-      - uses: ./.github/actions/build-test-and-deploy/build_docker # Referencing a copy from the github actions repo
+      - uses: ./.github/actions/build-test-and-deploy/build_docker # Our copy with modifications in for SENTRY_AUTH_TOKEN
         if: ${{ ( inputs.docker_registry  == 'ghcr.io' ) && ( ! inputs.docker_multiplatform )}}
         with:
           repository_name: ${{ github.event.repository.name }}
           docker_registry: ${{ inputs.docker_registry }}
           registry_org: ${{ inputs.registry_org }}
-          additional_docker_tag: ${{ inputs.additional_docker_tag }}
+          additional_docker_tag: ${{ secrets.SENTRY_AUTH_TOKEN }}
           push: ${{ inputs.push }}
           app_version: ${{ steps.app_version.outputs.version }}
           additional_docker_build_args: ${{ inputs.additional_docker_build_args }}
 
-      - uses: ./.github/actions/build-test-and-deploy/build_docker # Referencing a copy from the github actions repo
+      - uses: ./.github/actions/build-test-and-deploy/build_docker # Our copy with modifications in for SENTRY_AUTH_TOKEN
         if: ${{ ( inputs.docker_registry  == 'quay.io' ) && ( ! inputs.docker_multiplatform )}}
         with:
           repository_name: ${{ github.event.repository.name }}
           docker_registry: ${{ inputs.docker_registry }}
           registry_org: ${{ inputs.registry_org }}
-          additional_docker_tag: ${{ inputs.additional_docker_tag }}
+          additional_docker_tag: ${{ secrets.SENTRY_AUTH_TOKEN }}
           push: ${{ inputs.push }}
           app_version: ${{ steps.app_version.outputs.version }}
           HMPPS_QUAYIO_USER: ${{ secrets.HMPPS_QUAYIO_USER }}
@@ -80,24 +78,24 @@ jobs:
           # git_head_ref: ${{ github.head_ref }}
           # git_branch_ref: ${{ github.ref_name }}
 
-      - uses: ./.github/actions/build-test-and-deploy/build_multiplatform_docker # Referencing a copy from the github actions repo
+      - uses: ./.github/actions/build-test-and-deploy/build_multiplatform_docker # Our copy with modifications in for SENTRY_AUTH_TOKEN
         if: ${{ ( inputs.docker_registry  == 'ghcr.io' ) && ( inputs.docker_multiplatform )}}
         with:
           repository_name: ${{ github.event.repository.name }}
           docker_registry: ${{ inputs.docker_registry }}
           registry_org: ${{ inputs.registry_org }}
-          additional_docker_tag: ${{ inputs.additional_docker_tag }}
+          additional_docker_tag: ${{ secrets.SENTRY_AUTH_TOKEN }}
           push: ${{ inputs.push }}
           app_version: ${{ steps.app_version.outputs.version }}
           additional_docker_build_args: ${{ inputs.additional_docker_build_args }}
 
-      - uses: ./.github/actions/build-test-and-deploy/build_multiplatform_docker # Referencing a copy from the github actions repo
+      - uses: ./.github/actions/build-test-and-deploy/build_multiplatform_docker # Our copy with modifications in for SENTRY_AUTH_TOKEN
         if: ${{ ( inputs.docker_registry  == 'quay.io' ) && ( inputs.docker_multiplatform )}}
         with:
           repository_name: ${{ github.event.repository.name }}
           docker_registry: ${{ inputs.docker_registry }}
           registry_org: ${{ inputs.registry_org }}
-          additional_docker_tag: ${{ inputs.additional_docker_tag }}
+          additional_docker_tag: ${{ secrets.SENTRY_AUTH_TOKEN }}
           push: ${{ inputs.push }}
           app_version: ${{ steps.app_version.outputs.version }}
           additional_docker_build_args: ${{ inputs.additional_docker_build_args }}

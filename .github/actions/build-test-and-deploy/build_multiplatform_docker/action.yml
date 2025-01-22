@@ -14,9 +14,6 @@ inputs:
   additional_docker_tag:
     description: Additional docker tag that can be used to specify stable tags
     required: false
-  additional_docker_build_args:
-    description: Additional docker build args
-    required: false
   push:
     description: Push docker image to registry flag
     required: true
@@ -66,6 +63,8 @@ runs:
       #   uses: aws-actions/amazon-ecr-login@v1
       
     - name: Build Docker images 
+      env:
+        SENTRY_AUTH_TOKEN: ${{ inputs.additional_docker_tag }}
       uses: docker/build-push-action@v6
       with:
         cache-from: type=gha
@@ -73,6 +72,8 @@ runs:
         cache-to: type=gha,mode=max
         context: .
         push: ${{ inputs.push }}
+        secret-envs: |
+          "sentry=SENTRY_AUTH_TOKEN"
         provenance: false
         build-args: |
           "BUILD_NUMBER=${{ inputs.app_version }}"

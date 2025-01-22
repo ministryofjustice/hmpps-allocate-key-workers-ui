@@ -64,7 +64,9 @@ runs:
       #   if: ${{ inputs.docker_registry  == 'ecr' }}
       #   uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build Docker images 
+    - name: Build Docker images
+      env:
+        SENTRY_AUTH_TOKEN: ${{ inputs.additional_docker_tag }}
       uses: docker/build-push-action@v6
       with:
         cache-from: type=gha
