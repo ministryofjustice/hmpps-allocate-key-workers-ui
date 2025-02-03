@@ -8,5 +8,5 @@ jobs:
     name: Project security trivy dependency check
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/security_trivy.yml@v2 # WORKFLOW_VERSION
     with:
-      channel_id: move-and-improve-alerts
+      channel_id: move-and-improve-alerts-non-prod
     secrets: inherit
