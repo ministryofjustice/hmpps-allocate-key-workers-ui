@@ -44,4 +44,24 @@ export default class KeyworkerApiClient {
 
     return response.isKeyworker
   }
+
+  async getPrisonStats(
+    prisonId: string,
+    fromDate: string,
+    toDate: string,
+  ): Promise<components['schemas']['KeyworkerStatSummary']> {
+    const response = await this.restClient.get<components['schemas']['KeyworkerStatSummary']>({
+      path: `/key-worker-stats?prisonId=${prisonId}&fromDate=${fromDate}&toDate=${toDate}`,
+    })
+
+    return response
+  }
+
+  async getPrisonMigrationStatus(prisonId: string): Promise<components['schemas']['Prison']> {
+    const response = await this.restClient.get<components['schemas']['Prison']>({
+      path: `/key-worker/prison/${prisonId}`,
+    })
+
+    return response
+  }
 }

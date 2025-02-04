@@ -6,6 +6,7 @@ import fs from 'fs'
 import { initialiseName } from './utils'
 import config from '../config'
 import logger from '../../logger'
+import { todayStringGBFormat } from './datetimeUtils'
 
 export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
@@ -47,6 +48,15 @@ export default function nunjucksSetup(app: express.Express): void {
     },
   )
 
+  njkEnv.addGlobal('todayStringGBFormat', todayStringGBFormat)
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
+  njkEnv.addFilter('dateString', getDateInReadableFormat)
+}
+
+function getDateInReadableFormat(dateString: string) {
+  const split = dateString?.split('/') || []
+  if (split.length < 3) throw new Error('Invalid date string')
+  const date = new Date(parseInt(split[2]!, 10), parseInt(split[1]!, 10) - 1, parseInt(split[0]!, 10))
+  return `${date.getDate()} ${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`
 }
