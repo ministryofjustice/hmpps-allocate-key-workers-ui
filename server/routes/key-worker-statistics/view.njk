@@ -25,7 +25,8 @@
                     text: "From"
                 },
                 value: dateFrom,
-                maxDate: todayStringGBFormat()
+                maxDate: todayStringGBFormat(),
+                errorMessage: validationErrors | findError('dateFrom')
             }) }}
 
             {{ mojDatePicker({
@@ -35,7 +36,8 @@
                     text: "To"
                 },
                 value: dateTo,
-                maxDate: todayStringGBFormat()
+                maxDate: todayStringGBFormat(),
+                errorMessage: validationErrors | findError('dateTo')
             }) }}
 
             {{ govukButton({

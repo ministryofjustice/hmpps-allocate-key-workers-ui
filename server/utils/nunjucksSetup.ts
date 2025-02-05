@@ -7,6 +7,7 @@ import { initialiseName } from './utils'
 import config from '../config'
 import logger from '../../logger'
 import { todayStringGBFormat } from './datetimeUtils'
+import { findError } from '../middleware/validationMiddleware'
 
 export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
@@ -48,6 +49,7 @@ export default function nunjucksSetup(app: express.Express): void {
     },
   )
 
+  njkEnv.addFilter('findError', findError)
   njkEnv.addGlobal('todayStringGBFormat', todayStringGBFormat)
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
