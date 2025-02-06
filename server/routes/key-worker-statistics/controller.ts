@@ -122,7 +122,7 @@ function formatValue(value: number, type: string) {
 function formatChange(change: number, type: string) {
   const formatted = formatValue(change, type)
   if (change > 0) return `+${formatted} increase`
-  if (change < 0) return `-${formatted} decrease`
+  if (change < 0) return `${formatted} decrease`
   if (change === 0) return 'No change'
   return formatted
 }

@@ -63,7 +63,7 @@ const stubKeyworkerMigrationStatus = () =>
     },
   })
 
-const stubKeyworkerApiStats = () =>
+const stubKeyworkerApiStats2025 = () =>
   stubFor({
     request: {
       method: 'GET',
@@ -73,7 +73,7 @@ const stubKeyworkerApiStats = () =>
           matches: '.+',
         },
         fromDate: {
-          matches: '.+',
+          matches: '2025.+',
         },
         toDate: {
           matches: '.+',
@@ -138,6 +138,81 @@ const stubKeyworkerApiStats = () =>
     },
   })
 
+const stubKeyworkerApiStats2024 = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPathPattern: '/keyworker-api/key-worker-stats',
+      queryParameters: {
+        prisonId: {
+          matches: '.+',
+        },
+        fromDate: {
+          matches: '2024.+',
+        },
+        toDate: {
+          matches: '.+',
+        },
+      },
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: {
+        summary: {
+          requestedFromDate: '2024-01-01',
+          requestedToDate: '2024-01-31',
+          current: {
+            dataRangeFrom: '2024-01-11',
+            dataRangeTo: '2024-01-11',
+            numPrisonersAssignedKeyWorker: 4200,
+            totalNumPrisoners: 6900,
+            totalNumEligiblePrisoners: 5000,
+            numberKeyWorkerSessions: 1,
+            numberKeyWorkerEntries: 1,
+            numberOfActiveKeyworkers: 24,
+            percentagePrisonersWithKeyworker: 61,
+            numProjectedKeyworkerSessions: 200,
+            complianceRate: 0,
+          },
+          previous: {
+            dataRangeFrom: '2023-12-03',
+            dataRangeTo: '2023-12-03',
+            numPrisonersAssignedKeyWorker: 4205,
+            totalNumPrisoners: 7000,
+            totalNumEligiblePrisoners: 6500,
+            numberKeyWorkerSessions: 3,
+            numberKeyWorkerEntries: 5,
+            numberOfActiveKeyworkers: 2,
+            percentagePrisonersWithKeyworker: 60,
+            numProjectedKeyworkerSessions: 169,
+            complianceRate: 0,
+          },
+          complianceTimeline: {
+            '2023-04-14': 0,
+            '2023-05-19': 0,
+            '2023-06-02': 0,
+            '2023-08-18': 0,
+            '2023-11-10': 0,
+            '2023-12-01': 0,
+            '2024-01-05': 0,
+          },
+          avgOverallCompliance: 0,
+          keyworkerSessionsTimeline: {
+            '2023-04-14': 0,
+            '2023-05-19': 0,
+            '2023-06-02': 0,
+            '2023-08-18': 0,
+            '2023-11-10': 0,
+            '2023-12-01': 0,
+            '2024-01-05': 0,
+          },
+          avgOverallKeyworkerSessions: 0,
+        },
+      },
+    },
+  })
+
 const stubKeyworkerApiStatsNoData = () =>
   stubFor({
     request: {
@@ -192,7 +267,8 @@ export default {
   stubKeyworkerApiStatusIsKeyworker: () => stubKeyworkerApiStatusIsKeyworker(true),
   stubKeyworkerApiStatusIsNotKeyworker: () => stubKeyworkerApiStatusIsKeyworker(false),
   stubKeyworkerApiStatusFail: () => stubKeyworkerApiStatusFail(),
-  stubKeyworkerApiStats,
+  stubKeyworkerApiStats2025,
+  stubKeyworkerApiStats2024,
   stubKeyworkerMigrationStatus,
   stubKeyworkerApiStatsNoData,
 }
