@@ -29,6 +29,7 @@ import type { Services } from './services'
 import populateClientToken from './middleware/populateSystemClientToken'
 import breadcrumbs from './middleware/breadcrumbs'
 import populateUserPermissions from './middleware/permissionsMiddleware'
+import populateValidationErrors from './middleware/populateValidationErrors'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -72,6 +73,7 @@ export default function createApp(services: Services): express.Application {
   })
   app.use(breadcrumbs())
   app.use(dpsComponents.retrieveCaseLoadData({ logger }))
+  app.use(populateValidationErrors())
 
   app.get('/not-authorised', (_, res) => {
     res.status(403)
