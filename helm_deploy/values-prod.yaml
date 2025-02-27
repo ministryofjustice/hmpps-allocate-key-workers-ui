@@ -19,4 +19,4 @@ generic-service:
     SENTRY_ENVIRONMENT: PRODUCTION
 
 generic-prometheus-alerts:
-  alertSeverity: move-and-improve-alerts
+  alertSeverity: hmpps-alerts-api-prod
