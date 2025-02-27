@@ -993,7 +993,7 @@ export interface components {
        * @description Average Key worker sessions for keyworkerSessionsTimeline
        * @example 502
        */
-      averageSessions30?: number
+      averageSessions?: number
     }
     SummaryStatistic: {
       /**
