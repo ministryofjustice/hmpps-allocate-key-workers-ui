@@ -36,22 +36,22 @@ export class KeyWorkerStatisticsController {
     if (!current) return []
 
     const items = {
-      numberOfActiveKeyworkers: { heading: 'Total number of active key workers', type: 'number' },
-      percentagePrisonersWithKeyworker: {
+      activeKeyworkers: { heading: 'Total number of active key workers', type: 'number' },
+      percentageWithKeyworker: {
         heading: 'Percentage of prisoners with an allocated key worker',
         type: 'percentage',
       },
-      avgNumDaysFromReceptionToAllocationDays: {
+      avgReceptionToAllocationDays: {
         heading: 'Average time from reception to key worker allocation',
         type: 'day',
       },
-      avgNumDaysFromReceptionToKeyWorkingSession: {
+      avgReceptionToSessionDays: {
         heading: 'Average time from reception to first key worker session',
         type: 'day',
       },
-      numProjectedKeyworkerSessions: { heading: 'Number of projected key worker sessions', type: 'number' },
-      numberKeyWorkerSessions: { heading: 'Number of recorded key worker sessions', type: 'number' },
-      complianceRate: { heading: 'Compliance rate', type: 'percentage' },
+      projectedSessions: { heading: 'Number of projected key worker sessions', type: 'number' },
+      keyworkerSessions: { heading: 'Number of recorded key worker sessions', type: 'number' },
+      compliance: { heading: 'Compliance rate', type: 'percentage' },
     }
 
     return Object.entries(items).map(([key, val]) => {
@@ -83,7 +83,7 @@ export class KeyWorkerStatisticsController {
     const stats = await this.keyworkerApiService.getPrisonStats(req, prisonId, nowSpan.start, nowSpan.end)
     const prison = await this.keyworkerApiService.getPrisonMigrationStatus(req, prisonId)
 
-    const data = this.createPayload(stats.summary.current, stats.summary.previous)
+    const data = this.createPayload(stats.current, stats.previous)
 
     res.render('key-worker-statistics/view', {
       data,

@@ -969,13 +969,8 @@ export interface components {
        * @description Requested start date for data set
        * @example 2018-04-01
        */
-      requestedFromDate: string
-      /**
-       * Format: date
-       * @description Requested end date for data set
-       * @example 2018-04-31
-       */
-      requestedToDate: string
+      prisonCode: string
+
       /** @description Summary of Prison Statistics for the period requested. */
       current: components['schemas']['SummaryStatistic']
       /** @description Summary of Prison Statistics for the previous period requested. */
@@ -988,9 +983,9 @@ export interface components {
        * @description Average Compliance for complianceTimeline
        * @example 75.3
        */
-      avgOverallCompliance?: number
+      averageCompliance?: number
       /** @description Date and percentage key value pair of up to 1 years data before requestedToDate */
-      keyworkerSessionsTimeline?: {
+      sessionTimeline?: {
         [key: string]: number
       }
       /**
@@ -998,7 +993,7 @@ export interface components {
        * @description Average Key worker sessions for keyworkerSessionsTimeline
        * @example 502
        */
-      avgOverallKeyworkerSessions?: number
+      averageSessions?: number
     }
     SummaryStatistic: {
       /**
@@ -1006,77 +1001,77 @@ export interface components {
        * @description Starting date for the set of summary data
        * @example 2018-06-01
        */
-      dataRangeFrom: string
+      from: string
       /**
        * Format: date
        * @description End date for the set of summary data
        * @example 2018-07-30
        */
-      dataRangeTo: string
+      to: string
       /**
        * Format: int32
        * @description Average number of prisoners assigned a key worker over this time range
        * @example 423
        */
-      numPrisonersAssignedKeyWorker: number
+      prisonersAssignedKeyworker: number
       /**
        * Format: int32
        * @description Average total number of prisoners in the prisons over this time range
        * @example 600
        */
-      totalNumPrisoners: number
+      totalPrisoners: number
       /**
        * Format: int32
        * @description Average total number of eligible prisoners in the prisons over this time range
        * @example 600
        */
-      totalNumEligiblePrisoners: number
+      eligiblePrisoners: number
       /**
        * Format: int32
        * @description Average number of Key Working Sessions done over this time range
        * @example 354
        */
-      numberKeyWorkerSessions: number
+      keyworkerSessions: number
       /**
        * Format: int32
        * @description Average number of Key Worker Entries made over this time range
        * @example 232
        */
-      numberKeyWorkerEntries: number
+      keyworkerEntries: number
       /**
        * Format: int32
        * @description Average number of Active Key Workers over this time range
        * @example 320
        */
-      numberOfActiveKeyworkers: number
+      activeKeyworkers: number
       /**
        * @description Average percentage of Prisoners who have been assigned a Key Worker over this time range
        * @example 87.2
        */
-      percentagePrisonersWithKeyworker: number
+      percentageWithKeyworker: number
       /**
        * Format: int32
        * @description Average number of projected Key Worker sessions that could be done based on available key workers and frequency of sessions (e.g 1/week)
        * @example 501
        */
-      numProjectedKeyworkerSessions: number
+      projectedSessions: number
       /**
        * @description Overall compliance rate for this time period
        * @example 87.5
        */
-      complianceRate: number
+      compliance: number
       /**
        * Format: int32
        * @description Average number of days between a prisoner entering this prison and being allocated a key worker.
        * @example 5
        */
-      avgNumDaysFromReceptionToAllocationDays: number
+      avgReceptionToAllocationDays: number
       /**
        * Format: int32
        * @description Average number of days between a prisoner entering this prison and receiving a session from key worker
        * @example 10
        */
-      avgNumDaysFromReceptionToKeyWorkingSession: number
+      avgReceptionToSessionDays: number
     }
     KeyworkerStatsDto: {
       /**
