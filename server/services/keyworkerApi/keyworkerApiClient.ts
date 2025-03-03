@@ -57,9 +57,9 @@ export default class KeyworkerApiClient {
     return response
   }
 
-  async getPrisonMigrationStatus(prisonId: string): Promise<components['schemas']['Prison']> {
-    const response = await this.restClient.get<components['schemas']['Prison']>({
-      path: `/key-worker/prison/${prisonId}`,
+  async getPrisonConfig(prisonCode: string): Promise<components['schemas']['PrisonConfigurationDto']> {
+    const response = await this.restClient.get<components['schemas']['PrisonConfigurationDto']>({
+      path: `/prisons/${prisonCode}/keyworker/configuration`,
     })
 
     return response
