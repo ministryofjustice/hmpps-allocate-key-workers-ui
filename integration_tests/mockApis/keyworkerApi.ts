@@ -245,6 +245,28 @@ const stubKeyworkerApiStatsNoData = () =>
     },
   })
 
+const stubPrisonNoHighRisk = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPathPattern: '/keyworker-api/prisons/LEI/keyworker/configuration',
+    },
+    response: {
+      status: 200,
+      jsonBody: {
+        isEnabled: true,
+        hasPrisonersWithHighComplexityNeeds: false,
+        allowAutoAllocate: true,
+        capacityTier1: 6,
+        capacityTier2: 9,
+        kwSessionFrequencyInWeeks: 1,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  })
+
 export default {
   stubKeyworkerApiHealth,
   stubKeyworkerApiStatusIsKeyworker: () => stubKeyworkerApiStatusIsKeyworker(true),
@@ -254,4 +276,5 @@ export default {
   stubKeyworkerApiStats2024,
   stubKeyworkerMigrationStatus,
   stubKeyworkerApiStatsNoData,
+  stubPrisonNoHighRisk,
 }
