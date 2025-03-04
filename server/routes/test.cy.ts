@@ -167,6 +167,15 @@ context('test / homepage', () => {
     ).should('be.visible')
   })
 
+  it('should show service unavailable if prison does not have service enabled', () => {
+    cy.task('stubSignIn')
+    cy.task('stubPrisonNotEnabled')
+
+    navigateToTestPage()
+
+    cy.findByText('Sorry, there is a problem with the service').should('be.visible')
+  })
+
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit('/', { failOnStatusCode: false })
