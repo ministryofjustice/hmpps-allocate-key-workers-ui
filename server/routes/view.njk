@@ -27,7 +27,10 @@
                                   <h2 class="govuk-heading-m card__heading">
                                       <a class="govuk-link govuk-link--no-visited-state card__link" href="{{ legacyKeyWorkersUiUrl }}/manage-key-workers/view-residential-location">View by residential location</a>
                                   </h2>
-                                  <p class="govuk-body card__description">View all prisoners in a residential location and allocate or change key workers. You can also see high complexity prisoners</p>
+                                  <p class="govuk-body card__description">View all prisoners in a residential location and allocate or change key workers.</p>
+                                  {% if hasPrisonersWithHighComplexityNeeds %}
+                                    <p class="govuk-body card__description">You can also see high complexity prisoners</p>
+                                  {%  endif %}
                               </div>
                           </div>
 
