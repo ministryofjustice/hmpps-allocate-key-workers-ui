@@ -43,19 +43,17 @@ const stubKeyworkerMigrationStatus = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPathPattern: '/keyworker-api/key-worker/prison/(.*)',
+      urlPathPattern: '/keyworker-api/prisons/LEI/keyworker/configuration',
     },
     response: {
       status: 200,
       jsonBody: {
-        prisonId: 'LEI',
-        supported: true,
-        migrated: true,
-        autoAllocatedSupported: true,
+        isEnabled: true,
+        hasPrisonersWithHighComplexityNeeds: true,
+        allowAutoAllocate: true,
         capacityTier1: 6,
         capacityTier2: 9,
         kwSessionFrequencyInWeeks: 1,
-        migratedDateTime: '2025-01-01T01:12:55.000',
       },
       headers: {
         'Content-Type': 'application/json',
@@ -83,8 +81,8 @@ const stubKeyworkerApiStats2025 = () =>
       jsonBody: {
         prisonCode: 'LEI',
         current: {
-          from: '2024-01-11',
-          to: '2024-01-11',
+          from: '2025-01-11',
+          to: '2025-01-11',
           prisonersAssignedKeyworker: 4200,
           totalPrisoners: 6900,
           eligiblePrisoners: 5000,
@@ -247,6 +245,50 @@ const stubKeyworkerApiStatsNoData = () =>
     },
   })
 
+const stubPrisonNoHighRisk = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPathPattern: '/keyworker-api/prisons/LEI/keyworker/configuration',
+    },
+    response: {
+      status: 200,
+      jsonBody: {
+        isEnabled: true,
+        hasPrisonersWithHighComplexityNeeds: false,
+        allowAutoAllocate: true,
+        capacityTier1: 6,
+        capacityTier2: 9,
+        kwSessionFrequencyInWeeks: 1,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  })
+
+const stubPrisonNotEnabled = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPathPattern: '/keyworker-api/prisons/LEI/keyworker/configuration',
+    },
+    response: {
+      status: 200,
+      jsonBody: {
+        isEnabled: false,
+        hasPrisonersWithHighComplexityNeeds: false,
+        allowAutoAllocate: true,
+        capacityTier1: 6,
+        capacityTier2: 9,
+        kwSessionFrequencyInWeeks: 1,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  })
+
 export default {
   stubKeyworkerApiHealth,
   stubKeyworkerApiStatusIsKeyworker: () => stubKeyworkerApiStatusIsKeyworker(true),
@@ -256,4 +298,6 @@ export default {
   stubKeyworkerApiStats2024,
   stubKeyworkerMigrationStatus,
   stubKeyworkerApiStatsNoData,
+  stubPrisonNoHighRisk,
+  stubPrisonNotEnabled,
 }

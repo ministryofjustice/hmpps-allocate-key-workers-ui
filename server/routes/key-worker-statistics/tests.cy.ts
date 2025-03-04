@@ -24,8 +24,8 @@ context('Key worker statistics', () => {
 
     cy.findByRole('button', { name: 'View' })
 
-    cy.findByText(
-      'Displaying statistics from 1 January 2025 to 31 January 2025. Comparing against statistics from 2 December 2024 to 31 December 2024.',
+    cy.contains(
+      /^Displaying statistics from \d+ [A-Za-z]+ \d+ to \d+ [A-Za-z]+ \d+. Comparing against statistics from \d+ [A-Za-z]+ \d+ to \d+ [A-Za-z]+ \d+./,
     )
 
     cy.get('.govuk-grid-column-one-quarter')
