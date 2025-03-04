@@ -24,6 +24,7 @@ export interface ServiceConfigInfo {
   publishEvents: boolean
   productId: string
 }
+
 export default class KeyworkerApiClient {
   private readonly restClient: RestClient
 
