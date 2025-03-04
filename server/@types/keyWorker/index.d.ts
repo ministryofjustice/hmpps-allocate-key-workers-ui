@@ -410,7 +410,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/key-worker/prison/{prisonId}': {
+  '/prisons/{prisonCode}/keyworker/configuration': {
     parameters: {
       query?: never
       header?: never
@@ -418,7 +418,7 @@ export interface paths {
       cookie?: never
     }
     /** Get Prison Migration Status */
-    get: operations['getPrisonMigrationStatus']
+    get: operations['getPrisonConfig']
     put?: never
     post?: never
     delete?: never
