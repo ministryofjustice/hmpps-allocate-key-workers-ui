@@ -173,7 +173,7 @@ context('test / homepage', () => {
 
     navigateToTestPage()
 
-    cy.findByText('Sorry, there is a problem with the service').should('be.visible')
+    cy.findByText('Service not enabled').should('be.visible')
   })
 
   const navigateToTestPage = () => {

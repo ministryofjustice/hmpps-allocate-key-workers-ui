@@ -22,7 +22,7 @@ export default function populateUserPermissions(): RequestHandler {
       res.locals.prisonConfiguration = await keyworkerApiService.getPrisonConfig(req, prisonCode)
 
       if (!res.locals.prisonConfiguration.isEnabled) {
-        return res.render('pages/errorServiceProblem')
+        return res.render('pages/service-not-enabled')
       }
 
       if (!res.locals.user.permissions.view && !res.locals.user.permissions.allocate) {
