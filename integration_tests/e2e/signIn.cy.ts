@@ -7,7 +7,6 @@ context('Sign In', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubPrisonNoHighRisk')
-    cy.task('stubPrisonNoHighRisk')
   })
 
   it('Unauthenticated user directed to auth', () => {
@@ -28,7 +27,6 @@ context('Sign In', () => {
 
   it('User can sign out', () => {
     cy.signIn()
-    cy.task('stubPrisonNoHighRisk')
     const indexPage = Page.verifyOnPage(IndexPage)
     indexPage.signOut().click()
     Page.verifyOnPage(AuthSignInPage)
@@ -36,7 +34,6 @@ context('Sign In', () => {
 
   it('Token verification failure takes user to sign in page', () => {
     cy.signIn()
-    cy.task('stubPrisonNoHighRisk')
     Page.verifyOnPage(IndexPage)
     cy.task('stubVerifyToken', false)
 
@@ -46,7 +43,6 @@ context('Sign In', () => {
 
   it('Token verification failure clears user session', () => {
     cy.signIn()
-    cy.task('stubPrisonNoHighRisk')
     const indexPage = Page.verifyOnPage(IndexPage)
     cy.task('stubVerifyToken', false)
 
