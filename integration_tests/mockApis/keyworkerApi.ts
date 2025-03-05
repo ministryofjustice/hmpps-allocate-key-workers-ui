@@ -39,7 +39,7 @@ const stubKeyworkerApiStatusFail = () =>
     },
   })
 
-const stubKeyworkerMigrationStatus = () =>
+const stubKeyworkerPrisonConfig = (isEnabled: boolean, hasPrisonersWithHighComplexityNeeds: boolean) =>
   stubFor({
     request: {
       method: 'GET',
@@ -48,8 +48,8 @@ const stubKeyworkerMigrationStatus = () =>
     response: {
       status: 200,
       jsonBody: {
-        isEnabled: true,
-        hasPrisonersWithHighComplexityNeeds: true,
+        isEnabled,
+        hasPrisonersWithHighComplexityNeeds,
         allowAutoAllocate: true,
         capacityTier1: 6,
         capacityTier2: 9,
@@ -245,50 +245,6 @@ const stubKeyworkerApiStatsNoData = () =>
     },
   })
 
-const stubPrisonNoHighRisk = () =>
-  stubFor({
-    request: {
-      method: 'GET',
-      urlPathPattern: '/keyworker-api/prisons/LEI/keyworker/configuration',
-    },
-    response: {
-      status: 200,
-      jsonBody: {
-        isEnabled: true,
-        hasPrisonersWithHighComplexityNeeds: false,
-        allowAutoAllocate: true,
-        capacityTier1: 6,
-        capacityTier2: 9,
-        kwSessionFrequencyInWeeks: 1,
-      },
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    },
-  })
-
-const stubPrisonNotEnabled = () =>
-  stubFor({
-    request: {
-      method: 'GET',
-      urlPathPattern: '/keyworker-api/prisons/LEI/keyworker/configuration',
-    },
-    response: {
-      status: 200,
-      jsonBody: {
-        isEnabled: false,
-        hasPrisonersWithHighComplexityNeeds: false,
-        allowAutoAllocate: true,
-        capacityTier1: 6,
-        capacityTier2: 9,
-        kwSessionFrequencyInWeeks: 1,
-      },
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    },
-  })
-
 export default {
   stubKeyworkerApiHealth,
   stubKeyworkerApiStatusIsKeyworker: () => stubKeyworkerApiStatusIsKeyworker(true),
@@ -296,8 +252,8 @@ export default {
   stubKeyworkerApiStatusFail: () => stubKeyworkerApiStatusFail(),
   stubKeyworkerApiStats2025,
   stubKeyworkerApiStats2024,
-  stubKeyworkerMigrationStatus,
+  stubKeyworkerMigrationStatus: () => stubKeyworkerPrisonConfig(true, true),
   stubKeyworkerApiStatsNoData,
-  stubPrisonNoHighRisk,
-  stubPrisonNotEnabled,
+  stubPrisonNoHighRisk: () => stubKeyworkerPrisonConfig(true, false),
+  stubPrisonNotEnabled: () => stubKeyworkerPrisonConfig(false, false),
 }
