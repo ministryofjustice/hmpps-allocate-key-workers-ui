@@ -3,6 +3,7 @@ context('test errorHandler', () => {
     cy.task('reset')
     cy.task('stubSignIn')
     cy.task('stubComponents')
+    cy.task('stubPrisonNoHighRisk')
   })
 
   // TODO: add test for API error handling
