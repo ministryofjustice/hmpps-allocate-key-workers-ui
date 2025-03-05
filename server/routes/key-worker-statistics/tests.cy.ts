@@ -7,7 +7,7 @@ context('Key worker statistics', () => {
     cy.task('stubSignIn')
     cy.task('stubKeyworkerApiStats2025')
     cy.task('stubKeyworkerApiStats2024')
-    cy.task('stubKeyworkerMigrationStatus')
+    cy.task('stubEnabledPrisonWithHighComplexityNeedsPrisoners')
 
     navigateToTestPage()
 
@@ -156,7 +156,7 @@ context('Key worker statistics', () => {
   it('shows "no data" message when there is no data', () => {
     cy.task('stubSignIn')
     cy.task('stubKeyworkerApiStatsNoData')
-    cy.task('stubKeyworkerMigrationStatus')
+    cy.task('stubEnabledPrisonWithHighComplexityNeedsPrisoners')
 
     navigateToTestPage()
 

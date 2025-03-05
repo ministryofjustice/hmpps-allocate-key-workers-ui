@@ -252,8 +252,8 @@ export default {
   stubKeyworkerApiStatusFail: () => stubKeyworkerApiStatusFail(),
   stubKeyworkerApiStats2025,
   stubKeyworkerApiStats2024,
-  stubKeyworkerMigrationStatus: () => stubKeyworkerPrisonConfig(true, true),
   stubKeyworkerApiStatsNoData,
-  stubPrisonNoHighRisk: () => stubKeyworkerPrisonConfig(true, false),
+  stubEnabledPrisonWithHighComplexityNeedsPrisoners: () => stubKeyworkerPrisonConfig(true, true),
+  stubEnabledPrison: () => stubKeyworkerPrisonConfig(true, false),
   stubPrisonNotEnabled: () => stubKeyworkerPrisonConfig(false, false),
 }

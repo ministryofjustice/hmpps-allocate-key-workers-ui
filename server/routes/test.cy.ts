@@ -20,7 +20,7 @@ context('test / homepage', () => {
         roles: [],
       })
       cy.task('stubKeyworkerApiStatusIsNotKeyworker')
-      cy.task('stubPrisonNoHighRisk')
+      cy.task('stubEnabledPrison')
 
       navigateToTestPage()
       cy.url().should('include', 'not-authorised')
@@ -33,7 +33,7 @@ context('test / homepage', () => {
         roles: [],
       })
       cy.task('stubKeyworkerApiStatusIsKeyworker')
-      cy.task('stubPrisonNoHighRisk')
+      cy.task('stubEnabledPrison')
 
       navigateToTestPage()
 
@@ -59,7 +59,7 @@ context('test / homepage', () => {
         roles: [AuthorisedRoles.OMIC_ADMIN],
       })
       cy.task('stubKeyworkerApiStatusIsNotKeyworker')
-      cy.task('stubPrisonNoHighRisk')
+      cy.task('stubEnabledPrison')
 
       navigateToTestPage()
 
@@ -87,7 +87,7 @@ context('test / homepage', () => {
     cy.task('stubSignIn', {
       roles: [AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KEYWORKER_MONITOR],
     })
-    cy.task('stubPrisonNoHighRisk')
+    cy.task('stubEnabledPrison')
     navigateToTestPage()
 
     cy.findByRole('heading', { name: /^Key workers$/i }).should('be.visible')
@@ -127,7 +127,7 @@ context('test / homepage', () => {
     cy.task('stubSignIn', {
       roles: [AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KEYWORKER_MONITOR],
     })
-    cy.task('stubPrisonNoHighRisk')
+    cy.task('stubEnabledPrison')
 
     navigateToTestPage()
 
@@ -148,7 +148,7 @@ context('test / homepage', () => {
     cy.task('stubSignIn', {
       roles: [AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KEYWORKER_MONITOR],
     })
-    cy.task('stubKeyworkerMigrationStatus')
+    cy.task('stubEnabledPrisonWithHighComplexityNeedsPrisoners')
 
     navigateToTestPage()
 
