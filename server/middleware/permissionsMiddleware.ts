@@ -8,17 +8,21 @@ export default function populateUserPermissions(): RequestHandler {
 
   return async (req, res, next) => {
     try {
+      const prisonCode = res.locals.user.activeCaseLoad!.caseLoadId!
+
       const userViewPermission =
         res.locals.user.userRoles.includes(AuthorisedRoles.KEYWORKER_MONITOR) ||
-        (await keyworkerApiService.isKeyworker(
-          req,
-          res.locals.user.activeCaseLoad!.caseLoadId!,
-          res.locals.user.username,
-        ))
+        (await keyworkerApiService.isKeyworker(req, prisonCode, res.locals.user.username))
 
       res.locals.user.permissions = {
         view: userViewPermission,
         allocate: res.locals.user.userRoles.includes(AuthorisedRoles.OMIC_ADMIN),
+      }
+
+      res.locals.prisonConfiguration = await keyworkerApiService.getPrisonConfig(req, prisonCode)
+
+      if (!res.locals.prisonConfiguration.isEnabled) {
+        return res.render('pages/service-not-enabled')
       }
 
       if (!res.locals.user.permissions.view && !res.locals.user.permissions.allocate) {

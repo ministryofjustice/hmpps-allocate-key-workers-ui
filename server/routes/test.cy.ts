@@ -20,6 +20,8 @@ context('test / homepage', () => {
         roles: [],
       })
       cy.task('stubKeyworkerApiStatusIsNotKeyworker')
+      cy.task('stubEnabledPrison')
+
       navigateToTestPage()
       cy.url().should('include', 'not-authorised')
       cy.findByText('You do not have permission to access this page').should('be.visible')
@@ -31,6 +33,8 @@ context('test / homepage', () => {
         roles: [],
       })
       cy.task('stubKeyworkerApiStatusIsKeyworker')
+      cy.task('stubEnabledPrison')
+
       navigateToTestPage()
 
       cy.findByRole('heading', { name: /^Key workers$/i }).should('be.visible')
@@ -55,6 +59,8 @@ context('test / homepage', () => {
         roles: [AuthorisedRoles.OMIC_ADMIN],
       })
       cy.task('stubKeyworkerApiStatusIsNotKeyworker')
+      cy.task('stubEnabledPrison')
+
       navigateToTestPage()
 
       cy.findByRole('heading', { name: /^Key workers$/i }).should('be.visible')
@@ -81,6 +87,7 @@ context('test / homepage', () => {
     cy.task('stubSignIn', {
       roles: [AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KEYWORKER_MONITOR],
     })
+    cy.task('stubEnabledPrison')
     navigateToTestPage()
 
     cy.findByRole('heading', { name: /^Key workers$/i }).should('be.visible')
@@ -114,6 +121,59 @@ context('test / homepage', () => {
       .should('be.visible')
       .and('have.attr', 'href')
       .and('to.equal', 'https://legacy.key-workers.url/manage-key-worker-settings')
+  })
+
+  it('should not show extra text when prison has no high risk prisoners', () => {
+    cy.task('stubSignIn', {
+      roles: [AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KEYWORKER_MONITOR],
+    })
+    cy.task('stubEnabledPrison')
+
+    navigateToTestPage()
+
+    cy.findByRole('heading', { name: /^Key workers$/i }).should('be.visible')
+
+    cy.findByRole('link', { name: /View all without a key worker$/i }).should('be.visible')
+
+    cy.findByRole('link', { name: /View by residential location$/i }).should('be.visible')
+
+    cy.findByRole('link', { name: /Search for a prisoner$/i }).should('be.visible')
+
+    cy.findByRole('link', { name: /View key workers in your establishment$/i }).should('be.visible')
+
+    cy.findByText('View all prisoners in a residential location and allocate or change key workers.')
+  })
+
+  it('should show extra text when prison has high risk prisoners', () => {
+    cy.task('stubSignIn', {
+      roles: [AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KEYWORKER_MONITOR],
+    })
+    cy.task('stubEnabledPrisonWithHighComplexityNeedsPrisoners')
+
+    navigateToTestPage()
+
+    cy.findByRole('heading', { name: /^Key workers$/i }).should('be.visible')
+
+    cy.findByRole('link', { name: /View all without a key worker$/i }).should('be.visible')
+
+    cy.findByRole('link', { name: /View by residential location$/i }).should('be.visible')
+
+    cy.findByRole('link', { name: /Search for a prisoner$/i }).should('be.visible')
+
+    cy.findByRole('link', { name: /View key workers in your establishment$/i }).should('be.visible')
+
+    cy.contains(
+      /View all prisoners in a residential location and allocate or change key workers\. You can also see high complexity prisoners/,
+    ).should('be.visible')
+  })
+
+  it('should show service unavailable if prison does not have service enabled', () => {
+    cy.task('stubSignIn')
+    cy.task('stubPrisonNotEnabled')
+
+    navigateToTestPage()
+
+    cy.findByText('Service not enabled').should('be.visible')
   })
 
   const navigateToTestPage = () => {

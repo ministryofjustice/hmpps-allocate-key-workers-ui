@@ -410,7 +410,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/key-worker/prison/{prisonId}': {
+  '/prisons/{prisonCode}/keyworker/configuration': {
     parameters: {
       query?: never
       header?: never
@@ -418,7 +418,7 @@ export interface paths {
       cookie?: never
     }
     /** Get Prison Migration Status */
-    get: operations['getPrisonMigrationStatus']
+    get: operations['getPrisonConfig']
     put?: never
     post?: never
     delete?: never
@@ -581,32 +581,22 @@ export interface components {
       /** @description Whether allocation is active. */
       active: string
     }
-    Prison: {
-      /**
-       * @description Identifies prison.
-       * @example MDI
-       */
-      prisonId: string
+    PrisonConfigurationDto: {
       /**
        * @description Indicates that Key working is supported in this prison
        * @example true
        */
-      supported: boolean
-      /**
-       * @description Indicates that Key Worker data has been migrated to the Key Worker Service
-       * @example true
-       */
-      migrated: boolean
+      isEnabled: boolean
       /**
        * @description Indicates this prison has high complexity prisoners
        * @example true
        */
-      highComplexity: boolean
+      hasPrisonersWithHighComplexityNeeds: boolean
       /**
        * @description Indicates that this prison supports auto allocation of prisoner to key workers
        * @example true
        */
-      autoAllocatedSupported: boolean
+      allowAutoAllocate: boolean
       /**
        * Format: int32
        * @description Default auto allocation amount for staff in this prison.
@@ -618,19 +608,13 @@ export interface components {
        * @description Over allocation amount per staff member (max)
        * @example 9
        */
-      capacityTier2: number
+      capacityTier2?: number
       /**
        * Format: int32
        * @description Frequency of Key working sessions in this prison
        * @example 1
        */
       kwSessionFrequencyInWeeks: number
-      /**
-       * Format: date-time
-       * @description Date and time migration of key workers was done for this prison
-       * @example 2018-10-02T01:12:55.000
-       */
-      migratedDateTime: string
     }
     OffenderKeyWorkerHistorySummary: {
       /** @description Identifies prisoner. */
@@ -1519,7 +1503,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['Prison']
+          'application/json': components['schemas']['PrisonConfigurationDto']
         }
       }
       /** @description Invalid request. */
@@ -1565,7 +1549,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['Prison']
+          'application/json': components['schemas']['PrisonConfigurationDto']
         }
       }
       /** @description Invalid request. */
@@ -2184,7 +2168,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['Prison']
+          'application/json': components['schemas']['PrisonConfigurationDto']
         }
       }
       /** @description Invalid request. */
