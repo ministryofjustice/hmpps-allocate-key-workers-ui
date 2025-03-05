@@ -1,6 +1,6 @@
 import RestClient from '../../data/restClient'
 import config from '../../config'
-import type { components } from '../../@types/keyWorker'
+import type { components, operations } from '../../@types/keyWorker'
 
 export interface ServiceConfigInfo {
   git: {
@@ -60,6 +60,15 @@ export default class KeyworkerApiClient {
   async getPrisonMigrationStatus(prisonId: string): Promise<components['schemas']['Prison']> {
     const response = await this.restClient.get<components['schemas']['Prison']>({
       path: `/key-worker/prison/${prisonId}`,
+    })
+
+    return response
+  }
+
+  async getKeyworkerMembers(prisonId: string, query?: components['schemas']['KeyworkerSearchRequest']): Promise<components['schemas']['KeyworkerSummary'][]> {
+    const response = await this.restClient.post<components['schemas']['KeyworkerSummary'][]>({
+      path: `/search/prisons/${prisonId}/keyworkers`,
+      data: query
     })
 
     return response

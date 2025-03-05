@@ -8,6 +8,7 @@ import config from '../config'
 import logger from '../../logger'
 import { todayStringGBFormat } from './datetimeUtils'
 import { findError } from '../middleware/validationMiddleware'
+import { lastNameCommaFirstName } from './formatUtils'
 
 export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
@@ -54,6 +55,8 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
   njkEnv.addFilter('dateString', getDateInReadableFormat)
+  njkEnv.addFilter('convertToSortableColumns', convertToSortableColumns)
+  njkEnv.addFilter('lastNameCommaFirstName', lastNameCommaFirstName)
 }
 
 function getDateInReadableFormat(dateString: string) {
@@ -61,4 +64,39 @@ function getDateInReadableFormat(dateString: string) {
   if (split.length < 3) throw new Error('Invalid date string')
   const date = new Date(parseInt(split[2]!, 10), parseInt(split[1]!, 10) - 1, parseInt(split[0]!, 10))
   return `${date.getDate()} ${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`
+}
+
+// add aria-sort attributes to govukTable head row, so that moj-sortable-table css will be applied
+export const convertToSortableColumns = (headings: { text: string; key?: string }[], sort: string) => {
+  const [sortingKey, sortingDirection] = sort.split(',')
+
+  return headings.map(heading => {
+    if (!heading.key) {
+      return heading
+    }
+    if (heading.key === sortingKey) {
+      if (sortingDirection === 'asc') {
+        return {
+          attributes: {
+            'aria-sort': 'ascending',
+          },
+          html: `<a href="?sort=${heading.key},desc"><button>${heading.text}</button></a>`,
+        }
+      }
+      if (sortingDirection === 'desc') {
+        return {
+          attributes: {
+            'aria-sort': 'descending',
+          },
+          html: `<a href="?sort=${heading.key},asc"><button>${heading.text}</button></a>`,
+        }
+      }
+    }
+    return {
+      attributes: {
+        'aria-sort': 'none',
+      },
+      html: `<a href="?sort=${heading.key},asc"><button>${heading.text}</button></a>`,
+    }
+  })
 }

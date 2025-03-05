@@ -4,2418 +4,2698 @@
  */
 
 export interface paths {
-  '/queue-admin/retry-dlq/{dlqName}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put: operations['retryDlq']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/queue-admin/retry-all-dlqs': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put: operations['retryAllDlqs']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/queue-admin/purge-queue/{queueName}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put: operations['purgeQueue']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/key-worker/deallocate/{offenderNo}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    /**
-     * deallocate
-     * @description Marks the offender with expired time on active record
-     */
-    put: operations['deallocate']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/key-worker/{staffId}/prison/{prisonId}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * getKeyworkerDetails
-     * @description Key worker details.
-     */
-    get: operations['getKeyworkerDetails']
-    put?: never
-    /**
-     * addOrUpdateKeyworker
-     * @description Add or update a key worker record
-     */
-    post: operations['addOrUpdateKeyworker']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/key-worker/{prisonId}/offenders': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * getOffenderForPrison
-     * @description Keyworker details for specified offenders in the given prison, where the offender and details exist.
-     */
-    get: operations['getOffenderKeyworkerDetailsList']
-    put?: never
-    post: operations['getOffenderKeyworkerDetailsListPost']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/key-worker/{prisonId}/allocate/start': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * autoAllocate
-     * @description Initiate auto-allocation process for specified prison.
-     */
-    post: operations['startAutoAllocation']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/key-worker/{prisonId}/allocate/confirm': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * confirmAutoAllocation
-     * @description Confirm allocations chosen by the auto-allocation process.
-     */
-    post: operations['confirmAutoAllocation']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/key-worker/enable/{prisonId}/manual': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Enable Manual Allocation and Migrate
-     * @description Role Required: KW_MIGRATION. This will invoke migration from NOMIS DB
-     */
-    post: operations['addSupportedPrisonForManualAllocation']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/key-worker/enable/{prisonId}/auto-allocate': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * Enable Auto Allocation for specified prison and Migrate
-     * @description Role Required: KW_MIGRATION. This will also invoke migration from NOMIS DB
-     */
-    post: operations['addSupportedPrisonForAutoAllocation']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/key-worker/allocation-history/summary': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * getKeyWorkerHistorySummaryForPrisoners
-     * @description Gets a summary of the offender's allocation histories
-     */
-    post: operations['getKeyWorkerHistorySummaryForPrisoners']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/key-worker/allocate': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /**
-     * allocate
-     * @description Process manual allocation of an offender to a Key worker.
-     */
-    post: operations['allocate']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/subject-access-request': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Provides content for a prisoner to satisfy the needs of a subject access request on their behalf
-     * @description Requires role SAR_DATA_ACCESS
-     */
-    get: operations['getSarContentByReference']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/queue-admin/get-dlq-messages/{dlqName}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['getDlqMessages']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/prisons/{prisonCode}/key-workers/{username}/status': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** @description To determine if a user is a keyworker */
-    get: operations['userIsKeyworker']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/key-worker/{staffId}/prison/{prisonId}/offenders': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * keyworkerallocations
-     * @description Specified key worker’s currently assigned offenders for given prison.
-     */
-    get: operations['getAllocationsForKeyworkerWithOffenderDetails']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/key-worker/{prisonId}/offenders/unallocated': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * getUnallocatedOffenders
-     * @description All unallocated offenders in specified prison.
-     */
-    get: operations['getUnallocatedOffenders']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/key-worker/{prisonId}/offender/{offenderNo}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * getOffendersKeyworker
-     * @deprecated
-     * @description Offenders current Keyworker
-     */
-    get: operations['deprecatedGetOffendersKeyworker']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/key-worker/{prisonId}/members': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * keyworkersearch
-     * @description Search for key workers within prison.
-     */
-    get: operations['keyworkerSearch']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/key-worker/{prisonId}/available': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * getAvailableKeyworkers
-     * @description Key workers available for allocation at specified prison.
-     */
-    get: operations['getAvailableKeyworkers']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/key-worker/{prisonId}/allocations': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * getAllocations
-     * @description Allocations in specified prison.
-     */
-    get: operations['getKeyworkerAllocations']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/key-worker/prison/{prisonId}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Get Prison Migration Status */
-    get: operations['getPrisonMigrationStatus']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/key-worker/offender/{offenderNo}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * getOffendersKeyworker
-     * @description Offenders current Keyworker
-     */
-    get: operations['getOffendersKeyworker']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/key-worker/allocation-history/{offenderNo}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * getKeyWorkerHistoryForPrisoner
-     * @description Order by most recent first
-     */
-    get: operations['getKeyWorkerHistoryForPrisoner']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/key-worker-stats': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * getAllPrisonStats
-     * @description Get Key Worker stats for any prison.
-     */
-    get: operations['getPrisonStats']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/key-worker-stats/{staffId}/prison/{prisonId}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * getStatsForStaff
-     * @description Statistic for key workers and the prisoners that they support
-     */
-    get: operations['getStatsForStaff']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    "/key-worker/deallocate/{offenderNo}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * deallocate
+         * @description Marks the offender with expired time on active record
+         *
+         *     Requires one of the following roles:
+         *     * OMIC_ADMIN
+         */
+        put: operations["deallocate"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/search/prisons/{prisonCode}/keyworkers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description
+         *
+         *     Requires one of the following roles:
+         *     * ROLE_KEY_WORKER__RO */
+        post: operations["searchKeyworkers"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/key-worker/{staffId}/prison/{prisonId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * getKeyworkerDetails
+         * @description Key worker details.
+         */
+        get: operations["getKeyworkerDetails"];
+        put?: never;
+        /**
+         * addOrUpdateKeyworker
+         * @description Add or update a key worker record
+         */
+        post: operations["addOrUpdateKeyworker"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/key-worker/{prisonId}/offenders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * getOffenderForPrison
+         * @description Keyworker details for specified offenders in the given prison, where the offender and details exist.
+         */
+        get: operations["getOffenderKeyworkerDetailsList"];
+        put?: never;
+        post: operations["getOffenderKeyworkerDetailsListPost"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/key-worker/{prisonId}/allocate/start": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * autoAllocate
+         * @description Initiate auto-allocation process for specified prison.
+         */
+        post: operations["startAutoAllocation"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/key-worker/{prisonId}/allocate/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * confirmAutoAllocation
+         * @description Confirm allocations chosen by the auto-allocation process.
+         */
+        post: operations["confirmAutoAllocation"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/key-worker/enable/{prisonId}/manual": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Enable Manual Allocation and Migrate
+         * @description Role Required: KW_MIGRATION. This will invoke migration from NOMIS DB
+         */
+        post: operations["addSupportedPrisonForManualAllocation"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/key-worker/enable/{prisonId}/auto-allocate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Enable Auto Allocation for specified prison and Migrate
+         * @description Role Required: KW_MIGRATION. This will also invoke migration from NOMIS DB
+         */
+        post: operations["addSupportedPrisonForAutoAllocation"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/key-worker/allocation-history/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * getKeyWorkerHistorySummaryForPrisoners
+         * @description Gets a summary of the offender's allocation histories
+         */
+        post: operations["getKeyWorkerHistorySummaryForPrisoners"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/key-worker/allocate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * allocate
+         * @description Process manual allocation of an offender to a Key worker.
+         */
+        post: operations["allocate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/subject-access-request": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Provides content for a prisoner to satisfy the needs of a subject access request on their behalf
+         * @description Requires role SAR_DATA_ACCESS
+         *
+         *     Requires one of the following roles:
+         *     * SAR_DATA_ACCESS
+         */
+        get: operations["getSarContentByReference"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/prisons/{prisonCode}/keyworker/{staffId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description
+         *
+         *     Requires one of the following roles:
+         *     * ROLE_KEY_WORKER__RO */
+        get: operations["getKeyworkerDetails_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/prisons/{prisonCode}/keyworkers/{staffId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description
+         *
+         *     Requires one of the following roles:
+         *     * ROLE_KEY_WORKER__RO */
+        get: operations["getKeyworkerDetails_2"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/prisons/{prisonCode}/keyworkers/statistics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description
+         *
+         *     Requires one of the following roles:
+         *     * ROLE_KEY_WORKER__RO */
+        get: operations["getPrisonStatistics"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/prisons/{prisonCode}/keyworker/statistics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description
+         *
+         *     Requires one of the following roles:
+         *     * ROLE_KEY_WORKER__RO */
+        get: operations["getPrisonStatistics_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/prisons/{prisonCode}/keyworkers/configuration": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description
+         *
+         *     Requires one of the following roles:
+         *     * ROLE_KEY_WORKER__RO */
+        get: operations["getPrisonConfiguration"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/prisons/{prisonCode}/keyworker/configuration": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description
+         *
+         *     Requires one of the following roles:
+         *     * ROLE_KEY_WORKER__RO */
+        get: operations["getPrisonConfiguration_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/prisons/{prisonCode}/key-workers/{username}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description To determine if a user is a keyworker
+         *
+         *     Requires one of the following roles:
+         *     * ROLE_KEY_WORKER__RO */
+        get: operations["userIsKeyworker"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/key-worker/{staffId}/prison/{prisonId}/offenders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * keyworkerallocations
+         * @description Specified key worker’s currently assigned offenders for given prison.
+         */
+        get: operations["getAllocationsForKeyworkerWithOffenderDetails"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/key-worker/{prisonId}/offenders/unallocated": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * getUnallocatedOffenders
+         * @description All unallocated offenders in specified prison.
+         */
+        get: operations["getUnallocatedOffenders"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/key-worker/{prisonId}/offender/{offenderNo}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * getOffendersKeyworker
+         * @deprecated
+         * @description Offenders current Keyworker
+         */
+        get: operations["deprecatedGetOffendersKeyworker"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/key-worker/{prisonId}/members": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * keyworkersearch
+         * @description Search for key workers within prison.
+         */
+        get: operations["keyworkerSearch"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/key-worker/{prisonId}/available": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * getAvailableKeyworkers
+         * @description Key workers available for allocation at specified prison.
+         */
+        get: operations["getAvailableKeyworkers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/key-worker/{prisonId}/allocations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * getAllocations
+         * @description Allocations in specified prison.
+         */
+        get: operations["getKeyworkerAllocations"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/key-worker/prison/{prisonId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Prison Migration Status */
+        get: operations["getPrisonMigrationStatus"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/key-worker/offender/{offenderNo}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * getOffendersKeyworker
+         * @description Offenders current Keyworker
+         */
+        get: operations["getOffendersKeyworker"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/key-worker/allocation-history/{offenderNo}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * getKeyWorkerHistoryForPrisoner
+         * @description Order by most recent first
+         */
+        get: operations["getKeyWorkerHistoryForPrisoner"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/key-worker-stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * getAllPrisonStats
+         * @description Get Key Worker stats for any prison.
+         */
+        get: operations["getPrisonStats"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/key-worker-stats/{staffId}/prison/{prisonId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * getStatsForStaff
+         * @description Statistic for key workers and the prisoners that they support
+         */
+        get: operations["getStatsForStaff"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
-export type webhooks = Record<string, never>
+export type webhooks = Record<string, never>;
 export interface components {
-  schemas: {
-    RetryDlqResult: {
-      /** Format: int32 */
-      messagesFoundCount: number
-    }
-    PurgeQueueResult: {
-      /** Format: int32 */
-      messagesFoundCount: number
-    }
-    ErrorResponse: {
-      /** Format: int32 */
-      status?: number
-      /** Format: int32 */
-      errorCode?: number
-      userMessage?: string
-      developerMessage?: string
-      moreInfo?: string
-    }
-    /** @description New keyworker details. */
-    KeyworkerUpdateDto: {
-      /**
-       * Format: int32
-       * @description Key worker's allocation capacity.
-       */
-      capacity: number
-      /**
-       * @description Key worker's status.
-       * @enum {string}
-       */
-      status: 'ACT' | 'UAL' | 'ULT' | 'UNP' | 'INA'
-      /**
-       * @description Determines behaviour to apply to auto-allocation
-       * @enum {string}
-       */
-      behaviour?: 'KEEP_ALLOCATIONS' | 'KEEP_ALLOCATIONS_NO_AUTO' | 'REMOVE_ALLOCATIONS_NO_AUTO'
-      /**
-       * Format: date
-       * @description Date that the Key worker's status should be updated to Active
-       */
-      activeDate?: string
-    }
-    OffenderKeyworkerDto: {
-      /**
-       * Format: int64
-       * @description Id of offender allocation.
-       */
-      offenderKeyworkerId: number
-      /** @description The offender's unique offender number (aka NOMS Number in the UK). */
-      offenderNo: string
-      /**
-       * Format: int64
-       * @description The offender's Key worker.
-       */
-      staffId: number
-      /** @description Prison Id where allocation is effective. */
-      agencyId: string
-      /**
-       * Format: date-time
-       * @description The date and time of the allocation.
-       */
-      assigned: string
-      /**
-       * Format: date-time
-       * @description The date and time of deallocation.
-       */
-      expired?: string
-      /** @description The user who created the allocation. */
-      userId: string
-      /** @description Whether allocation is active. */
-      active: string
-    }
-    Prison: {
-      /**
-       * @description Identifies prison.
-       * @example MDI
-       */
-      prisonId: string
-      /**
-       * @description Indicates that Key working is supported in this prison
-       * @example true
-       */
-      supported: boolean
-      /**
-       * @description Indicates that Key Worker data has been migrated to the Key Worker Service
-       * @example true
-       */
-      migrated: boolean
-      /**
-       * @description Indicates this prison has high complexity prisoners
-       * @example true
-       */
-      highComplexity: boolean
-      /**
-       * @description Indicates that this prison supports auto allocation of prisoner to key workers
-       * @example true
-       */
-      autoAllocatedSupported: boolean
-      /**
-       * Format: int32
-       * @description Default auto allocation amount for staff in this prison.
-       * @example 6
-       */
-      capacityTier1: number
-      /**
-       * Format: int32
-       * @description Over allocation amount per staff member (max)
-       * @example 9
-       */
-      capacityTier2: number
-      /**
-       * Format: int32
-       * @description Frequency of Key working sessions in this prison
-       * @example 1
-       */
-      kwSessionFrequencyInWeeks: number
-      /**
-       * Format: date-time
-       * @description Date and time migration of key workers was done for this prison
-       * @example 2018-10-02T01:12:55.000
-       */
-      migratedDateTime: string
-    }
-    OffenderKeyWorkerHistorySummary: {
-      /** @description Identifies prisoner. */
-      offenderNo: string
-      /** @description Whether this prisoner has ever had a keyworker allocated. */
-      hasHistory: boolean
-    }
-    /** @description New allocation details. */
-    KeyworkerAllocationDto: {
-      /** @description Identifies offender who is subject of allocation. */
-      offenderNo: string
-      /**
-       * Format: int64
-       * @description Identifies Key worker who is subject of allocation.
-       */
-      staffId: number
-      /** @description Prison where allocation is effective. */
-      prisonId: string
-      /**
-       * @description Type of allocation - auto or manual.
-       * @enum {string}
-       */
-      allocationType: 'A' | 'M' | 'P'
-      /**
-       * @description Reason for allocation.
-       * @enum {string}
-       */
-      allocationReason: 'AUTO' | 'MANUAL'
-      /**
-       * @description Reason for de-allocation.
-       * @enum {string}
-       */
-      deallocationReason?:
-        | 'OVERRIDE'
-        | 'RELEASED'
-        | 'KEYWORKER_STATUS_CHANGE'
-        | 'TRANSFER'
-        | 'MERGED'
-        | 'MISSING'
-        | 'DUPLICATE'
-        | 'MANUAL'
-    }
-    SarKeyWorker: {
-      /** Format: date-time */
-      allocatedAt: string
-      /** Format: date-time */
-      allocationExpiredAt?: string
-      prisonCode: string
-      allocationType: string
-      allocationReason: string
-      deallocationReason?: string
-      keyworker: components['schemas']['StaffMember']
-      activeAllocation: boolean
-    }
-    StaffMember: {
-      firstName: string
-      lastName: string
-    }
-    SubjectAccessResponse: {
-      prn: string
-      content: components['schemas']['SarKeyWorker'][]
-    }
-    DlqMessage: {
-      body: {
-        [key: string]: unknown
-      }
-      messageId: string
-    }
-    GetDlqResult: {
-      /** Format: int32 */
-      messagesFoundCount: number
-      /** Format: int32 */
-      messagesReturnedCount: number
-      messages: components['schemas']['DlqMessage'][]
-    }
-    UsernameKeyworker: {
-      username: string
-      isKeyworker: boolean
-    }
-    KeyworkerDto: {
-      /**
-       * Format: int64
-       * @description Unique staff identifier for Key worker.
-       */
-      staffId: number
-      /** @description Key worker's first name. */
-      firstName: string
-      /** @description Key worker's last name. */
-      lastName: string
-      /** @description Key worker's email address. */
-      email?: string
-      /**
-       * Format: int64
-       * @description Identifier for Key worker image.
-       */
-      thumbnailId?: number
-      /**
-       * Format: int32
-       * @description Key worker's allocation capacity.
-       */
-      capacity: number
-      /**
-       * Format: int32
-       * @description Number of offenders allocated to Key worker.
-       */
-      numberAllocated: number
-      /** @description Key worker's schedule type. */
-      scheduleType?: string
-      /** @description Key worker's agency Id. */
-      agencyId?: string
-      /** @description Key worker's agency description. */
-      agencyDescription?: string
-      /**
-       * @description Key worker's status.
-       * @enum {string}
-       */
-      status?: 'ACT' | 'UAL' | 'ULT' | 'UNP' | 'INA'
-      /** @description Key worker is eligible for auto allocation. */
-      autoAllocationAllowed?: boolean
-      /**
-       * Format: date
-       * @description Date keyworker status should return to active. (returning from annual leave)
-       */
-      activeDate?: string
-      /**
-       * Format: int32
-       * @description Number of KW sessions in the time period specified
-       */
-      numKeyWorkerSessions?: number
-    }
-    KeyworkerAllocationDetailsDto: {
-      /**
-       * Format: int64
-       * @description Offender Booking Id
-       */
-      bookingId: number
-      /** @description Offender Unique Reference */
-      offenderNo: string
-      /** @description First Name */
-      firstName: string
-      /** @description Middle Name(s) */
-      middleNames?: string
-      /** @description Last Name */
-      lastName: string
-      /**
-       * Format: int64
-       * @description The key worker's Staff Id
-       */
-      staffId: number
-      /**
-       * @deprecated
-       * @description Agency Id - will be removed - use prisonId
-       */
-      agencyId: string
-      /** @description Prison Id */
-      prisonId: string
-      /**
-       * Format: date-time
-       * @description Date and time of the allocation
-       */
-      assigned: string
-      /**
-       * @description A
-       * @enum {string}
-       */
-      allocationType: 'A' | 'M' | 'P'
-      /** @description Description of the location within the prison */
-      internalLocationDesc: string
-      /** @description Prison different to current - deallocation only allowed */
-      deallocOnly: boolean
-    }
-    OffenderLocationDto: {
-      /** @description The offender's unique offender number (aka NOMS Number in the UK). */
-      offenderNo: string
-      /**
-       * Format: int64
-       * @description A unique booking id.
-       */
-      bookingId: number
-      /** @description The offender's first name. */
-      firstName: string
-      /** @description The offender's middle name(s). */
-      middleName?: string
-      /** @description The offender's last name. */
-      lastName: string
-      /** Format: date */
-      dateOfBirth?: string
-      /** @description Agency Id (if known) */
-      agencyId?: string
-      /**
-       * Format: int64
-       * @description Internal location id (if known)
-       */
-      assignedLivingUnitId?: number
-      /** @description Internal location description (if known) */
-      assignedLivingUnitDesc?: string
-    }
-    BasicKeyworkerDto: {
-      /**
-       * Format: int64
-       * @description Unique staff identifier for Key worker.
-       */
-      staffId: number
-      /** @description Key worker's first name. */
-      firstName: string
-      /** @description Key worker's last name. */
-      lastName: string
-      /** @description Key worker's email address. */
-      email?: string
-    }
-    KeyWorkerAllocation: {
-      /**
-       * Format: int64
-       * @description Id of offender allocation.
-       */
-      offenderKeyworkerId: number
-      /**
-       * Format: int64
-       * @description The offender's Key worker staff Id.
-       */
-      staffId: number
-      /** @description Key worker's first name. */
-      firstName: string
-      /** @description Key worker's last name. */
-      lastName: string
-      /** @description Prison Id where allocation is effective. */
-      prisonId: string
-      /**
-       * Format: date-time
-       * @description The date and time of the allocation.
-       */
-      assigned: string
-      /**
-       * Format: date-time
-       * @description The date and time of deallocation.
-       */
-      expired?: string
-      /** @description The user who created the allocation. */
-      userId: components['schemas']['StaffUser']
-      /** @description Whether allocation is active. */
-      active: boolean
-      /**
-       * @description Type of allocation - auto or manual.
-       * @enum {string}
-       */
-      allocationType: 'A' | 'M' | 'P'
-      /** @description Reason for allocation. */
-      allocationReason: string
-      /** @description Reason for de-allocation. */
-      deallocationReason?: string
-      /**
-       * Format: date-time
-       * @description The date and time of creation.
-       */
-      creationDateTime?: string
-      /** @description The user who created the allocation. */
-      createdByUser: components['schemas']['StaffUser']
-      /**
-       * Format: date-time
-       * @description Last date and time of modification.
-       */
-      modifyDateTime?: string
-      /** @description The user who last modified the allocation. */
-      lastModifiedByUser: components['schemas']['StaffUser']
-    }
-    OffenderKeyWorkerHistory: {
-      offender?: components['schemas']['PrisonerDetail']
-      allocationHistory?: components['schemas']['KeyWorkerAllocation'][]
-    }
-    PrisonerDetail: {
-      /** @description Identifies prisoner. */
-      offenderNo: string
-      /** @description The prisoner's Title */
-      title: string
-      /** @description The prisoner's Suffix */
-      suffix: string
-      /** @description The prisoner's first name. */
-      firstName: string
-      /** @description The prisoner's middle names. */
-      middleNames: string
-      /** @description The prisoner's last name. */
-      lastName: string
-      /**
-       * Format: date
-       * @description The prisoner's date of birth
-       */
-      dateOfBirth: string
-      /** @description The prisoner's gender */
-      gender: string
-      /** @description Indicate Y if in prison */
-      currentlyInPrison: string
-      /**
-       * Format: int64
-       * @description Latest booking id
-       */
-      latestBookingId: number
-      /** @description Latest Location Id */
-      latestLocationId: string
-      /** @description Latest location */
-      latestLocation: string
-      /** @description Last Internal location */
-      internalLocation: string
-      /** @description Current Imprisonment Status */
-      imprisonmentStatus: string
-      /**
-       * Format: date
-       * @description Date received into prison
-       */
-      receptionDate: string
-      inPrison?: boolean
-    }
-    StaffUser: {
-      /**
-       * Format: int64
-       * @description Unique staff identifier
-       */
-      staffId: number
-      /** @description Staff first name. */
-      firstName: string
-      /** @description Staff last name. */
-      lastName: string
-      /** @description Staff username */
-      username: string
-    }
-    KeyworkerStatSummary: {
-      /** @description Summary of all prisons specified */
-      summary: components['schemas']['PrisonStatsDto']
-      /** @description Individual prison stats */
-      prisons: {
-        [key: string]: components['schemas']['PrisonStatsDto']
-      }
-    }
-    PrisonStatsDto: {
-      /**
-       * Format: date
-       * @description Requested start date for data set
-       * @example 2018-04-01
-       */
-      prisonCode: string
-
-      /** @description Summary of Prison Statistics for the period requested. */
-      current: components['schemas']['SummaryStatistic']
-      /** @description Summary of Prison Statistics for the previous period requested. */
-      previous: components['schemas']['SummaryStatistic']
-      /** @description Date and percentage compliance key value pair of up to 1 years data before requestedToDate */
-      complianceTimeline?: {
-        [key: string]: number
-      }
-      /**
-       * @description Average Compliance for complianceTimeline
-       * @example 75.3
-       */
-      averageCompliance?: number
-      /** @description Date and percentage key value pair of up to 1 years data before requestedToDate */
-      sessionTimeline?: {
-        [key: string]: number
-      }
-      /**
-       * Format: int32
-       * @description Average Key worker sessions for keyworkerSessionsTimeline
-       * @example 502
-       */
-      averageSessions?: number
-    }
-    SummaryStatistic: {
-      /**
-       * Format: date
-       * @description Starting date for the set of summary data
-       * @example 2018-06-01
-       */
-      from: string
-      /**
-       * Format: date
-       * @description End date for the set of summary data
-       * @example 2018-07-30
-       */
-      to: string
-      /**
-       * Format: int32
-       * @description Average number of prisoners assigned a key worker over this time range
-       * @example 423
-       */
-      prisonersAssignedKeyworker: number
-      /**
-       * Format: int32
-       * @description Average total number of prisoners in the prisons over this time range
-       * @example 600
-       */
-      totalPrisoners: number
-      /**
-       * Format: int32
-       * @description Average total number of eligible prisoners in the prisons over this time range
-       * @example 600
-       */
-      eligiblePrisoners: number
-      /**
-       * Format: int32
-       * @description Average number of Key Working Sessions done over this time range
-       * @example 354
-       */
-      keyworkerSessions: number
-      /**
-       * Format: int32
-       * @description Average number of Key Worker Entries made over this time range
-       * @example 232
-       */
-      keyworkerEntries: number
-      /**
-       * Format: int32
-       * @description Average number of Active Key Workers over this time range
-       * @example 320
-       */
-      activeKeyworkers: number
-      /**
-       * @description Average percentage of Prisoners who have been assigned a Key Worker over this time range
-       * @example 87.2
-       */
-      percentageWithKeyworker: number
-      /**
-       * Format: int32
-       * @description Average number of projected Key Worker sessions that could be done based on available key workers and frequency of sessions (e.g 1/week)
-       * @example 501
-       */
-      projectedSessions: number
-      /**
-       * @description Overall compliance rate for this time period
-       * @example 87.5
-       */
-      compliance: number
-      /**
-       * Format: int32
-       * @description Average number of days between a prisoner entering this prison and being allocated a key worker.
-       * @example 5
-       */
-      avgReceptionToAllocationDays: number
-      /**
-       * Format: int32
-       * @description Average number of days between a prisoner entering this prison and receiving a session from key worker
-       * @example 10
-       */
-      avgReceptionToSessionDays: number
-    }
-    KeyworkerStatsDto: {
-      /**
-       * Format: int64
-       * @description Identifies the staff by ID.
-       * @example 234233
-       */
-      staffId: number
-      /**
-       * Format: date
-       * @description Start date on which statistic results are based
-       * @example 2018-07-01
-       */
-      fromDate: string
-      /**
-       * Format: date
-       * @description End date on which statistic results are based
-       * @example 2018-07-31
-       */
-      toDate: string
-      /**
-       * Format: int32
-       * @description Number of Session done based on case note type Key worker Activity, sub type Session
-       * @example 24
-       */
-      caseNoteSessionCount: number
-      /**
-       * Format: int32
-       * @description Number of key worker entry case notes done based on case note type Key worker Activity, sub type Entry
-       * @example 12
-       */
-      caseNoteEntryCount: number
-      /**
-       * Format: int32
-       * @description Number of projected key worker sessions that could have been done based on number of prisoners assigned to key worker and frequency of sessions set by this prison
-       * @example 22
-       */
-      projectedKeyworkerSessions: number
-      /**
-       * @description Percentage Compliance Rate of key worker session done over this time range
-       * @example 87.5
-       */
-      complianceRate: number
-    }
-  }
-  responses: never
-  parameters: never
-  requestBodies: never
-  headers: never
-  pathItems: never
+    schemas: {
+        ErrorResponse: {
+            /** Format: int32 */
+            status?: number;
+            /** Format: int32 */
+            errorCode?: number;
+            userMessage?: string;
+            developerMessage?: string;
+            moreInfo?: string;
+        };
+        KeyworkerSearchRequest: {
+            query?: string;
+            /** @enum {string} */
+            status: "ACT" | "UAL" | "ULT" | "UNP" | "INA";
+        };
+        CodedDescription: {
+            code: string;
+            description: string;
+        };
+        KeyworkerSearchResponse: {
+            content: components["schemas"]["KeyworkerSummary"][];
+        };
+        KeyworkerSummary: {
+            /** Format: int64 */
+            staffId: number;
+            firstName: string;
+            lastName: string;
+            status: components["schemas"]["CodedDescription"];
+            /** Format: int32 */
+            capacity: number;
+            /** Format: int32 */
+            numberAllocated: number;
+            autoAllocationAllowed: boolean;
+            /** Format: int32 */
+            numberOfKeyworkerSessions: number;
+        };
+        /** @description New keyworker details. */
+        KeyworkerUpdateDto: {
+            /**
+             * Format: int32
+             * @description Key worker's allocation capacity.
+             */
+            capacity: number;
+            /**
+             * @description Key worker's status.
+             * @enum {string}
+             */
+            status: "ACT" | "UAL" | "ULT" | "UNP" | "INA";
+            /**
+             * @description Determines behaviour to apply to auto-allocation
+             * @enum {string}
+             */
+            behaviour?: "KEEP_ALLOCATIONS" | "KEEP_ALLOCATIONS_NO_AUTO" | "REMOVE_ALLOCATIONS_NO_AUTO";
+            /**
+             * Format: date
+             * @description Date that the Key worker's status should be updated to Active
+             */
+            activeDate?: string;
+        };
+        OffenderKeyworkerDto: {
+            /**
+             * Format: int64
+             * @description Id of offender allocation.
+             */
+            offenderKeyworkerId: number;
+            /** @description The offender's unique offender number (aka NOMS Number in the UK). */
+            offenderNo: string;
+            /**
+             * Format: int64
+             * @description The offender's Key worker.
+             */
+            staffId: number;
+            /** @description Prison Id where allocation is effective. */
+            agencyId: string;
+            /**
+             * Format: date-time
+             * @description The date and time of the allocation.
+             */
+            assigned: string;
+            /**
+             * Format: date-time
+             * @description The date and time of deallocation.
+             */
+            expired?: string;
+            /** @description The user who created the allocation. */
+            userId: string;
+            /** @description Whether allocation is active. */
+            active: string;
+        };
+        Prison: {
+            /**
+             * @description Identifies prison.
+             * @example MDI
+             */
+            prisonId: string;
+            /**
+             * @description Indicates that Key working is supported in this prison
+             * @example true
+             */
+            supported: boolean;
+            /**
+             * @description Indicates that Key Worker data has been migrated to the Key Worker Service
+             * @example true
+             */
+            migrated: boolean;
+            /**
+             * @description Indicates this prison has high complexity prisoners
+             * @example true
+             */
+            highComplexity: boolean;
+            /**
+             * @description Indicates that this prison supports auto allocation of prisoner to key workers
+             * @example true
+             */
+            autoAllocatedSupported: boolean;
+            /**
+             * Format: int32
+             * @description Default auto allocation amount for staff in this prison.
+             * @example 6
+             */
+            capacityTier1: number;
+            /**
+             * Format: int32
+             * @description Over allocation amount per staff member (max)
+             * @example 9
+             */
+            capacityTier2: number;
+            /**
+             * Format: int32
+             * @description Frequency of Key working sessions in this prison
+             * @example 1
+             */
+            kwSessionFrequencyInWeeks: number;
+            /**
+             * Format: date-time
+             * @description Date and time migration of key workers was done for this prison
+             * @example 2018-10-02T01:12:55.000
+             */
+            migratedDateTime: string;
+        };
+        OffenderKeyWorkerHistorySummary: {
+            /** @description Identifies prisoner. */
+            offenderNo: string;
+            /** @description Whether this prisoner has ever had a keyworker allocated. */
+            hasHistory: boolean;
+        };
+        /** @description New allocation details. */
+        KeyworkerAllocationDto: {
+            /** @description Identifies offender who is subject of allocation. */
+            offenderNo: string;
+            /**
+             * Format: int64
+             * @description Identifies Key worker who is subject of allocation.
+             */
+            staffId: number;
+            /** @description Prison where allocation is effective. */
+            prisonId: string;
+            /**
+             * @description Type of allocation - auto or manual.
+             * @enum {string}
+             */
+            allocationType: "A" | "M" | "P";
+            /**
+             * @description Reason for allocation.
+             * @enum {string}
+             */
+            allocationReason: "AUTO" | "MANUAL";
+            /**
+             * @description Reason for de-allocation.
+             * @enum {string}
+             */
+            deallocationReason?: "OVERRIDE" | "RELEASED" | "KEYWORKER_STATUS_CHANGE" | "TRANSFER" | "MERGED" | "MISSING" | "DUPLICATE" | "MANUAL";
+        };
+        SarKeyWorker: {
+            /** Format: date-time */
+            allocatedAt: string;
+            /** Format: date-time */
+            allocationExpiredAt?: string;
+            prisonCode: string;
+            allocationType: string;
+            allocationReason: string;
+            deallocationReason?: string;
+            keyworker: components["schemas"]["StaffMember"];
+            activeAllocation: boolean;
+        };
+        StaffMember: {
+            firstName: string;
+            lastName: string;
+        };
+        SubjectAccessResponse: {
+            prn: string;
+            content: components["schemas"]["SarKeyWorker"][];
+        };
+        Allocation: {
+            prisoner: components["schemas"]["Prisoner"];
+            location: string;
+            /** Format: date */
+            releaseDate?: string;
+            latestSession?: components["schemas"]["LatestKeyworkerSession"];
+        };
+        Keyworker: {
+            /** Format: int64 */
+            staffId: number;
+            firstName: string;
+            lastName: string;
+            scheduleType: components["schemas"]["CodedDescription"];
+        };
+        KeyworkerDetails: {
+            keyworker: components["schemas"]["Keyworker"];
+            status: components["schemas"]["CodedDescription"];
+            prison: components["schemas"]["CodedDescription"];
+            /** Format: int32 */
+            capacity: number;
+            /** Format: int32 */
+            allocated: number;
+            allocations: components["schemas"]["Allocation"][];
+            stats: components["schemas"]["KeyworkerStats"];
+        };
+        KeyworkerSessionStats: {
+            /** Format: date */
+            from: string;
+            /** Format: date */
+            to: string;
+            /** Format: int32 */
+            projectedSessions?: number;
+            /** Format: int32 */
+            recordedSessions: number;
+            /** Format: int32 */
+            recordedEntries: number;
+            /** Format: double */
+            complianceRate?: number;
+        };
+        KeyworkerStats: {
+            current?: components["schemas"]["KeyworkerSessionStats"];
+            previous?: components["schemas"]["KeyworkerSessionStats"];
+        };
+        LatestKeyworkerSession: {
+            /** Format: date */
+            occurredAt: string;
+        };
+        Prisoner: {
+            prisonNumber: string;
+            firstName: string;
+            lastName: string;
+            csra?: string;
+        };
+        PrisonStats: {
+            prisonCode: string;
+            current?: components["schemas"]["StatSummary"];
+            previous?: components["schemas"]["StatSummary"];
+            sessionTimeline: components["schemas"]["WeeklyStatInt"][];
+            /** Format: int32 */
+            averageSessions: number;
+            complianceTimeline: components["schemas"]["WeeklyStatDbl"][];
+            /** Format: double */
+            averageCompliance: number;
+        };
+        StatSummary: {
+            /** Format: date */
+            from: string;
+            /** Format: date */
+            to: string;
+            /** Format: int32 */
+            totalPrisoners: number;
+            /** Format: int32 */
+            eligiblePrisoners: number;
+            /** Format: int32 */
+            prisonersAssignedKeyworker: number;
+            /** Format: int32 */
+            activeKeyworkers: number;
+            /** Format: int32 */
+            keyworkerSessions: number;
+            /** Format: int32 */
+            keyworkerEntries: number;
+            /** Format: int32 */
+            avgReceptionToAllocationDays?: number;
+            /** Format: int32 */
+            avgReceptionToSessionDays?: number;
+            /** Format: int32 */
+            projectedSessions: number;
+            /** Format: double */
+            percentageWithKeyworker?: number;
+            /** Format: double */
+            compliance: number;
+        };
+        WeeklyStatDbl: {
+            /** Format: date */
+            date: string;
+            /** Format: double */
+            value: number;
+        };
+        WeeklyStatInt: {
+            /** Format: date */
+            date: string;
+            /** Format: int32 */
+            value: number;
+        };
+        PrisonKeyworkerConfiguration: {
+            isEnabled: boolean;
+            hasPrisonersWithHighComplexityNeeds: boolean;
+            allowAutoAllocate: boolean;
+            /** Format: int32 */
+            capacityTier1: number;
+            /** Format: int32 */
+            capacityTier2?: number;
+            /** Format: int32 */
+            kwSessionFrequencyInWeeks: number;
+        };
+        UsernameKeyworker: {
+            username: string;
+            isKeyworker: boolean;
+        };
+        KeyworkerDto: {
+            /**
+             * Format: int64
+             * @description Unique staff identifier for Key worker.
+             */
+            staffId: number;
+            /** @description Key worker's first name. */
+            firstName: string;
+            /** @description Key worker's last name. */
+            lastName: string;
+            /** @description Key worker's email address. */
+            email?: string;
+            /**
+             * Format: int64
+             * @description Identifier for Key worker image.
+             */
+            thumbnailId?: number;
+            /**
+             * Format: int32
+             * @description Key worker's allocation capacity.
+             */
+            capacity: number;
+            /**
+             * Format: int32
+             * @description Number of offenders allocated to Key worker.
+             */
+            numberAllocated: number;
+            /** @description Key worker's schedule type. */
+            scheduleType?: string;
+            /** @description Key worker's agency Id. */
+            agencyId?: string;
+            /** @description Key worker's agency description. */
+            agencyDescription?: string;
+            /**
+             * @description Key worker's status.
+             * @enum {string}
+             */
+            status?: "ACT" | "UAL" | "ULT" | "UNP" | "INA";
+            /** @description Key worker is eligible for auto allocation. */
+            autoAllocationAllowed?: boolean;
+            /**
+             * Format: date
+             * @description Date keyworker status should return to active. (returning from annual leave)
+             */
+            activeDate?: string;
+            /**
+             * Format: int32
+             * @description Number of KW sessions in the time period specified
+             */
+            numKeyWorkerSessions?: number;
+        };
+        KeyworkerAllocationDetailsDto: {
+            /**
+             * Format: int64
+             * @description Offender Booking Id
+             */
+            bookingId: number;
+            /** @description Offender Unique Reference */
+            offenderNo: string;
+            /** @description First Name */
+            firstName: string;
+            /** @description Middle Name(s) */
+            middleNames?: string;
+            /** @description Last Name */
+            lastName: string;
+            /**
+             * Format: int64
+             * @description The key worker's Staff Id
+             */
+            staffId: number;
+            /**
+             * @deprecated
+             * @description Agency Id - will be removed - use prisonId
+             */
+            agencyId: string;
+            /** @description Prison Id */
+            prisonId: string;
+            /**
+             * Format: date-time
+             * @description Date and time of the allocation
+             */
+            assigned: string;
+            /**
+             * @description A
+             * @enum {string}
+             */
+            allocationType: "A" | "M" | "P";
+            /** @description Description of the location within the prison */
+            internalLocationDesc: string;
+            /** @description Prison different to current - deallocation only allowed */
+            deallocOnly: boolean;
+        };
+        OffenderLocationDto: {
+            /** @description The offender's unique offender number (aka NOMS Number in the UK). */
+            offenderNo: string;
+            /**
+             * Format: int64
+             * @description A unique booking id.
+             */
+            bookingId: number;
+            /** @description The offender's first name. */
+            firstName: string;
+            /** @description The offender's middle name(s). */
+            middleName?: string;
+            /** @description The offender's last name. */
+            lastName: string;
+            /** Format: date */
+            dateOfBirth?: string;
+            /** @description Agency Id (if known) */
+            agencyId?: string;
+            /**
+             * Format: int64
+             * @description Internal location id (if known)
+             */
+            assignedLivingUnitId?: number;
+            /** @description Internal location description (if known) */
+            assignedLivingUnitDesc?: string;
+        };
+        BasicKeyworkerDto: {
+            /**
+             * Format: int64
+             * @description Unique staff identifier for Key worker.
+             */
+            staffId: number;
+            /** @description Key worker's first name. */
+            firstName: string;
+            /** @description Key worker's last name. */
+            lastName: string;
+            /** @description Key worker's email address. */
+            email?: string;
+        };
+        KeyWorkerAllocation: {
+            /**
+             * Format: int64
+             * @description Id of offender allocation.
+             */
+            offenderKeyworkerId: number;
+            /**
+             * Format: int64
+             * @description The offender's Key worker staff Id.
+             */
+            staffId: number;
+            /** @description Key worker's first name. */
+            firstName: string;
+            /** @description Key worker's last name. */
+            lastName: string;
+            /** @description Prison Id where allocation is effective. */
+            prisonId: string;
+            /**
+             * Format: date-time
+             * @description The date and time of the allocation.
+             */
+            assigned: string;
+            /**
+             * Format: date-time
+             * @description The date and time of deallocation.
+             */
+            expired?: string;
+            /** @description The user who created the allocation. */
+            userId: components["schemas"]["StaffUser"];
+            /** @description Whether allocation is active. */
+            active: boolean;
+            /**
+             * @description Type of allocation - auto or manual.
+             * @enum {string}
+             */
+            allocationType: "A" | "M" | "P";
+            /** @description Reason for allocation. */
+            allocationReason: string;
+            /** @description Reason for de-allocation. */
+            deallocationReason?: string;
+            /**
+             * Format: date-time
+             * @description The date and time of creation.
+             */
+            creationDateTime?: string;
+            /** @description The user who created the allocation. */
+            createdByUser: components["schemas"]["StaffUser"];
+            /**
+             * Format: date-time
+             * @description Last date and time of modification.
+             */
+            modifyDateTime?: string;
+            /** @description The user who last modified the allocation. */
+            lastModifiedByUser: components["schemas"]["StaffUser"];
+        };
+        OffenderKeyWorkerHistory: {
+            offender?: components["schemas"]["PrisonerDetail"];
+            allocationHistory?: components["schemas"]["KeyWorkerAllocation"][];
+        };
+        PrisonerDetail: {
+            /** @description Identifies prisoner. */
+            offenderNo: string;
+            /** @description The prisoner's Title */
+            title: string;
+            /** @description The prisoner's Suffix */
+            suffix: string;
+            /** @description The prisoner's first name. */
+            firstName: string;
+            /** @description The prisoner's middle names. */
+            middleNames: string;
+            /** @description The prisoner's last name. */
+            lastName: string;
+            /**
+             * Format: date
+             * @description The prisoner's date of birth
+             */
+            dateOfBirth: string;
+            /** @description The prisoner's gender */
+            gender: string;
+            /** @description Indicate Y if in prison */
+            currentlyInPrison: string;
+            /**
+             * Format: int64
+             * @description Latest booking id
+             */
+            latestBookingId: number;
+            /** @description Latest Location Id */
+            latestLocationId: string;
+            /** @description Latest location */
+            latestLocation: string;
+            /** @description Last Internal location */
+            internalLocation: string;
+            /** @description Current Imprisonment Status */
+            imprisonmentStatus: string;
+            /**
+             * Format: date
+             * @description Date received into prison
+             */
+            receptionDate: string;
+            inPrison?: boolean;
+        };
+        StaffUser: {
+            /**
+             * Format: int64
+             * @description Unique staff identifier
+             */
+            staffId: number;
+            /** @description Staff first name. */
+            firstName: string;
+            /** @description Staff last name. */
+            lastName: string;
+            /** @description Staff username */
+            username: string;
+        };
+        KeyworkerStatSummary: {
+            /** @description Summary of all prisons specified */
+            summary: components["schemas"]["PrisonStatsDto"];
+            /** @description Individual prison stats */
+            prisons: {
+                [key: string]: components["schemas"]["PrisonStatsDto"];
+            };
+        };
+        PrisonStatsDto: {
+            /**
+             * Format: date
+             * @description Requested start date for data set
+             * @example 2018-04-01
+             */
+            requestedFromDate: string;
+            /**
+             * Format: date
+             * @description Requested end date for data set
+             * @example 2018-04-31
+             */
+            requestedToDate: string;
+            /** @description Summary of Prison Statistics for the period requested. */
+            current: components["schemas"]["SummaryStatistic"];
+            /** @description Summary of Prison Statistics for the previous period requested. */
+            previous: components["schemas"]["SummaryStatistic"];
+            /** @description Date and percentage compliance key value pair of up to 1 years data before requestedToDate */
+            complianceTimeline?: {
+                [key: string]: number;
+            };
+            /**
+             * @description Average Compliance for complianceTimeline
+             * @example 75.3
+             */
+            avgOverallCompliance?: number;
+            /** @description Date and percentage key value pair of up to 1 years data before requestedToDate */
+            keyworkerSessionsTimeline?: {
+                [key: string]: number;
+            };
+            /**
+             * Format: int32
+             * @description Average Key worker sessions for keyworkerSessionsTimeline
+             * @example 502
+             */
+            avgOverallKeyworkerSessions?: number;
+        };
+        SummaryStatistic: {
+            /**
+             * Format: date
+             * @description Starting date for the set of summary data
+             * @example 2018-06-01
+             */
+            dataRangeFrom: string;
+            /**
+             * Format: date
+             * @description End date for the set of summary data
+             * @example 2018-07-30
+             */
+            dataRangeTo: string;
+            /**
+             * Format: int32
+             * @description Average number of prisoners assigned a key worker over this time range
+             * @example 423
+             */
+            numPrisonersAssignedKeyWorker: number;
+            /**
+             * Format: int32
+             * @description Average total number of prisoners in the prisons over this time range
+             * @example 600
+             */
+            totalNumPrisoners: number;
+            /**
+             * Format: int32
+             * @description Average total number of eligible prisoners in the prisons over this time range
+             * @example 600
+             */
+            totalNumEligiblePrisoners: number;
+            /**
+             * Format: int32
+             * @description Average number of Key Working Sessions done over this time range
+             * @example 354
+             */
+            numberKeyWorkerSessions: number;
+            /**
+             * Format: int32
+             * @description Average number of Key Worker Entries made over this time range
+             * @example 232
+             */
+            numberKeyWorkerEntries: number;
+            /**
+             * Format: int32
+             * @description Average number of Active Key Workers over this time range
+             * @example 320
+             */
+            numberOfActiveKeyworkers: number;
+            /**
+             * @description Average percentage of Prisoners who have been assigned a Key Worker over this time range
+             * @example 87.2
+             */
+            percentagePrisonersWithKeyworker: number;
+            /**
+             * Format: int32
+             * @description Average number of projected Key Worker sessions that could be done based on available key workers and frequency of sessions (e.g 1/week)
+             * @example 501
+             */
+            numProjectedKeyworkerSessions: number;
+            /**
+             * @description Overall compliance rate for this time period
+             * @example 87.5
+             */
+            complianceRate: number;
+            /**
+             * Format: int32
+             * @description Average number of days between a prisoner entering this prison and being allocated a key worker.
+             * @example 5
+             */
+            avgNumDaysFromReceptionToAllocationDays: number;
+            /**
+             * Format: int32
+             * @description Average number of days between a prisoner entering this prison and receiving a session from key worker
+             * @example 10
+             */
+            avgNumDaysFromReceptionToKeyWorkingSession: number;
+        };
+        KeyworkerStatsDto: {
+            /**
+             * Format: int64
+             * @description Identifies the staff by ID.
+             * @example 234233
+             */
+            staffId: number;
+            /**
+             * Format: date
+             * @description Start date on which statistic results are based
+             * @example 2018-07-01
+             */
+            fromDate: string;
+            /**
+             * Format: date
+             * @description End date on which statistic results are based
+             * @example 2018-07-31
+             */
+            toDate: string;
+            /**
+             * Format: int32
+             * @description Number of Session done based on case note type Key worker Activity, sub type Session
+             * @example 24
+             */
+            caseNoteSessionCount: number;
+            /**
+             * Format: int32
+             * @description Number of key worker entry case notes done based on case note type Key worker Activity, sub type Entry
+             * @example 12
+             */
+            caseNoteEntryCount: number;
+            /**
+             * Format: int32
+             * @description Number of projected key worker sessions that could have been done based on number of prisoners assigned to key worker and frequency of sessions set by this prison
+             * @example 22
+             */
+            projectedKeyworkerSessions: number;
+            /**
+             * @description Percentage Compliance Rate of key worker session done over this time range
+             * @example 87.5
+             */
+            complianceRate: number;
+        };
+    };
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
-export type $defs = Record<string, never>
+export type $defs = Record<string, never>;
 export interface operations {
-  retryDlq: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        dlqName: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['RetryDlqResult']
-        }
-      }
-    }
-  }
-  retryAllDlqs: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['RetryDlqResult'][]
-        }
-      }
-    }
-  }
-  purgeQueue: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        queueName: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['PurgeQueueResult']
-        }
-      }
-    }
-  }
-  deallocate: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        offenderNo: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description De allocated */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Invalid request. */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Requested resource not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unrecoverable error occurred whilst processing request. */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getKeyworkerDetails: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        staffId: number
-        prisonId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['KeyworkerDto']
-        }
-      }
-      /** @description Invalid request. */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Requested resource not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unrecoverable error occurred whilst processing request. */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  addOrUpdateKeyworker: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        staffId: number
-        prisonId: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['KeyworkerUpdateDto']
-      }
-    }
-    responses: {
-      /** @description OK */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-      /** @description Invalid request. */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unrecoverable error occurred whilst processing request. */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getOffenderKeyworkerDetailsList: {
-    parameters: {
-      query?: {
-        /** @description Offenders for which details are required, or get all. */
-        offenderNo?: string[]
-      }
-      header?: never
-      path: {
-        prisonId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['OffenderKeyworkerDto'][]
-        }
-      }
-      /** @description Invalid request. */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Requested resource not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unrecoverable error occurred whilst processing request. */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getOffenderKeyworkerDetailsListPost: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        prisonId: string
-      }
-      cookie?: never
-    }
-    requestBody?: {
-      content: {
-        'application/json': string[]
-      }
-    }
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['OffenderKeyworkerDto'][]
-        }
-      }
-    }
-  }
-  startAutoAllocation: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        prisonId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Request to initiate auto-allocation process has been successfully processed. (NOT YET IMPLEMENTED - Use returned process id to monitor process execution and outcome.) Note that until asynchronous processing is implemented, this request will execute synchronously and return total number of allocations processed.) */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': number
-        }
-      }
-      /** @description Prison id provided is not valid or is not accessible to user. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Auto-allocation processing not able to proceed or halted due to state of dependent resources. */
-      409: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unrecoverable error occurred whilst processing request. */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  confirmAutoAllocation: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        prisonId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Request to confirm allocations has been successfully processed. (NOT YET IMPLEMENTED - Use returned process id to monitor process execution and outcome.) Note that until asynchronous processing is implemented, this request will execute synchronously and return total number of allocations processed.) */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': number
-        }
-      }
-      /** @description Prison id provided is not valid or is not accessible to user. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unrecoverable error occurred whilst processing request. */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  addSupportedPrisonForManualAllocation: {
-    parameters: {
-      query?: {
-        migrate?: boolean
-        /** @description standard and extended default keyworker capacities for this prison, comma separated, e.g. &capacity=6,9 */
-        capacity?: number[]
-        /** @description default KW Session Frequency in weeks (default 1) */
-        frequency?: number
-      }
-      header?: never
-      path: {
-        prisonId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['Prison']
-        }
-      }
-      /** @description Invalid request. */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unrecoverable error occurred whilst processing request. */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  addSupportedPrisonForAutoAllocation: {
-    parameters: {
-      query?: {
-        migrate?: boolean
-        /** @description standard and extended default keyworker capacities for this prison, comma separated, e.g. &capacity=6,9 */
-        capacity?: number[]
-        /** @description default KW Session Frequency in weeks (default 1) */
-        frequency?: number
-      }
-      header?: never
-      path: {
-        prisonId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['Prison']
-        }
-      }
-      /** @description Invalid request. */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unrecoverable error occurred whilst processing request. */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getKeyWorkerHistorySummaryForPrisoners: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: {
-      content: {
-        'application/json': string[]
-      }
-    }
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['OffenderKeyWorkerHistorySummary'][]
-        }
-      }
-      /** @description Invalid request. */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unrecoverable error occurred whilst processing request. */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  allocate: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['KeyworkerAllocationDto']
-      }
-    }
-    responses: {
-      /** @description The allocation has been created. */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': unknown
-        }
-      }
-    }
-  }
-  getSarContentByReference: {
-    parameters: {
-      query?: {
-        /** @description NOMIS Prison Reference Number */
-        prn?: string
-        /** @description Optional parameter denoting minimum date of event occurrence which should be returned in the response */
-        fromDate?: string
-        /** @description Optional parameter denoting maximum date of event occurrence which should be returned in the response */
-        toDate?: string
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Request successfully processed - content found */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SubjectAccessResponse']
-        }
-      }
-      /** @description Request successfully processed - no content found */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SubjectAccessResponse']
-        }
-      }
-      /** @description Subject Identifier is not recognised by this service */
-      209: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['SubjectAccessResponse']
-        }
-      }
-      /** @description The client does not have authorisation to make this request */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden, requires an appropriate role */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unexpected error occurred */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getDlqMessages: {
-    parameters: {
-      query?: {
-        maxMessages?: number
-      }
-      header?: never
-      path: {
-        dlqName: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['GetDlqResult']
-        }
-      }
-    }
-  }
-  userIsKeyworker: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        prisonCode: string
-        username: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK - staff recorded verified */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['UsernameKeyworker']
-        }
-      }
-      /** @description Bad request - username not valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Not found - staff not found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getAllocationsForKeyworkerWithOffenderDetails: {
-    parameters: {
-      query?: {
-        /** @example false */
-        skipOffenderDetails?: boolean
-      }
-      header?: never
-      path: {
-        staffId: number
-        prisonId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['KeyworkerAllocationDetailsDto']
-        }
-      }
-      /** @description Invalid request. */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Requested resource not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unrecoverable error occurred whilst processing request. */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getUnallocatedOffenders: {
-    parameters: {
-      query?: never
-      header?: {
-        /** @description Comma separated list of one or more of the following fields - <b>firstName, lastName</b> */
-        'Sort-Fields'?: string
-        /**
-         * @description Sort order (ASC or DESC) - defaults to ASC.
-         * @example ASC
-         */
-        'Sort-Order'?: 'ASC' | 'DESC'
-      }
-      path: {
-        prisonId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['OffenderLocationDto'][]
-        }
-      }
-      /** @description Invalid request. */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Requested resource not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unrecoverable error occurred whilst processing request. */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  deprecatedGetOffendersKeyworker: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        prisonId: string
-        offenderNo: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BasicKeyworkerDto']
-        }
-      }
-      /** @description Invalid request. */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Requested resource not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unrecoverable error occurred whilst processing request. */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  keyworkerSearch: {
-    parameters: {
-      query?: {
-        /** @description Filter results by first name and/or last name of key worker. Supplied filter term is matched to start of key worker's first and last name. */
-        nameFilter?: string
-        /** @description Filter results by status of key worker. */
-        statusFilter?: 'ACT' | 'UAL' | 'ULT' | 'UNP' | 'INA'
-      }
-      header?: {
-        /**
-         * @description Requested offset of first record in returned collection of allocation records.
-         * @example 0
-         */
-        'Page-Offset'?: number
-        /**
-         * @description Requested limit to number of allocation records returned.
-         * @example 10
-         */
-        'Page-Limit'?: number
-        /** @description Comma separated list of one or more of the following fields - <b>firstName, lastName</b> */
-        'Sort-Fields'?: string
-        /**
-         * @description Sort order (ASC or DESC) - defaults to ASC.
-         * @example ASC
-         */
-        'Sort-Order'?: 'ASC' | 'DESC'
-      }
-      path: {
-        prisonId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': unknown
-        }
-      }
-      /** @description Invalid request. */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Requested resource not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unrecoverable error occurred whilst processing request. */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getAvailableKeyworkers: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        prisonId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['KeyworkerDto'][]
-        }
-      }
-      /** @description Invalid request. */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Requested resource not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unrecoverable error occurred whilst processing request. */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getKeyworkerAllocations: {
-    parameters: {
-      query?: {
-        /** @description Optional filter by type of allocation. A for auto allocations, M for manual allocations. */
-        allocationType?: string
-        /** @description Returned allocations must have been assigned on or after this date (in YYYY-MM-DD format). */
-        fromDate?: string
-        /**
-         * @description Returned allocations must have been assigned on or before this date (in YYYY-MM-DD format).
-         * @example today's date
-         */
-        toDate?: string
-      }
-      header?: {
-        /**
-         * @description Requested offset of first record in returned collection of allocation records.
-         * @example 0
-         */
-        'Page-Offset'?: number
-        /**
-         * @description Requested limit to number of allocation records returned.
-         * @example 10
-         */
-        'Page-Limit'?: number
-        /** @description Comma separated list of one or more of the following fields - <b>firstName, lastName, assigned</b> */
-        'Sort-Fields'?: string
-        /**
-         * @description Sort order (ASC or DESC) - defaults to ASC.
-         * @example ASC
-         */
-        'Sort-Order'?: 'ASC' | 'DESC'
-      }
-      path: {
-        prisonId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['KeyworkerAllocationDetailsDto'][]
-        }
-      }
-      /** @description Invalid request. */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Requested resource not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unrecoverable error occurred whilst processing request. */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getPrisonMigrationStatus: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        prisonId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['Prison']
-        }
-      }
-      /** @description Invalid request. */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Requested resource not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unrecoverable error occurred whilst processing request. */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getOffendersKeyworker: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        /** @example A1234BC */
-        offenderNo: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BasicKeyworkerDto']
-        }
-      }
-      /** @description Invalid request. */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Requested resource not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unrecoverable error occurred whilst processing request. */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getKeyWorkerHistoryForPrisoner: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        offenderNo: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['OffenderKeyWorkerHistory']
-        }
-      }
-      /** @description Invalid request. */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Requested resource not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unrecoverable error occurred whilst processing request. */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getPrisonStats: {
-    parameters: {
-      query?: {
-        /**
-         * @description List of prisonIds
-         * @example prisonId=MDI&prisonId=LEI
-         */
-        prisonId?: string[]
-        /** @description Start Date of Stats, optional, will choose one month before toDate (in YYYY-MM-DD format) */
-        fromDate?: string
-        /** @description End Date of Stats (inclusive), optional, will choose yesterday if not provided (in YYYY-MM-DD format) */
-        toDate?: string
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['KeyworkerStatSummary']
-        }
-      }
-      /** @description Invalid request. */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Requested resource not found. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unrecoverable error occurred whilst processing request. */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getStatsForStaff: {
-    parameters: {
-      query?: {
-        /** @description Calculate stats for staff on or after this date (in YYYY-MM-DD format). */
-        fromDate?: string
-        /** @description Calculate stats for staff on or before this date (in YYYY-MM-DD format). */
-        toDate?: string
-      }
-      header?: never
-      path: {
-        staffId: number
-        prisonId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['KeyworkerStatsDto']
-        }
-      }
-      /** @description Invalid request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unrecoverable error occurred whilst processing request. */
-      500: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
+    deallocate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                offenderNo: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description De allocated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid request. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Requested resource not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unrecoverable error occurred whilst processing request. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    searchKeyworkers: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                prisonCode: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KeyworkerSearchRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["KeyworkerSearchResponse"];
+                };
+            };
+        };
+    };
+    getKeyworkerDetails: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                staffId: number;
+                prisonId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KeyworkerDto"];
+                };
+            };
+            /** @description Invalid request. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Requested resource not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unrecoverable error occurred whilst processing request. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    addOrUpdateKeyworker: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                staffId: number;
+                prisonId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KeyworkerUpdateDto"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid request. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unrecoverable error occurred whilst processing request. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getOffenderKeyworkerDetailsList: {
+        parameters: {
+            query?: {
+                /** @description Offenders for which details are required, or get all. */
+                offenderNo?: string[];
+            };
+            header?: never;
+            path: {
+                prisonId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OffenderKeyworkerDto"][];
+                };
+            };
+            /** @description Invalid request. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Requested resource not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unrecoverable error occurred whilst processing request. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getOffenderKeyworkerDetailsListPost: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                prisonId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": string[];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OffenderKeyworkerDto"][];
+                };
+            };
+        };
+    };
+    startAutoAllocation: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                prisonId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Request to initiate auto-allocation process has been successfully processed. (NOT YET IMPLEMENTED - Use returned process id to monitor process execution and outcome.) Note that until asynchronous processing is implemented, this request will execute synchronously and return total number of allocations processed.) */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": number;
+                };
+            };
+            /** @description Prison id provided is not valid or is not accessible to user. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Auto-allocation processing not able to proceed or halted due to state of dependent resources. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unrecoverable error occurred whilst processing request. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    confirmAutoAllocation: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                prisonId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Request to confirm allocations has been successfully processed. (NOT YET IMPLEMENTED - Use returned process id to monitor process execution and outcome.) Note that until asynchronous processing is implemented, this request will execute synchronously and return total number of allocations processed.) */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": number;
+                };
+            };
+            /** @description Prison id provided is not valid or is not accessible to user. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unrecoverable error occurred whilst processing request. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    addSupportedPrisonForManualAllocation: {
+        parameters: {
+            query?: {
+                migrate?: boolean;
+                /** @description standard and extended default keyworker capacities for this prison, comma separated, e.g. &capacity=6,9 */
+                capacity?: number[];
+                /** @description default KW Session Frequency in weeks (default 1) */
+                frequency?: number;
+            };
+            header?: never;
+            path: {
+                prisonId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Prison"];
+                };
+            };
+            /** @description Invalid request. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unrecoverable error occurred whilst processing request. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    addSupportedPrisonForAutoAllocation: {
+        parameters: {
+            query?: {
+                migrate?: boolean;
+                /** @description standard and extended default keyworker capacities for this prison, comma separated, e.g. &capacity=6,9 */
+                capacity?: number[];
+                /** @description default KW Session Frequency in weeks (default 1) */
+                frequency?: number;
+            };
+            header?: never;
+            path: {
+                prisonId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Prison"];
+                };
+            };
+            /** @description Invalid request. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unrecoverable error occurred whilst processing request. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getKeyWorkerHistorySummaryForPrisoners: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": string[];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OffenderKeyWorkerHistorySummary"][];
+                };
+            };
+            /** @description Invalid request. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unrecoverable error occurred whilst processing request. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    allocate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["KeyworkerAllocationDto"];
+            };
+        };
+        responses: {
+            /** @description The allocation has been created. */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+        };
+    };
+    getSarContentByReference: {
+        parameters: {
+            query?: {
+                /** @description NOMIS Prison Reference Number */
+                prn?: string;
+                /** @description Optional parameter denoting minimum date of event occurrence which should be returned in the response */
+                fromDate?: string;
+                /** @description Optional parameter denoting maximum date of event occurrence which should be returned in the response */
+                toDate?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Request successfully processed - content found */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubjectAccessResponse"];
+                };
+            };
+            /** @description Request successfully processed - no content found */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubjectAccessResponse"];
+                };
+            };
+            /** @description Subject Identifier is not recognised by this service */
+            209: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubjectAccessResponse"];
+                };
+            };
+            /** @description The client does not have authorisation to make this request */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden, requires an appropriate role */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unexpected error occurred */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getKeyworkerDetails_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                prisonCode: string;
+                staffId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["KeyworkerDetails"];
+                };
+            };
+        };
+    };
+    getKeyworkerDetails_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                prisonCode: string;
+                staffId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["KeyworkerDetails"];
+                };
+            };
+        };
+    };
+    getPrisonStatistics: {
+        parameters: {
+            query: {
+                from: string;
+                to: string;
+            };
+            header?: never;
+            path: {
+                prisonCode: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PrisonStats"];
+                };
+            };
+        };
+    };
+    getPrisonStatistics_1: {
+        parameters: {
+            query: {
+                from: string;
+                to: string;
+            };
+            header?: never;
+            path: {
+                prisonCode: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PrisonStats"];
+                };
+            };
+        };
+    };
+    getPrisonConfiguration: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                prisonCode: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PrisonKeyworkerConfiguration"];
+                };
+            };
+        };
+    };
+    getPrisonConfiguration_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                prisonCode: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PrisonKeyworkerConfiguration"];
+                };
+            };
+        };
+    };
+    userIsKeyworker: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                prisonCode: string;
+                username: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK - staff recorded verified */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UsernameKeyworker"];
+                };
+            };
+            /** @description Bad request - username not valid */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not found - staff not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getAllocationsForKeyworkerWithOffenderDetails: {
+        parameters: {
+            query?: {
+                /** @example false */
+                skipOffenderDetails?: boolean;
+            };
+            header?: never;
+            path: {
+                staffId: number;
+                prisonId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KeyworkerAllocationDetailsDto"];
+                };
+            };
+            /** @description Invalid request. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Requested resource not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unrecoverable error occurred whilst processing request. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getUnallocatedOffenders: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Comma separated list of one or more of the following fields - <b>firstName, lastName</b> */
+                "Sort-Fields"?: string;
+                /**
+                 * @description Sort order (ASC or DESC) - defaults to ASC.
+                 * @example ASC
+                 */
+                "Sort-Order"?: "ASC" | "DESC";
+            };
+            path: {
+                prisonId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OffenderLocationDto"][];
+                };
+            };
+            /** @description Invalid request. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Requested resource not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unrecoverable error occurred whilst processing request. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    deprecatedGetOffendersKeyworker: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                prisonId: string;
+                offenderNo: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BasicKeyworkerDto"];
+                };
+            };
+            /** @description Invalid request. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Requested resource not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unrecoverable error occurred whilst processing request. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    keyworkerSearch: {
+        parameters: {
+            query?: {
+                /** @description Filter results by first name and/or last name of key worker. Supplied filter term is matched to start of key worker's first and last name. */
+                nameFilter?: string;
+                /** @description Filter results by status of key worker. */
+                statusFilter?: "ACT" | "UAL" | "ULT" | "UNP" | "INA";
+            };
+            header?: {
+                /**
+                 * @description Requested offset of first record in returned collection of allocation records.
+                 * @example 0
+                 */
+                "Page-Offset"?: number;
+                /**
+                 * @description Requested limit to number of allocation records returned.
+                 * @example 10
+                 */
+                "Page-Limit"?: number;
+                /** @description Comma separated list of one or more of the following fields - <b>firstName, lastName</b> */
+                "Sort-Fields"?: string;
+                /**
+                 * @description Sort order (ASC or DESC) - defaults to ASC.
+                 * @example ASC
+                 */
+                "Sort-Order"?: "ASC" | "DESC";
+            };
+            path: {
+                prisonId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+            /** @description Invalid request. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Requested resource not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unrecoverable error occurred whilst processing request. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getAvailableKeyworkers: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                prisonId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KeyworkerDto"][];
+                };
+            };
+            /** @description Invalid request. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Requested resource not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unrecoverable error occurred whilst processing request. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getKeyworkerAllocations: {
+        parameters: {
+            query?: {
+                /** @description Optional filter by type of allocation. A for auto allocations, M for manual allocations. */
+                allocationType?: string;
+                /** @description Returned allocations must have been assigned on or after this date (in YYYY-MM-DD format). */
+                fromDate?: string;
+                /**
+                 * @description Returned allocations must have been assigned on or before this date (in YYYY-MM-DD format).
+                 * @example today's date
+                 */
+                toDate?: string;
+            };
+            header?: {
+                /**
+                 * @description Requested offset of first record in returned collection of allocation records.
+                 * @example 0
+                 */
+                "Page-Offset"?: number;
+                /**
+                 * @description Requested limit to number of allocation records returned.
+                 * @example 10
+                 */
+                "Page-Limit"?: number;
+                /** @description Comma separated list of one or more of the following fields - <b>firstName, lastName, assigned</b> */
+                "Sort-Fields"?: string;
+                /**
+                 * @description Sort order (ASC or DESC) - defaults to ASC.
+                 * @example ASC
+                 */
+                "Sort-Order"?: "ASC" | "DESC";
+            };
+            path: {
+                prisonId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KeyworkerAllocationDetailsDto"][];
+                };
+            };
+            /** @description Invalid request. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Requested resource not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unrecoverable error occurred whilst processing request. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getPrisonMigrationStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                prisonId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Prison"];
+                };
+            };
+            /** @description Invalid request. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Requested resource not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unrecoverable error occurred whilst processing request. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getOffendersKeyworker: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @example A1234BC */
+                offenderNo: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BasicKeyworkerDto"];
+                };
+            };
+            /** @description Invalid request. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Requested resource not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unrecoverable error occurred whilst processing request. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getKeyWorkerHistoryForPrisoner: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                offenderNo: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OffenderKeyWorkerHistory"];
+                };
+            };
+            /** @description Invalid request. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Requested resource not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unrecoverable error occurred whilst processing request. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getPrisonStats: {
+        parameters: {
+            query?: {
+                /**
+                 * @description List of prisonIds
+                 * @example prisonId=MDI&prisonId=LEI
+                 */
+                prisonId?: string[];
+                /** @description Start Date of Stats, optional, will choose one month before toDate (in YYYY-MM-DD format) */
+                fromDate?: string;
+                /** @description End Date of Stats (inclusive), optional, will choose yesterday if not provided (in YYYY-MM-DD format) */
+                toDate?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KeyworkerStatSummary"];
+                };
+            };
+            /** @description Invalid request. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Requested resource not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unrecoverable error occurred whilst processing request. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getStatsForStaff: {
+        parameters: {
+            query?: {
+                /** @description Calculate stats for staff on or after this date (in YYYY-MM-DD format). */
+                fromDate?: string;
+                /** @description Calculate stats for staff on or before this date (in YYYY-MM-DD format). */
+                toDate?: string;
+            };
+            header?: never;
+            path: {
+                staffId: number;
+                prisonId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KeyworkerStatsDto"];
+                };
+            };
+            /** @description Invalid request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unrecoverable error occurred whilst processing request. */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
 }
