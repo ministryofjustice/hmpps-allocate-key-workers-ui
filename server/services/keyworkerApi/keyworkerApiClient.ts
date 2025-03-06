@@ -65,12 +65,12 @@ export default class KeyworkerApiClient {
     return response
   }
 
-  async getKeyworkerMembers(prisonId: string, query?: components['schemas']['KeyworkerSearchRequest']): Promise<components['schemas']['KeyworkerSummary'][]> {
-    const response = await this.restClient.post<components['schemas']['KeyworkerSummary'][]>({
+  async getKeyworkerMembers(prisonId: string, query: components['schemas']['KeyworkerSearchRequest']): Promise<components['schemas']['KeyworkerSummary'][]> {
+    const response = await this.restClient.post<{content: components['schemas']['KeyworkerSummary'][]}>({
       path: `/search/prisons/${prisonId}/keyworkers`,
       data: query
     })
 
-    return response
+    return response.content
   }
 }

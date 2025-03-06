@@ -608,7 +608,7 @@ export interface components {
         KeyworkerSearchRequest: {
             query?: string;
             /** @enum {string} */
-            status: "ACT" | "UAL" | "ULT" | "UNP" | "INA";
+            status: "ALL" | "ACTIVE" | "UNAVAILABLE_ANNUAL_LEAVE" | "UNAVAILABLE_LONG_TERM_ABSENCE" | "UNAVAILABLE_NO_PRISONER_CONTACT" | "INACTIVE";
         };
         CodedDescription: {
             code: string;
@@ -819,13 +819,13 @@ export interface components {
             /** Format: date */
             to: string;
             /** Format: int32 */
-            projectedSessions?: number;
+            projectedSessions: number;
             /** Format: int32 */
             recordedSessions: number;
             /** Format: int32 */
             recordedEntries: number;
             /** Format: double */
-            complianceRate?: number;
+            complianceRate: number;
         };
         KeyworkerStats: {
             current?: components["schemas"]["KeyworkerSessionStats"];
