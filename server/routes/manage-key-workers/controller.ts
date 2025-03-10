@@ -23,10 +23,6 @@ export class ManageKeyWorkersController {
       { value: 'INACTIVE', text: 'Inactive' },
     ]
 
-    if (req.query['clear']) {
-      delete req.session.filter
-    }
-
     const { query, status } = req.query || {}
     const sort = req.query['sort'] || 'name'
     const direction = req.query['direction'] || 'asc'
@@ -45,7 +41,6 @@ export class ManageKeyWorkersController {
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
-    req.session.filter = { query: req.body.query, status: req.body.status }
     const queryParams = new URLSearchParams({ query: req.body.query, status: req.body.status })
     res.redirect(`manage-key-workers?${queryParams.toString()}`)
   }

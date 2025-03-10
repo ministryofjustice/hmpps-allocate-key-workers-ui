@@ -6,7 +6,6 @@ export declare module 'express-session' {
   interface SessionData {
     returnTo: string
     nowInMinutes: number
-    filter?: { query: string; status: string }
   }
 }
 

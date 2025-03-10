@@ -6,6 +6,7 @@ context('Manage key workers', () => {
     cy.task('stubKeyworkerMembersQuery')
     cy.task('stubKeyworkerMembersStatus')
     cy.task('stubKeyworkerMembersNone')
+    cy.task('stubEnabledPrison')
   })
 
   it('happy path', () => {
