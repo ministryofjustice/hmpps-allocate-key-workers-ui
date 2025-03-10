@@ -6,14 +6,14 @@ const createBasicHttpStub = (method: string, urlPattern: string, status: number,
 
 const createHttpStub = (
   method: string,
-  urlPattern: string,
+  urlPathPattern: string,
   queryParameters: object,
   bodyPatterns: Array<object> | undefined,
   status: number,
   jsonBody?: object,
 ) => {
   return stubFor({
-    request: { method, urlPattern, queryParameters, bodyPatterns },
+    request: { method, urlPathPattern, queryParameters, bodyPatterns },
     response: {
       status,
       headers: {
