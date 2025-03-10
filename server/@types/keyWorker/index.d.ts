@@ -4,54 +4,6 @@
  */
 
 export interface paths {
-  '/queue-admin/retry-dlq/{dlqName}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put: operations['retryDlq']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/queue-admin/retry-all-dlqs': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put: operations['retryAllDlqs']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/queue-admin/purge-queue/{queueName}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put: operations['purgeQueue']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/key-worker/deallocate/{offenderNo}': {
     parameters: {
       query?: never
@@ -63,9 +15,32 @@ export interface paths {
     /**
      * deallocate
      * @description Marks the offender with expired time on active record
+     *
+     *     Requires one of the following roles:
+     *     * OMIC_ADMIN
      */
     put: operations['deallocate']
     post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/search/prisons/{prisonCode}/keyworkers': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_KEY_WORKER__RO */
+    post: operations['searchKeyworkers']
     delete?: never
     options?: never
     head?: never
@@ -246,6 +221,9 @@ export interface paths {
     /**
      * Provides content for a prisoner to satisfy the needs of a subject access request on their behalf
      * @description Requires role SAR_DATA_ACCESS
+     *
+     *     Requires one of the following roles:
+     *     * SAR_DATA_ACCESS
      */
     get: operations['getSarContentByReference']
     put?: never
@@ -256,14 +234,118 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/queue-admin/get-dlq-messages/{dlqName}': {
+  '/prisons/{prisonCode}/keyworker/{staffId}': {
     parameters: {
       query?: never
       header?: never
       path?: never
       cookie?: never
     }
-    get: operations['getDlqMessages']
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_KEY_WORKER__RO */
+    get: operations['getKeyworkerDetails_1']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/prisons/{prisonCode}/keyworkers/{staffId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_KEY_WORKER__RO */
+    get: operations['getKeyworkerDetails_2']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/prisons/{prisonCode}/keyworkers/statistics': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_KEY_WORKER__RO */
+    get: operations['getPrisonStatistics']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/prisons/{prisonCode}/keyworker/statistics': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_KEY_WORKER__RO */
+    get: operations['getPrisonStatistics_1']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/prisons/{prisonCode}/keyworkers/configuration': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_KEY_WORKER__RO */
+    get: operations['getPrisonConfiguration']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/prisons/{prisonCode}/keyworker/configuration': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_KEY_WORKER__RO */
+    get: operations['getPrisonConfiguration_1']
     put?: never
     post?: never
     delete?: never
@@ -279,7 +361,10 @@ export interface paths {
       path?: never
       cookie?: never
     }
-    /** @description To determine if a user is a keyworker */
+    /** @description To determine if a user is a keyworker
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_KEY_WORKER__RO */
     get: operations['userIsKeyworker']
     put?: never
     post?: never
@@ -410,7 +495,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/prisons/{prisonCode}/keyworker/configuration': {
+  '/key-worker/prison/{prisonId}': {
     parameters: {
       query?: never
       header?: never
@@ -418,7 +503,7 @@ export interface paths {
       cookie?: never
     }
     /** Get Prison Migration Status */
-    get: operations['getPrisonConfig']
+    get: operations['getPrisonMigrationStatus']
     put?: never
     post?: never
     delete?: never
@@ -511,14 +596,6 @@ export interface paths {
 export type webhooks = Record<string, never>
 export interface components {
   schemas: {
-    RetryDlqResult: {
-      /** Format: int32 */
-      messagesFoundCount: number
-    }
-    PurgeQueueResult: {
-      /** Format: int32 */
-      messagesFoundCount: number
-    }
     ErrorResponse: {
       /** Format: int32 */
       status?: number
@@ -527,6 +604,38 @@ export interface components {
       userMessage?: string
       developerMessage?: string
       moreInfo?: string
+    }
+    KeyworkerSearchRequest: {
+      query?: string
+      /** @enum {string} */
+      status:
+        | 'ALL'
+        | 'ACTIVE'
+        | 'UNAVAILABLE_ANNUAL_LEAVE'
+        | 'UNAVAILABLE_LONG_TERM_ABSENCE'
+        | 'UNAVAILABLE_NO_PRISONER_CONTACT'
+        | 'INACTIVE'
+    }
+    CodedDescription: {
+      code: string
+      description: string
+    }
+    KeyworkerSearchResponse: {
+      content: components['schemas']['KeyworkerSummary'][]
+    }
+    KeyworkerSummary: {
+      /** Format: int64 */
+      staffId: number
+      firstName: string
+      lastName: string
+      status: components['schemas']['CodedDescription']
+      /** Format: int32 */
+      capacity: number
+      /** Format: int32 */
+      numberAllocated: number
+      autoAllocationAllowed: boolean
+      /** Format: int32 */
+      numberOfKeyworkerSessions: number
     }
     /** @description New keyworker details. */
     KeyworkerUpdateDto: {
@@ -581,22 +690,32 @@ export interface components {
       /** @description Whether allocation is active. */
       active: string
     }
-    PrisonConfigurationDto: {
+    Prison: {
+      /**
+       * @description Identifies prison.
+       * @example MDI
+       */
+      prisonId: string
       /**
        * @description Indicates that Key working is supported in this prison
        * @example true
        */
-      isEnabled: boolean
+      supported: boolean
+      /**
+       * @description Indicates that Key Worker data has been migrated to the Key Worker Service
+       * @example true
+       */
+      migrated: boolean
       /**
        * @description Indicates this prison has high complexity prisoners
        * @example true
        */
-      hasPrisonersWithHighComplexityNeeds: boolean
+      highComplexity: boolean
       /**
        * @description Indicates that this prison supports auto allocation of prisoner to key workers
        * @example true
        */
-      allowAutoAllocate: boolean
+      autoAllocatedSupported: boolean
       /**
        * Format: int32
        * @description Default auto allocation amount for staff in this prison.
@@ -608,13 +727,19 @@ export interface components {
        * @description Over allocation amount per staff member (max)
        * @example 9
        */
-      capacityTier2?: number
+      capacityTier2: number
       /**
        * Format: int32
        * @description Frequency of Key working sessions in this prison
        * @example 1
        */
       kwSessionFrequencyInWeeks: number
+      /**
+       * Format: date-time
+       * @description Date and time migration of key workers was done for this prison
+       * @example 2018-10-02T01:12:55.000
+       */
+      migratedDateTime: string
     }
     OffenderKeyWorkerHistorySummary: {
       /** @description Identifies prisoner. */
@@ -677,18 +802,120 @@ export interface components {
       prn: string
       content: components['schemas']['SarKeyWorker'][]
     }
-    DlqMessage: {
-      body: {
-        [key: string]: unknown
-      }
-      messageId: string
+    Allocation: {
+      prisoner: components['schemas']['Prisoner']
+      location: string
+      /** Format: date */
+      releaseDate?: string
+      latestSession?: components['schemas']['LatestKeyworkerSession']
     }
-    GetDlqResult: {
+    Keyworker: {
+      /** Format: int64 */
+      staffId: number
+      firstName: string
+      lastName: string
+      scheduleType: components['schemas']['CodedDescription']
+    }
+    KeyworkerDetails: {
+      keyworker: components['schemas']['Keyworker']
+      status: components['schemas']['CodedDescription']
+      prison: components['schemas']['CodedDescription']
       /** Format: int32 */
-      messagesFoundCount: number
+      capacity: number
       /** Format: int32 */
-      messagesReturnedCount: number
-      messages: components['schemas']['DlqMessage'][]
+      allocated: number
+      allocations: components['schemas']['Allocation'][]
+      stats: components['schemas']['KeyworkerStats']
+    }
+    KeyworkerSessionStats: {
+      /** Format: date */
+      from: string
+      /** Format: date */
+      to: string
+      /** Format: int32 */
+      projectedSessions: number
+      /** Format: int32 */
+      recordedSessions: number
+      /** Format: int32 */
+      recordedEntries: number
+      /** Format: double */
+      complianceRate: number
+    }
+    KeyworkerStats: {
+      current?: components['schemas']['KeyworkerSessionStats']
+      previous?: components['schemas']['KeyworkerSessionStats']
+    }
+    LatestKeyworkerSession: {
+      /** Format: date */
+      occurredAt: string
+    }
+    Prisoner: {
+      prisonNumber: string
+      firstName: string
+      lastName: string
+      csra?: string
+    }
+    PrisonStats: {
+      prisonCode: string
+      current?: components['schemas']['StatSummary']
+      previous?: components['schemas']['StatSummary']
+      sessionTimeline: components['schemas']['WeeklyStatInt'][]
+      /** Format: int32 */
+      averageSessions: number
+      complianceTimeline: components['schemas']['WeeklyStatDbl'][]
+      /** Format: double */
+      averageCompliance: number
+    }
+    StatSummary: {
+      /** Format: date */
+      from: string
+      /** Format: date */
+      to: string
+      /** Format: int32 */
+      totalPrisoners: number
+      /** Format: int32 */
+      eligiblePrisoners: number
+      /** Format: int32 */
+      prisonersAssignedKeyworker: number
+      /** Format: int32 */
+      activeKeyworkers: number
+      /** Format: int32 */
+      keyworkerSessions: number
+      /** Format: int32 */
+      keyworkerEntries: number
+      /** Format: int32 */
+      avgReceptionToAllocationDays?: number
+      /** Format: int32 */
+      avgReceptionToSessionDays?: number
+      /** Format: int32 */
+      projectedSessions: number
+      /** Format: double */
+      percentageWithKeyworker?: number
+      /** Format: double */
+      compliance: number
+    }
+    WeeklyStatDbl: {
+      /** Format: date */
+      date: string
+      /** Format: double */
+      value: number
+    }
+    WeeklyStatInt: {
+      /** Format: date */
+      date: string
+      /** Format: int32 */
+      value: number
+    }
+    PrisonKeyworkerConfiguration: {
+      isEnabled: boolean
+      hasPrisonersWithHighComplexityNeeds: boolean
+      allowAutoAllocate: boolean
+      /** Format: int32 */
+      capacityTier1: number
+      /** Format: int32 */
+      capacityTier2?: number
+      /** Format: int32 */
+      kwSessionFrequencyInWeeks: number
     }
     UsernameKeyworker: {
       username: string
@@ -953,8 +1180,13 @@ export interface components {
        * @description Requested start date for data set
        * @example 2018-04-01
        */
-      prisonCode: string
-
+      requestedFromDate: string
+      /**
+       * Format: date
+       * @description Requested end date for data set
+       * @example 2018-04-31
+       */
+      requestedToDate: string
       /** @description Summary of Prison Statistics for the period requested. */
       current: components['schemas']['SummaryStatistic']
       /** @description Summary of Prison Statistics for the previous period requested. */
@@ -967,9 +1199,9 @@ export interface components {
        * @description Average Compliance for complianceTimeline
        * @example 75.3
        */
-      averageCompliance?: number
+      avgOverallCompliance?: number
       /** @description Date and percentage key value pair of up to 1 years data before requestedToDate */
-      sessionTimeline?: {
+      keyworkerSessionsTimeline?: {
         [key: string]: number
       }
       /**
@@ -977,7 +1209,7 @@ export interface components {
        * @description Average Key worker sessions for keyworkerSessionsTimeline
        * @example 502
        */
-      averageSessions?: number
+      avgOverallKeyworkerSessions?: number
     }
     SummaryStatistic: {
       /**
@@ -985,77 +1217,77 @@ export interface components {
        * @description Starting date for the set of summary data
        * @example 2018-06-01
        */
-      from: string
+      dataRangeFrom: string
       /**
        * Format: date
        * @description End date for the set of summary data
        * @example 2018-07-30
        */
-      to: string
+      dataRangeTo: string
       /**
        * Format: int32
        * @description Average number of prisoners assigned a key worker over this time range
        * @example 423
        */
-      prisonersAssignedKeyworker: number
+      numPrisonersAssignedKeyWorker: number
       /**
        * Format: int32
        * @description Average total number of prisoners in the prisons over this time range
        * @example 600
        */
-      totalPrisoners: number
+      totalNumPrisoners: number
       /**
        * Format: int32
        * @description Average total number of eligible prisoners in the prisons over this time range
        * @example 600
        */
-      eligiblePrisoners: number
+      totalNumEligiblePrisoners: number
       /**
        * Format: int32
        * @description Average number of Key Working Sessions done over this time range
        * @example 354
        */
-      keyworkerSessions: number
+      numberKeyWorkerSessions: number
       /**
        * Format: int32
        * @description Average number of Key Worker Entries made over this time range
        * @example 232
        */
-      keyworkerEntries: number
+      numberKeyWorkerEntries: number
       /**
        * Format: int32
        * @description Average number of Active Key Workers over this time range
        * @example 320
        */
-      activeKeyworkers: number
+      numberOfActiveKeyworkers: number
       /**
        * @description Average percentage of Prisoners who have been assigned a Key Worker over this time range
        * @example 87.2
        */
-      percentageWithKeyworker: number
+      percentagePrisonersWithKeyworker: number
       /**
        * Format: int32
        * @description Average number of projected Key Worker sessions that could be done based on available key workers and frequency of sessions (e.g 1/week)
        * @example 501
        */
-      projectedSessions: number
+      numProjectedKeyworkerSessions: number
       /**
        * @description Overall compliance rate for this time period
        * @example 87.5
        */
-      compliance: number
+      complianceRate: number
       /**
        * Format: int32
        * @description Average number of days between a prisoner entering this prison and being allocated a key worker.
        * @example 5
        */
-      avgReceptionToAllocationDays: number
+      avgNumDaysFromReceptionToAllocationDays: number
       /**
        * Format: int32
        * @description Average number of days between a prisoner entering this prison and receiving a session from key worker
        * @example 10
        */
-      avgReceptionToSessionDays: number
+      avgNumDaysFromReceptionToKeyWorkingSession: number
     }
     KeyworkerStatsDto: {
       /**
@@ -1109,70 +1341,6 @@ export interface components {
 }
 export type $defs = Record<string, never>
 export interface operations {
-  retryDlq: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        dlqName: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['RetryDlqResult']
-        }
-      }
-    }
-  }
-  retryAllDlqs: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['RetryDlqResult'][]
-        }
-      }
-    }
-  }
-  purgeQueue: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        queueName: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['PurgeQueueResult']
-        }
-      }
-    }
-  }
   deallocate: {
     parameters: {
       query?: never
@@ -1216,6 +1384,32 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  searchKeyworkers: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        prisonCode: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['KeyworkerSearchRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['KeyworkerSearchResponse']
         }
       }
     }
@@ -1503,7 +1697,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['PrisonConfigurationDto']
+          'application/json': components['schemas']['Prison']
         }
       }
       /** @description Invalid request. */
@@ -1549,7 +1743,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['PrisonConfigurationDto']
+          'application/json': components['schemas']['Prison']
         }
       }
       /** @description Invalid request. */
@@ -1633,7 +1827,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': unknown
+          'application/json': Record<string, never>
         }
       }
     }
@@ -1710,14 +1904,13 @@ export interface operations {
       }
     }
   }
-  getDlqMessages: {
+  getKeyworkerDetails_1: {
     parameters: {
-      query?: {
-        maxMessages?: number
-      }
+      query?: never
       header?: never
       path: {
-        dlqName: string
+        prisonCode: string
+        staffId: number
       }
       cookie?: never
     }
@@ -1729,7 +1922,124 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          '*/*': components['schemas']['GetDlqResult']
+          '*/*': components['schemas']['KeyworkerDetails']
+        }
+      }
+    }
+  }
+  getKeyworkerDetails_2: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        prisonCode: string
+        staffId: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['KeyworkerDetails']
+        }
+      }
+    }
+  }
+  getPrisonStatistics: {
+    parameters: {
+      query: {
+        from: string
+        to: string
+      }
+      header?: never
+      path: {
+        prisonCode: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['PrisonStats']
+        }
+      }
+    }
+  }
+  getPrisonStatistics_1: {
+    parameters: {
+      query: {
+        from: string
+        to: string
+      }
+      header?: never
+      path: {
+        prisonCode: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['PrisonStats']
+        }
+      }
+    }
+  }
+  getPrisonConfiguration: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        prisonCode: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['PrisonKeyworkerConfiguration']
+        }
+      }
+    }
+  }
+  getPrisonConfiguration_1: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        prisonCode: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['PrisonKeyworkerConfiguration']
         }
       }
     }
@@ -1993,7 +2303,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': unknown
+          'application/json': Record<string, never>
         }
       }
       /** @description Invalid request. */
@@ -2168,7 +2478,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['PrisonConfigurationDto']
+          'application/json': components['schemas']['Prison']
         }
       }
       /** @description Invalid request. */

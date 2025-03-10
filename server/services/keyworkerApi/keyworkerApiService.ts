@@ -25,4 +25,12 @@ export default class KeyworkerApiService {
   getPrisonConfig(req: Request, prisonId: string): ReturnType<KeyworkerApiClient['getPrisonConfig']> {
     return this.keyworkerApiClientBuilder(req.systemClientToken).getPrisonConfig(prisonId)
   }
+
+  getKeyworkerMembers(
+    req: Request,
+    prisonId: string,
+    query: Parameters<KeyworkerApiClient['getKeyworkerMembers']>[1],
+  ): ReturnType<KeyworkerApiClient['getKeyworkerMembers']> {
+    return this.keyworkerApiClientBuilder(req.systemClientToken).getKeyworkerMembers(prisonId, query)
+  }
 }

@@ -1,0 +1,153 @@
+{% extends "partials/layout.njk" %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "partials/statusTag/macro.njk" import statusTag %}
+
+{% set fullWidth = true %}
+{% set pageTitle = "Key worker statistics for " + user.activeCaseLoad.description %}
+
+{% block innerContent %}
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-6">Manage key workers</h1>
+
+  <div class="govuk-width-container">
+    <div class="govuk-grid-row">
+
+      <div class="govuk-grid-column-three-quarters">
+        <form method="post" class="govuk-grid-row govuk-!-margin-bottom-7 govuk-!-padding-6 search-form">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+          <h2 class="govuk-heading-m">Filter by</h2>
+          <div class="horizontal-form">
+            {{ govukInput({
+        id: "query",
+        name: "query",
+        value: params.query,
+        classes: "min-width-two-quarters",
+        label: {
+          text: 'Key worker name'
+        }
+      }) }}
+
+            {{ govukSelect({
+        id: "status",
+        name: "status",
+        label: {
+          text: "Status"
+        },
+        items: status
+      }) }}
+
+            {{ govukButton({
+        text: "Apply filters",
+        preventDoubleClick: true
+      }) }}
+            <a class="govuk-link govuk-link--no-visited-state govuk-body no-label-form-clear-link" href="?clear=true">Clear</a>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="govuk-grid-row">
+
+      {% set rows = [] %}
+      {% for item in records %}
+        {% set rows = (rows.push([
+          {
+            html: '<a class="govuk-link--no-visited-state" href="idklol">' + item | lastNameCommaFirstName + "</a>",
+            attributes: {
+              "data-sort-value": item | lastNameCommaFirstName
+            }
+          },
+          {
+            html: statusTag({ text: item.status.description }),
+            attributes: {
+              "data-sort-value": item.status.description
+            }
+          },
+          {
+            text: item.numberAllocated
+          },
+          {
+            text: item.capacity
+          },
+          {
+            text: "Yes" if item.autoAllocated else "No"
+          },
+          {
+            text: item.numberOfKeyworkerSessions
+          }
+        ]), rows) %}
+      {% endfor %}
+
+      {% if records.length %}
+
+        <nav class="moj-pagination" aria-label="Pagination navigation">
+          <ul class="moj-pagination__list"></ul>
+          <p class="moj-pagination__results">Showing <b>1</b> to <b>{{ records.length }}</b> of <b>{{records.length}}</b>
+            {{'result' + ('' if records.length == 1 else 's') }}</p>
+        </div>
+
+        {{ govukTable({
+            attributes: {
+              "data-module": "moj-sortable-table"
+            },
+            head: [
+              {
+                text: 'Name',
+                key: 'name',
+                attributes: {
+                  "aria-sort": "ascending"
+                }
+              },
+              {
+                text: "Status",
+                key: 'status',
+                attributes: {
+                  "aria-sort": "none"
+                }
+              },
+              {
+                text: "Allocated prisoners",
+                key: 'numberAllocated',
+                attributes: {
+                  "aria-sort": "none"
+                }
+              },
+              {
+                text: "Maximum capacity",
+                key: 'capacity',
+                attributes: {
+                  "aria-sort": "none"
+                }
+              },
+              {
+                text: "Auto-allocation",
+                key: 'autoAllocated',
+                attributes: {
+                  "aria-sort": "none"
+                }
+              },
+              {
+                text: "Sessions in last month",
+                key: 'numberOfKeyworkerSessions',
+                attributes: {
+                  "aria-sort": "none"
+                }
+              }
+            ],
+            rows: rows
+         }) }}
+
+        <nav class="moj-pagination" aria-label="Pagination navigation">
+          <ul class="moj-pagination__list"></ul>
+          <p class="moj-pagination__results">Showing <b>1</b> to <b>{{ records.length }}</b> of <b>{{records.length}}</b>
+            {{'result' + ('' if records.length == 1 else 's') }}</p>
+        </div>
+
+      {% else %}
+        <p class="govuk-!-margin-bottom-6">No results for this search criteria.</p>
+      {% endif %}
+
+    </div>
+  </div>
+{% endblock %}

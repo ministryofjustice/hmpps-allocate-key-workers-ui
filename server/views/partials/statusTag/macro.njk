@@ -1,0 +1,9 @@
+{% macro statusTag(params) %}
+    {% if params.text == 'Active' %}
+        <strong class="govuk-tag status-tag govuk-tag--green">Active</strong>
+    {% elif params.text == 'Inactive' %}
+        <strong class="govuk-tag status-tag govuk-tag--grey">Inactive</strong>
+    {% else %}
+        <strong class="govuk-tag status-tag govuk-tag--red">{{params.text}}</strong>
+    {% endif %}
+{% endmacro %}
