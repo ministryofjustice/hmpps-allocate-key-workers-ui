@@ -1,251 +1,266 @@
 import { stubFor } from './wiremock'
 
-const stubKeyworkerApiHealth = () =>
-  stubFor({
-    request: {
-      method: 'GET',
-      urlPattern: '/keyworker-api/health/ping',
-    },
+const createBasicHttpStub = (method: string, urlPattern: string, status: number, jsonBody: object = {}) => {
+  return createHttpStub(method, urlPattern, undefined, undefined, status, jsonBody)
+}
+
+const createHttpStub = (
+  method: string,
+  urlPattern: string,
+  queryParameters: object,
+  bodyPatterns: Array<object> | undefined,
+  status: number,
+  jsonBody?: object,
+) => {
+  return stubFor({
+    request: { method, urlPattern, queryParameters, bodyPatterns },
     response: {
-      status: 200,
-      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      jsonBody: { status: 'UP' },
+      status,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody,
     },
   })
+}
+
+const stubKeyworkerApiHealth = () => createBasicHttpStub('GET', '/keyworker-api/health/ping', 200, { status: 'UP' })
 
 const stubKeyworkerApiStatusIsKeyworker = (isKeyworker: boolean) =>
-  stubFor({
-    request: {
-      method: 'GET',
-      urlPattern: '/keyworker-api/prisons/LEI/key-workers/USER1/status',
-    },
-    response: {
-      status: 200,
-      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      jsonBody: { isKeyworker },
-    },
-  })
+  createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/key-workers/USER1/status', 200, { isKeyworker })
 
 const stubKeyworkerApiStatusFail = () =>
-  stubFor({
-    request: {
-      method: 'GET',
-      urlPattern: '/keyworker-api/prisons/LEI/key-workers/USER1/status',
-    },
-    response: {
-      status: 500,
-      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      jsonBody: {},
-    },
-  })
+  createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/key-workers/USER1/status', 500, {})
 
 const stubKeyworkerMigrationStatus = () =>
-  stubFor({
-    request: {
-      method: 'GET',
-      urlPathPattern: '/keyworker-api/key-worker/prison/(.*)',
-    },
-    response: {
-      status: 200,
-      jsonBody: {
-        prisonId: 'LEI',
-        supported: true,
-        migrated: true,
-        autoAllocatedSupported: true,
-        capacityTier1: 6,
-        capacityTier2: 9,
-        kwSessionFrequencyInWeeks: 1,
-        migratedDateTime: '2025-01-01T01:12:55.000',
-      },
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    },
-  })
+  createBasicHttpStub('GET', '/keyworker-api/key-worker/prison/(.*)', 200, keyworkerMigrationStatusResponse)
 
-const stubKeyworkerApiStats2025 = () =>
-  stubFor({
-    request: {
-      method: 'GET',
-      urlPathPattern: '/keyworker-api/prisons/LEI/keyworker/statistics',
-      queryParameters: {
-        from: {
-          matches: '2025.+',
-        },
-        to: {
-          matches: '.+',
-        },
-      },
-    },
-    response: {
-      status: 200,
-      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      jsonBody: {
-        prisonCode: 'LEI',
-        current: {
-          from: '2024-01-11',
-          to: '2024-01-11',
-          prisonersAssignedKeyworker: 4200,
-          totalPrisoners: 6900,
-          eligiblePrisoners: 5000,
-          keyworkerSessions: 1,
-          keyworkerEntries: 1,
-          activeKeyworkers: 24,
-          percentageWithKeyworker: 61,
-          projectedSessions: 200,
-          compliance: 0,
-        },
-        previous: {
-          from: '2023-12-03',
-          to: '2023-12-03',
-          prisonersAssignedKeyworker: 4205,
-          totalPrisoners: 7000,
-          eligiblePrisoners: 6500,
-          keyworkerSessions: 3,
-          keyworkerEntries: 5,
-          activeKeyworkers: 2,
-          percentageWithKeyworker: 60,
-          projectedSessions: 169,
-          compliance: 0,
-        },
-        complianceTimeline: {
-          '2023-04-14': 0,
-          '2023-05-19': 0,
-          '2023-06-02': 0,
-          '2023-08-18': 0,
-          '2023-11-10': 0,
-          '2023-12-01': 0,
-          '2024-01-05': 0,
-        },
-        averageCompliance: 0,
-        sessionTimeline: {
-          '2023-04-14': 0,
-          '2023-05-19': 0,
-          '2023-06-02': 0,
-          '2023-08-18': 0,
-          '2023-11-10': 0,
-          '2023-12-01': 0,
-          '2024-01-05': 0,
-        },
-        averageSessions: 0,
-      },
-    },
-  })
+const createKeyworkerStatsStub = (from: string, to: string, jsonBody = {}) => {
+  return createHttpStub(
+    'GET',
+    '/keyworker-api/prisons/LEI/keyworker/statistics',
+    { from: { matches: from }, to: { matches: to } },
+    undefined,
+    200,
+    jsonBody,
+  )
+}
 
-const stubKeyworkerApiStats2024 = () =>
-  stubFor({
-    request: {
-      method: 'GET',
-      urlPathPattern: '/keyworker-api/prisons/LEI/keyworker/statistics',
-      queryParameters: {
-        from: {
-          matches: '2024.+',
-        },
-        to: {
-          matches: '.+',
-        },
-      },
-    },
-    response: {
-      status: 200,
-      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      jsonBody: {
-        prisonCode: 'LEI',
-        current: {
-          from: '2024-01-11',
-          to: '2024-01-11',
-          prisonersAssignedKeyworker: 4200,
-          totalPrisoners: 6900,
-          eligiblePrisoners: 5000,
-          keyworkerSessions: 1,
-          keyworkerEntries: 1,
-          activeKeyworkers: 24,
-          percentageWithKeyworker: 61,
-          projectedSessions: 200,
-          compliance: 0,
-        },
-        previous: {
-          from: '2023-12-03',
-          to: '2023-12-03',
-          prisonersAssignedKeyworker: 4205,
-          totalPrisoners: 7000,
-          eligiblePrisoners: 6500,
-          keyworkerSessions: 3,
-          keyworkerEntries: 5,
-          activeKeyworkers: 2,
-          percentageWithKeyworker: 60,
-          projectedSessions: 169,
-          compliance: 0,
-        },
-        complianceTimeline: {
-          '2023-04-14': 0,
-          '2023-05-19': 0,
-          '2023-06-02': 0,
-          '2023-08-18': 0,
-          '2023-11-10': 0,
-          '2023-12-01': 0,
-          '2024-01-05': 0,
-        },
-        averageCompliance: 0,
-        sessionTimeline: {
-          '2023-04-14': 0,
-          '2023-05-19': 0,
-          '2023-06-02': 0,
-          '2023-08-18': 0,
-          '2023-11-10': 0,
-          '2023-12-01': 0,
-          '2024-01-05': 0,
-        },
-        averageSessions: 0,
-      },
-    },
-  })
+const stubKeyworkerApiStats2025 = () => createKeyworkerStatsStub('2025.+', '.+', keyworkerStatisticsResponse)
+
+const stubKeyworkerApiStats2024 = () => createKeyworkerStatsStub('2024.+', '.+', keyworkerStatisticsResponse)
 
 const stubKeyworkerApiStatsNoData = () =>
-  stubFor({
-    request: {
-      method: 'GET',
-      urlPathPattern: '/keyworker-api/prisons/LEI/keyworker/statistics',
-      queryParameters: {
-        from: {
-          matches: '.+',
-        },
-        to: {
-          matches: '.+',
-        },
-      },
-    },
-    response: {
-      status: 200,
-      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-      jsonBody: {
-        summary: {
-          requestedFromDate: '2025-01-01',
-          requestedToDate: '2025-01-31',
-          complianceTimeline: {
-            '2024-04-14': 0,
-            '2024-05-19': 0,
-            '2024-06-02': 0,
-            '2024-08-18': 0,
-            '2024-11-10': 0,
-            '2024-12-01': 0,
-            '2025-01-05': 0,
-          },
-          averageCompliance: 0,
-          sessionTimeline: {
-            '2024-04-14': 0,
-            '2024-05-19': 0,
-            '2024-06-02': 0,
-            '2024-08-18': 0,
-            '2024-11-10': 0,
-            '2024-12-01': 0,
-            '2025-01-05': 0,
-          },
-          averageSessions: 0,
-        },
-      },
+  createKeyworkerStatsStub('.+', '.+', {
+    summary: {
+      ...keyworkerStatisticsResponse,
+      current: undefined,
+      previous: undefined,
     },
   })
+
+const stubKeyworkerMembersAll = () =>
+  createHttpStub(
+    'POST',
+    '/keyworker-api/search/prisons/LEI/keyworkers',
+    undefined,
+    [
+      {
+        doesNotMatch: '.*"query".*',
+        equalToJson: {
+          name: 'query',
+          values: ['ALL'],
+        },
+      },
+    ],
+    200,
+    keyworkerManageResponse,
+  )
+
+const stubKeyworkerMembersError = () =>
+  createHttpStub('POST', '/keyworker-api/search/prisons/LEI/keyworkers', undefined, undefined, 502, {})
+
+const stubKeyworkerMembersNone = () =>
+  createHttpStub(
+    'POST',
+    '/keyworker-api/search/prisons/LEI/keyworkers',
+    undefined,
+    [
+      {
+        equalToJson: {
+          query: 'IDKLOL',
+          status: 'ALL',
+        },
+      },
+    ],
+    200,
+    { content: [] },
+  )
+
+const stubKeyworkerMembersQuery = () =>
+  createHttpStub(
+    'POST',
+    '/keyworker-api/search/prisons/LEI/keyworkers',
+    undefined,
+    [
+      {
+        equalToJson: {
+          query: 'AVAILABLE-ACTIVE',
+          status: 'ALL',
+        },
+      },
+    ],
+    200,
+    { content: [keyworkerManageResponse.content[0]] },
+  )
+
+const stubKeyworkerMembersStatus = () =>
+  createHttpStub(
+    'POST',
+    '/keyworker-api/search/prisons/LEI/keyworkers',
+    undefined,
+    [
+      {
+        equalToJson: {
+          query: '',
+          status: 'INACTIVE',
+        },
+      },
+    ],
+    200,
+    { content: keyworkerManageResponse.content.filter(o => o.status.code === 'INA') },
+  )
+
+const keyworkerManageResponse = {
+  content: [
+    {
+      staffId: 488095,
+      firstName: 'AVAILABLE-ACTIVE',
+      lastName: 'KEY-WORKER',
+      status: {
+        code: 'ACT',
+        description: 'Active',
+      },
+      capacity: 28,
+      numberAllocated: 32,
+      autoAllocationAllowed: true,
+      numberOfKeyworkerSessions: 0,
+    },
+    {
+      staffId: 488096,
+      firstName: 'UNAVAILABLE-ANNUAL-LEAVE',
+      lastName: 'KEY-WORKER',
+      status: {
+        code: 'UAL',
+        description: 'Unavailable - annual leave',
+      },
+      capacity: 6,
+      numberAllocated: 9,
+      autoAllocationAllowed: true,
+      numberOfKeyworkerSessions: 0,
+    },
+    {
+      staffId: 488097,
+      firstName: 'UNAVAILABLE-LONG-TERM-ABSENCE',
+      lastName: 'KEY-WORKER',
+      status: {
+        code: 'ULT',
+        description: 'Unavailable - long term absence',
+      },
+      capacity: 4,
+      numberAllocated: 1,
+      autoAllocationAllowed: false,
+      numberOfKeyworkerSessions: 0,
+    },
+    {
+      staffId: 488098,
+      firstName: 'UNAVAILABLE-NO-PRISONER-CONTACT',
+      lastName: 'KEY-WORKER',
+      status: {
+        code: 'UNP',
+        description: 'Unavailable - no prisoner contact',
+      },
+      capacity: 12,
+      numberAllocated: 0,
+      autoAllocationAllowed: false,
+      numberOfKeyworkerSessions: 0,
+    },
+    {
+      staffId: 488099,
+      firstName: 'UNAVAILABLE-INACTIVE',
+      lastName: 'KEY-WORKER',
+      status: {
+        code: 'INA',
+        description: 'Inactive',
+      },
+      capacity: 11,
+      numberAllocated: 0,
+      autoAllocationAllowed: false,
+      numberOfKeyworkerSessions: 0,
+    },
+  ],
+}
+
+const keyworkerMigrationStatusResponse = {
+  prisonId: 'LEI',
+  supported: true,
+  migrated: true,
+  autoAllocatedSupported: true,
+  capacityTier1: 6,
+  capacityTier2: 9,
+  kwSessionFrequencyInWeeks: 1,
+  migratedDateTime: '2025-01-01T01:12:55.000',
+}
+
+const keyworkerStatisticsResponse = {
+  prisonCode: 'LEI',
+  current: {
+    from: '2024-01-11',
+    to: '2024-01-11',
+    prisonersAssignedKeyworker: 4200,
+    totalPrisoners: 6900,
+    eligiblePrisoners: 5000,
+    keyworkerSessions: 1,
+    keyworkerEntries: 1,
+    activeKeyworkers: 24,
+    percentageWithKeyworker: 61,
+    projectedSessions: 200,
+    compliance: 0,
+  },
+  previous: {
+    from: '2023-12-03',
+    to: '2023-12-03',
+    prisonersAssignedKeyworker: 4205,
+    totalPrisoners: 7000,
+    eligiblePrisoners: 6500,
+    keyworkerSessions: 3,
+    keyworkerEntries: 5,
+    activeKeyworkers: 2,
+    percentageWithKeyworker: 60,
+    projectedSessions: 169,
+    compliance: 0,
+  },
+  complianceTimeline: {
+    '2023-04-14': 0,
+    '2023-05-19': 0,
+    '2023-06-02': 0,
+    '2023-08-18': 0,
+    '2023-11-10': 0,
+    '2023-12-01': 0,
+    '2024-01-05': 0,
+  },
+  averageCompliance: 0,
+  sessionTimeline: {
+    '2023-04-14': 0,
+    '2023-05-19': 0,
+    '2023-06-02': 0,
+    '2023-08-18': 0,
+    '2023-11-10': 0,
+    '2023-12-01': 0,
+    '2024-01-05': 0,
+  },
+  averageSessions: 0,
+}
 
 export default {
   stubKeyworkerApiHealth,
@@ -256,4 +271,9 @@ export default {
   stubKeyworkerApiStats2024,
   stubKeyworkerMigrationStatus,
   stubKeyworkerApiStatsNoData,
+  stubKeyworkerMembersAll,
+  stubKeyworkerMembersQuery,
+  stubKeyworkerMembersStatus,
+  stubKeyworkerMembersNone,
+  stubKeyworkerMembersError,
 }
