@@ -67,36 +67,25 @@ function getDateInReadableFormat(dateString: string) {
 }
 
 // add aria-sort attributes to govukTable head row, so that moj-sortable-table css will be applied
-export const convertToSortableColumns = (headings: { text: string; key?: string }[], sort: string) => {
-  const [sortingKey, sortingDirection] = sort.split(',')
+export const convertToSortableColumns = (
+  headings: { text: string; key?: string }[],
+  params: Record<string, string>,
+) => {
+  const existingParams = new URLSearchParams(params)
+  const reverseDirection = params['direction'] === 'asc' ? 'desc' : 'asc'
 
   return headings.map(heading => {
     if (!heading.key) {
       return heading
     }
-    if (heading.key === sortingKey) {
-      if (sortingDirection === 'asc') {
-        return {
-          attributes: {
-            'aria-sort': 'ascending',
-          },
-          html: `<a href="?sort=${heading.key},desc"><button>${heading.text}</button></a>`,
-        }
-      }
-      if (sortingDirection === 'desc') {
-        return {
-          attributes: {
-            'aria-sort': 'descending',
-          },
-          html: `<a href="?sort=${heading.key},asc"><button>${heading.text}</button></a>`,
-        }
-      }
-    }
+    const ariaSort = heading.key === params['sort'] ? `${params['direction']}ending` : 'none'
+    existingParams.set('sort', heading.key)
+    existingParams.set('direction', reverseDirection)
     return {
       attributes: {
-        'aria-sort': 'none',
+        'aria-sort': ariaSort,
       },
-      html: `<a href="?sort=${heading.key},asc"><button>${heading.text}</button></a>`,
+      html: `<a href="?${existingParams.toString()}"><button>${heading.text}</button></a>`,
     }
   })
 }

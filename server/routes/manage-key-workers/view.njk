@@ -22,7 +22,7 @@
             {{ govukInput({
         id: "query",
         name: "query",
-        value: query,
+        value: params.query,
         classes: "min-width-two-quarters",
         label: {
           text: 'Key worker name'
@@ -109,7 +109,7 @@
                 text: "Sessions in last month",
                 key: 'numberOfKeyworkerSessions'
               }
-            ] | convertToSortableColumns(sort or 'name,asc'),
+            ] | convertToSortableColumns(params),
             rows: rows
          }) }}
 
