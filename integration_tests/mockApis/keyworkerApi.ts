@@ -32,9 +32,6 @@ const stubKeyworkerApiStatusIsKeyworker = (isKeyworker: boolean) =>
 const stubKeyworkerApiStatusFail = () =>
   createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/key-workers/USER1/status', 500, {})
 
-const stubKeyworkerMigrationStatus = () =>
-  createBasicHttpStub('GET', '/keyworker-api/key-worker/prison/(.*)', 200, keyworkerMigrationStatusResponse)
-
 const createKeyworkerStatsStub = (from: string, to: string, jsonBody = {}) => {
   return createHttpStub(
     'GET',
@@ -45,6 +42,27 @@ const createKeyworkerStatsStub = (from: string, to: string, jsonBody = {}) => {
     jsonBody,
   )
 }
+const stubKeyworkerPrisonConfig = (isEnabled: boolean, hasPrisonersWithHighComplexityNeeds: boolean) =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPathPattern: '/keyworker-api/prisons/LEI/keyworker/configuration',
+    },
+    response: {
+      status: 200,
+      jsonBody: {
+        isEnabled,
+        hasPrisonersWithHighComplexityNeeds,
+        allowAutoAllocate: true,
+        capacityTier1: 6,
+        capacityTier2: 9,
+        kwSessionFrequencyInWeeks: 1,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  })
 
 const stubKeyworkerApiStats2025 = () => createKeyworkerStatsStub('2025.+', '.+', keyworkerStatisticsResponse)
 
@@ -269,11 +287,13 @@ export default {
   stubKeyworkerApiStatusFail: () => stubKeyworkerApiStatusFail(),
   stubKeyworkerApiStats2025,
   stubKeyworkerApiStats2024,
-  stubKeyworkerMigrationStatus,
   stubKeyworkerApiStatsNoData,
   stubKeyworkerMembersAll,
   stubKeyworkerMembersQuery,
   stubKeyworkerMembersStatus,
   stubKeyworkerMembersNone,
   stubKeyworkerMembersError,
+  stubEnabledPrisonWithHighComplexityNeedsPrisoners: () => stubKeyworkerPrisonConfig(true, true),
+  stubEnabledPrison: () => stubKeyworkerPrisonConfig(true, false),
+  stubPrisonNotEnabled: () => stubKeyworkerPrisonConfig(false, false),
 }

@@ -81,7 +81,7 @@ export class KeyWorkerStatisticsController {
     const previousSpan = this.getComparisonDates(nowSpan.start, nowSpan.end)
     const prisonId = res.locals.user.activeCaseLoad!.caseLoadId!
     const stats = await this.keyworkerApiService.getPrisonStats(req, prisonId, nowSpan.start, nowSpan.end)
-    const prison = await this.keyworkerApiService.getPrisonMigrationStatus(req, prisonId)
+    const prison = await this.keyworkerApiService.getPrisonConfig(req, prisonId)
 
     const data = this.createPayload(stats.current, stats.previous)
 

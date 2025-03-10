@@ -22,11 +22,15 @@ export default class KeyworkerApiService {
     return this.keyworkerApiClientBuilder(req.systemClientToken).getPrisonStats(prisonId, fromDate, toDate)
   }
 
-  getPrisonMigrationStatus(req: Request, prisonId: string): ReturnType<KeyworkerApiClient['getPrisonMigrationStatus']> {
-    return this.keyworkerApiClientBuilder(req.systemClientToken).getPrisonMigrationStatus(prisonId)
+  getPrisonConfig(req: Request, prisonId: string): ReturnType<KeyworkerApiClient['getPrisonConfig']> {
+    return this.keyworkerApiClientBuilder(req.systemClientToken).getPrisonConfig(prisonId)
   }
 
-  getKeyworkerMembers(req: Request, prisonId: string, query: Parameters<KeyworkerApiClient['getKeyworkerMembers']>[1]): ReturnType<KeyworkerApiClient['getKeyworkerMembers']> {
+  getKeyworkerMembers(
+    req: Request,
+    prisonId: string,
+    query: Parameters<KeyworkerApiClient['getKeyworkerMembers']>[1],
+  ): ReturnType<KeyworkerApiClient['getKeyworkerMembers']> {
     return this.keyworkerApiClientBuilder(req.systemClientToken).getKeyworkerMembers(prisonId, query)
   }
 }

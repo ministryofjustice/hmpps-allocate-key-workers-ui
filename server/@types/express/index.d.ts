@@ -44,6 +44,10 @@ export declare global {
       applicationName: string
       environmentName: string
       environmentNameColour: string
+      prisonConfiguration: {
+        isEnabled: boolean
+        hasPrisonersWithHighComplexityNeeds: boolean
+      }
       feComponents?: {
         sharedData?: {
           activeCaseLoad: CaseLoad
