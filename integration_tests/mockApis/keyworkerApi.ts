@@ -219,17 +219,6 @@ const keyworkerManageResponse = {
   ],
 }
 
-const keyworkerMigrationStatusResponse = {
-  prisonId: 'LEI',
-  supported: true,
-  migrated: true,
-  autoAllocatedSupported: true,
-  capacityTier1: 6,
-  capacityTier2: 9,
-  kwSessionFrequencyInWeeks: 1,
-  migratedDateTime: '2025-01-01T01:12:55.000',
-}
-
 const keyworkerStatisticsResponse = {
   prisonCode: 'LEI',
   current: {
