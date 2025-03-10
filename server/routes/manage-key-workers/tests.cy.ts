@@ -77,13 +77,13 @@ context('Manage key workers', () => {
     cy.get('.govuk-table__row').eq(5).children().eq(5).should('contain.text', '0')
 
     // Sort by allocated prisoners
-    cy.get('[aria-sort="none"] > a').eq(2).click()
+    cy.get(':nth-child(2) > button').click()
 
-    cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', '0')
+    cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', '32')
     cy.get('.govuk-table__row').eq(2).children().eq(2).should('contain.text', '0')
-    cy.get('.govuk-table__row').eq(3).children().eq(2).should('contain.text', '1')
-    cy.get('.govuk-table__row').eq(4).children().eq(2).should('contain.text', '9')
-    cy.get('.govuk-table__row').eq(5).children().eq(2).should('contain.text', '32')
+    cy.get('.govuk-table__row').eq(3).children().eq(2).should('contain.text', '9')
+    cy.get('.govuk-table__row').eq(4).children().eq(2).should('contain.text', '1')
+    cy.get('.govuk-table__row').eq(5).children().eq(2).should('contain.text', '0')
 
     cy.get('#query').type('AVAILABLE-ACTIVE')
     cy.findByRole('button', { name: 'Apply filters' }).click()

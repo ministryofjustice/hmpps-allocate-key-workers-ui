@@ -55,7 +55,6 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
   njkEnv.addFilter('dateString', getDateInReadableFormat)
-  njkEnv.addFilter('convertToSortableColumns', convertToSortableColumns)
   njkEnv.addFilter('lastNameCommaFirstName', lastNameCommaFirstName)
 }
 
@@ -64,28 +63,4 @@ function getDateInReadableFormat(dateString: string) {
   if (split.length < 3) throw new Error('Invalid date string')
   const date = new Date(parseInt(split[2]!, 10), parseInt(split[1]!, 10) - 1, parseInt(split[0]!, 10))
   return `${date.getDate()} ${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`
-}
-
-// add aria-sort attributes to govukTable head row, so that moj-sortable-table css will be applied
-export const convertToSortableColumns = (
-  headings: { text: string; key?: string }[],
-  params: Record<string, string>,
-) => {
-  const existingParams = new URLSearchParams(params)
-  const reverseDirection = params['direction'] === 'asc' ? 'desc' : 'asc'
-
-  return headings.map(heading => {
-    if (!heading.key) {
-      return heading
-    }
-    const ariaSort = heading.key === params['sort'] ? `${params['direction']}ending` : 'none'
-    existingParams.set('sort', heading.key)
-    existingParams.set('direction', reverseDirection)
-    return {
-      attributes: {
-        'aria-sort': ariaSort,
-      },
-      html: `<a href="?${existingParams.toString()}"><button>${heading.text}</button></a>`,
-    }
-  })
 }
