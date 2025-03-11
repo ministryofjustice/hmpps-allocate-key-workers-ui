@@ -110,7 +110,7 @@ context('test / homepage', () => {
     cy.findByRole('link', { name: /View key workers in your establishment$/i })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('to.equal', 'https://legacy.key-workers.url/key-worker-search')
+      .and('to.match', /manage-key-workers/)
 
     cy.findByRole('link', { name: /Key worker statistics$/i })
       .should('be.visible')
