@@ -33,4 +33,12 @@ export default class KeyworkerApiService {
   ): ReturnType<KeyworkerApiClient['getKeyworkerMembers']> {
     return this.keyworkerApiClientBuilder(req.systemClientToken).getKeyworkerMembers(prisonId, query)
   }
+
+  getKeyworkerDetails(
+    req: Request,
+    prisonCode: string,
+    staffId: string,
+  ): ReturnType<KeyworkerApiClient['getKeyworkerDetails']> {
+    return this.keyworkerApiClientBuilder(req.systemClientToken).getKeyworkerDetails(prisonCode, staffId)
+  }
 }
