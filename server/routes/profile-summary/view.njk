@@ -28,9 +28,9 @@
       {% for item in records %}
         {% set rows = (rows.push([
           {
-            html: '<a class="govuk-link--no-visited-state" href="/key-worker-profile/' + item.prisonerId + '">' + item.prisonerName | lastNameCommaFirstName + "</a>",
+            html: '<a class="govuk-link--no-visited-state" href="/key-worker-profile/' + item.prisonerId + '">' + item | lastNameCommaFirstName + "</a>",
             attributes: {
-            "data-sort-value": item.prisonerName | lastNameCommaFirstName
+            "data-sort-value": item | lastNameCommaFirstName
           }
           },
           {
@@ -61,7 +61,7 @@
           head: [
             {
               text: 'Name',
-              key: 'prisonerName',
+              key: 'name',
               attributes: {
               "aria-sort": "ascending"
             }

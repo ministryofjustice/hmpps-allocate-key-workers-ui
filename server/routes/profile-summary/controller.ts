@@ -26,7 +26,8 @@ export class ProfileSummaryController {
     return allocations.map(allocation => {
       return {
         prisonerId: allocation.prisoner.prisonNumber,
-        prisonerName: `${allocation.prisoner.firstName} ${allocation.prisoner.lastName}`,
+        firstName: allocation.prisoner.firstName,
+        lastName: allocation.prisoner.lastName,
         location: allocation.location,
         releaseDate: allocation.releaseDate ? allocation.releaseDate : '-',
         recentSession: allocation.latestSession?.occurredAt ? allocation.latestSession.occurredAt : '-',
