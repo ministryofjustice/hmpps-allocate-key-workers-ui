@@ -29,6 +29,7 @@ export class ProfileSummaryController {
         firstName: allocation.prisoner.firstName,
         lastName: allocation.prisoner.lastName,
         location: allocation.location,
+        csra: allocation.prisoner.csra ? allocation.prisoner.csra : '-',
         releaseDate: allocation.releaseDate ? allocation.releaseDate : '-',
         recentSession: allocation.latestSession?.occurredAt ? allocation.latestSession.occurredAt : '-',
       }

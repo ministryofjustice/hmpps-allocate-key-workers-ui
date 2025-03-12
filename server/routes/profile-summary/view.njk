@@ -19,8 +19,10 @@
 
     <hr />
 
+    <hr />
 
     <hr />
+
     <h2 class="govuk-heading-m govuk-!-margin-bottom-6">Current Allocations</h2>
 
     <nav class="govuk-grid-row">
@@ -29,7 +31,7 @@
       {% for item in records %}
         {% set rows = (rows.push([
           {
-            html: '<a class="govuk-link--no-visited-state" href="/key-worker-profile/' + item.prisonerId + '">' + item | lastNameCommaFirstName + "</a>",
+            html: '<a class="govuk-link--no-visited-state" href="/dunno/' + item.prisonerId + '">' + item | lastNameCommaFirstName + "</a>",
             attributes: {
             "data-sort-value": item | lastNameCommaFirstName
           }
@@ -39,6 +41,9 @@
           },
           {
             text: item.releaseDate
+          },
+          {
+            text: item.csra
           },
           {
             text: item.recentSession
@@ -77,6 +82,13 @@
             {
               text: "Release date",
               key: 'releaseDate',
+              attributes: {
+              "aria-sort": "none"
+            }
+            },
+            {
+              text: "CSRA",
+              key: 'csra',
               attributes: {
               "aria-sort": "none"
             }
