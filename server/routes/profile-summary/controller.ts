@@ -12,17 +12,17 @@ export class ProfileSummaryController {
     const keyworkerData = await this.keyworkerApiService.getKeyworkerDetails(req, prisonId, userId)
     const keyworkerName = `${keyworkerData.keyworker.firstName} ${keyworkerData.keyworker.lastName}`
     const keyworkerStatus = keyworkerData.status.description
-    const allocations = this.mapAllocations(keyworkerData.allocations)
+    const allocationRecords = this.mapAllocationsToRecords(keyworkerData.allocations)
 
     res.render('profile-summary/view', {
       keyworkerName,
       keyworkerStatus,
       keyworkerData,
-      records: allocations,
+      records: allocationRecords,
     })
   }
 
-  private mapAllocations(allocations: components['schemas']['Allocation'][]) {
+  private mapAllocationsToRecords(allocations: components['schemas']['Allocation'][]) {
     return allocations.map(allocation => {
       return {
         prisonerId: allocation.prisoner.prisonNumber,
