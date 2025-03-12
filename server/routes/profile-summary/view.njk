@@ -1,10 +1,108 @@
 {% extends "partials/layout.njk" %}
+{% from "partials/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% set fullWidth = true %}
 {% set pageTitle = "Profile summary" %}
 
 {% block innerContent %}
 
+  <nav class="govuk-width-container">
 
+    <div class="govuk-grid-row">
+      <h1 class="govuk-heading-l govuk-!-margin-bottom-6">{{ keyworkerName }}</h1>
+      <p> {{ statusTag({ text: keyworkerStatus }) }} </p>
+      <a class="govuk-link govuk-link--no-visited-state govuk-body no-label-form-clear-link" href="/dunno">Update
+        capacity and status</a>
+    </div>
+
+    <hr />
+
+
+    <hr />
+    <h2 class="govuk-heading-m govuk-!-margin-bottom-6">Current Allocations</h2>
+
+    <nav class="govuk-grid-row">
+
+      {% set rows = [] %}
+      {% for item in records %}
+        {% set rows = (rows.push([
+          {
+            html: '<a class="govuk-link--no-visited-state" href="/key-worker-profile/' + item.prisonerId + '">' + item.prisonerName | lastNameCommaFirstName + "</a>",
+            attributes: {
+            "data-sort-value": item.prisonerName | lastNameCommaFirstName
+          }
+          },
+          {
+            text: item.location
+          },
+          {
+            text: item.releaseDate
+          },
+          {
+            text: item.recentSession
+          }
+        ]), rows) %}
+      {% endfor %}
+
+      {% if records.length %}
+
+        <nav class="moj-pagination" aria-label="Pagination navigation">
+          <ul class="moj-pagination__list"></ul>
+          <p class="moj-pagination__results">Showing <b>1</b> to <b>{{ records.length }}</b> of
+            <b>{{ records.length }}</b>
+            {{ 'result' + ('' if records.length == 1 else 's') }}</p>
+        </nav>
+
+        {{ govukTable({
+          attributes: {
+            "data-module": "moj-sortable-table"
+          },
+          head: [
+            {
+              text: 'Name',
+              key: 'prisonerName',
+              attributes: {
+              "aria-sort": "ascending"
+            }
+            },
+            {
+              text: "Residual location",
+              key: 'location',
+              attributes: {
+              "aria-sort": "none"
+            }
+            },
+            {
+              text: "Release date",
+              key: 'releaseDate',
+              attributes: {
+              "aria-sort": "none"
+            }
+            },
+            {
+              text: "Most recent session",
+              key: 'recentSession',
+              attributes: {
+              "aria-sort": "none"
+            }
+            }
+          ],
+          rows: rows
+        }) }}
+
+        <nav class="moj-pagination" aria-label="Pagination navigation">
+          <ul class="moj-pagination__list"></ul>
+          <p class="moj-pagination__results">Showing <b>1</b> to <b>{{ records.length }}</b> of
+            <b>{{ records.length }}</b>
+            {{ 'result' + ('' if records.length == 1 else 's') }}</p>
+        </nav>
+
+      {% else %}
+        <p class="govuk-!-margin-bottom-6">No results for this search criteria.</p>
+      {% endif %}
+
+    </nav>
+  </nav>
 
 {% endblock %}
