@@ -12,10 +12,13 @@
   <div class="govuk-width-container">
 
     <div class="govuk-grid-row">
-      <h1 class="govuk-heading-l govuk-!-margin-bottom-6">{{ keyworkerName }}</h1>
-      <p> {{ statusTag({ text: keyworkerStatus }) }} </p>
-      <a class="govuk-link govuk-link--no-visited-state govuk-body no-label-form-clear-link" href="/dunno">Update
-        capacity and status</a>
+      <div class="govuk-!-display-inline">
+        <h1 class="govuk-heading-l govuk-!-static-margin-bottom-0 govuk-!-display-inline-block govuk-!-vertical-align-middle">{{ keyworkerName }}</h1>
+        <p class="govuk-!-margin-left-2 govuk-!-padding-top-2 govuk-!-display-inline-block govuk-!-vertical-align-middle"> {{ statusTag({ text: keyworkerStatus }) }} </p>
+        <a
+          class="govuk-link govuk-link--no-visited-state govuk-body no-label-form-clear-link govuk-!-margin-left-2 govuk-!-margin-bottom-0 govuk-!-display-inline-block govuk-!-vertical-align-middle"
+          href="/dunno">Update capacity and status</a>
+      </div>
     </div>
 
     <hr />
