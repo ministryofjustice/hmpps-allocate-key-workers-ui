@@ -31,7 +31,7 @@
       {% for item in records %}
         {% set rows = (rows.push([
           {
-            html: '<a class="govuk-link--no-visited-state" href="/dunno/' + item.prisonerId + '">' + item | lastNameCommaFirstName + "</a>",
+            html: '<a class="govuk-link--no-visited-state" href="/prisoner/' + item.prisonerId + '">' + item | lastNameCommaFirstName + "</a>",
             attributes: {
             "data-sort-value": item | lastNameCommaFirstName
           }
