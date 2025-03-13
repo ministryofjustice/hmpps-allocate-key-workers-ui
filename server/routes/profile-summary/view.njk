@@ -13,8 +13,10 @@
 
     <div class="govuk-grid-row">
       <div class="govuk-!-display-inline">
-        <h1 class="govuk-heading-l govuk-!-static-margin-bottom-0 govuk-!-display-inline-block govuk-!-vertical-align-middle">{{ keyworkerName }}</h1>
-        <p class="govuk-!-margin-left-2 govuk-!-padding-top-2 govuk-!-display-inline-block govuk-!-vertical-align-middle"> {{ statusTag({ text: keyworkerStatus }) }} </p>
+        <h1
+          class="govuk-heading-l govuk-!-static-margin-bottom-0 govuk-!-display-inline-block govuk-!-vertical-align-middle">{{ keyworkerName }}</h1>
+        <p
+          class="govuk-!-margin-left-2 govuk-!-padding-top-2 govuk-!-display-inline-block govuk-!-vertical-align-middle"> {{ statusTag({ text: keyworkerStatus }) }} </p>
         <a
           class="govuk-link govuk-link--no-visited-state govuk-body no-label-form-clear-link govuk-!-margin-left-2 govuk-!-margin-bottom-0 govuk-!-display-inline-block govuk-!-vertical-align-middle"
           href="/dunno">Update capacity and status</a>
@@ -36,7 +38,7 @@
 
     {% if statistics.length %}
 
-      {#      <p>Displaying statistics from {{ dateFrom | dateString }} to {{ dateTo | dateString}}. #}
+      <p><strong>Statistics for period:</strong> {{ dateFrom | dateString }} to {{ dateTo | dateString }}.
 
       <div class="govuk-grid-row">
         {% for statistic in statistics %}

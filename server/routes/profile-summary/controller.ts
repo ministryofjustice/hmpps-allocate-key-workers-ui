@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import { components } from '../../@types/keyWorker'
+import { formatDateConcise } from '../../utils/datetimeUtils'
 
 interface AllocationRecord {
   prisonerId: string
@@ -36,6 +37,8 @@ export class ProfileSummaryController {
       keyworkerName,
       keyworkerStatus,
       keyworkerDetails,
+      dateFrom: formatDateConcise(keyworkerData.stats.current?.from),
+      dateTo: formatDateConcise(keyworkerData.stats.current?.to),
       statistics: keyworkerStats,
       records: allocationRecords,
     })
