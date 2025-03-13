@@ -2,6 +2,21 @@ import { Request, Response } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import { components } from '../../@types/keyWorker'
 
+interface AllocationRecord {
+  prisonerId: string
+  firstName: string
+  lastName: string
+  location: string
+  releaseDate: string
+  csra: string
+  recentSession: string
+}
+
+interface DetailRecord {
+  heading: string
+  value: string | number
+}
+
 export class ProfileSummaryController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
@@ -26,21 +41,21 @@ export class ProfileSummaryController {
     })
   }
 
-  private mapAllocationsToRecords(allocations: components['schemas']['Allocation'][]) {
+  private mapAllocationsToRecords(allocations: components['schemas']['Allocation'][]): AllocationRecord[] {
     return allocations.map(allocation => {
       return {
         prisonerId: allocation.prisoner.prisonNumber,
         firstName: allocation.prisoner.firstName,
         lastName: allocation.prisoner.lastName,
         location: allocation.location,
-        csra: allocation.prisoner.csra ? allocation.prisoner.csra : '-',
         releaseDate: allocation.releaseDate ? allocation.releaseDate : '-',
+        csra: allocation.prisoner.csra ? allocation.prisoner.csra : '-',
         recentSession: allocation.latestSession?.occurredAt ? allocation.latestSession.occurredAt : '-',
       }
     })
   }
 
-  private formatDetails(details: components['schemas']['KeyworkerDetails']) {
+  private formatDetails(details: components['schemas']['KeyworkerDetails']): DetailRecord[] {
     return [
       {
         heading: 'Establishment',
