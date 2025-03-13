@@ -52,7 +52,7 @@
 
     <h2 class="govuk-heading-m govuk-!-margin-bottom-6">Current Allocations</h2>
 
-    <nav class="govuk-grid-row">
+    <div class="govuk-grid-row">
 
       {% set rows = [] %}
       {% for item in records %}
@@ -155,7 +155,7 @@
         text: "Save changes"
       }) }}
 
-    </nav>
+    </div>
   </div>
 
 {% endblock %}
