@@ -9,6 +9,7 @@ import logger from '../../logger'
 import { todayStringGBFormat } from './datetimeUtils'
 import { findError } from '../middleware/validationMiddleware'
 import { lastNameCommaFirstName } from './formatUtils'
+import { addDefaultSelectedValue, setSelectedValue } from './dropdownUtils'
 
 export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
@@ -56,6 +57,8 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
   njkEnv.addFilter('dateString', getDateInReadableFormat)
   njkEnv.addFilter('lastNameCommaFirstName', lastNameCommaFirstName)
+  njkEnv.addFilter('addDefaultSelectedValue', addDefaultSelectedValue)
+  njkEnv.addFilter('setSelectedValue', setSelectedValue)
 }
 
 function getDateInReadableFormat(dateString: string) {
