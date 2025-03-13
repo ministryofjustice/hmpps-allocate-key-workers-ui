@@ -21,6 +21,23 @@
 
     <hr />
 
+    {% if keyworkerStats.length %}
+
+{#      <p>Displaying statistics from {{ dateFrom | dateString }} to {{ dateTo | dateString}}.#}
+
+      <div class="govuk-grid-row">
+        {% for statistic in keyworkerStats %}
+          <div class="govuk-grid-column-one-quarter">
+            <h2 class="govuk-heading-s">{{ statistic.heading }}</h2>
+            <p class="govuk-!-font-size-36">{{ statistic.value }}</p>
+            <p>{{ statistic.change.value }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <h2 class="govuk-heading-s">There is no data for this period.</h2>
+    {% endif %}
+
     <hr />
 
     <h2 class="govuk-heading-m govuk-!-margin-bottom-6">Current Allocations</h2>
