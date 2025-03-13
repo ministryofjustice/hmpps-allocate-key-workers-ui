@@ -19,14 +19,23 @@
 
     <hr />
 
+    <div class="govuk-grid-row">
+      {% for detail in keyworkerDetails %}
+        <div class="govuk-grid-column-one-quarter">
+          <h2 class="govuk-heading-s">{{ detail.heading }}</h2>
+          <p class="govuk-!-font-size-25">{{ detail.value }}</p>
+        </div>
+      {% endfor %}
+    </div>
+
     <hr />
 
-    {% if keyworkerStats.length %}
+    {% if statistics.length %}
 
-{#      <p>Displaying statistics from {{ dateFrom | dateString }} to {{ dateTo | dateString}}.#}
+      {#      <p>Displaying statistics from {{ dateFrom | dateString }} to {{ dateTo | dateString}}. #}
 
       <div class="govuk-grid-row">
-        {% for statistic in keyworkerStats %}
+        {% for statistic in statistics %}
           <div class="govuk-grid-column-one-quarter">
             <h2 class="govuk-heading-s">{{ statistic.heading }}</h2>
             <p class="govuk-!-font-size-36">{{ statistic.value }}</p>

@@ -10,16 +10,18 @@ export class ProfileSummaryController {
     const userId = res.locals.user.userId!
 
     const keyworkerData = await this.keyworkerApiService.getKeyworkerDetails(req, prisonId, userId)
+
     const keyworkerName = `${keyworkerData.keyworker.firstName} ${keyworkerData.keyworker.lastName}`
     const keyworkerStatus = keyworkerData.status.description
-    const allocationRecords = this.mapAllocationsToRecords(keyworkerData.allocations)
+    const keyworkerDetails = this.formatDetails(keyworkerData)
     const keyworkerStats = this.formatStats(keyworkerData.stats.current, keyworkerData.stats.previous)
+    const allocationRecords = this.mapAllocationsToRecords(keyworkerData.allocations)
 
     res.render('profile-summary/view', {
       keyworkerName,
       keyworkerStatus,
-      stats: keyworkerStats,
-      keyworkerData,
+      keyworkerDetails,
+      statistics: keyworkerStats,
       records: allocationRecords,
     })
   }
@@ -36,6 +38,27 @@ export class ProfileSummaryController {
         recentSession: allocation.latestSession?.occurredAt ? allocation.latestSession.occurredAt : '-',
       }
     })
+  }
+
+  private formatDetails(details: components['schemas']['KeyworkerDetails']) {
+    return [
+      {
+        heading: 'Establishment',
+        value: details.prison.description,
+      },
+      {
+        heading: 'Schedule type',
+        value: details.keyworker.scheduleType.description,
+      },
+      {
+        heading: 'Prisoners allocated',
+        value: details.allocated,
+      },
+      {
+        heading: 'Maximum capacity',
+        value: details.capacity,
+      },
+    ]
   }
 
   private formatStats = (
