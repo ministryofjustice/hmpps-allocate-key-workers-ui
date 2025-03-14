@@ -149,6 +149,21 @@ const stubKeyworkerMembersStatus = () =>
     { content: keyworkerManageResponse.content.filter(o => o.status.code === 'INA') },
   )
 
+const stubKeyworkerDetails = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPathPattern: '/prisons/LEI/keyworkers/(.*)',
+    },
+    response: {
+      status: 200,
+      jsonBody: keyworkerDetailsResponse,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  })
+
 const keyworkerManageResponse = {
   content: [
     {
@@ -269,6 +284,61 @@ const keyworkerStatisticsResponse = {
   averageSessions: 0,
 }
 
+const keyworkerDetailsResponse = {
+  keyworker: {
+    staffId: 488098,
+    firstName: 'Test',
+    lastName: 'Keyworker',
+    scheduleType: {
+      code: 'FT',
+      description: 'Full Time',
+    },
+  },
+  status: {
+    code: 'ACT',
+    description: 'ACTIVE',
+  },
+  prison: {
+    code: 'LEI',
+    description: 'LEEDS',
+  },
+  capacity: 4,
+  allocated: 2,
+  stats: {
+    current: {
+      from: '2025-01-11',
+      to: '2025-01-11',
+      projectedSessions: 20,
+      recordedSessions: 10,
+      recordedEntries: 8,
+      complianceRate: 8,
+    },
+    previous: {
+      from: '2024-12-03',
+      to: '2024-12-03',
+      projectedSessions: 15,
+      recordedSessions: 5,
+      recordedEntries: 4,
+      complianceRate: 4,
+    },
+  },
+  allocations: [
+    {
+      prisoner: {
+        prisonerNumber: '123',
+        firstName: 'Test',
+        lastName: 'Prisoner',
+        csra: 'Standard',
+      },
+      location: 'LEI',
+      releaseDate: '2025-01-11',
+      latestSession: {
+        occurredAt: '2024-12-11',
+      },
+    },
+  ],
+}
+
 export default {
   stubKeyworkerApiHealth,
   stubKeyworkerApiStatusIsKeyworker: () => stubKeyworkerApiStatusIsKeyworker(true),
@@ -285,4 +355,5 @@ export default {
   stubEnabledPrisonWithHighComplexityNeedsPrisoners: () => stubKeyworkerPrisonConfig(true, true),
   stubEnabledPrison: () => stubKeyworkerPrisonConfig(true, false),
   stubPrisonNotEnabled: () => stubKeyworkerPrisonConfig(false, false),
+  stubKeyworkerDetails,
 }
