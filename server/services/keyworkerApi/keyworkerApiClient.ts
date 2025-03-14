@@ -52,7 +52,7 @@ export default class KeyworkerApiClient {
     toDate: string,
   ): Promise<components['schemas']['PrisonStatsDto']> {
     const response = await this.restClient.get<components['schemas']['PrisonStatsDto']>({
-      path: `/prisons/${prisonId}/keyworker/statistics?from=${fromDate}&to=${toDate}`,
+      path: `/prisons/${prisonId}/statistics/keyworker?from=${fromDate}&to=${toDate}`,
     })
 
     return response
@@ -60,7 +60,7 @@ export default class KeyworkerApiClient {
 
   async getPrisonConfig(prisonCode: string): Promise<components['schemas']['PrisonKeyworkerConfiguration']> {
     const response = await this.restClient.get<components['schemas']['PrisonKeyworkerConfiguration']>({
-      path: `/prisons/${prisonCode}/keyworker/configuration`,
+      path: `/prisons/${prisonCode}/configuration/keyworker`,
     })
 
     return response

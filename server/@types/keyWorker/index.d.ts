@@ -234,7 +234,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/prisons/{prisonCode}/keyworker/{staffId}': {
+  '/reference-data/{domain}': {
     parameters: {
       query?: never
       header?: never
@@ -244,8 +244,9 @@ export interface paths {
     /** @description
      *
      *     Requires one of the following roles:
-     *     * ROLE_KEY_WORKER__RO */
-    get: operations['getKeyworkerDetails_1']
+     *     * ROLE_KEY_WORKER__RO
+     *     * ROLE_KEY_WORKER__RW */
+    get: operations['findReferenceDataForDomain']
     put?: never
     post?: never
     delete?: never
@@ -265,7 +266,7 @@ export interface paths {
      *
      *     Requires one of the following roles:
      *     * ROLE_KEY_WORKER__RO */
-    get: operations['getKeyworkerDetails_2']
+    get: operations['getKeyworkerDetails_1']
     put?: never
     post?: never
     delete?: never
@@ -314,6 +315,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/prisons/{prisonCode}/statistics/keyworker': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_KEY_WORKER__RO */
+    get: operations['getPrisonStatistics_2']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/prisons/{prisonCode}/keyworkers/configuration': {
     parameters: {
       query?: never
@@ -334,7 +355,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/prisons/{prisonCode}/keyworker/configuration': {
+  '/prisons/{prisonCode}/configuration/keyworker': {
     parameters: {
       query?: never
       header?: never
@@ -1904,13 +1925,12 @@ export interface operations {
       }
     }
   }
-  getKeyworkerDetails_1: {
+  findReferenceDataForDomain: {
     parameters: {
       query?: never
       header?: never
       path: {
-        prisonCode: string
-        staffId: number
+        domain: string
       }
       cookie?: never
     }
@@ -1922,12 +1942,12 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          '*/*': components['schemas']['KeyworkerDetails']
+          '*/*': components['schemas']['CodedDescription'][]
         }
       }
     }
   }
-  getKeyworkerDetails_2: {
+  getKeyworkerDetails_1: {
     parameters: {
       query?: never
       header?: never
@@ -1976,6 +1996,31 @@ export interface operations {
     }
   }
   getPrisonStatistics_1: {
+    parameters: {
+      query: {
+        from: string
+        to: string
+      }
+      header?: never
+      path: {
+        prisonCode: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['PrisonStats']
+        }
+      }
+    }
+  }
+  getPrisonStatistics_2: {
     parameters: {
       query: {
         from: string
