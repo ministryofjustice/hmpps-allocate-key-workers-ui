@@ -21,11 +21,10 @@ interface DetailRecord {
 export class ProfileSummaryController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
-  GET = async (req: Request, res: Response): Promise<void> => {
+  GET = async (req: Request, res: Response, staffId: string): Promise<void> => {
     const prisonId = res.locals.user.activeCaseLoad!.caseLoadId!
-    const userId = res.locals.user.userId!
 
-    const keyworkerData = await this.keyworkerApiService.getKeyworkerDetails(req, prisonId, userId)
+    const keyworkerData = await this.keyworkerApiService.getKeyworkerDetails(req, prisonId, staffId)
 
     const keyworkerName = `${keyworkerData.keyworker.firstName} ${keyworkerData.keyworker.lastName}`
     const keyworkerStatus = keyworkerData.status.description
@@ -37,6 +36,7 @@ export class ProfileSummaryController {
       keyworkerName,
       keyworkerStatus,
       keyworkerDetails,
+      showBreadcrumbs: true,
       dateFrom: formatDateConcise(keyworkerData.stats.current?.from),
       dateTo: formatDateConcise(keyworkerData.stats.current?.to),
       statistics: keyworkerStats,
