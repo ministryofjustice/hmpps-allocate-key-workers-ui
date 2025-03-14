@@ -35,7 +35,7 @@ const stubKeyworkerApiStatusFail = () =>
 const createKeyworkerStatsStub = (from: string, to: string, jsonBody = {}) => {
   return createHttpStub(
     'GET',
-    '/keyworker-api/prisons/LEI/keyworker/statistics',
+    '/keyworker-api/prisons/LEI/statistics/keyworker',
     { from: { matches: from }, to: { matches: to } },
     undefined,
     200,
@@ -46,7 +46,7 @@ const stubKeyworkerPrisonConfig = (isEnabled: boolean, hasPrisonersWithHighCompl
   stubFor({
     request: {
       method: 'GET',
-      urlPathPattern: '/keyworker-api/prisons/LEI/keyworker/configuration',
+      urlPathPattern: '/keyworker-api/prisons/LEI/configuration/keyworker',
     },
     response: {
       status: 200,
