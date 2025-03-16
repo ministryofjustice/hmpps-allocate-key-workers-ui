@@ -154,6 +154,9 @@
             <b>{{ records.length }}</b>
             {{ 'result' + ('' if records.length == 1 else 's') }}</p>
         </nav>
+
+      {% else %}
+        <p class="govuk-!-margin-bottom-6">There are no allocations for this keyworker.</p>
       {% endif %}
 
       {{ submitButton({
