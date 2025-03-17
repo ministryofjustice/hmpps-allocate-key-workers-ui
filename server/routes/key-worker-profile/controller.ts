@@ -8,9 +8,9 @@ interface AllocationRecord {
   firstName: string
   lastName: string
   location: string
-  releaseDate: string
+  releaseDate: string | undefined
   csra: string
-  recentSession: string
+  recentSession: string | undefined
 }
 
 interface DetailRecord {
@@ -37,8 +37,8 @@ export class KeyWorkerProfileController {
       keyworkerStatus,
       keyworkerDetails,
       showBreadcrumbs: true,
-      dateFrom: formatDateConcise(keyworkerData.stats.current?.from),
-      dateTo: formatDateConcise(keyworkerData.stats.current?.to),
+      dateFrom: formatDateConcise(keyworkerData.stats.previous?.from),
+      dateTo: formatDateConcise(keyworkerData.stats.previous?.to),
       statistics: keyworkerStats,
       records: allocationRecords,
     })
@@ -51,9 +51,11 @@ export class KeyWorkerProfileController {
         firstName: allocation.prisoner.firstName,
         lastName: allocation.prisoner.lastName,
         location: allocation.location,
-        releaseDate: allocation.releaseDate ? allocation.releaseDate : '-',
+        releaseDate: allocation.releaseDate ? formatDateConcise(allocation.releaseDate) : '-',
         csra: allocation.prisoner.csra ? allocation.prisoner.csra : '-',
-        recentSession: allocation.latestSession?.occurredAt ? allocation.latestSession.occurredAt : '-',
+        recentSession: allocation.latestSession?.occurredAt
+          ? formatDateConcise(allocation.latestSession.occurredAt)
+          : '-',
       }
     })
   }

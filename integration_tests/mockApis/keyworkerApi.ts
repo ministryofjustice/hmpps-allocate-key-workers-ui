@@ -291,7 +291,7 @@ const keyworkerDetailsResponse = {
     description: 'Leeds',
   },
   capacity: 6,
-  allocated: 3,
+  allocated: 1,
   allocations: [
     {
       prisoner: {

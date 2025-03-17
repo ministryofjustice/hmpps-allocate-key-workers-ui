@@ -22,7 +22,7 @@ context('Profile Info', () => {
     cy.get('.govuk-grid-column-one-quarter').eq(1).children().eq(1).should('have.text', 'Full Time')
 
     cy.get('.govuk-grid-column-one-quarter').eq(2).children().eq(0).should('have.text', 'Prisoners allocated')
-    cy.get('.govuk-grid-column-one-quarter').eq(2).children().eq(1).should('have.text', '3')
+    cy.get('.govuk-grid-column-one-quarter').eq(2).children().eq(1).should('have.text', '1')
 
     cy.get('.govuk-grid-column-one-quarter').eq(3).children().eq(0).should('have.text', 'Maximum capacity')
     cy.get('.govuk-grid-column-one-quarter').eq(3).children().eq(1).should('have.text', '6')
@@ -47,7 +47,7 @@ context('Profile Info', () => {
     // Allocations panel
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Blue, Second')
     cy.get('.govuk-table__row').eq(1).children().eq(1).should('contain.text', 'Leeds')
-    cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', '2025-02-01')
+    cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', '1/2/2025')
     cy.get('.govuk-table__row').eq(1).children().eq(3).should('contain.text', 'Standard')
     cy.get('.govuk-table__row').eq(1).children().eq(4).should('contain.text', '-')
   })

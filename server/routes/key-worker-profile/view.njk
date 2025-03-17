@@ -11,36 +11,31 @@
 
   <div class="govuk-width-container">
 
-    <div class="govuk-grid-row">
       <div class="govuk-!-display-inline">
         <h1
-          class="govuk-heading-l govuk-!-static-margin-bottom-0 govuk-!-display-inline-block govuk-!-vertical-align-middle">{{ keyworkerName }}</h1>
+          class="govuk-heading-l govuk-!-static-margin-bottom-0 govuk-!-display-inline-block govuk-!-vertical-align-middle">{{ keyworkerName | nameCase }}</h1>
         <p
-          class="govuk-!-margin-left-2 govuk-!-padding-top-2 govuk-!-display-inline-block govuk-!-vertical-align-middle"> {{ statusTag({ text: keyworkerStatus }) }} </p>
+          class="govuk-!-margin-left-4 govuk-!-display-inline-block govuk-!-vertical-align-middle"> {{ statusTag({ text: keyworkerStatus }) }} </p>
         <a
-          class="govuk-link govuk-link--no-visited-state govuk-body no-label-form-clear-link govuk-!-margin-left-2 govuk-!-margin-bottom-0 govuk-!-display-inline-block govuk-!-vertical-align-middle"
+          class="govuk-link govuk-link--no-visited-state govuk-body no-label-form-clear-link govuk-!-margin-left-4 govuk-!-margin-bottom-0 govuk-!-display-inline-block govuk-!-vertical-align-middle"
           href="/edit-key-worker-settings">Update capacity and status</a>
       </div>
-    </div>
 
     <hr />
 
-    <div class="govuk-grid-row">
       {% for detail in keyworkerDetails %}
         <div class="govuk-grid-column-one-quarter">
           <h2 class="govuk-heading-s govuk-!-font-size-16 govuk-!-margin-bottom-2">{{ detail.heading }}</h2>
           <p class="govuk-!-font-size-16 govuk-!-margin-bottom-2">{{ detail.value }}</p>
         </div>
       {% endfor %}
-    </div>
 
     <hr />
 
     {% if statistics.length %}
 
-      <p><strong>Statistics for period:</strong> {{ dateFrom | dateString }} to {{ dateTo | dateString }}.
+      <p class="govuk-!-padding-left-3"><strong>Statistics for period:</strong> {{ dateFrom | dateString }} to {{ dateTo | dateString }}.
 
-      <div class="govuk-grid-row">
         {% for statistic in statistics %}
           <div class="govuk-grid-column-one-quarter">
             <h2 class="govuk-heading-s govuk-!-font-size-16 govuk-!-margin-bottom-0">{{ statistic.heading }}</h2>
@@ -48,22 +43,20 @@
             <p class="govuk-!-font-size-16 govuk-!-margin-bottom-2">{{ statistic.change.value }}</p>
           </div>
         {% endfor %}
-      </div>
+
     {% else %}
       <h2 class="govuk-heading-s">There is no data for this period.</h2>
     {% endif %}
 
     <hr />
 
-    <h2 class="govuk-heading-m govuk-!-margin-bottom-6">Current Allocations</h2>
-
-    <div class="govuk-grid-row">
+    <h2 class="govuk-heading-m govuk-!-margin-top-3 govuk-!-margin-bottom-3">Current Allocations</h2>
 
       {% set rows = [] %}
       {% for item in records %}
         {% set rows = (rows.push([
           {
-            html: '<a class="govuk-link--no-visited-state" href="/prisoner/' + item.prisonerId + '">' + item | lastNameCommaFirstName + "</a>",
+            html: '<a class="govuk-link--no-visited-state" href="/prisoner/' + item.prisonerId + '">' + item | lastNameCommaFirstName + "</a><br/>" + item.prisonerId,
             attributes: {
             "data-sort-value": item | lastNameCommaFirstName
           }
@@ -85,7 +78,6 @@
             html: govukSelect({
             id: "allocatePrisoner",
             name: "allocatePrisoner",
-            classes: 'govuk-!-margin-bottom-0',
             items: [
               {
                 value: 'reallocate',
@@ -114,6 +106,7 @@
           attributes: {
             "data-module": "moj-sortable-table"
           },
+          classes: 'table-vertical-align-middle govuk-!-margin-top-6',
           head: [
             {
               text: 'Name',
@@ -172,7 +165,6 @@
         text: "Save changes"
       }) }}
 
-    </div>
   </div>
 
 {% endblock %}
