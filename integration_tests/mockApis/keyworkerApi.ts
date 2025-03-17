@@ -149,6 +149,9 @@ const stubKeyworkerMembersStatus = () =>
     { content: keyworkerManageResponse.content.filter(o => o.status.code === 'INA') },
   )
 
+const stubKeyworkerDetails = () =>
+  createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/keyworkers/485585', 200, keyworkerDetailsResponse)
+
 const keyworkerManageResponse = {
   content: [
     {
@@ -269,6 +272,59 @@ const keyworkerStatisticsResponse = {
   averageSessions: 0,
 }
 
+const keyworkerDetailsResponse = {
+  keyworker: {
+    staffId: 485585,
+    firstName: 'AVAILABLE-ACTIVE',
+    lastName: 'KEY-WORKER',
+    scheduleType: {
+      code: 'FT',
+      description: 'Full Time',
+    },
+  },
+  status: {
+    code: 'ACT',
+    description: 'Active',
+  },
+  prison: {
+    code: 'LEI',
+    description: 'Leeds',
+  },
+  capacity: 6,
+  allocated: 1,
+  allocations: [
+    {
+      prisoner: {
+        prisonNumber: 'A9013EA',
+        firstName: 'SECOND',
+        lastName: 'BLUE',
+        csra: 'Standard',
+      },
+      location: 'Leeds',
+      releaseDate: '2025-02-01',
+      latestSession: '2025-01-23',
+    },
+  ],
+  stats: {
+    current: {
+      from: '2025-02-17',
+      to: '2025-03-17',
+      projectedSessions: 1,
+      recordedSessions: 3,
+      recordedEntries: 2,
+      complianceRate: 0,
+    },
+    previous: {
+      from: '2025-01-17',
+      to: '2025-02-17',
+      projectedSessions: -3,
+      recordedSessions: 0,
+      recordedEntries: 0,
+      complianceRate: 0,
+    },
+  },
+}
+
 export default {
   stubKeyworkerApiHealth,
   stubKeyworkerApiStatusIsKeyworker: () => stubKeyworkerApiStatusIsKeyworker(true),
@@ -285,4 +341,5 @@ export default {
   stubEnabledPrisonWithHighComplexityNeedsPrisoners: () => stubKeyworkerPrisonConfig(true, true),
   stubEnabledPrison: () => stubKeyworkerPrisonConfig(true, false),
   stubPrisonNotEnabled: () => stubKeyworkerPrisonConfig(false, false),
+  stubKeyworkerDetails,
 }

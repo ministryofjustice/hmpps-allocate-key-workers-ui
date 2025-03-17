@@ -1,0 +1,170 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "partials/submitButton/macro.njk" import submitButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{% set fullWidth = true %}
+{% set pageTitle = "Key Worker Profile" %}
+
+{% block innerContent %}
+
+  <div class="govuk-width-container">
+
+      <div class="govuk-!-display-inline">
+        <h1
+          class="govuk-heading-l govuk-!-static-margin-bottom-0 govuk-!-display-inline-block govuk-!-vertical-align-middle">{{ keyworkerName | nameCase }}</h1>
+        <p
+          class="govuk-!-margin-left-4 govuk-!-display-inline-block govuk-!-vertical-align-middle"> {{ statusTag({ text: keyworkerStatus }) }} </p>
+        <a
+          class="govuk-link govuk-link--no-visited-state govuk-body no-label-form-clear-link govuk-!-margin-left-4 govuk-!-margin-bottom-0 govuk-!-display-inline-block govuk-!-vertical-align-middle"
+          href="/edit-key-worker-settings">Update capacity and status</a>
+      </div>
+
+    <hr />
+
+      {% for detail in keyworkerDetails %}
+        <div class="govuk-grid-column-one-quarter">
+          <h2 class="govuk-heading-s govuk-!-font-size-16 govuk-!-margin-bottom-2">{{ detail.heading }}</h2>
+          <p class="govuk-!-font-size-16 govuk-!-margin-bottom-2">{{ detail.value }}</p>
+        </div>
+      {% endfor %}
+
+    <hr />
+
+    {% if statistics.length %}
+
+      <p class="govuk-!-padding-left-3"><strong>Statistics for period:</strong> {{ dateFrom | dateString }} to {{ dateTo | dateString }}.
+
+        {% for statistic in statistics %}
+          <div class="govuk-grid-column-one-quarter">
+            <h2 class="govuk-heading-s govuk-!-font-size-16 govuk-!-margin-bottom-0">{{ statistic.heading }}</h2>
+            <p class="govuk-!-font-size-19 govuk-!-margin-bottom-0">{{ statistic.value }}</p>
+            <p class="govuk-!-font-size-16 govuk-!-margin-bottom-2">{{ statistic.change.value }}</p>
+          </div>
+        {% endfor %}
+
+    {% else %}
+      <h2 class="govuk-heading-s">There is no data for this period.</h2>
+    {% endif %}
+
+    <hr />
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-3 govuk-!-margin-bottom-3">Current Allocations</h2>
+
+      {% set rows = [] %}
+      {% for item in records %}
+        {% set rows = (rows.push([
+          {
+            html: '<a class="govuk-link--no-visited-state" href="/prisoner/' + item.prisonerId + '">' + item | lastNameCommaFirstName + "</a><br/>" + item.prisonerId,
+            attributes: {
+            "data-sort-value": item | lastNameCommaFirstName
+          }
+          },
+          {
+            text: item.location
+          },
+          {
+            text: item.releaseDate
+          },
+          {
+            text: item.csra
+          },
+          {
+            text: item.recentSession
+          },
+          {
+            text: "Allocate Prisoner",
+            html: govukSelect({
+              id: "allocatePrisoner",
+              name: "allocatePrisoner",
+              items: [
+                {
+                  value: 'reallocate',
+                  text: 'Reallocate'
+                },
+                {
+                  value: 'deallocate',
+                  text: 'Deallocate'
+                }
+              ] | addDefaultSelectedValue('No change', true)
+          })
+          }
+        ]), rows) %}
+      {% endfor %}
+
+      {% if records.length %}
+
+        <nav class="moj-pagination" aria-label="Pagination navigation">
+          <ul class="moj-pagination__list"></ul>
+          <p class="moj-pagination__results">Showing <b>1</b> to <b>{{ records.length }}</b> of
+            <b>{{ records.length }}</b>
+            {{ 'result' + ('' if records.length == 1 else 's') }}</p>
+        </nav>
+
+        {{ govukTable({
+          attributes: {
+            "data-module": "moj-sortable-table"
+          },
+          classes: 'table-vertical-align-middle govuk-!-margin-top-6',
+          head: [
+            {
+              text: 'Name',
+              key: 'name',
+              attributes: {
+              "aria-sort": "ascending"
+            }
+            },
+            {
+              text: "Residual location",
+              key: 'location',
+              attributes: {
+              "aria-sort": "none"
+            }
+            },
+            {
+              text: "Release date",
+              key: 'releaseDate',
+              attributes: {
+              "aria-sort": "none"
+            }
+            },
+            {
+              text: "CSRA",
+              key: 'csra',
+              attributes: {
+              "aria-sort": "none"
+            }
+            },
+            {
+              text: "Most recent session",
+              key: 'recentSession',
+              attributes: {
+              "aria-sort": "none"
+            }
+            },
+            {
+              text: "Reallocate or deallocate prisoner"
+            }
+          ],
+          rows: rows
+        }) }}
+
+        <nav class="moj-pagination" aria-label="Pagination navigation">
+          <ul class="moj-pagination__list"></ul>
+          <p class="moj-pagination__results">Showing <b>1</b> to <b>{{ records.length }}</b> of
+            <b>{{ records.length }}</b>
+            {{ 'result' + ('' if records.length == 1 else 's') }}</p>
+        </nav>
+
+      {% else %}
+        <p class="govuk-!-margin-bottom-6">There are no allocations for this keyworker.</p>
+      {% endif %}
+
+      {{ submitButton({
+        text: "Save changes"
+      }) }}
+
+  </div>
+
+{% endblock %}

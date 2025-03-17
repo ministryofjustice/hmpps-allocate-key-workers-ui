@@ -1,0 +1,22 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% macro submitButton(params) %}
+    {% if params.alternativeHyperlinkHref %}
+        <div class="govuk-button-group">
+            {{ govukButton({
+                text: params.text or "Continue",
+                classes: params.classes,
+                href: params.href,
+                preventDoubleClick: true
+            }) }}
+            <a class="govuk-link govuk-link--no-visited-state" href="{{ params.alternativeHyperlinkHref }}">{{ params.alternativeHyperlinkLabel or "Cancel" }}</a>
+        </div>
+    {% else %}
+        {{ govukButton({
+            text: params.text or "Continue",
+            classes: params.classes,
+            href: params.href,
+            preventDoubleClick: true
+        }) }}
+    {% endif %}
+{% endmacro %}
