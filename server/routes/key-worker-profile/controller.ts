@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import { components } from '../../@types/keyWorker'
 import { formatDateConcise } from '../../utils/datetimeUtils'
+import { formatChange, formatNumber, formatValue } from '../../utils/statsUtils'
 
 interface AllocationRecord {
   prisonerId: string
@@ -124,24 +125,4 @@ export class KeyWorkerProfileController {
       }
     })
   }
-}
-
-function formatNumber(value: string | number, type?: string) {
-  if (type === 'percentage') return Number(parseFloat(value.toString()).toFixed(2))
-  return Number(value)
-}
-
-function formatValue(value: number, type: string) {
-  if (type === 'percentage') return `${value} %`
-  if (value === 0) return 0
-  if (!value) return '-'
-  return Number(value)
-}
-
-function formatChange(change: number, type: string) {
-  const formatted = formatValue(change, type)
-  if (change > 0) return `+${formatted} increase`
-  if (change < 0) return `${formatted} decrease`
-  if (change === 0) return 'No change'
-  return formatted
 }
