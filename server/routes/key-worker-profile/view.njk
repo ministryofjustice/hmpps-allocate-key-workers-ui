@@ -5,7 +5,7 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 
 {% set fullWidth = true %}
-{% set pageTitle = "Profile summary" %}
+{% set pageTitle = "Key Worker Profile" %}
 
 {% block innerContent %}
 
@@ -19,7 +19,7 @@
           class="govuk-!-margin-left-2 govuk-!-padding-top-2 govuk-!-display-inline-block govuk-!-vertical-align-middle"> {{ statusTag({ text: keyworkerStatus }) }} </p>
         <a
           class="govuk-link govuk-link--no-visited-state govuk-body no-label-form-clear-link govuk-!-margin-left-2 govuk-!-margin-bottom-0 govuk-!-display-inline-block govuk-!-vertical-align-middle"
-          href="/dunno">Update capacity and status</a>
+          href="/edit-key-worker-settings">Update capacity and status</a>
       </div>
     </div>
 

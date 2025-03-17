@@ -5,7 +5,7 @@ import type { Services } from '../services'
 import { HomePageController } from './controller'
 import { KeyWorkerStatisticsRoutes } from './key-worker-statistics/routes'
 import { KeyWorkerMembersRoutes } from './manage-key-workers/routes'
-import { ProfileSummaryRoutes } from './profile-summary/routes'
+import { KeyWorkerProfileRoutes } from './key-worker-profile/routes'
 
 export default function routes(services: Services): Router {
   const router = Router()
@@ -16,7 +16,7 @@ export default function routes(services: Services): Router {
 
   router.use('/key-worker-statistics', KeyWorkerStatisticsRoutes(services))
   router.use('/manage-key-workers', KeyWorkerMembersRoutes(services))
-  router.use('/key-worker-profile', ProfileSummaryRoutes(services))
+  router.use('/key-worker-profile', KeyWorkerProfileRoutes(services))
 
   return router
 }

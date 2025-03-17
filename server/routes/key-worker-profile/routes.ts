@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
 import { Services } from '../../services'
 import { JourneyRouter } from '../base/routes'
-import { ProfileSummaryController } from './controller'
+import { KeyWorkerProfileController } from './controller'
 
-export const ProfileSummaryRoutes = ({ keyworkerApiService }: Services) => {
+export const KeyWorkerProfileRoutes = ({ keyworkerApiService }: Services) => {
   const { router, get } = JourneyRouter()
-  const controller = new ProfileSummaryController(keyworkerApiService)
+  const controller = new KeyWorkerProfileController(keyworkerApiService)
 
   get('/:staffId', async (req: Request, res: Response) => {
     const staffId = req.params['staffId'] as string

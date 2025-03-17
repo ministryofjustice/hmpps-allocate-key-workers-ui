@@ -18,7 +18,7 @@ interface DetailRecord {
   value: string | number
 }
 
-export class ProfileSummaryController {
+export class KeyWorkerProfileController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
   GET = async (req: Request, res: Response, staffId: string): Promise<void> => {
@@ -32,7 +32,7 @@ export class ProfileSummaryController {
     const keyworkerStats = this.formatStats(keyworkerData.stats.current, keyworkerData.stats.previous)
     const allocationRecords = this.mapAllocationsToRecords(keyworkerData.allocations)
 
-    res.render('profile-summary/view', {
+    res.render('key-worker-profile/view', {
       keyworkerName,
       keyworkerStatus,
       keyworkerDetails,
