@@ -23,9 +23,9 @@ export class KeyWorkerProfileController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
   GET = async (req: Request, res: Response, staffId: string): Promise<void> => {
-    const prisonId = res.locals.user.activeCaseLoad!.caseLoadId!
+    const prisonCode = res.locals.user.activeCaseLoad!.caseLoadId!
 
-    const keyworkerData = await this.keyworkerApiService.getKeyworkerDetails(req, prisonId, staffId)
+    const keyworkerData = await this.keyworkerApiService.getKeyworkerDetails(req, prisonCode, staffId)
 
     const keyworkerName = `${keyworkerData.keyworker.firstName} ${keyworkerData.keyworker.lastName}`
     const keyworkerStatus = keyworkerData.status.description
