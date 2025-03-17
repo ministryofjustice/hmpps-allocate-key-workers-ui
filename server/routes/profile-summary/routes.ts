@@ -7,10 +7,8 @@ export const ProfileSummaryRoutes = ({ keyworkerApiService }: Services) => {
   const { router, get } = JourneyRouter()
   const controller = new ProfileSummaryController(keyworkerApiService)
 
-  get('/', async (req: Request, res: Response) => {
+  get('/:staffId', async (req: Request, res: Response) => {
     const staffId = req.params['staffId'] as string
-
-    console.log('staffId', staffId)
 
     await controller.GET(req, res, staffId)
   })

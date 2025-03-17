@@ -16,7 +16,7 @@ export default function routes(services: Services): Router {
 
   router.use('/key-worker-statistics', KeyWorkerStatisticsRoutes(services))
   router.use('/manage-key-workers', KeyWorkerMembersRoutes(services))
-  router.use('/key-worker-profile/:staffId', ProfileSummaryRoutes(services))
+  router.use('/key-worker-profile', ProfileSummaryRoutes(services))
 
   return router
 }
