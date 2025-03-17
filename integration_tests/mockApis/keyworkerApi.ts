@@ -150,19 +150,7 @@ const stubKeyworkerMembersStatus = () =>
   )
 
 const stubKeyworkerDetails = () =>
-  stubFor({
-    request: {
-      method: 'GET',
-      urlPathPattern: '/prisons/LEI/keyworkers/(.*)',
-    },
-    response: {
-      status: 200,
-      jsonBody: keyworkerDetailsResponse,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    },
-  })
+  createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/keyworkers/485585', 200, keyworkerDetailsResponse)
 
 const keyworkerManageResponse = {
   content: [
@@ -286,9 +274,9 @@ const keyworkerStatisticsResponse = {
 
 const keyworkerDetailsResponse = {
   keyworker: {
-    staffId: 488098,
-    firstName: 'Test',
-    lastName: 'Keyworker',
+    staffId: 485585,
+    firstName: 'AVAILABLE-ACTIVE',
+    lastName: 'KEY-WORKER',
     scheduleType: {
       code: 'FT',
       description: 'Full Time',
@@ -296,47 +284,45 @@ const keyworkerDetailsResponse = {
   },
   status: {
     code: 'ACT',
-    description: 'ACTIVE',
+    description: 'Active',
   },
   prison: {
     code: 'LEI',
-    description: 'LEEDS',
+    description: 'Leeds',
   },
-  capacity: 4,
-  allocated: 2,
-  stats: {
-    current: {
-      from: '2025-01-11',
-      to: '2025-01-11',
-      projectedSessions: 20,
-      recordedSessions: 10,
-      recordedEntries: 8,
-      complianceRate: 8,
-    },
-    previous: {
-      from: '2024-12-03',
-      to: '2024-12-03',
-      projectedSessions: 15,
-      recordedSessions: 5,
-      recordedEntries: 4,
-      complianceRate: 4,
-    },
-  },
+  capacity: 6,
+  allocated: 3,
   allocations: [
     {
       prisoner: {
-        prisonerNumber: '123',
-        firstName: 'Test',
-        lastName: 'Prisoner',
+        prisonNumber: 'A9013EA',
+        firstName: 'SECOND',
+        lastName: 'BLUE',
         csra: 'Standard',
       },
-      location: 'LEI',
-      releaseDate: '2025-01-11',
-      latestSession: {
-        occurredAt: '2024-12-11',
-      },
+      location: 'Leeds',
+      releaseDate: '2025-02-01',
+      latestSession: '2025-01-23',
     },
   ],
+  stats: {
+    current: {
+      from: '2025-02-17',
+      to: '2025-03-17',
+      projectedSessions: 1,
+      recordedSessions: 3,
+      recordedEntries: 2,
+      complianceRate: 0,
+    },
+    previous: {
+      from: '2025-01-17',
+      to: '2025-02-17',
+      projectedSessions: -3,
+      recordedSessions: 0,
+      recordedEntries: 0,
+      complianceRate: 0,
+    },
+  },
 }
 
 export default {
