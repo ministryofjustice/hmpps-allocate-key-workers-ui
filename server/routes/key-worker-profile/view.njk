@@ -86,7 +86,16 @@
             id: "allocatePrisoner",
             name: "allocatePrisoner",
             classes: 'govuk-!-margin-bottom-0',
-            items: [] | addDefaultSelectedValue('No change', true)
+            items: [
+              {
+                value: 'reallocate',
+                text: 'Reallocate'
+              },
+              {
+                value: 'deallocate',
+                text: 'Deallocate'
+              }
+            ] | addDefaultSelectedValue('No change', true)
           })
           }
         ]), rows) %}
