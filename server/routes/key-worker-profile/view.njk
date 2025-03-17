@@ -76,18 +76,18 @@
           {
             text: "Allocate Prisoner",
             html: govukSelect({
-            id: "allocatePrisoner",
-            name: "allocatePrisoner",
-            items: [
-              {
-                value: 'reallocate',
-                text: 'Reallocate'
-              },
-              {
-                value: 'deallocate',
-                text: 'Deallocate'
-              }
-            ] | addDefaultSelectedValue('No change', true)
+              id: "allocatePrisoner",
+              name: "allocatePrisoner",
+              items: [
+                {
+                  value: 'reallocate',
+                  text: 'Reallocate'
+                },
+                {
+                  value: 'deallocate',
+                  text: 'Deallocate'
+                }
+              ] | addDefaultSelectedValue('No change', true)
           })
           }
         ]), rows) %}
