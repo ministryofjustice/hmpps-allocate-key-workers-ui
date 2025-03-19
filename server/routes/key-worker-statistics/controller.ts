@@ -83,11 +83,15 @@ export class KeyWorkerStatisticsController {
     const prisonId = res.locals.user.activeCaseLoad!.caseLoadId!
     const stats = await this.keyworkerApiService.getPrisonStats(req, prisonId, nowSpan.start, nowSpan.end)
     const prison = await this.keyworkerApiService.getPrisonConfig(req, prisonId)
+    const hasCurrentStats = stats.current !== undefined && stats.current !== null
+    const hasPreviousStats = stats.previous !== undefined && stats.previous !== null
 
     const data = this.createPayload(stats.current, stats.previous)
 
     res.render('key-worker-statistics/view', {
       data,
+      hasCurrentStats,
+      hasPreviousStats,
       prisonerToKeyWorkerRatio: prison.capacityTier1,
       weekFrequency: prison.kwSessionFrequencyInWeeks,
       dateFrom: formatDateConcise(nowSpan.start),
