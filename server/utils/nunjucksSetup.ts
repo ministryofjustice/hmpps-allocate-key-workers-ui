@@ -62,7 +62,7 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('nameCase', nameCase)
 }
 
-function getDateInReadableFormat(dateString: string) {
+export function getDateInReadableFormat(dateString: string) {
   const split = dateString?.split('/') || []
   if (split.length < 3) throw new Error('Invalid date string')
   const date = new Date(parseInt(split[2]!, 10), parseInt(split[1]!, 10) - 1, parseInt(split[0]!, 10))

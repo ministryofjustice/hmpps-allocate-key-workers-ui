@@ -1,3 +1,5 @@
+import { comparisonDateFrom, comparisonDateTo, dateFrom, dateTo } from '../../utils/testUtils'
+
 context('Key worker statistics', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -25,7 +27,7 @@ context('Key worker statistics', () => {
     cy.findByRole('button', { name: 'View' })
 
     cy.contains(
-      /^Displaying statistics from \d+ [A-Za-z]+ \d+ to \d+ [A-Za-z]+ \d+. Comparing against statistics from \d+ [A-Za-z]+ \d+ to \d+ [A-Za-z]+ \d+./,
+      `Displaying statistics from ${dateFrom} to ${dateTo}. Comparing against statistics from ${comparisonDateFrom} to ${comparisonDateTo}.`,
     )
 
     cy.get('.govuk-grid-column-one-quarter')
@@ -184,7 +186,7 @@ context('Key worker statistics', () => {
     navigateToTestPage()
 
     cy.contains(
-      /^Displaying statistics from \d+ [A-Za-z]+ \d+ to \d+ [A-Za-z]+ \d+. Comparing against statistics from \d+ [A-Za-z]+ \d+ to \d+ [A-Za-z]+ \d+./,
+      `Displaying statistics from ${dateFrom} to ${dateTo}. Comparing against statistics from ${comparisonDateFrom} to ${comparisonDateTo}.`,
     )
 
     cy.get('.govuk-grid-column-one-quarter')
@@ -217,7 +219,7 @@ context('Key worker statistics', () => {
 
     navigateToTestPage()
 
-    cy.contains(/^Displaying statistics from \d+ [A-Za-z]+ \d+ to \d+ [A-Za-z]+ \d+./)
+    cy.contains(`Displaying statistics from ${dateFrom} to ${dateTo}.`)
 
     cy.get('.govuk-grid-column-one-quarter')
       .eq(0)
