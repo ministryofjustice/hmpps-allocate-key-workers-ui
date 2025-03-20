@@ -50,8 +50,8 @@ export default class KeyworkerApiClient {
     prisonId: string,
     fromDate: string,
     toDate: string,
-  ): Promise<components['schemas']['PrisonStatsDto']> {
-    const response = await this.restClient.get<components['schemas']['PrisonStatsDto']>({
+  ): Promise<components['schemas']['PrisonStats']> {
+    const response = await this.restClient.get<components['schemas']['PrisonStats']>({
       path: `/prisons/${prisonId}/statistics/keyworker?from=${fromDate}&to=${toDate}`,
     })
 

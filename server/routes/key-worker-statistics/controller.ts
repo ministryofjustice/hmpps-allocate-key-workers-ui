@@ -31,8 +31,8 @@ export class KeyWorkerStatisticsController {
   }
 
   private createPayload = (
-    current: components['schemas']['PrisonStatsDto']['current'],
-    previous: components['schemas']['PrisonStatsDto']['previous'],
+    current: components['schemas']['PrisonStats']['current'],
+    previous: components['schemas']['PrisonStats']['previous'],
   ) => {
     if (!current) return []
 
@@ -55,21 +55,34 @@ export class KeyWorkerStatisticsController {
       compliance: { heading: 'Compliance rate', type: 'percentage' },
     }
 
+    const nullCheckFields = new Set([
+      'percentageWithKeyworker',
+      'avgReceptionToAllocationDays',
+      'avgReceptionToSessionDays',
+    ])
+
     return Object.entries(items).map(([key, val]) => {
-      const currentVal = current[key as keyof components['schemas']['PrisonStatsDto']['current']] as number
+      const currentVal = current[key as keyof components['schemas']['PrisonStats']['current']] as number
       const previousVal = previous
-        ? (previous[key as keyof components['schemas']['PrisonStatsDto']['previous']] as number)
+        ? (previous[key as keyof components['schemas']['PrisonStats']['previous']] as number)
         : undefined
+
+      const displayValue =
+        nullCheckFields.has(key) && (currentVal == null || previousVal == null)
+          ? '-'
+          : formatValue(currentVal ?? 0, val.type || 'number')
+
+      const changeValue =
+        nullCheckFields.has(key) && (currentVal == null || previousVal == null)
+          ? 'No change'
+          : formatChange(previousVal ? formatNumber(currentVal - previousVal, val.type) : currentVal || 0, val.type)
 
       return {
         name: key,
         heading: val.heading,
-        value: formatValue(currentVal, val.type || 'number'),
+        value: displayValue,
         change: {
-          value: formatChange(
-            previousVal ? formatNumber(currentVal - previousVal, val.type) : currentVal || 0,
-            val.type,
-          ),
+          value: changeValue,
           period: 'period',
         },
         type: val.type || 'number',
