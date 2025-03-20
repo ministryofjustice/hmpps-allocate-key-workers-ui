@@ -59,13 +59,8 @@
 
     {% if data.length %}
 
-      {% if not hasCurrentStats %}
-        <p>There is no data for this period</p>
-      {% else %}
         <p>Displaying statistics from {{ dateFrom | dateString }} to {{ dateTo | dateString }}.
           {% if hasPreviousStats %}Comparing against statistics from {{ comparisonDateFrom | dateString }} to {{ comparisonDateTo | dateString }}. {% endif %}</p>
-      {% endif %}
-
 
       <div class="govuk-grid-row">
         {% for statistic in data %}
