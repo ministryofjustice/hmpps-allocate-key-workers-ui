@@ -26,7 +26,7 @@ context('Key worker statistics', () => {
 
     cy.findByRole('button', { name: 'View' })
 
-    cy.contains(
+    cy.findByText(
       `Displaying statistics from ${dateFrom} to ${dateTo}. Comparing against statistics from ${comparisonDateFrom} to ${comparisonDateTo}.`,
     )
 
@@ -219,7 +219,7 @@ context('Key worker statistics', () => {
 
     navigateToTestPage()
 
-    cy.contains(`Displaying statistics from ${dateFrom} to ${dateTo}.`)
+    cy.findByText(`Displaying statistics from ${dateFrom} to ${dateTo}.`)
 
     cy.get('.govuk-grid-column-one-quarter')
       .eq(0)
