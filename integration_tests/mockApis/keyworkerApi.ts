@@ -152,6 +152,32 @@ const stubKeyworkerMembersStatus = () =>
 const stubKeyworkerDetails = () =>
   createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/keyworkers/485585', 200, keyworkerDetailsResponse)
 
+const stubKeyWorkerStatsWithNullPreviousValues = () =>
+  createKeyworkerStatsStub('.+', '.+', {
+    ...keyworkerStatisticsResponse,
+    previous: {
+      from: '2025-01-11',
+      to: '2025-01-11',
+      totalPrisoners: 1169,
+      eligiblePrisoners: 1169,
+      prisonersAssignedKeyworker: 1077,
+      activeKeyworkers: 8,
+      keyworkerSessions: 0,
+      keyworkerEntries: 0,
+      avgReceptionToAllocationDays: null,
+      avgReceptionToSessionDays: null,
+      projectedSessions: 167,
+      percentageWithKeyworker: null,
+      compliance: 0,
+    },
+  })
+
+const stubKeyWorkerStatsWithNullPreviousData = () =>
+  createKeyworkerStatsStub('.+', '.+', {
+    ...keyworkerStatisticsResponse,
+    previous: undefined,
+  })
+
 const keyworkerManageResponse = {
   content: [
     {
@@ -225,51 +251,129 @@ const keyworkerManageResponse = {
 const keyworkerStatisticsResponse = {
   prisonCode: 'LEI',
   current: {
-    from: '2024-01-11',
-    to: '2024-01-11',
-    prisonersAssignedKeyworker: 4200,
-    totalPrisoners: 6900,
-    eligiblePrisoners: 5000,
+    from: '2025-02-06',
+    to: '2025-02-28',
+    totalPrisoners: 1172,
+    eligiblePrisoners: 1172,
+    prisonersAssignedKeyworker: 1078,
+    activeKeyworkers: 11,
     keyworkerSessions: 1,
-    keyworkerEntries: 1,
-    activeKeyworkers: 24,
-    percentageWithKeyworker: 61,
-    projectedSessions: 200,
-    compliance: 0,
+    keyworkerEntries: 0,
+    avgReceptionToAllocationDays: 66,
+    avgReceptionToSessionDays: 0,
+    projectedSessions: 3851,
+    percentageWithKeyworker: 91.98,
+    compliance: 0.03,
   },
   previous: {
-    from: '2023-12-03',
-    to: '2023-12-03',
-    prisonersAssignedKeyworker: 4205,
-    totalPrisoners: 7000,
-    eligiblePrisoners: 6500,
-    keyworkerSessions: 3,
-    keyworkerEntries: 5,
-    activeKeyworkers: 2,
-    percentageWithKeyworker: 60,
-    projectedSessions: 169,
+    from: '2025-01-11',
+    to: '2025-01-11',
+    totalPrisoners: 1169,
+    eligiblePrisoners: 1169,
+    prisonersAssignedKeyworker: 1077,
+    activeKeyworkers: 8,
+    keyworkerSessions: 0,
+    keyworkerEntries: 0,
+    avgReceptionToAllocationDays: 0,
+    avgReceptionToSessionDays: 0,
+    projectedSessions: 167,
+    percentageWithKeyworker: 92.13,
     compliance: 0,
   },
-  complianceTimeline: {
-    '2023-04-14': 0,
-    '2023-05-19': 0,
-    '2023-06-02': 0,
-    '2023-08-18': 0,
-    '2023-11-10': 0,
-    '2023-12-01': 0,
-    '2024-01-05': 0,
-  },
-  averageCompliance: 0,
-  sessionTimeline: {
-    '2023-04-14': 0,
-    '2023-05-19': 0,
-    '2023-06-02': 0,
-    '2023-08-18': 0,
-    '2023-11-10': 0,
-    '2023-12-01': 0,
-    '2024-01-05': 0,
-  },
+  sessionTimeline: [
+    {
+      date: '2024-04-14',
+      value: 0,
+    },
+    {
+      date: '2024-05-19',
+      value: 0,
+    },
+    {
+      date: '2024-06-02',
+      value: 0,
+    },
+    {
+      date: '2024-08-18',
+      value: 0,
+    },
+    {
+      date: '2024-11-10',
+      value: 0,
+    },
+    {
+      date: '2024-12-01',
+      value: 0,
+    },
+    {
+      date: '2025-01-05',
+      value: 0,
+    },
+    {
+      date: '2025-02-02',
+      value: 0,
+    },
+    {
+      date: '2025-02-09',
+      value: 0,
+    },
+    {
+      date: '2025-02-16',
+      value: 0,
+    },
+    {
+      date: '2025-02-23',
+      value: 1,
+    },
+  ],
   averageSessions: 0,
+  complianceTimeline: [
+    {
+      date: '2024-04-14',
+      value: 0,
+    },
+    {
+      date: '2024-05-19',
+      value: 0,
+    },
+    {
+      date: '2024-06-02',
+      value: 0,
+    },
+    {
+      date: '2024-08-18',
+      value: 0,
+    },
+    {
+      date: '2024-11-10',
+      value: 0,
+    },
+    {
+      date: '2024-12-01',
+      value: 0,
+    },
+    {
+      date: '2025-01-05',
+      value: 0,
+    },
+    {
+      date: '2025-02-02',
+      value: 0,
+    },
+    {
+      date: '2025-02-09',
+      value: 0,
+    },
+    {
+      date: '2025-02-16',
+      value: 0,
+    },
+    {
+      date: '2025-02-23',
+      value: 0.1,
+    },
+  ],
+  averageCompliance: 0.01,
 }
 
 const keyworkerDetailsResponse = {
@@ -342,4 +446,6 @@ export default {
   stubEnabledPrison: () => stubKeyworkerPrisonConfig(true, false),
   stubPrisonNotEnabled: () => stubKeyworkerPrisonConfig(false, false),
   stubKeyworkerDetails,
+  stubKeyWorkerStatsWithNullPreviousValues,
+  stubKeyWorkerStatsWithNullPreviousData,
 }
