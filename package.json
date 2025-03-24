@@ -98,7 +98,7 @@
     "@ministryofjustice/frontend": "^4.0.0",
     "@ministryofjustice/hmpps-connect-dps-components": "^2.0.0",
     "@ministryofjustice/hmpps-monitoring": "^0.0.1-beta.2",
-    "@sentry/node": "^8.49.0",
+    "@sentry/node": "^9.9.0",
     "@types/cypress__code-coverage": "^3.10.2",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^2.9.6",
