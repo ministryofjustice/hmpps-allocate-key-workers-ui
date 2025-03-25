@@ -50,7 +50,11 @@ context('Profile Info', () => {
     cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', '1/2/2025')
     cy.get('.govuk-table__row').eq(1).children().eq(3).should('contain.text', 'Standard')
     cy.get('.govuk-table__row').eq(1).children().eq(4).should('contain.text', '23/1/2025')
-    cy.get('[data-sort-value="Blue, Second"] > .govuk-link--no-visited-state').should('have.attr', 'href', 'http://localhost:3001/prisoner/A9013EA')
+    cy.get('[data-sort-value="Blue, Second"] > .govuk-link--no-visited-state').should(
+      'have.attr',
+      'href',
+      'http://localhost:3001/prisoner/A9013EA'
+    )
   })
 
   const navigateToTestPage = () => {

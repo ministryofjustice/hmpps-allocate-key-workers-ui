@@ -4,7 +4,7 @@ import { components } from '../../@types/keyWorker'
 import { formatDateConcise } from '../../utils/datetimeUtils'
 
 export class KeyWorkerProfileController {
-  constructor(private readonly keyworkerApiService: KeyworkerApiService) { }
+  constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
   GET = async (req: Request, res: Response, staffId: string): Promise<void> => {
     const prisonCode = res.locals.user.activeCaseLoad!.caseLoadId!
