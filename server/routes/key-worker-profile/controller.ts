@@ -4,21 +4,6 @@ import { components } from '../../@types/keyWorker'
 import { formatDateConcise } from '../../utils/datetimeUtils'
 import { formatChange, formatNumber, formatValue } from '../../utils/statsUtils'
 
-interface AllocationRecord {
-  prisonerId: string
-  firstName: string
-  lastName: string
-  location: string
-  releaseDate: string | undefined
-  csra: string
-  recentSession: string | undefined
-}
-
-interface DetailRecord {
-  heading: string
-  value: string | number
-}
-
 export class KeyWorkerProfileController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
@@ -45,23 +30,22 @@ export class KeyWorkerProfileController {
     })
   }
 
-  private mapAllocationsToRecords(allocations: components['schemas']['Allocation'][]): AllocationRecord[] {
+  private mapAllocationsToRecords(allocations: components['schemas']['Allocation'][]) {
     return allocations.map(allocation => {
+      const { prisoner } = allocation
       return {
-        prisonerId: allocation.prisoner.prisonNumber,
-        firstName: allocation.prisoner.firstName,
-        lastName: allocation.prisoner.lastName,
-        location: allocation.location,
-        releaseDate: allocation.releaseDate ? formatDateConcise(allocation.releaseDate) : '-',
-        csra: allocation.prisoner.csra ? allocation.prisoner.csra : '-',
-        recentSession: allocation.latestSession?.occurredAt
-          ? formatDateConcise(allocation.latestSession.occurredAt)
-          : '-',
+        prisonerId: prisoner.prisonNumber,
+        firstName: prisoner.firstName,
+        lastName: prisoner.lastName,
+        location: prisoner.cellLocation,
+        releaseDate: formatDateConcise(prisoner.releaseDate) || '-',
+        csra: prisoner.csra ? prisoner.csra : '-',
+        recentSession: formatDateConcise(allocation.latestSession?.occurredAt) || '-',
       }
     })
   }
 
-  private formatDetails(details: components['schemas']['KeyworkerDetails']): DetailRecord[] {
+  private formatDetails(details: components['schemas']['KeyworkerDetails']) {
     return [
       {
         heading: 'Establishment',

@@ -11,46 +11,46 @@
 
   <div class="govuk-width-container">
 
-      <div class="govuk-!-display-inline">
-        <h1
-          class="govuk-heading-l govuk-!-static-margin-bottom-0 govuk-!-display-inline-block govuk-!-vertical-align-middle">{{ keyworkerName | nameCase }}</h1>
-        <p
-          class="govuk-!-margin-left-4 govuk-!-display-inline-block govuk-!-vertical-align-middle"> {{ statusTag({ text: keyworkerStatus }) }} </p>
-        <a
-          class="govuk-link govuk-link--no-visited-state govuk-body no-label-form-clear-link govuk-!-margin-left-4 govuk-!-margin-bottom-0 govuk-!-display-inline-block govuk-!-vertical-align-middle"
-          href="/edit-key-worker-settings">Update capacity and status</a>
-      </div>
+    <div class="govuk-grid-row govuk-!-margin-0">
+      <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0">{{ keyworkerName | nameCase }}</h1>
+      <p class="govuk-!-margin-left-2 govuk-!-display-inline-block govuk-!-margin-0 "> {{ statusTag({ text: keyworkerStatus }) }} </p>
+      <a class="govuk-!-margin-left-2 govuk-link govuk-link--no-visited-state govuk-!-display-inline-block " href="/edit-key-worker-settings">Update capacity and status</a>
+    </div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
-    <hr />
-
+    <div class="govuk-grid-row">
       {% for detail in keyworkerDetails %}
-        <div class="govuk-grid-column-one-quarter">
-          <h2 class="govuk-heading-s govuk-!-font-size-16 govuk-!-margin-bottom-2">{{ detail.heading }}</h2>
-          <p class="govuk-!-font-size-16 govuk-!-margin-bottom-2">{{ detail.value }}</p>
+        <div class="govuk-grid-column-one-quarter left-aligned">
+          <h2 class="govuk-heading-s govuk-!-margin-bottom-2">{{ detail.heading }}</h2>
+          <p class="govuk-!-margin-bottom-2">{{ detail.value }}</p>
         </div>
       {% endfor %}
+    </div>
 
-    <hr />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
     {% if statistics.length %}
 
-      <p class="govuk-!-padding-left-3"><strong>Statistics for period:</strong> {{ dateFrom | dateString }} to {{ dateTo | dateString }}.
-
+      <h2 class="govuk-body-l"><strong>Statistics for period:</strong> {{ dateFrom | dateString }} to {{ dateTo | dateString }} </h2>
+      <div class="govuk-grid-row">
         {% for statistic in statistics %}
-          <div class="govuk-grid-column-one-quarter">
-            <h2 class="govuk-heading-s govuk-!-font-size-16 govuk-!-margin-bottom-0">{{ statistic.heading }}</h2>
-            <p class="govuk-!-font-size-19 govuk-!-margin-bottom-0">{{ statistic.value }}</p>
-            <p class="govuk-!-font-size-16 govuk-!-margin-bottom-2">{{ statistic.change.value }}</p>
+          <div class="govuk-grid-column-one-quarter left-aligned">
+            <h2 class="govuk-heading-s govuk-!-margin-bottom-2">{{ statistic.heading }}</h2>
+            <p class="govuk-!-margin-bottom-1 govuk-body-l">{{ statistic.value }}</p>
+            <p class="govuk-!-margin-bottom-2">{{ statistic.change.value }}</p>
           </div>
         {% endfor %}
+      </div>
 
     {% else %}
       <h2 class="govuk-heading-s">There is no data for this period.</h2>
     {% endif %}
 
-    <hr />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
-    <h2 class="govuk-heading-m govuk-!-margin-top-3 govuk-!-margin-bottom-3">Current Allocations</h2>
+    <hr class="govuk-section-break govuk-section-break--m" />
+
+    <h2 class="govuk-heading-m govuk-!-display-inline">Current allocations</h2>
 
       {% set rows = [] %}
       {% for item in records %}
@@ -78,6 +78,9 @@
             html: govukSelect({
               id: "allocatePrisoner",
               name: "allocatePrisoner",
+              formGroup: {
+                classes: "govuk-!-margin-0"
+              },
               items: [
                 {
                   value: 'reallocate',
@@ -95,7 +98,7 @@
 
       {% if records.length %}
 
-        <nav class="moj-pagination" aria-label="Pagination navigation">
+        <nav class="moj-pagination float-right" aria-label="Pagination navigation">
           <ul class="moj-pagination__list"></ul>
           <p class="moj-pagination__results">Showing <b>1</b> to <b>{{ records.length }}</b> of
             <b>{{ records.length }}</b>
@@ -106,17 +109,17 @@
           attributes: {
             "data-module": "moj-sortable-table"
           },
-          classes: 'table-vertical-align-middle govuk-!-margin-top-6',
+          classes: 'table-vertical-align-middle govuk-!-margin-top-6 center-align-content',
           head: [
             {
-              text: 'Name',
+              text: 'Name and prisoner number',
               key: 'name',
               attributes: {
               "aria-sort": "ascending"
             }
             },
             {
-              text: "Residual location",
+              text: "Residential location",
               key: 'location',
               attributes: {
               "aria-sort": "none"
