@@ -407,7 +407,7 @@ const keyworkerDetailsResponse = {
         releaseDate: '2025-02-01',
       },
       location: 'Leeds',
-      latestSession: { 
+      latestSession: {
         occurredAt: '2025-01-23',
       },
     },
