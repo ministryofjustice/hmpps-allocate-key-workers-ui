@@ -46,7 +46,7 @@ context('Profile Info', () => {
 
     // Allocations panel
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Blue, Second')
-    cy.get('.govuk-table__row').eq(1).children().eq(1).should('contain.text', 'Leeds')
+    cy.get('.govuk-table__row').eq(1).children().eq(1).should('contain.text', '1-2-011')
     cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', '1/2/2025')
     cy.get('.govuk-table__row').eq(1).children().eq(3).should('contain.text', 'Standard')
     cy.get('.govuk-table__row').eq(1).children().eq(4).should('contain.text', '-')

@@ -554,9 +554,7 @@ export interface paths {
     trace?: never
   }
 }
-
 export type webhooks = Record<string, never>
-
 export interface components {
   schemas: {
     ErrorResponse: {
@@ -819,8 +817,6 @@ export interface components {
     Allocation: {
       prisoner: components['schemas']['Prisoner']
       location: string
-      /** Format: date */
-      releaseDate?: string
       latestSession?: components['schemas']['LatestKeyworkerSession']
     }
     Keyworker: {
@@ -868,6 +864,9 @@ export interface components {
       firstName: string
       lastName: string
       csra?: string
+      cellLocation?: string
+      /** Format: date */
+      releaseDate?: string
     }
     UsernameKeyworker: {
       username: string
@@ -1302,9 +1301,7 @@ export interface components {
   headers: never
   pathItems: never
 }
-
 export type $defs = Record<string, never>
-
 export interface operations {
   deallocate: {
     parameters: {
@@ -1874,7 +1871,8 @@ export interface operations {
       query?: never
       header?: never
       path: {
-        domain: string
+        /** @description The reference data domain required. This is case insensitive. */
+        domain: 'keyworker-status' | 'allocation-reason' | 'deallocation-reason'
       }
       cookie?: never
     }

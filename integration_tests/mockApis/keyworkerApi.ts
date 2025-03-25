@@ -403,6 +403,7 @@ const keyworkerDetailsResponse = {
         firstName: 'SECOND',
         lastName: 'BLUE',
         csra: 'Standard',
+        cellLocation: '	1-2-011',
       },
       location: 'Leeds',
       releaseDate: '2025-02-01',
