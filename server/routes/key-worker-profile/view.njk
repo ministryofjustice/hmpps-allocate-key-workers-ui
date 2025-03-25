@@ -3,6 +3,7 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "partials/submitButton/macro.njk" import submitButton %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "./components/statCard.njk" import statCard %}
 
 {% set fullWidth = true %}
 {% set pageTitle = "Key Worker Profile" %}
@@ -19,32 +20,39 @@
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
     <div class="govuk-grid-row">
-      {% for detail in keyworkerDetails %}
-        <div class="govuk-grid-column-one-quarter left-aligned">
-          <h2 class="govuk-heading-s govuk-!-margin-bottom-2">{{ detail.heading }}</h2>
-          <p class="govuk-!-margin-bottom-2">{{ detail.value }}</p>
-        </div>
-      {% endfor %}
+      <div class="govuk-grid-column-one-quarter left-aligned">
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Establishment</h2>
+        <p class="govuk-!-margin-bottom-2">{{ prison.description }}</p>
+      </div>
+
+      <div class="govuk-grid-column-one-quarter left-aligned">
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Schedule type</h2>
+        <p class="govuk-!-margin-bottom-2">{{ keyworker.scheduleType.description }}</p>
+      </div>
+
+      <div class="govuk-grid-column-one-quarter left-aligned">
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Prisoners allocated</h2>
+        <p class="govuk-!-margin-bottom-2">{{ allocated }}</p>
+      </div>
+
+      <div class="govuk-grid-column-one-quarter left-aligned">
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Maximum capacity</h2>
+        <p class="govuk-!-margin-bottom-2">{{ capacity }}</p>
+      </div>
     </div>
 
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
-    {% if statistics.length %}
+    <h2 class="govuk-body-l"><strong>Statistics for period:</strong> {{ stats.current.from | dateString }} to {{ stats.current.to | dateString }} </h2>
+    <div class="govuk-grid-row">
+      {{ statCard('Projected sessions', stats.current.projectedSessions, stats.previous.projectedSessions ) }}
 
-      <h2 class="govuk-body-l"><strong>Statistics for period:</strong> {{ dateFrom | dateString }} to {{ dateTo | dateString }} </h2>
-      <div class="govuk-grid-row">
-        {% for statistic in statistics %}
-          <div class="govuk-grid-column-one-quarter left-aligned">
-            <h2 class="govuk-heading-s govuk-!-margin-bottom-2">{{ statistic.heading }}</h2>
-            <p class="govuk-!-margin-bottom-1 govuk-body-l">{{ statistic.value }}</p>
-            <p class="govuk-!-margin-bottom-2">{{ statistic.change.value }}</p>
-          </div>
-        {% endfor %}
-      </div>
+      {{ statCard('Recorded sessions', stats.current.recordedSessions, stats.previous.recordedSessions ) }}
 
-    {% else %}
-      <h2 class="govuk-heading-s">There is no data for this period.</h2>
-    {% endif %}
+      {{ statCard('Session compliance', stats.current.complianceRate, stats.previous.complianceRate, 'percentage') }}
+
+      {{ statCard('Case notes written', stats.current.recordedEntries + stats.current.recordedSessions, stats.previous.recordedEntries + stats.previous.recordedSessions) }}
+    </div>
 
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 

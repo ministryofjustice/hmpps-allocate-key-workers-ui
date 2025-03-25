@@ -10,6 +10,7 @@ import { todayStringGBFormat } from './datetimeUtils'
 import { findError } from '../middleware/validationMiddleware'
 import { lastNameCommaFirstName, nameCase } from './formatUtils'
 import { addDefaultSelectedValue, setSelectedValue } from './dropdownUtils'
+import { formatValue, getStatChange } from './statsUtils'
 
 export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
@@ -60,11 +61,17 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('addDefaultSelectedValue', addDefaultSelectedValue)
   njkEnv.addFilter('setSelectedValue', setSelectedValue)
   njkEnv.addFilter('nameCase', nameCase)
+  njkEnv.addFilter('formatValue', formatValue)
+  njkEnv.addFilter('getStatChange', getStatChange)
 }
 
 export function getDateInReadableFormat(dateString: string) {
-  const split = dateString?.split('/') || []
-  if (split.length < 3) throw new Error('Invalid date string')
+  const split = dateString?.split(/-|\//) || []
+  if (split.length < 3) throw new Error(`Invalid date string: ${dateString}`)
+  if (split[0]?.length === 4) {
+    const date = new Date(dateString)
+    return `${date.getDate()} ${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`
+  }
   const date = new Date(parseInt(split[2]!, 10), parseInt(split[1]!, 10) - 1, parseInt(split[0]!, 10))
   return `${date.getDate()} ${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`
 }

@@ -41,8 +41,8 @@ context('Profile Info', () => {
     cy.get('.govuk-grid-column-one-quarter').eq(6).children().eq(2).should('have.text', 'No change')
 
     cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(0).should('have.text', 'Case notes written')
-    cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(1).should('have.text', '2')
-    cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(2).should('have.text', '+2 increase')
+    cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(1).should('have.text', '5')
+    cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(2).should('have.text', '+5 increase')
 
     // Allocations panel
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Blue, Second')
