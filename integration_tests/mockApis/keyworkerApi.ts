@@ -404,7 +404,7 @@ const keyworkerDetailsResponse = {
         lastName: 'BLUE',
         csra: 'Standard',
         cellLocation: '	1-2-011',
-        releaseDate: '2025-02-01'
+        releaseDate: '2025-02-01',
       },
       location: 'Leeds',
       latestSession: '2025-01-23',
