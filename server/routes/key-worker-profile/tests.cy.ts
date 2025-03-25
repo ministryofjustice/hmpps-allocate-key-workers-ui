@@ -49,7 +49,7 @@ context('Profile Info', () => {
     cy.get('.govuk-table__row').eq(1).children().eq(1).should('contain.text', '1-2-011')
     cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', '1/2/2025')
     cy.get('.govuk-table__row').eq(1).children().eq(3).should('contain.text', 'Standard')
-    cy.get('.govuk-table__row').eq(1).children().eq(4).should('contain.text', '-')
+    cy.get('.govuk-table__row').eq(1).children().eq(4).should('contain.text', '23/1/2025')
   })
 
   const navigateToTestPage = () => {
