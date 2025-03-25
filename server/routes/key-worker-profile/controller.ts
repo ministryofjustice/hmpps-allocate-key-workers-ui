@@ -23,8 +23,8 @@ export class KeyWorkerProfileController {
       keyworkerStatus,
       keyworkerDetails,
       showBreadcrumbs: true,
-      dateFrom: formatDateConcise(keyworkerData.stats.previous?.from),
-      dateTo: formatDateConcise(keyworkerData.stats.previous?.to),
+      dateFrom: formatDateConcise(keyworkerData.stats.current?.from),
+      dateTo: formatDateConcise(keyworkerData.stats.current?.to),
       statistics: keyworkerStats,
       records: allocationRecords,
     })
