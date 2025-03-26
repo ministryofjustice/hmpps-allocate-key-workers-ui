@@ -41,8 +41,8 @@ context('Profile Info', () => {
     cy.get('.govuk-grid-column-one-quarter').eq(6).children().eq(2).should('have.text', 'No change')
 
     cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(0).should('have.text', 'Case notes written')
-    cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(1).should('have.text', '2')
-    cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(2).should('have.text', '+2 increase')
+    cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(1).should('have.text', '5')
+    cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(2).should('have.text', '+5 increase')
 
     // Allocations panel
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Blue, Second')
@@ -50,6 +50,13 @@ context('Profile Info', () => {
     cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', '1/2/2025')
     cy.get('.govuk-table__row').eq(1).children().eq(3).should('contain.text', 'Standard')
     cy.get('.govuk-table__row').eq(1).children().eq(4).should('contain.text', '23/1/2025')
+    cy.get('[data-sort-value="Blue, Second"] > .govuk-link--no-visited-state').should(
+      'have.attr',
+      'href',
+      'http://localhost:3001/prisoner/A9013EA',
+    )
+
+    cy.get('[data-sort-value="Blue, Second"] > .govuk-link--no-visited-state').should('have.attr', 'target', '_blank')
   })
 
   const navigateToTestPage = () => {

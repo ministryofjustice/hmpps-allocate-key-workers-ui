@@ -4,6 +4,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "partials/statusTag/macro.njk" import statusTag %}
+{% from "partials/mojPagination/macro.njk" import mojPagination %}
 
 {% set fullWidth = true %}
 {% set pageTitle = "Key worker statistics for " + user.activeCaseLoad.description %}
@@ -81,11 +82,7 @@
 
       {% if records.length %}
 
-        <nav class="moj-pagination" aria-label="Pagination navigation">
-          <ul class="moj-pagination__list"></ul>
-          <p class="moj-pagination__results">Showing <b>1</b> to <b>{{ records.length }}</b> of <b>{{records.length}}</b>
-            {{'result' + ('' if records.length == 1 else 's') }}</p>
-        </div>
+        {{ mojPagination(records.length) }}
 
         {{ govukTable({
             attributes: {
@@ -138,11 +135,7 @@
             rows: rows
          }) }}
 
-        <nav class="moj-pagination" aria-label="Pagination navigation">
-          <ul class="moj-pagination__list"></ul>
-          <p class="moj-pagination__results">Showing <b>1</b> to <b>{{ records.length }}</b> of <b>{{records.length}}</b>
-            {{'result' + ('' if records.length == 1 else 's') }}</p>
-        </div>
+        {{ mojPagination(records.length) }}
 
       {% else %}
         <p class="govuk-!-margin-bottom-6">No results for this search criteria.</p>

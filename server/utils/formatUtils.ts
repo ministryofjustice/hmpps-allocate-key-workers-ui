@@ -18,3 +18,7 @@ export const nameCase = (name: string): string => {
 export const lastNameCommaFirstName = (person: { firstName: string; lastName: string }): string => {
   return `${nameCase(person.lastName)}, ${nameCase(person.firstName)}`.replace(/(^, )|(, $)/, '')
 }
+
+export const firstNameSpaceLastName = (person: { firstName: string; lastName: string }): string => {
+  return `${nameCase(person.firstName)} ${nameCase(person.lastName)}`.trim()
+}

@@ -3,6 +3,8 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "partials/submitButton/macro.njk" import submitButton %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "./components/statCard.njk" import statCard %}
+{% from "partials/mojPagination/macro.njk" import mojPagination %}
 
 {% set fullWidth = true %}
 {% set pageTitle = "Key Worker Profile" %}
@@ -12,39 +14,46 @@
   <div class="govuk-width-container">
 
     <div class="govuk-grid-row govuk-!-margin-0">
-      <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0">{{ keyworkerName | nameCase }}</h1>
-      <p class="govuk-!-margin-left-2 govuk-!-display-inline-block govuk-!-margin-0 "> {{ statusTag({ text: keyworkerStatus }) }} </p>
+      <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0">{{ keyworker | firstNameSpaceLastName }}</h1>
+      <p class="govuk-!-margin-left-2 govuk-!-display-inline-block govuk-!-margin-0 "> {{ statusTag({ text: status.description }) }} </p>
       <a class="govuk-!-margin-left-2 govuk-link govuk-link--no-visited-state govuk-!-display-inline-block " href="/edit-key-worker-settings">Update capacity and status</a>
     </div>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
     <div class="govuk-grid-row">
-      {% for detail in keyworkerDetails %}
-        <div class="govuk-grid-column-one-quarter left-aligned">
-          <h2 class="govuk-heading-s govuk-!-margin-bottom-2">{{ detail.heading }}</h2>
-          <p class="govuk-!-margin-bottom-2">{{ detail.value }}</p>
-        </div>
-      {% endfor %}
+      <div class="govuk-grid-column-one-quarter left-aligned">
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Establishment</h2>
+        <p class="govuk-!-margin-bottom-2">{{ prison.description }}</p>
+      </div>
+
+      <div class="govuk-grid-column-one-quarter left-aligned">
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Schedule type</h2>
+        <p class="govuk-!-margin-bottom-2">{{ keyworker.scheduleType.description }}</p>
+      </div>
+
+      <div class="govuk-grid-column-one-quarter left-aligned">
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Prisoners allocated</h2>
+        <p class="govuk-!-margin-bottom-2">{{ allocated }}</p>
+      </div>
+
+      <div class="govuk-grid-column-one-quarter left-aligned">
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Maximum capacity</h2>
+        <p class="govuk-!-margin-bottom-2">{{ capacity }}</p>
+      </div>
     </div>
 
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
-    {% if statistics.length %}
+    <h2 class="govuk-body-l"><strong>Statistics for period:</strong> {{ stats.current.from | dateString }} to {{ stats.current.to | dateString }} </h2>
+    <div class="govuk-grid-row">
+      {{ statCard('Projected sessions', stats.current.projectedSessions, stats.previous.projectedSessions ) }}
 
-      <h2 class="govuk-body-l"><strong>Statistics for period:</strong> {{ dateFrom | dateString }} to {{ dateTo | dateString }} </h2>
-      <div class="govuk-grid-row">
-        {% for statistic in statistics %}
-          <div class="govuk-grid-column-one-quarter left-aligned">
-            <h2 class="govuk-heading-s govuk-!-margin-bottom-2">{{ statistic.heading }}</h2>
-            <p class="govuk-!-margin-bottom-1 govuk-body-l">{{ statistic.value }}</p>
-            <p class="govuk-!-margin-bottom-2">{{ statistic.change.value }}</p>
-          </div>
-        {% endfor %}
-      </div>
+      {{ statCard('Recorded sessions', stats.current.recordedSessions, stats.previous.recordedSessions ) }}
 
-    {% else %}
-      <h2 class="govuk-heading-s">There is no data for this period.</h2>
-    {% endif %}
+      {{ statCard('Session compliance', stats.current.complianceRate, stats.previous.complianceRate, 'percentage') }}
+
+      {{ statCard('Case notes written', stats.current.recordedEntries + stats.current.recordedSessions, stats.previous.recordedEntries + stats.previous.recordedSessions) }}
+    </div>
 
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
@@ -53,25 +62,25 @@
     <h2 class="govuk-heading-m govuk-!-display-inline">Current allocations</h2>
 
       {% set rows = [] %}
-      {% for item in records %}
+      {% for item in allocations %}
         {% set rows = (rows.push([
           {
-            html: '<a class="govuk-link--no-visited-state" href="/prisoner/' + item.prisonerId + '">' + item | lastNameCommaFirstName + "</a><br/>" + item.prisonerId,
+            html: '<a class="govuk-link--no-visited-state" target="_blank" href="' + prisonerProfileUrl + '/prisoner/' + item.prisoner.prisonNumber + '">' + item.prisoner | lastNameCommaFirstName + "</a><br/>" + item.prisoner.prisonNumber,
             attributes: {
-            "data-sort-value": item | lastNameCommaFirstName
+            "data-sort-value": item.prisoner | lastNameCommaFirstName
           }
           },
           {
-            text: item.location
+            text: item.prisoner.cellLocation
           },
           {
-            text: item.releaseDate
+            text: item.prisoner.releaseDate | formatDateConcise | default('-', true)
           },
           {
-            text: item.csra
+            text: item.prisoner.csra | default('-', true)
           },
           {
-            text: item.recentSession
+            text: item.latestSession.occurredAt | formatDateConcise | default('-', true) if item.latestSession else '-'
           },
           {
             text: "Allocate Prisoner",
@@ -96,14 +105,8 @@
         ]), rows) %}
       {% endfor %}
 
-      {% if records.length %}
-
-        <nav class="moj-pagination float-right" aria-label="Pagination navigation">
-          <ul class="moj-pagination__list"></ul>
-          <p class="moj-pagination__results">Showing <b>1</b> to <b>{{ records.length }}</b> of
-            <b>{{ records.length }}</b>
-            {{ 'result' + ('' if records.length == 1 else 's') }}</p>
-        </nav>
+      {% if allocations.length %}
+        {{ mojPagination(allocations.length) }}
 
         {{ govukTable({
           attributes: {
@@ -115,36 +118,36 @@
               text: 'Name and prisoner number',
               key: 'name',
               attributes: {
-              "aria-sort": "ascending"
-            }
+                "aria-sort": "ascending"
+              }
             },
             {
               text: "Residential location",
               key: 'location',
               attributes: {
-              "aria-sort": "none"
-            }
+                "aria-sort": "none"
+              }
             },
             {
               text: "Release date",
               key: 'releaseDate',
               attributes: {
-              "aria-sort": "none"
-            }
+                "aria-sort": "none"
+              }
             },
             {
               text: "CSRA",
               key: 'csra',
               attributes: {
-              "aria-sort": "none"
-            }
+                "aria-sort": "none"
+              }
             },
             {
               text: "Most recent session",
               key: 'recentSession',
               attributes: {
-              "aria-sort": "none"
-            }
+                "aria-sort": "none"
+              }
             },
             {
               text: "Reallocate or deallocate prisoner"
@@ -153,12 +156,7 @@
           rows: rows
         }) }}
 
-        <nav class="moj-pagination" aria-label="Pagination navigation">
-          <ul class="moj-pagination__list"></ul>
-          <p class="moj-pagination__results">Showing <b>1</b> to <b>{{ records.length }}</b> of
-            <b>{{ records.length }}</b>
-            {{ 'result' + ('' if records.length == 1 else 's') }}</p>
-        </nav>
+        {{ mojPagination(allocations.length) }}
 
       {% else %}
         <p class="govuk-!-margin-bottom-6">There are no allocations for this keyworker.</p>
