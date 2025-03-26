@@ -66,5 +66,3 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('firstNameSpaceLastName', firstNameSpaceLastName)
   njkEnv.addFilter('formatDateConcise', formatDateConcise)
 }
-
-

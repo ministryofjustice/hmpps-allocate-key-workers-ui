@@ -56,11 +56,7 @@ context('Profile Info', () => {
       'http://localhost:3001/prisoner/A9013EA',
     )
 
-    cy.get('[data-sort-value="Blue, Second"] > .govuk-link--no-visited-state').should(
-      'have.attr',
-      'target',
-      '_blank',
-    )
+    cy.get('[data-sort-value="Blue, Second"] > .govuk-link--no-visited-state').should('have.attr', 'target', '_blank')
   })
 
   const navigateToTestPage = () => {
