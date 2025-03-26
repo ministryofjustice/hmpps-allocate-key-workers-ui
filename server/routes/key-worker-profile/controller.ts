@@ -8,17 +8,11 @@ export class KeyWorkerProfileController {
 
   GET = async (req: Request, res: Response, staffId: string): Promise<void> => {
     const prisonCode = res.locals.user.activeCaseLoad!.caseLoadId!
-
     const keyworkerData = await this.keyworkerApiService.getKeyworkerDetails(req, prisonCode, staffId)
-
-    const keyworkerName = `${keyworkerData.keyworker.firstName} ${keyworkerData.keyworker.lastName}`
-    const keyworkerStatus = keyworkerData.status.description
     const allocationRecords = this.mapAllocationsToRecords(keyworkerData.allocations)
 
     res.render('key-worker-profile/view', {
       ...keyworkerData,
-      keyworkerName,
-      keyworkerStatus,
       showBreadcrumbs: true,
       records: allocationRecords,
     })

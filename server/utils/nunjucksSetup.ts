@@ -8,7 +8,7 @@ import config from '../config'
 import logger from '../../logger'
 import { todayStringGBFormat } from './datetimeUtils'
 import { findError } from '../middleware/validationMiddleware'
-import { lastNameCommaFirstName, nameCase } from './formatUtils'
+import { firstNameSpaceLastName, lastNameCommaFirstName, nameCase } from './formatUtils'
 import { addDefaultSelectedValue, setSelectedValue } from './dropdownUtils'
 import { formatValue, getStatChange } from './statsUtils'
 
@@ -63,6 +63,7 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('nameCase', nameCase)
   njkEnv.addFilter('formatValue', formatValue)
   njkEnv.addFilter('getStatChange', getStatChange)
+  njkEnv.addFilter('firstNameSpaceLastName', firstNameSpaceLastName)
 }
 
 export function getDateInReadableFormat(dateString: string) {
