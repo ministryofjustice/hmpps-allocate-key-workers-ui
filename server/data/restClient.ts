@@ -68,7 +68,7 @@ export default class RestClient {
         .responseType(responseType)
         .timeout(this.timeoutConfig())
 
-      return raw ? result : result.body
+      return raw ? (result as Response) : result.body
     } catch (error) {
       if (!(error instanceof Error)) {
         throw error
@@ -101,7 +101,7 @@ export default class RestClient {
         .responseType(responseType)
         .timeout(this.timeoutConfig())
 
-      return raw ? result : result.body
+      return raw ? (result as Response) : result.body
     } catch (error) {
       if (!(error instanceof Error)) {
         throw error
@@ -146,7 +146,7 @@ export default class RestClient {
         .responseType(responseType)
         .timeout(this.timeoutConfig())
 
-      return raw ? result : result.body
+      return raw ? (result as Response) : result.body
     } catch (error) {
       if (!(error instanceof Error)) {
         throw error
