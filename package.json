@@ -155,7 +155,7 @@
     "chai": "^5.2.0",
     "chokidar": "^3.6.0",
     "concurrently": "^9.1.2",
-    "cypress": "^13.17.0",
+    "cypress": "^14.2.1",
     "cypress-ctrf-json-reporter": "^0.0.11",
     "cypress-multi-reporters": "^2.0.5",
     "esbuild": "^0.25.1",
