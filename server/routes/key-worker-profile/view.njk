@@ -4,6 +4,7 @@
 {% from "partials/submitButton/macro.njk" import submitButton %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "./components/statCard.njk" import statCard %}
+{% from "partials/mojPagination/macro.njk" import mojPagination %}
 
 {% set fullWidth = true %}
 {% set pageTitle = "Key Worker Profile" %}
@@ -61,25 +62,25 @@
     <h2 class="govuk-heading-m govuk-!-display-inline">Current allocations</h2>
 
       {% set rows = [] %}
-      {% for item in records %}
+      {% for item in allocations %}
         {% set rows = (rows.push([
           {
-            html: '<a class="govuk-link--no-visited-state" target="_blank" href="' + prisonerProfileUrl + '/prisoner/' + item.prisonerId + '">' + item | lastNameCommaFirstName + "</a><br/>" + item.prisonerId,
+            html: '<a class="govuk-link--no-visited-state" target="_blank" href="' + prisonerProfileUrl + '/prisoner/' + item.prisoner.prisonNumber + '">' + item.prisoner | lastNameCommaFirstName + "</a><br/>" + item.prisoner.prisonNumber,
             attributes: {
-            "data-sort-value": item | lastNameCommaFirstName
+            "data-sort-value": item.prisoner | lastNameCommaFirstName
           }
           },
           {
-            text: item.location
+            text: item.prisoner.cellLocation
           },
           {
-            text: item.releaseDate | default('-', true)
+            text: item.prisoner.releaseDate | formatDateConcise | default('-', true)
           },
           {
-            text: item.csra | default('-', true)
+            text: item.prisoner.csra | default('-', true)
           },
           {
-            text: item.recentSession | default('-', true)
+            text: item.latestSession.occurredAt | formatDateConcise | default('-', true) if item.latestSession else '-'
           },
           {
             text: "Allocate Prisoner",
@@ -104,14 +105,8 @@
         ]), rows) %}
       {% endfor %}
 
-      {% if records.length %}
-
-        <nav class="moj-pagination float-right" aria-label="Pagination navigation">
-          <ul class="moj-pagination__list"></ul>
-          <p class="moj-pagination__results">Showing <b>1</b> to <b>{{ records.length }}</b> of
-            <b>{{ records.length }}</b>
-            {{ 'result' + ('' if records.length == 1 else 's') }}</p>
-        </nav>
+      {% if allocations.length %}
+        {{ mojPagination(allocations.length) }}
 
         {{ govukTable({
           attributes: {
@@ -123,36 +118,36 @@
               text: 'Name and prisoner number',
               key: 'name',
               attributes: {
-              "aria-sort": "ascending"
-            }
+                "aria-sort": "ascending"
+              }
             },
             {
               text: "Residential location",
               key: 'location',
               attributes: {
-              "aria-sort": "none"
-            }
+                "aria-sort": "none"
+              }
             },
             {
               text: "Release date",
               key: 'releaseDate',
               attributes: {
-              "aria-sort": "none"
-            }
+                "aria-sort": "none"
+              }
             },
             {
               text: "CSRA",
               key: 'csra',
               attributes: {
-              "aria-sort": "none"
-            }
+                "aria-sort": "none"
+              }
             },
             {
               text: "Most recent session",
               key: 'recentSession',
               attributes: {
-              "aria-sort": "none"
-            }
+                "aria-sort": "none"
+              }
             },
             {
               text: "Reallocate or deallocate prisoner"
@@ -161,12 +156,7 @@
           rows: rows
         }) }}
 
-        <nav class="moj-pagination" aria-label="Pagination navigation">
-          <ul class="moj-pagination__list"></ul>
-          <p class="moj-pagination__results">Showing <b>1</b> to <b>{{ records.length }}</b> of
-            <b>{{ records.length }}</b>
-            {{ 'result' + ('' if records.length == 1 else 's') }}</p>
-        </nav>
+        {{ mojPagination(allocations.length) }}
 
       {% else %}
         <p class="govuk-!-margin-bottom-6">There are no allocations for this keyworker.</p>

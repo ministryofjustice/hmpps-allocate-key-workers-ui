@@ -57,3 +57,14 @@ export const formatInputTime = (value?: string | null) => {
 export const todayString = () => new Date().toISOString().substring(0, 10)
 
 export const todayStringGBFormat = () => DATE_FORMAT_GB.format(new Date())
+
+export function getDateInReadableFormat(dateString: string) {
+  const split = dateString?.split(/-|\//) || []
+  if (split.length < 3) throw new Error(`Invalid date string: ${dateString}`)
+  if (split[0]?.length === 4) {
+    const date = new Date(dateString)
+    return `${date.getDate()} ${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`
+  }
+  const date = new Date(parseInt(split[2]!, 10), parseInt(split[1]!, 10) - 1, parseInt(split[0]!, 10))
+  return `${date.getDate()} ${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`
+}

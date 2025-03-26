@@ -1,0 +1,6 @@
+{% macro mojPagination(length) %}
+  <nav class="moj-pagination" aria-label="Pagination navigation">
+    <ul class="moj-pagination__list"></ul>
+    <p class="moj-pagination__results">Showing <b>1</b> to <b>{{ length }}</b> of <b>{{ length }}</b> {{ 'result' + ('' if length == 1 else 's') }}</p>
+  </nav>
+{% endmacro %}
