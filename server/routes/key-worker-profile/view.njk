@@ -73,13 +73,13 @@
             text: item.location
           },
           {
-            text: item.releaseDate
+            text: item.releaseDate | default('-', true)
           },
           {
-            text: item.csra
+            text: item.csra | default('-', true)
           },
           {
-            text: item.recentSession
+            text: item.recentSession | default('-', true)
           },
           {
             text: "Allocate Prisoner",

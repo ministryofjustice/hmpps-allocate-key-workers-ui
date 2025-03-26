@@ -26,9 +26,9 @@ export class KeyWorkerProfileController {
         firstName: prisoner.firstName,
         lastName: prisoner.lastName,
         location: prisoner.cellLocation,
-        releaseDate: formatDateConcise(prisoner.releaseDate) || '-',
-        csra: prisoner.csra || '-',
-        recentSession: formatDateConcise(allocation.latestSession?.occurredAt) || '-',
+        releaseDate: formatDateConcise(prisoner.releaseDate),
+        csra: prisoner.csra,
+        recentSession: formatDateConcise(allocation.latestSession?.occurredAt),
       }
     })
   }
