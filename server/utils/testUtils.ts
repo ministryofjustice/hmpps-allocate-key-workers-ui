@@ -1,5 +1,4 @@
-import { getDateInReadableFormat } from './nunjucksSetup'
-import { formatDateConcise } from './datetimeUtils'
+import { formatDateConcise, getDateInReadableFormat } from './datetimeUtils'
 
 const getLastFullMonthAsIsoDateString = () => {
   const lastMonth = new Date()
