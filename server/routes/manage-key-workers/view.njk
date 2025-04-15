@@ -19,31 +19,39 @@
         <form method="post" class="govuk-grid-row govuk-!-margin-bottom-7 govuk-!-padding-6 search-form">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
           <h2 class="govuk-heading-m">Filter by</h2>
-          <div class="horizontal-form">
-            {{ govukInput({
-              id: "query",
-              name: "query",
-              value: params.query,
-              classes: "min-width-two-quarters",
-              label: {
-                text: 'Key worker name'
-              }
-            }) }}
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-half">
+              {{ govukInput({
+                id: "query",
+                name: "query",
+                value: params.query,
+                label: {
+                  text: 'Key worker name'
+                }
+              }) }}
+            </div>
 
-            {{ govukSelect({
-              id: "status",
-              name: "status",
-              label: {
-                text: "Status"
-              },
-              items: status
-            }) }}
+            <div class="govuk-grid-column-one-quarter govuk-!-padding-left-0">
+              {{ govukSelect({
+                id: "status",
+                name: "status",
+                label: {
+                  text: "Status"
+                },
+                items: status
+              }) }}
+            </div>
 
-            {{ govukButton({
-              text: "Apply filters",
-              preventDoubleClick: true
-            }) }}
-            <a class="govuk-link govuk-link--no-visited-state govuk-body no-label-form-clear-link" href="?clear=true">Clear</a>
+            <div class="govuk-grid-column-one-quarter govuk-!-margin-top-6 govuk-!-padding-left-1">
+              <div class="horizontal-form govuk-!-padding-left-2">
+                {{ govukButton({
+                  text: "Apply filters",
+                  preventDoubleClick: true
+                }) }}
+                <a class="govuk-link govuk-link--no-visited-state govuk-body no-label-form-clear-link"
+                   href="?clear=true">Clear</a>
+              </div>
+            </div>
           </div>
         </form>
       </div>
