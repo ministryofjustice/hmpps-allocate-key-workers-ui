@@ -1,11 +1,38 @@
 .search-form {
   background-color: #f3f2f1;
   padding: 10px;
+  .govuk-select {
+    width: 100%;
+  }
+}
+
+.select-container {
+  @include govuk-media-query($from: desktop) {
+    padding-left: govuk-spacing(0);
+  }
+}
+
+.button-container {
+  @include govuk-media-query($from: desktop) {
+    margin-top: govuk-spacing(6);
+    padding-left: govuk-spacing(3);
+  }
 }
 
 .horizontal-form {
   * {
     width: 100%;
+  }
+
+  button {
+    margin-top: govuk-spacing(2);
+    width: 100%;
+  }
+
+  a.no-label-form-clear-link {
+    display: inline-block;
+    text-align: center;
+    margin-top: govuk-spacing(2);
   }
 
   @include govuk-media-query($from: desktop) {
@@ -32,17 +59,19 @@
     button {
       margin-right: govuk-spacing(3);
       margin-bottom: $govuk-border-width-form-element;
+      margin-top: 0;
+      width: auto;
     }
 
     a {
       margin-bottom: 10px;
+      text-align: left;
     }
 
     button,
     a {
       align-self: flex-end;
     }
-
   }
 }
 
