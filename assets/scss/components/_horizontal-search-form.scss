@@ -1,6 +1,7 @@
 .search-form {
   background-color: #f3f2f1;
   padding: 10px;
+
   .govuk-select {
     width: 100%;
   }
@@ -13,13 +14,6 @@
 }
 
 .button-container {
-  @include govuk-media-query($from: desktop) {
-    margin-top: govuk-spacing(6);
-    padding-left: govuk-spacing(3);
-  }
-}
-
-.horizontal-form {
   * {
     width: 100%;
   }
@@ -37,23 +31,12 @@
 
   @include govuk-media-query($from: desktop) {
     display: flex;
-    flex-flow: row wrap;
+    margin-top: govuk-spacing(6);
+    padding-left: govuk-spacing(3);
 
     * {
       width: auto;
       margin-bottom: 0;
-    }
-
-    > div {
-      margin-right: govuk-spacing(3);
-    }
-
-    .date-picker-container input {
-      width: 130px !important;
-    }
-
-    label {
-      margin-bottom: govuk-spacing(1);
     }
 
     button {

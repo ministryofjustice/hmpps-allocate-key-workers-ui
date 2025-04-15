@@ -43,14 +43,12 @@
             </div>
 
             <div class="govuk-grid-column-one-quarter button-container">
-              <div class="horizontal-form">
-                {{ govukButton({
-                  text: "Apply filters",
-                  preventDoubleClick: true
-                }) }}
-                <a class="govuk-link govuk-link--no-visited-state govuk-body no-label-form-clear-link"
-                   href="?clear=true">Clear</a>
-              </div>
+              {{ govukButton({
+                text: "Apply filters",
+                preventDoubleClick: true
+              }) }}
+              <a class="govuk-link govuk-link--no-visited-state govuk-body no-label-form-clear-link"
+                 href="?clear=true">Clear</a>
             </div>
           </div>
         </form>
