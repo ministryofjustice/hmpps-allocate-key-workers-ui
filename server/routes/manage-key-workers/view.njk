@@ -17,39 +17,33 @@
 
       <div class="govuk-grid-column-three-quarters">
         <form method="post" class="govuk-grid-row govuk-!-margin-bottom-7 govuk-!-padding-6 search-form">
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
           <h2 class="govuk-heading-m">Filter by</h2>
-          <div class="govuk-grid-row">
-            <div class="govuk-grid-column-full govuk-grid-column-one-half-from-desktop">
-              {{ govukInput({
-                id: "query",
-                name: "query",
-                value: params.query,
-                label: {
-                  text: 'Key worker name'
-                }
-              }) }}
-            </div>
+          <div class="horizontal-form">
+            {{ govukInput({
+        id: "query",
+        name: "query",
+        value: params.query,
+        classes: "min-width-two-quarters",
+        label: {
+          text: 'Key worker name'
+        }
+      }) }}
 
-            <div class="govuk-grid-column-full govuk-grid-column-one-quarter-from-desktop select-container">
-              {{ govukSelect({
-                id: "status",
-                name: "status",
-                label: {
-                  text: "Status"
-                },
-                items: status
-              }) }}
-            </div>
+            {{ govukSelect({
+        id: "status",
+        name: "status",
+        label: {
+          text: "Status"
+        },
+        items: status
+      }) }}
 
-            <div class="govuk-grid-column-one-quarter button-container">
-              {{ govukButton({
-                text: "Apply filters",
-                preventDoubleClick: true
-              }) }}
-              <a class="govuk-link govuk-link--no-visited-state govuk-body no-label-form-clear-link"
-                 href="?clear=true">Clear</a>
-            </div>
+            {{ govukButton({
+        text: "Apply filters",
+        preventDoubleClick: true
+      }) }}
+            <a class="govuk-link govuk-link--no-visited-state govuk-body no-label-form-clear-link" href="?clear=true">Clear</a>
           </div>
         </form>
       </div>
@@ -62,14 +56,14 @@
           {
             html: '<a class="govuk-link--no-visited-state" href="/key-worker-profile/' + item.staffId + '">' + item | lastNameCommaFirstName + "</a>",
             attributes: {
-            "data-sort-value": item | lastNameCommaFirstName
-          }
+              "data-sort-value": item | lastNameCommaFirstName
+            }
           },
           {
             html: statusTag({ text: item.status.description }),
             attributes: {
-            "data-sort-value": item.status.description
-          }
+              "data-sort-value": item.status.description
+            }
           },
           {
             text: item.numberAllocated
@@ -91,55 +85,55 @@
         {{ mojPagination(records.length) }}
 
         {{ govukTable({
-          attributes: {
-            "data-module": "moj-sortable-table"
-          },
-          head: [
-            {
-              text: 'Name',
-              key: 'name',
-              attributes: {
-              "aria-sort": "ascending"
-            }
+            attributes: {
+              "data-module": "moj-sortable-table"
             },
-            {
-              text: "Status",
-              key: 'status',
-              attributes: {
-              "aria-sort": "none"
-            }
-            },
-            {
-              text: "Allocated prisoners",
-              key: 'numberAllocated',
-              attributes: {
-              "aria-sort": "none"
-            }
-            },
-            {
-              text: "Maximum capacity",
-              key: 'capacity',
-              attributes: {
-              "aria-sort": "none"
-            }
-            },
-            {
-              text: "Auto-allocation",
-              key: 'autoAllocated',
-              attributes: {
-              "aria-sort": "none"
-            }
-            },
-            {
-              text: "Sessions in last month",
-              key: 'numberOfKeyworkerSessions',
-              attributes: {
-              "aria-sort": "none"
-            }
-            }
-          ],
-          rows: rows
-        }) }}
+            head: [
+              {
+                text: 'Name',
+                key: 'name',
+                attributes: {
+                  "aria-sort": "ascending"
+                }
+              },
+              {
+                text: "Status",
+                key: 'status',
+                attributes: {
+                  "aria-sort": "none"
+                }
+              },
+              {
+                text: "Allocated prisoners",
+                key: 'numberAllocated',
+                attributes: {
+                  "aria-sort": "none"
+                }
+              },
+              {
+                text: "Maximum capacity",
+                key: 'capacity',
+                attributes: {
+                  "aria-sort": "none"
+                }
+              },
+              {
+                text: "Auto-allocation",
+                key: 'autoAllocated',
+                attributes: {
+                  "aria-sort": "none"
+                }
+              },
+              {
+                text: "Sessions in last month",
+                key: 'numberOfKeyworkerSessions',
+                attributes: {
+                  "aria-sort": "none"
+                }
+              }
+            ],
+            rows: rows
+         }) }}
 
         {{ mojPagination(records.length) }}
 
