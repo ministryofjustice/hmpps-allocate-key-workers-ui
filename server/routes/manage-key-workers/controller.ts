@@ -13,14 +13,10 @@ export class ManageKeyWorkersController {
       throw new Error('No active caseload')
     }
 
-    const statuses = [
-      { value: 'ALL', text: 'All' },
-      { value: 'ACTIVE', text: 'Active' },
-      { value: 'UNAVAILABLE_ANNUAL_LEAVE', text: 'Unavailable (annual leave)' },
-      { value: 'UNAVAILABLE_LONG_TERM_ABSENCE', text: 'Unavailable (long-term absence)' },
-      { value: 'UNAVAILABLE_NO_PRISONER_CONTACT', text: 'Unavailable (no prisoner contact)' },
-      { value: 'INACTIVE', text: 'Inactive' },
-    ]
+    const keyworkerStatuses = await this.keyworkerApiService.getKeyworkerStatuses(req)
+    const statuses = keyworkerStatuses.map(keyworkerStatus => {
+      return { value: keyworkerStatus.code, text: keyworkerStatus.description }
+    })
 
     const { query, status } = req.query || {}
 
