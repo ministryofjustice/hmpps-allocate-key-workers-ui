@@ -7,6 +7,7 @@ context('Manage key workers', () => {
     cy.task('stubKeyworkerMembersStatus')
     cy.task('stubKeyworkerMembersNone')
     cy.task('stubEnabledPrison')
+    cy.task('stubKeyworkerStatuses')
   })
 
   it('happy path', () => {
@@ -26,7 +27,7 @@ context('Manage key workers', () => {
       .should('contain.text', 'results')
 
     cy.get('#query').should('have.text', '')
-    cy.get('#status').should('have.value', 'ALL')
+    cy.get('#status').should('have.value', 'ACTIVE')
 
     cy.findByRole('button', { name: 'Apply filters' })
     cy.findByRole('link', { name: 'Clear' })

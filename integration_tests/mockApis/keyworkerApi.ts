@@ -124,7 +124,7 @@ const stubKeyworkerMembersQuery = () =>
       {
         equalToJson: {
           query: 'AVAILABLE-ACTIVE',
-          status: 'ALL',
+          status: 'ACTIVE',
         },
       },
     ],
@@ -177,6 +177,9 @@ const stubKeyWorkerStatsWithNullPreviousData = () =>
     ...keyworkerStatisticsResponse,
     previous: undefined,
   })
+
+const stubKeyworkerStatuses = () =>
+  createBasicHttpStub('GET', '/keyworker-api/reference-data/keyworker-status', 200, keyworkerStatuses)
 
 const keyworkerManageResponse = {
   content: [
@@ -432,6 +435,29 @@ const keyworkerDetailsResponse = {
   },
 }
 
+const keyworkerStatuses = [
+  {
+    code: 'ACTIVE',
+    description: 'Active',
+  },
+  {
+    code: 'UNAVAILABLE_ANNUAL_LEAVE',
+    description: 'Unavailable - annual leave',
+  },
+  {
+    code: 'UNAVAILABLE_LONG_TERM_ABSENCE',
+    description: 'Unavailable - long term absence',
+  },
+  {
+    code: 'UNAVAILABLE_NO_PRISONER_CONTACT',
+    description: 'Unavailable - no prisoner contact',
+  },
+  {
+    code: 'INACTIVE',
+    description: 'Inactive',
+  },
+]
+
 export default {
   stubKeyworkerApiHealth,
   stubKeyworkerApiStatusIsKeyworker: () => stubKeyworkerApiStatusIsKeyworker(true),
@@ -451,4 +477,5 @@ export default {
   stubKeyworkerDetails,
   stubKeyWorkerStatsWithNullPreviousValues,
   stubKeyWorkerStatsWithNullPreviousData,
+  stubKeyworkerStatuses,
 }

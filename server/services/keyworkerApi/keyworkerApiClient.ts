@@ -85,4 +85,12 @@ export default class KeyworkerApiClient {
 
     return response
   }
+
+  async getKeyworkerStatuses(): Promise<components['schemas']['CodedDescription'][]> {
+    const response = await this.restClient.get<components['schemas']['CodedDescription'][]>({
+      path: '/reference-data/keyworker-status',
+    })
+
+    return response
+  }
 }

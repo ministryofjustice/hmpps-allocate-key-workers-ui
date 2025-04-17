@@ -41,4 +41,8 @@ export default class KeyworkerApiService {
   ): ReturnType<KeyworkerApiClient['getKeyworkerDetails']> {
     return this.keyworkerApiClientBuilder(req.systemClientToken).getKeyworkerDetails(prisonCode, staffId)
   }
+
+  getKeyworkerStatuses(req: Request): ReturnType<KeyworkerApiClient['getKeyworkerStatuses']> {
+    return this.keyworkerApiClientBuilder(req.systemClientToken).getKeyworkerStatuses()
+  }
 }
