@@ -20,5 +20,6 @@ export const lastNameCommaFirstName = (person: { firstName: string; lastName: st
 }
 
 export const firstNameSpaceLastName = (person: { firstName: string; lastName: string }): string => {
+  if (!person) return ''
   return `${nameCase(person.firstName)} ${nameCase(person.lastName)}`.trim()
 }

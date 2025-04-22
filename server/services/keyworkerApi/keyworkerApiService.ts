@@ -45,4 +45,12 @@ export default class KeyworkerApiService {
   getKeyworkerStatuses(req: Request): ReturnType<KeyworkerApiClient['getKeyworkerStatuses']> {
     return this.keyworkerApiClientBuilder(req.systemClientToken).getKeyworkerStatuses()
   }
+
+  searchPrisoners(
+    req: Request,
+    prisonCode: string,
+    body: { query?: string; location?: string } = {},
+  ): ReturnType<KeyworkerApiClient['searchPrisoners']> {
+    return this.keyworkerApiClientBuilder(req.systemClientToken).searchPrisoners(prisonCode, body)
+  }
 }

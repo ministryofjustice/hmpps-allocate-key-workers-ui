@@ -28,3 +28,10 @@ export const initialiseName = (fullName: string | undefined | null): string | nu
   }
   return `${firstName[0]}. ${array.reverse()[0]}`
 }
+
+export const getNonUndefinedProp = <T>(obj: T, key: keyof NonNullable<T>, newKey?: string) => {
+  if (obj?.[key] !== undefined) {
+    return { [newKey ?? key]: obj[key] }
+  }
+  return {}
+}
