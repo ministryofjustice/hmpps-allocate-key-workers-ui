@@ -2,9 +2,6 @@ import * as govukFrontend from 'govuk-frontend'
 import * as mojFrontend from '@ministryofjustice/frontend'
 import Card from './card'
 import { nodeListForEach } from './utils'
-import $ from 'jquery'
-
-window.$ = $
 
 govukFrontend.initAll()
 mojFrontend.initAll()
