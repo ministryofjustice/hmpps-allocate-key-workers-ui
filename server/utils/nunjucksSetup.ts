@@ -3,7 +3,7 @@ import path from 'path'
 import nunjucks from 'nunjucks'
 import express from 'express'
 import fs from 'fs'
-import { initialiseName } from './utils'
+import { convertToSelectItems, initialiseName } from './utils'
 import config from '../config'
 import logger from '../../logger'
 import { formatDateConcise, getDateInReadableFormat, todayStringGBFormat } from './datetimeUtils'
@@ -65,4 +65,5 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('getStatChange', getStatChange)
   njkEnv.addFilter('firstNameSpaceLastName', firstNameSpaceLastName)
   njkEnv.addFilter('formatDateConcise', formatDateConcise)
+  njkEnv.addFilter('convertToSelectItems', convertToSelectItems)
 }

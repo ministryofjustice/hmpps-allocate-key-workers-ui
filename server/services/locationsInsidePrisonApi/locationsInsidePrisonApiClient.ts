@@ -9,7 +9,7 @@ export default class LocationsInsidePrisonApiRestClient {
     this.restClient = new RestClient('Locations inside Prison API', config.apis.locationsInsidePrisonApi, token)
   }
 
-  async getResidentialLocations(prisonId: string): Promise<components['schemas']['PrisonHierarchyDto']> {
+  async getResidentialLocations(prisonId: string): Promise<components['schemas']['PrisonHierarchyDto'][]> {
     return this.restClient.get({ path: `/locations/prison/${prisonId}/residential-hierarchy`, query: { maxLevel: 1 } })
   }
 }

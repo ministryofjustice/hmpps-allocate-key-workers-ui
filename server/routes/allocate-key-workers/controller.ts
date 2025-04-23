@@ -14,18 +14,19 @@ export class AllocateKeyWorkerController {
     const prisonCode = res.locals.user.activeCaseLoad!.caseLoadId!
     const records = await this.keyworkerApiService.searchPrisoners(req, prisonCode, {
       ...getNonUndefinedProp(req.query, 'query'),
-      ...getNonUndefinedProp(req.query, 'location'),
+      ...getNonUndefinedProp(req.query, 'location', 'cellLocationPrefix'),
     })
 
     const keyworkers = await this.keyworkerApiService.getKeyworkerMembers(req, prisonCode, { status: 'ALL' })
     const locations = await this.locationsApiService.getResidentialLocations(req, prisonCode)
 
+    const withoutKeyworker = req.query['withoutKeyworker'] === 'true'
     res.render('allocate-key-workers/view', {
       query: req.query['query'],
       location: req.query['location'],
-      withoutKeyworker: req.query['withoutKeyworker'] === 'true',
-      records: records.filter(o => req.query['withoutKeyworker'] === 'true' || o.keyworker),
-      locations,
+      withoutKeyworker,
+      records: records.filter(o => withoutKeyworker || o.keyworker),
+      locations: locations.map(o => o.fullLocationPath),
       keyworkers: keyworkers.map(o => {
         return {
           text: `${firstNameSpaceLastName(o)} (allocations: ${o.numberAllocated})`,

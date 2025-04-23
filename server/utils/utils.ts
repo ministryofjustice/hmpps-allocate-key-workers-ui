@@ -35,3 +35,7 @@ export const getNonUndefinedProp = <T>(obj: T, key: keyof NonNullable<T>, newKey
   }
   return {}
 }
+
+export const convertToSelectItems = (items: string[]): Array<{ value: string; text: string }> => {
+  return items.map(item => ({ value: item, text: item }))
+}
