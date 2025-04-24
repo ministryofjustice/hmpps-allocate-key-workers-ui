@@ -7,6 +7,7 @@ import tokenVerification from './integration_tests/mockApis/tokenVerification'
 import prisonApi from './integration_tests/mockApis/prisonApi'
 import componentsApi from './integration_tests/mockApis/componentsApi'
 import keyworkerApi from './integration_tests/mockApis/keyworkerApi'
+import locationsApi from './integration_tests/mockApis/locationsApi'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -28,6 +29,7 @@ export default defineConfig({
         ...keyworkerApi,
         ...prisonApi,
         ...componentsApi,
+        ...locationsApi,
       })
       // eslint-disable-next-line no-new
       new GenerateCtrfReport({
@@ -48,5 +50,6 @@ export default defineConfig({
     retries: {
       runMode: 2,
     },
+    viewportHeight: 1200,
   },
 })

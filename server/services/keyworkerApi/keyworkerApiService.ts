@@ -49,7 +49,7 @@ export default class KeyworkerApiService {
   searchPrisoners(
     req: Request,
     prisonCode: string,
-    body: { query?: string; location?: string } = {},
+    body: { query?: string; cellLocationPrefix?: string } = {},
   ): ReturnType<KeyworkerApiClient['searchPrisoners']> {
     return this.keyworkerApiClientBuilder(req.systemClientToken).searchPrisoners(prisonCode, body)
   }

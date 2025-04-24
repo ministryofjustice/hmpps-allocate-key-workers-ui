@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import { firstNameSpaceLastName } from '../../utils/formatUtils'
 import LocationsInsidePrisonApiService from '../../services/locationsInsidePrisonApi/locationsInsidePrisonApiService'
-import { getNonUndefinedProp } from '../../utils/utils'
 
 export class AllocateKeyWorkerController {
   constructor(
@@ -13,8 +12,8 @@ export class AllocateKeyWorkerController {
   GET = async (req: Request, res: Response): Promise<void> => {
     const prisonCode = res.locals.user.activeCaseLoad!.caseLoadId!
     const records = await this.keyworkerApiService.searchPrisoners(req, prisonCode, {
-      ...getNonUndefinedProp(req.query, 'query'),
-      ...getNonUndefinedProp(req.query, 'location', 'cellLocationPrefix'),
+      query: req.query['query']?.toString() || '',
+      cellLocationPrefix: req.query['location']?.toString() || '',
     })
 
     const keyworkers = await this.keyworkerApiService.getKeyworkerMembers(req, prisonCode, { status: 'ALL' })

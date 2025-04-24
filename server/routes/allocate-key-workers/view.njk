@@ -37,7 +37,7 @@
               label: {
                 text: "Residential location"
               },
-              items: locations | convertToSelectItems | setSelectedValue(location)
+              items: locations | convertToSelectItems | addDefaultSelectedValue('') | setSelectedValue(location)
             }) }}
 
             {{ govukButton({
