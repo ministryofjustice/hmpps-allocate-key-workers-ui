@@ -20,15 +20,17 @@
   <p class="govuk-heading-s">Current and previous allocations: 2</p>
 
   <div class="govuk-!-width-one-half">
-    <div style="border: 1px solid black;">
+    <div class="dropshadow govuk-!-margin-bottom-4">
       {{ govukTable({
         caption: "Current key worker: Steve Rendell",
         captionClasses: "govuk-table__caption--m search-form",
         firstCellIsHeader: true,
+        classes: "govuk-!-margin-bottom-0",
         rows: [
           [
             {
-              text: "Establishment"
+              text: "Establishment",
+              classes: "govuk-!-padding-left-2"
             },
             {
               text: "HMP/YOI Moorland"
@@ -36,7 +38,8 @@
           ],
           [
             {
-              text: "Allocated on"
+              text: "Allocated on",
+              classes: "govuk-!-padding-left-2"
             },
             {
               text: "15/09/2023 10:44"
@@ -44,7 +47,8 @@
           ],
           [
             {
-              text: "Allocation type"
+              text: "Allocation type",
+              classes: "govuk-!-padding-left-2"
             },
             {
               text: "Auto-allocated"
@@ -52,7 +56,8 @@
           ],
           [
             {
-              text: "Allocated by"
+              text: "Allocated by",
+              classes: "govuk-!-padding-left-2"
             },
             {
               text: "Tim Wright"
@@ -60,7 +65,8 @@
           ],
           [
             {
-              text: "Deallocated on"
+              text: "Deallocated on",
+              classes: "govuk-!-padding-left-2"
             },
             {
               text: "-"
@@ -68,7 +74,8 @@
           ],
           [
             {
-              text: "Deallocated by"
+              text: "Deallocated by",
+              classes: "govuk-!-padding-left-2"
             },
             {
               text: "-"
@@ -76,7 +83,8 @@
           ],
           [
             {
-              text: "Deallocation reason"
+              text: "Deallocation reason",
+              classes: "govuk-!-padding-left-2"
             },
             {
               text: "-"
@@ -86,15 +94,17 @@
       }) }}
     </div>
 
-    <div style="border: 1px solid black;">
+    <div class="dropshadow">
       {{ govukTable({
         caption: "Previous key worker: Gemma Barnes",
         captionClasses: "govuk-table__caption--m search-form",
         firstCellIsHeader: true,
+        classes: "govuk-!-margin-bottom-0",
         rows: [
           [
             {
-              text: "Establishment"
+              text: "Establishment",
+              classes: "govuk-!-padding-left-2"
             },
             {
               text: "HMP Belmarsh"
@@ -102,7 +112,8 @@
           ],
           [
             {
-              text: "Allocated on"
+              text: "Allocated on",
+              classes: "govuk-!-padding-left-2"
             },
             {
               text: "21/02/2022 08:45"
@@ -110,7 +121,8 @@
           ],
           [
             {
-              text: "Allocation type"
+              text: "Allocation type",
+              classes: "govuk-!-padding-left-2"
             },
             {
               text: "Manual"
@@ -118,7 +130,8 @@
           ],
           [
             {
-              text: "Allocated by"
+              text: "Allocated by",
+              classes: "govuk-!-padding-left-2"
             },
             {
               text: "James Smith"
@@ -126,7 +139,8 @@
           ],
           [
             {
-              text: "Deallocated on"
+              text: "Deallocated on",
+              classes: "govuk-!-padding-left-2"
             },
             {
               text: "10/08/2023 13:55"
@@ -134,7 +148,8 @@
           ],
           [
             {
-              text: "Deallocated by"
+              text: "Deallocated by",
+              classes: "govuk-!-padding-left-2"
             },
             {
               text: "James Smith"
@@ -142,7 +157,8 @@
           ],
           [
             {
-              text: "Deallocation reason"
+              text: "Deallocation reason",
+              classes: "govuk-!-padding-left-2"
             },
             {
               text: "Transfer"
