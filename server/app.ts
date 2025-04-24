@@ -56,7 +56,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpCurrentUser())
   app.use(populateClientToken())
   app.get(
-    '*',
+    /(.*)/,
     dpsComponents.getPageComponents({
       logger,
       includeSharedData: true,
