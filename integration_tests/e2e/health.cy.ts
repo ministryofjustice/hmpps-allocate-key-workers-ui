@@ -8,6 +8,7 @@ context('Healthcheck', () => {
       cy.task('stubTokenVerificationPing')
       cy.task('stubPrisonApiHealth')
       cy.task('stubKeyworkerApiHealth')
+      cy.task('stubLocationsApiHealth')
     })
 
     it('Health check page is visible and UP', () => {

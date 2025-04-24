@@ -101,6 +101,6 @@ const residentialHierarchyResponse = [
 ]
 
 export default {
-  stubApiHealth,
+  stubLocationsApiHealth: stubApiHealth,
   stubResidentialHierarchy,
 }
