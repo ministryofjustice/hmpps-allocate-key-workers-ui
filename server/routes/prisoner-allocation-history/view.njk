@@ -1,0 +1,155 @@
+{% extends "partials/layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set fullWidth = true %}
+{% set pageTitle = "Prisoner Allocation History" %}
+
+{% block innerContent %}
+
+  <div class="govuk-grid-row govuk-!-margin-bottom-7 govuk-!-padding-6 search-form">
+    <div class="govuk-grid-column-full">
+      <div class="govuk-grid-column-one-quarter">
+
+      </div>
+    </div>
+  </div>
+
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Prisoner key worker allocation history</h1>
+  <hr />
+
+  <p class="govuk-heading-s">Current and previous allocations: 2</p>
+
+  <div class="govuk-!-width-one-half">
+    <div style="border: 1px solid black;">
+      {{ govukTable({
+        caption: "Current key worker: Steve Rendell",
+        captionClasses: "govuk-table__caption--m search-form",
+        firstCellIsHeader: true,
+        rows: [
+          [
+            {
+              text: "Establishment"
+            },
+            {
+              text: "HMP/YOI Moorland"
+            }
+          ],
+          [
+            {
+              text: "Allocated on"
+            },
+            {
+              text: "15/09/2023 10:44"
+            }
+          ],
+          [
+            {
+              text: "Allocation type"
+            },
+            {
+              text: "Auto-allocated"
+            }
+          ],
+          [
+            {
+              text: "Allocated by"
+            },
+            {
+              text: "Tim Wright"
+            }
+          ],
+          [
+            {
+              text: "Deallocated on"
+            },
+            {
+              text: "-"
+            }
+          ],
+          [
+            {
+              text: "Deallocated by"
+            },
+            {
+              text: "-"
+            }
+          ],
+          [
+            {
+              text: "Deallocation reason"
+            },
+            {
+              text: "-"
+            }
+          ]
+        ]
+      }) }}
+    </div>
+
+    <div style="border: 1px solid black;">
+      {{ govukTable({
+        caption: "Previous key worker: Gemma Barnes",
+        captionClasses: "govuk-table__caption--m search-form",
+        firstCellIsHeader: true,
+        rows: [
+          [
+            {
+              text: "Establishment"
+            },
+            {
+              text: "HMP Belmarsh"
+            }
+          ],
+          [
+            {
+              text: "Allocated on"
+            },
+            {
+              text: "21/02/2022 08:45"
+            }
+          ],
+          [
+            {
+              text: "Allocation type"
+            },
+            {
+              text: "Manual"
+            }
+          ],
+          [
+            {
+              text: "Allocated by"
+            },
+            {
+              text: "James Smith"
+            }
+          ],
+          [
+            {
+              text: "Deallocated on"
+            },
+            {
+              text: "10/08/2023 13:55"
+            }
+          ],
+          [
+            {
+              text: "Deallocated by"
+            },
+            {
+              text: "James Smith"
+            }
+          ],
+          [
+            {
+              text: "Deallocation reason"
+            },
+            {
+              text: "Transfer"
+            }
+          ]
+        ]
+      }) }}
+    </div>
+  </div>
+{% endblock %}
