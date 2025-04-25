@@ -6,10 +6,27 @@
 
 {% block innerContent %}
 
-  <div class="govuk-grid-row govuk-!-margin-bottom-7 govuk-!-padding-6 search-form">
+  <div class="govuk-grid-row govuk-!-margin-bottom-2 search-form">
     <div class="govuk-grid-column-full">
-      <div class="govuk-grid-column-one-quarter">
-
+      <div class="mini-profile" data-qa="mini-profile">
+        <div class="mini-profile-inner">
+          <div class="mini-profile-left">
+            <img class="mini-profile-person-img" src="/prisoner-image/{{ item.prisoner.prisonerNumber }}"
+                 alt="Image of {{ item.prisoner | lastNameCommaFirstName }}"
+                 loading="lazy" />
+          </div>
+          <div class="mini-profile-right">
+            <p class="govuk-!-margin-bottom-0">
+              <a class="govuk-link--no-visited-state" target="_blank"
+                 href="{{ prisonerProfileUrl }}/prisoner/{{ item.prisoner.prisonerNumber }}">{{ item.prisoner | lastNameCommaFirstName }}</a>
+            </p>
+            <p>test</p>
+          </div>
+          <div class="mini-profile-right">
+            <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-0">Location</p>
+            <p>{{ item.prisoner.location }}</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
