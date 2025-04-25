@@ -88,7 +88,7 @@ context('Profile Info', () => {
       .should('contain.text', 'View allocation history')
       .children()
       .eq(0)
-      .should('have.attr', 'href', '/offender-history/A4288DZ')
+      .should('have.attr', 'href', '/prisoner-allocation-history/A4288DZ')
 
     cy.findByRole('button', { name: 'Save changes' }).should('exist')
   }
@@ -115,7 +115,7 @@ context('Profile Info', () => {
       .should('contain.text', 'View allocation history')
       .children()
       .eq(0)
-      .should('have.attr', 'href', '/offender-history/A2504EA')
+      .should('have.attr', 'href', '/prisoner-allocation-history/A2504EA')
 
     cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'Capodilupo, Darwin')
     cy.get('.govuk-table__row').eq(3).children().eq(1).should('contain.text', '4-2-031')

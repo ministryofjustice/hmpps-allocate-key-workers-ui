@@ -103,7 +103,7 @@
             })
           },
           {
-            html: '<a class="govuk-link govuk-link--no-visited-state" href="/offender-history/' + item.personIdentifier + '">View allocation history</a>' if item.hasAllocationHistory or item.keyworker else ''
+            html: '<a class="govuk-link govuk-link--no-visited-state" href="/prisoner-allocation-history' + item.personIdentifier + '">View allocation history</a>' if item.hasAllocationHistory or item.keyworker else ''
           }
         ]), rows) %}
     {% endfor %}
