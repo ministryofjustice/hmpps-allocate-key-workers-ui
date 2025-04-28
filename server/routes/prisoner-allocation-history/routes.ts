@@ -3,9 +3,9 @@ import { Services } from '../../services'
 import { JourneyRouter } from '../base/routes'
 import { PrisonerAllocationHistoryController } from './controller'
 
-export const PrisonerAllocationHistoryRoutes = ({ prisonApiService }: Services) => {
+export const PrisonerAllocationHistoryRoutes = ({ prisonerSearchApiService, keyworkerApiService }: Services) => {
   const { router, get } = JourneyRouter()
-  const controller = new PrisonerAllocationHistoryController(prisonApiService)
+  const controller = new PrisonerAllocationHistoryController(prisonerSearchApiService, keyworkerApiService)
 
   get('/:prisonerId', async (req: Request, res: Response) => {
     const prisonerId = req.params['prisonerId'] as string
