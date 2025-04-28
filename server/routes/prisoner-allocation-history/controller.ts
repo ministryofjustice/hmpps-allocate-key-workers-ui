@@ -9,17 +9,12 @@ export class PrisonerAllocationHistoryController {
   ) {}
 
   GET = async (req: Request, res: Response, prisonerId: string): Promise<void> => {
-    const prisoner = {
-      firstName: 'Mr',
-      lastName: 'Doe',
-      cellLocation: 'B Wing',
-      prisonerNumber: prisonerId,
-    }
-    const allocationHistory = await this.keyworkerApiService.getKeyworkerAllocations(req, prisonerId)
+    const prisoner = await this.prisonerSearchApiService.getPrisonerDetails(req, prisonerId)
+    const keyworkerAllocations = await this.keyworkerApiService.getKeyworkerAllocations(req, prisonerId)
 
     res.render('prisoner-allocation-history/view', {
       prisoner,
-      allocationHistory: allocationHistory.allocations,
+      allocationHistory: keyworkerAllocations.allocations,
     })
   }
 }
