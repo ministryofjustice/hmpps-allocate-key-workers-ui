@@ -8,6 +8,7 @@ context('Profile Info', () => {
     cy.task('stubSearchPrisonersWithLocation')
     cy.task('stubSearchPrisoner')
     cy.task('stubKeyworkerMembersAll')
+    cy.task('stubSearchPrisonersWithExcludeAllocations')
   })
 
   it('should load page correctly', () => {
@@ -15,9 +16,9 @@ context('Profile Info', () => {
 
     checkPageContentsNoFilter()
 
-    checkPrisonersWithoutKeyworkerFilter()
-
     checkSorting()
+
+    checkPrisonersExcludeActiveAllocationsFilter()
 
     checkNameOrPrisonNumberFilter()
 
@@ -40,9 +41,9 @@ context('Profile Info', () => {
 
     cy.findByRole('button', { name: 'Assign key workers automatically' }).should('exist')
 
-    cy.get('.moj-pagination').should('have.length', 2).eq(0).should('contain.text', 'Showing 1 to 1 of 1 result')
+    cy.get('.moj-pagination').should('have.length', 2).eq(0).should('contain.text', 'Showing 1 to 3 of 3 results')
 
-    cy.get('.govuk-table__row').should('have.length', 2)
+    cy.get('.govuk-table__row').should('have.length', 4)
     cy.get('.govuk-table__row')
       .eq(0)
       .children()
@@ -93,23 +94,23 @@ context('Profile Info', () => {
     cy.findByRole('button', { name: 'Save changes' }).should('exist')
   }
 
-  const checkPrisonersWithoutKeyworkerFilter = () => {
+  const checkPrisonersExcludeActiveAllocationsFilter = () => {
     cy.findByRole('checkbox', { name: /Prisoners without a key worker/ }).check()
     cy.findByRole('button', { name: /Apply filters/i }).click()
 
-    cy.get('.moj-pagination').should('have.length', 2).eq(0).should('contain.text', 'Showing 1 to 3 of 3 results')
+    cy.get('.moj-pagination').should('have.length', 2).eq(0).should('contain.text', 'Showing 1 to 2 of 2 results')
 
-    cy.get('.govuk-table__row').should('have.length', 4)
-    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'Bogisich, Astrid')
-    cy.get('.govuk-table__row').eq(2).children().eq(1).should('contain.text', '3-1-027')
-    cy.get('.govuk-table__row').eq(2).children().eq(2).should('contain.text', '-')
+    cy.get('.govuk-table__row').should('have.length', 3)
+    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Bogisich, Astrid')
+    cy.get('.govuk-table__row').eq(1).children().eq(1).should('contain.text', '3-1-027')
+    cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', '-')
     cy.get('.govuk-table__row')
-      .eq(2)
+      .eq(1)
       .children()
       .eq(3)
       .should('contain.text', 'Key-Worker, Available-Active (allocations: 32)')
     cy.get('.govuk-table__row')
-      .eq(2)
+      .eq(1)
       .children()
       .eq(4)
       .should('contain.text', 'View allocation history')
@@ -117,15 +118,15 @@ context('Profile Info', () => {
       .eq(0)
       .should('have.attr', 'href', '/prisoner-allocation-history/A2504EA')
 
-    cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'Capodilupo, Darwin')
-    cy.get('.govuk-table__row').eq(3).children().eq(1).should('contain.text', '4-2-031')
-    cy.get('.govuk-table__row').eq(3).children().eq(2).should('contain.text', '-')
+    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'Capodilupo, Darwin')
+    cy.get('.govuk-table__row').eq(2).children().eq(1).should('contain.text', '4-2-031')
+    cy.get('.govuk-table__row').eq(2).children().eq(2).should('contain.text', '-')
     cy.get('.govuk-table__row')
-      .eq(3)
+      .eq(2)
       .children()
       .eq(3)
       .should('contain.text', 'Key-Worker, Available-Active (allocations: 32)')
-    cy.get('.govuk-table__row').eq(3).children().eq(4).should('not.contain.text', 'View allocation history')
+    cy.get('.govuk-table__row').eq(2).children().eq(4).should('not.contain.text', 'View allocation history')
   }
 
   const checkSorting = () => {
@@ -148,6 +149,7 @@ context('Profile Info', () => {
   }
 
   const checkNameOrPrisonNumberFilter = () => {
+    cy.findByRole('checkbox', { name: /Prisoners without a key worker/ }).uncheck()
     cy.findByRole('textbox', { name: /Name or prison number/ })
       .clear()
       .type('Ayo')

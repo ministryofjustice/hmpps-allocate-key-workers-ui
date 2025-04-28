@@ -33,7 +33,10 @@ export const setSelectedValue = (items: SelectOption[] | null, selected: string 
   }))
 }
 
-export const excludeCurrentKeyworker = (items: SelectOption[], currentKeyworker: string): SelectOption[] => {
+export const excludeCurrentKeyworker = (
+  items: SelectOption[],
+  currentKeyworker: { staffId: string } | null,
+): SelectOption[] => {
   if (!currentKeyworker || !items) return items
-  return items.filter(o => !o.text.toString().startsWith(currentKeyworker))
+  return items.filter(o => o.value !== currentKeyworker.staffId)
 }

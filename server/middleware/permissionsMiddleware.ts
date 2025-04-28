@@ -8,7 +8,7 @@ export default function populateUserPermissions(): RequestHandler {
 
   return async (req, res, next) => {
     try {
-      const prisonCode = res.locals.user.activeCaseLoad!.caseLoadId!
+      const prisonCode = res.locals.user.getActiveCaseloadId()!
 
       const userViewPermission =
         res.locals.user.userRoles.includes(AuthorisedRoles.KEYWORKER_MONITOR) ||

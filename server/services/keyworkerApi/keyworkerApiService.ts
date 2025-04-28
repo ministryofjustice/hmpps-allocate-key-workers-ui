@@ -1,6 +1,7 @@
 import { Request } from 'express'
 import { RestClientBuilder } from '../../data'
 import KeyworkerApiClient, { ServiceConfigInfo } from './keyworkerApiClient'
+import { components } from '../../@types/keyWorker'
 
 export default class KeyworkerApiService {
   constructor(private readonly keyworkerApiClientBuilder: RestClientBuilder<KeyworkerApiClient>) {}
@@ -49,7 +50,7 @@ export default class KeyworkerApiService {
   searchPrisoners(
     req: Request,
     prisonCode: string,
-    body: { query?: string; cellLocationPrefix?: string } = {},
+    body: components['schemas']['PersonSearchRequest'],
   ): ReturnType<KeyworkerApiClient['searchPrisoners']> {
     return this.keyworkerApiClientBuilder(req.systemClientToken).searchPrisoners(prisonCode, body)
   }

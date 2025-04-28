@@ -468,6 +468,7 @@ const stubSearchPrisonersWithQuery = () =>
         equalToJson: {
           query: 'Ayo',
           cellLocationPrefix: '',
+          excludeActiveAllocations: false,
         },
       },
     ],
@@ -485,11 +486,30 @@ const stubSearchPrisonersWithLocation = () =>
         equalToJson: {
           query: '',
           cellLocationPrefix: '3',
+          excludeActiveAllocations: false,
         },
       },
     ],
     200,
     { content: [keyworkerSearchPrisoners[1]] },
+  )
+
+const stubSearchPrisonersWithExcludeAllocations = () =>
+  createHttpStub(
+    'POST',
+    '/keyworker-api/search/prisons/.+/prisoners',
+    undefined,
+    [
+      {
+        equalToJson: {
+          query: '',
+          cellLocationPrefix: '',
+          excludeActiveAllocations: true,
+        },
+      },
+    ],
+    200,
+    { content: keyworkerSearchPrisoners.slice(1) },
   )
 
 const stubSearchPrisoner = () =>
@@ -502,6 +522,7 @@ const stubSearchPrisoner = () =>
         equalToJson: {
           query: '',
           cellLocationPrefix: '',
+          excludeActiveAllocations: false,
         },
       },
     ],
@@ -564,4 +585,5 @@ export default {
   stubSearchPrisonersWithQuery,
   stubSearchPrisonersWithLocation,
   stubSearchPrisoner,
+  stubSearchPrisonersWithExcludeAllocations,
 }

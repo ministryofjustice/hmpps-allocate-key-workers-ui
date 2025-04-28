@@ -48,13 +48,13 @@
           </div>
 
           {{ govukCheckboxes({
-              name: "withoutKeyworker",
+              name: "excludeActiveAllocations",
               classes: "govuk-checkboxes--small govuk-!-margin-top-2",
               items: [
                 {
                   value: "true",
                   text: "Prisoners without a key worker",
-                  checked: withoutKeyworker
+                  checked: excludeActiveAllocations
                 }
               ]
             }) }}
@@ -98,7 +98,7 @@
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: keyworkers | excludeCurrentKeyworker(item.keyworker | lastNameCommaFirstName)
+              items: keyworkers | excludeCurrentKeyworker(item.keyworker)
             })
           },
           {
