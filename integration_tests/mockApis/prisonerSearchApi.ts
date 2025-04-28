@@ -24,6 +24,19 @@ const createBasicHttpStub = (method: string, urlPattern: string, status: number,
   return createHttpStub(method, urlPattern, undefined, undefined, status, jsonBody)
 }
 
+const stubPrisonerSearchApiHealth = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/prisoner-search-api/health/ping',
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+      jsonBody: { status: 'UP' },
+    },
+  })
+
 const stubGetPrisonerDetails = () =>
   createBasicHttpStub('GET', '/prisoner-search-api/prisoner/A9965EA', 200, prisonerDetailsResponse)
 
@@ -78,5 +91,6 @@ const prisonerDetailsResponse = {
 }
 
 export default {
+  stubPrisonerSearchApiHealth,
   stubGetPrisonerDetails,
 }
