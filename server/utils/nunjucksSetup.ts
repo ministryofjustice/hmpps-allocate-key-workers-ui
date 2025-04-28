@@ -6,7 +6,7 @@ import fs from 'fs'
 import { convertToSelectItems, initialiseName } from './utils'
 import config from '../config'
 import logger from '../../logger'
-import { formatDateConcise, getDateInReadableFormat, todayStringGBFormat } from './datetimeUtils'
+import { formatDateConcise, formatDateTime, getDateInReadableFormat, todayStringGBFormat } from './datetimeUtils'
 import { findError } from '../middleware/validationMiddleware'
 import { firstNameSpaceLastName, lastNameCommaFirstName, nameCase } from './formatUtils'
 import { addDefaultSelectedValue, excludeCurrentKeyworker, setSelectedValue } from './dropdownUtils'
@@ -67,4 +67,5 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('formatDateConcise', formatDateConcise)
   njkEnv.addFilter('convertToSelectItems', convertToSelectItems)
   njkEnv.addFilter('excludeCurrentKeyworker', excludeCurrentKeyworker)
+  njkEnv.addFilter('formatDateTime', formatDateTime)
 }
