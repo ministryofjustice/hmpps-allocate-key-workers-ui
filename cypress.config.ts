@@ -8,6 +8,7 @@ import prisonApi from './integration_tests/mockApis/prisonApi'
 import componentsApi from './integration_tests/mockApis/componentsApi'
 import keyworkerApi from './integration_tests/mockApis/keyworkerApi'
 import locationsApi from './integration_tests/mockApis/locationsApi'
+import prisonerSearchApi from './integration_tests/mockApis/prisonerSearchApi'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -30,6 +31,7 @@ export default defineConfig({
         ...prisonApi,
         ...componentsApi,
         ...locationsApi,
+        ...prisonerSearchApi,
       })
       // eslint-disable-next-line no-new
       new GenerateCtrfReport({
