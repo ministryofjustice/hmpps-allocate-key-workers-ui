@@ -38,9 +38,26 @@
 
   <div class="govuk-!-width-one-half">
     {% for allocation in allocationHistory %}
+
+      {% if allocation.active %}
+        {% set tableCaption = "Current key worker: " + (allocation.keyworker | firstNameSpaceLastName) %}
+      {% else %}
+        {% set tableCaption = "Previous key worker: " + (allocation.keyworker | firstNameSpaceLastName) %}
+      {% endif %}
+
+      {% if allocation.deallocated %}
+        {% set deallocatedOn = allocation.deallocated.at | formatDateTime %}
+        {% set deallocatedBy = allocation.deallocated.by %}
+        {% set deallocationReason = allocation.deallocated.reason.description %}
+      {% else %}
+        {% set deallocatedOn = "-" %}
+        {% set deallocatedBy = "-" %}
+        {% set deallocationReason = "-" %}
+      {% endif %}
+
       <div class="dropshadow govuk-!-margin-bottom-4">
         {{ govukTable({
-          caption: "Current key worker: Steve Rendell",
+          caption: tableCaption,
           captionClasses: "govuk-table__caption--m search-form",
           firstCellIsHeader: true,
           classes: "govuk-!-margin-bottom-0",
@@ -48,7 +65,7 @@
             [
               {
                 text: "Establishment",
-                classes: "govuk-!-padding-left-2"
+                classes: "govuk-!-padding-left-2 govuk-!-width-one-half"
               },
               {
                 text: allocation.prison.description
@@ -57,7 +74,7 @@
             [
               {
                 text: "Allocated on",
-                classes: "govuk-!-padding-left-2"
+                classes: "govuk-!-padding-left-2 govuk-!-width-one-half"
               },
               {
                 text: allocation.allocated.at | formatDateTime
@@ -66,7 +83,7 @@
             [
               {
                 text: "Allocation type",
-                classes: "govuk-!-padding-left-2"
+                classes: "govuk-!-padding-left-2 govuk-!-width-one-half"
               },
               {
                 text: allocation.allocated.reason.description
@@ -75,7 +92,7 @@
             [
               {
                 text: "Allocated by",
-                classes: "govuk-!-padding-left-2"
+                classes: "govuk-!-padding-left-2 govuk-!-width-one-half"
               },
               {
                 text: allocation.allocated.by
@@ -84,28 +101,28 @@
             [
               {
                 text: "Deallocated on",
-                classes: "govuk-!-padding-left-2"
+                classes: "govuk-!-padding-left-2 govuk-!-width-one-half"
               },
               {
-                text: "-"
+                text: deallocatedOn
               }
             ],
             [
               {
                 text: "Deallocated by",
-                classes: "govuk-!-padding-left-2"
+                classes: "govuk-!-padding-left-2 govuk-!-width-one-half"
               },
               {
-                text: "-"
+                text: deallocatedBy
               }
             ],
             [
               {
                 text: "Deallocation reason",
-                classes: "govuk-!-padding-left-2"
+                classes: "govuk-!-padding-left-2 govuk-!-width-one-half"
               },
               {
-                text: "-"
+                text: deallocationReason
               }
             ]
           ]
