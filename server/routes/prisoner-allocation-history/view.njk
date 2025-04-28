@@ -24,7 +24,7 @@
           </div>
           <div class="mini-profile-right">
             <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-0">Location</p>
-            <p>{{ prisoner.cellLocation }}</p>
+            <p class="cell-location">{{ prisoner.cellLocation }}</p>
           </div>
         </div>
       </div>
@@ -34,7 +34,7 @@
   <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Prisoner key worker allocation history</h1>
   <hr />
 
-  <p class="govuk-heading-s">Current and previous allocations: {{ allocationHistory.length }}</p>
+  <p class="govuk-heading-m govuk-!-margin-top-4 govuk-!-margin-bottom-4">Current and previous allocations: {{ allocationHistory.length }}</p>
 
   <div class="govuk-!-width-one-half">
     {% for allocation in allocationHistory %}
@@ -55,7 +55,7 @@
         {% set deallocationReason = "-" %}
       {% endif %}
 
-      <div class="dropshadow govuk-!-margin-bottom-4">
+      <div class="dropshadow govuk-!-margin-bottom-6">
         {{ govukTable({
           caption: tableCaption,
           captionClasses: "govuk-table__caption--m search-form",

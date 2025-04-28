@@ -17,7 +17,7 @@ context('Prisoner Allocation History', () => {
     cy.findByText('2-1-005')
 
     cy.get('.govuk-heading-l').eq(0).should('have.text', 'Prisoner key worker allocation history')
-    cy.get('.govuk-heading-s').eq(0).should('have.text', 'Current and previous allocations: 2')
+    cy.get('.govuk-heading-m').eq(0).should('have.text', 'Current and previous allocations: 2')
 
     cy.get('.govuk-table__caption--m').eq(0).should('have.text', 'Current key worker: Tom Cat')
     cy.get('.govuk-table__header').eq(0).should('have.text', 'Establishment')
