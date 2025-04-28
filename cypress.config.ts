@@ -51,5 +51,6 @@ export default defineConfig({
       runMode: 2,
     },
     viewportHeight: 1200,
+    viewportWidth: 1280,
   },
 })

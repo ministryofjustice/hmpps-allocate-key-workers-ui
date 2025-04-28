@@ -9,7 +9,7 @@ import logger from '../../logger'
 import { formatDateConcise, getDateInReadableFormat, todayStringGBFormat } from './datetimeUtils'
 import { findError } from '../middleware/validationMiddleware'
 import { firstNameSpaceLastName, lastNameCommaFirstName, nameCase } from './formatUtils'
-import { addDefaultSelectedValue, setSelectedValue } from './dropdownUtils'
+import { addDefaultSelectedValue, excludeCurrentKeyworker, setSelectedValue } from './dropdownUtils'
 import { formatValue, getStatChange } from './statsUtils'
 
 export default function nunjucksSetup(app: express.Express): void {
@@ -66,4 +66,5 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('firstNameSpaceLastName', firstNameSpaceLastName)
   njkEnv.addFilter('formatDateConcise', formatDateConcise)
   njkEnv.addFilter('convertToSelectItems', convertToSelectItems)
+  njkEnv.addFilter('excludeCurrentKeyworker', excludeCurrentKeyworker)
 }

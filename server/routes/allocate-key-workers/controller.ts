@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
-import { firstNameSpaceLastName } from '../../utils/formatUtils'
+import { lastNameCommaFirstName } from '../../utils/formatUtils'
 import LocationsInsidePrisonApiService from '../../services/locationsInsidePrisonApi/locationsInsidePrisonApiService'
 
 export class AllocateKeyWorkerController {
@@ -16,7 +16,7 @@ export class AllocateKeyWorkerController {
       cellLocationPrefix: req.query['location']?.toString() || '',
     })
 
-    const keyworkers = await this.keyworkerApiService.getKeyworkerMembers(req, prisonCode, { status: 'ALL' })
+    const keyworkers = await this.keyworkerApiService.getKeyworkerMembers(req, prisonCode, { status: 'ACTIVE' })
     const locations = await this.locationsApiService.getResidentialLocations(req, prisonCode)
 
     const withoutKeyworker = req.query['withoutKeyworker'] === 'true'
@@ -26,12 +26,14 @@ export class AllocateKeyWorkerController {
       withoutKeyworker,
       records: records.filter(o => withoutKeyworker || o.keyworker),
       locations: locations.map(o => o.fullLocationPath),
-      keyworkers: keyworkers.map(o => {
-        return {
-          text: `${firstNameSpaceLastName(o)} (allocations: ${o.numberAllocated})`,
-          value: o.staffId,
-        }
-      }),
+      keyworkers: keyworkers
+        .sort((a, b) => (a.numberAllocated > b.numberAllocated ? 1 : -1))
+        .map(o => {
+          return {
+            text: `${lastNameCommaFirstName(o)} (allocations: ${o.numberAllocated})`,
+            value: o.staffId,
+          }
+        }),
       showBreadcrumbs: true,
     })
   }

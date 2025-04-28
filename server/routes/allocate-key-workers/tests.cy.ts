@@ -80,7 +80,7 @@ context('Profile Info', () => {
       .eq(1)
       .children()
       .eq(3)
-      .should('contain.text', 'Available-Active Key-Worker (allocations: 32)')
+      .should('contain.text', 'Key-Worker, Available-Active (allocations: 32)')
     cy.get('.govuk-table__row')
       .eq(1)
       .children()
@@ -107,7 +107,7 @@ context('Profile Info', () => {
       .eq(2)
       .children()
       .eq(3)
-      .should('contain.text', 'Available-Active Key-Worker (allocations: 32)')
+      .should('contain.text', 'Key-Worker, Available-Active (allocations: 32)')
     cy.get('.govuk-table__row')
       .eq(2)
       .children()
@@ -124,7 +124,7 @@ context('Profile Info', () => {
       .eq(3)
       .children()
       .eq(3)
-      .should('contain.text', 'Available-Active Key-Worker (allocations: 32)')
+      .should('contain.text', 'Key-Worker, Available-Active (allocations: 32)')
     cy.get('.govuk-table__row').eq(3).children().eq(4).should('not.contain.text', 'View allocation history')
   }
 

@@ -25,7 +25,7 @@
               id: "query",
               name: "query",
               value: query,
-              classes: "min-width-two-thirds",
+              classes: "min-width-one-quarter ",
               label: {
                 text: 'Name or prison number'
               }
@@ -58,7 +58,6 @@
                 }
               ]
             }) }}
-
         </form>
       </div>
     </div>
@@ -99,11 +98,11 @@
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: keyworkers 
+              items: keyworkers | excludeCurrentKeyworker(item.keyworker | lastNameCommaFirstName)
             })
           },
           {
-            html: '<a class="govuk-link govuk-link--no-visited-state" href="/prisoner-allocation-history/' + item.personIdentifier + '">View allocation history</a>' if item.hasAllocationHistory or item.keyworker else ''
+            html: '<a class="govuk-link govuk-link--no-visited-state" href="/prisoner-allocation-history/' + item.personIdentifier + '">View allocation history</a>' if item.hasAllocationHistory else ''
           }
         ]), rows) %}
     {% endfor %}
