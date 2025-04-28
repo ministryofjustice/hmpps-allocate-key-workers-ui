@@ -69,4 +69,4 @@ export function getDateInReadableFormat(dateString: string) {
   return `${date.getDate()} ${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`
 }
 
-export const formatDateTime = (value?: string) => value && format(new Date(Date.parse(value)), 'yyyy-MM-dd HH:mm')
+export const formatDateTime = (value?: string) => value && format(new Date(Date.parse(value)), 'dd/MM/yyyy HH:mm')
