@@ -18,6 +18,7 @@ import config from '../config'
 import HmppsAuditClient from './hmppsAuditClient'
 import PrisonApiRestClient from '../services/prisonApi/prisonApiClient'
 import KeyworkerApiClient from '../services/keyworkerApi/keyworkerApiClient'
+import LocationsInsidePrisonApiRestClient from '../services/locationsInsidePrisonApi/locationsInsidePrisonApiClient'
 
 type RestClientBuilder<T> = (token: string) => T
 
@@ -29,6 +30,7 @@ export const dataAccess = () => ({
   hmppsAuditClient: new HmppsAuditClient(config.sqs.audit),
   keyworkerApiClient: (token: string) => new KeyworkerApiClient(token),
   prisonApiClient: (token: string) => new PrisonApiRestClient(token),
+  locationsWithinPrisonApiClient: (token: string) => new LocationsInsidePrisonApiRestClient(token),
 })
 
 export type DataAccess = ReturnType<typeof dataAccess>

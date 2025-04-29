@@ -1,0 +1,158 @@
+{% extends "partials/layout.njk" %}
+{% from "moj/components/date-picker/macro.njk" import mojDatePicker %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "partials/mojPagination/macro.njk" import mojPagination %}
+
+{% set fullWidth = true %}
+{% set pageTitle = "Allocate key workers to prisoners" %}
+
+{% block innerContent %}
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-6">{{ pageTitle }}</h1>
+
+  <div class="govuk-width-container">
+    <div class="govuk-grid-row">
+
+      <div class="govuk-grid-column-three-quarters">
+        <form method="post" class="govuk-grid-row govuk-!-margin-bottom-7 govuk-!-padding-6 search-form">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+          <h2 class="govuk-heading-m">Filter by</h2>
+          <div class="horizontal-form">
+            {{ govukInput({
+              id: "query",
+              name: "query",
+              value: query,
+              classes: "min-width-one-quarter ",
+              label: {
+                text: 'Name or prison number'
+              }
+            }) }}
+
+            {{ govukSelect({
+              id: "location",
+              name: "location",
+              label: {
+                text: "Residential location"
+              },
+              items: locations | convertToSelectItems | addDefaultSelectedValue('') | setSelectedValue(location)
+            }) }}
+
+            {{ govukButton({
+              text: "Apply filters",
+              preventDoubleClick: true
+            }) }}
+            <a class="govuk-link govuk-link--no-visited-state govuk-body no-label-form-clear-link" href="?clear=true">Clear</a>
+          </div>
+
+          {{ govukCheckboxes({
+              name: "excludeActiveAllocations",
+              classes: "govuk-checkboxes--small govuk-!-margin-top-2",
+              items: [
+                {
+                  value: "true",
+                  text: "Prisoners without a key worker",
+                  checked: excludeActiveAllocations
+                }
+              ]
+            }) }}
+        </form>
+      </div>
+    </div>
+
+    <p>Select key workers from the dropdown lists or automatically assign them.</p>
+    <p>Keyworkers will only be allocated when you save your changes.</p>
+
+    <div class="govuk-grid-row">
+      {{ govukButton({
+        text: "Assign key workers automatically",
+        classes: "govuk-button--secondary float-right govuk-!-margin-bottom-2",
+        preventDoubleClick: true
+      }) }}
+
+    </div>
+
+    {% set rows = [] %}
+    {% for item in records %}
+      {% set rows = (rows.push([
+          {
+            html: '<a class="govuk-link--no-visited-state" target="_blank" href="' + prisonerProfileUrl + '/prisoner/' + item.personIdentifier + '">' + item | lastNameCommaFirstName + "</a><br/>" + item.personIdentifier,
+            attributes: {
+            "data-sort-value": item | lastNameCommaFirstName
+          }
+          },
+          {
+            text: item.location
+          },
+          {
+            text: item.keyworker | lastNameCommaFirstName  | default('-', true)
+          },
+          {
+            text: "Select keyworker",
+            html: govukSelect({
+              id: "selectKeyworker",
+              name: "selectKeyworker",
+              text: 'Select key worker',
+              formGroup: {
+                classes: "govuk-!-margin-0"
+              },
+              items: keyworkers | excludeCurrentKeyworker(item.keyworker)
+            })
+          },
+          {
+            html: '<a class="govuk-link govuk-link--no-visited-state" href="/prisoner-allocation-history/' + item.personIdentifier + '">View allocation history</a>' if item.hasAllocationHistory else ''
+          }
+        ]), rows) %}
+    {% endfor %}
+
+    {{ mojPagination(records.length) }}
+
+    {{ govukTable({
+          attributes: {
+            "data-module": "moj-sortable-table"
+          },
+          classes: 'table-vertical-align-middle govuk-!-margin-top-6 center-align-content',
+          head: [
+            {
+              text: 'Name and prisoner number',
+              key: 'name',
+              attributes: {
+                "aria-sort": "ascending"
+              }
+            },
+            {
+              text: "Residential location",
+              key: 'location',
+              attributes: {
+                "aria-sort": "none"
+              }
+            },
+            {
+              text: "Key worker",
+              key: 'keyworker',
+              attributes: {
+                "aria-sort": "none"
+              }
+            },
+            {
+              text: "Change key worker",
+              key: 'change'
+            },
+            {
+              text: ""
+            }
+          ],
+          rows: rows
+        }) }}
+
+    {{ mojPagination(records.length) }}
+
+    {{ govukButton({
+        text: "Save changes",
+        preventDoubleClick: true
+      }) }}
+
+  </div>
+{% endblock %}

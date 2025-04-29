@@ -3,13 +3,13 @@ import path from 'path'
 import nunjucks from 'nunjucks'
 import express from 'express'
 import fs from 'fs'
-import { initialiseName } from './utils'
+import { convertToSelectItems, initialiseName } from './utils'
 import config from '../config'
 import logger from '../../logger'
 import { formatDateConcise, getDateInReadableFormat, todayStringGBFormat } from './datetimeUtils'
 import { findError } from '../middleware/validationMiddleware'
 import { firstNameSpaceLastName, lastNameCommaFirstName, nameCase } from './formatUtils'
-import { addDefaultSelectedValue, setSelectedValue } from './dropdownUtils'
+import { addDefaultSelectedValue, excludeCurrentKeyworker, setSelectedValue } from './dropdownUtils'
 import { formatValue, getStatChange } from './statsUtils'
 
 export default function nunjucksSetup(app: express.Express): void {
@@ -65,4 +65,6 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('getStatChange', getStatChange)
   njkEnv.addFilter('firstNameSpaceLastName', firstNameSpaceLastName)
   njkEnv.addFilter('formatDateConcise', formatDateConcise)
+  njkEnv.addFilter('convertToSelectItems', convertToSelectItems)
+  njkEnv.addFilter('excludeCurrentKeyworker', excludeCurrentKeyworker)
 }

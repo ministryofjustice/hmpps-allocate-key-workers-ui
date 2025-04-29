@@ -458,6 +458,110 @@ const keyworkerStatuses = [
   },
 ]
 
+const stubSearchPrisonersWithQuery = () =>
+  createHttpStub(
+    'POST',
+    '/keyworker-api/search/prisons/.+/prisoners',
+    undefined,
+    [
+      {
+        equalToJson: {
+          query: 'Ayo',
+          cellLocationPrefix: '',
+          excludeActiveAllocations: false,
+        },
+      },
+    ],
+    200,
+    { content: [keyworkerSearchPrisoners[0]] },
+  )
+
+const stubSearchPrisonersWithLocation = () =>
+  createHttpStub(
+    'POST',
+    '/keyworker-api/search/prisons/.+/prisoners',
+    undefined,
+    [
+      {
+        equalToJson: {
+          query: '',
+          cellLocationPrefix: '3',
+          excludeActiveAllocations: false,
+        },
+      },
+    ],
+    200,
+    { content: [keyworkerSearchPrisoners[1]] },
+  )
+
+const stubSearchPrisonersWithExcludeAllocations = () =>
+  createHttpStub(
+    'POST',
+    '/keyworker-api/search/prisons/.+/prisoners',
+    undefined,
+    [
+      {
+        equalToJson: {
+          query: '',
+          cellLocationPrefix: '',
+          excludeActiveAllocations: true,
+        },
+      },
+    ],
+    200,
+    { content: keyworkerSearchPrisoners.slice(1) },
+  )
+
+const stubSearchPrisoner = () =>
+  createHttpStub(
+    'POST',
+    '/keyworker-api/search/prisons/.+/prisoners',
+    undefined,
+    [
+      {
+        equalToJson: {
+          query: '',
+          cellLocationPrefix: '',
+          excludeActiveAllocations: false,
+        },
+      },
+    ],
+    200,
+    { content: keyworkerSearchPrisoners },
+  )
+
+const keyworkerSearchPrisoners = [
+  {
+    personIdentifier: 'A4288DZ',
+    firstName: 'ZAKIRA',
+    lastName: 'AYO',
+    location: '1-1-035',
+    hasHighComplexityOfNeeds: false,
+    hasAllocationHistory: true,
+    keyworker: {
+      staffId: 485834,
+      firstName: 'ROB',
+      lastName: 'COOPER',
+    },
+  },
+  {
+    personIdentifier: 'A2504EA',
+    firstName: 'ASTRID',
+    lastName: 'BOGISICH',
+    location: '3-1-027',
+    hasHighComplexityOfNeeds: false,
+    hasAllocationHistory: true,
+  },
+  {
+    personIdentifier: 'G7189VT',
+    firstName: 'DARWIN',
+    lastName: 'CAPODILUPO',
+    location: '4-2-031',
+    hasHighComplexityOfNeeds: false,
+    hasAllocationHistory: false,
+  },
+]
+
 export default {
   stubKeyworkerApiHealth,
   stubKeyworkerApiStatusIsKeyworker: () => stubKeyworkerApiStatusIsKeyworker(true),
@@ -478,4 +582,8 @@ export default {
   stubKeyWorkerStatsWithNullPreviousValues,
   stubKeyWorkerStatsWithNullPreviousData,
   stubKeyworkerStatuses,
+  stubSearchPrisonersWithQuery,
+  stubSearchPrisonersWithLocation,
+  stubSearchPrisoner,
+  stubSearchPrisonersWithExcludeAllocations,
 }

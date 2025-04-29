@@ -62,4 +62,5 @@ export type HmppsUser = (PrisonUser | ProbationUser | ExternalUser | AzureADUser
   caseLoads: CaseLoad[] | undefined
   activeCaseLoad?: CaseLoad | undefined
   permissions: { view: boolean; allocate: boolean }
+  getActiveCaseloadId: () => string | undefined
 }

@@ -28,3 +28,7 @@ export const initialiseName = (fullName: string | undefined | null): string | nu
   }
   return `${firstName[0]}. ${array.reverse()[0]}`
 }
+
+export const convertToSelectItems = (items: string[]): Array<{ value: string; text: string }> => {
+  return items.map(item => ({ value: item, text: item }))
+}

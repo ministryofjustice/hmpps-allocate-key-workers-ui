@@ -93,4 +93,18 @@ export default class KeyworkerApiClient {
 
     return response
   }
+
+  async searchPrisoners(
+    prisonCode: string,
+    body: components['schemas']['PersonSearchRequest'],
+  ): Promise<components['schemas']['PersonSearchResponse']['content']> {
+    const response = await this.restClient.post<components['schemas']['PersonSearchResponse']>({
+      path: `/search/prisons/${prisonCode}/prisoners`,
+      data: {
+        ...body,
+      },
+    })
+
+    return response.content
+  }
 }

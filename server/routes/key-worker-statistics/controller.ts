@@ -93,7 +93,7 @@ export class KeyWorkerStatisticsController {
   GET = async (req: Request, res: Response): Promise<void> => {
     const nowSpan = res.locals[FLASH_KEY__FORM_RESPONSES]?.nowSpan || this.getLastFullMonthAsIsoDateString()
     const previousSpan = this.getComparisonDates(nowSpan.start, nowSpan.end)
-    const prisonId = res.locals.user.activeCaseLoad!.caseLoadId!
+    const prisonId = res.locals.user.getActiveCaseloadId()!
     const stats = await this.keyworkerApiService.getPrisonStats(req, prisonId, nowSpan.start, nowSpan.end)
     const prison = await this.keyworkerApiService.getPrisonConfig(req, prisonId)
     const hasCurrentStats = stats.current !== undefined && stats.current !== null
