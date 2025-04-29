@@ -76,7 +76,7 @@ context('Profile Info', () => {
 
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Ayo, Zakira')
     cy.get('.govuk-table__row').eq(1).children().eq(1).should('contain.text', '1-1-035')
-    cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', 'Rob Cooper')
+    cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', 'Cooper, Rob')
     cy.get('.govuk-table__row')
       .eq(1)
       .children()
