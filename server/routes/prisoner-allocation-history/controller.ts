@@ -13,6 +13,7 @@ export class PrisonerAllocationHistoryController {
     const keyworkerAllocations = await this.keyworkerApiService.getKeyworkerAllocations(req, prisonerId)
 
     res.render('prisoner-allocation-history/view', {
+      showBreadcrumbs: true,
       prisoner,
       allocationHistory: keyworkerAllocations.allocations,
     })
