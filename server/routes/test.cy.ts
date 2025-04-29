@@ -79,13 +79,41 @@ context('test / homepage', () => {
 
       cy.findByRole('link', { name: /Key worker statistics$/i }).should('be.visible')
 
+      cy.findAllByRole('link', { name: /Manage your establishment’s key worker settings$/i }).should('not.exist')
+    })
+
+    it('should show correct services when user has admin permission', () => {
+      cy.task('stubSignIn', {
+        roles: [AuthorisedRoles.KW_MIGRATION],
+      })
+      cy.task('stubKeyworkerApiStatusIsNotKeyworker')
+      cy.task('stubEnabledPrison')
+
+      navigateToTestPage()
+
+      cy.findByRole('heading', { name: /^Key workers$/i }).should('be.visible')
+
+      cy.findByRole('link', { name: /View all without a key worker$/i }).should('be.visible')
+
+      cy.findByRole('link', { name: /View by residential location$/i }).should('be.visible')
+
+      cy.findByRole('link', { name: /Search for a prisoner$/i }).should('be.visible')
+
+      cy.findByRole('link', { name: /View key workers in your establishment$/i }).should('be.visible')
+
+      cy.findByText(
+        'You can manage a key worker’s availability, reassign their prisoners and check their individual statistics.',
+      )
+
+      cy.findByRole('link', { name: /Key worker statistics$/i }).should('be.visible')
+
       cy.findAllByRole('link', { name: /Manage your establishment’s key worker settings$/i }).should('be.visible')
     })
   })
 
   it('shows all tiles when user has all required roles', () => {
     cy.task('stubSignIn', {
-      roles: [AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KEYWORKER_MONITOR],
+      roles: [AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.KW_MIGRATION],
     })
     cy.task('stubEnabledPrison')
     navigateToTestPage()

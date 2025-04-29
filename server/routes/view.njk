@@ -43,7 +43,7 @@
                           </div>
                         </div>
 
-                        {% if user.permissions.view or user.permissions.allocate %}
+                        {% if user.permissions.view %}
                           <div class="govuk-grid-column-one-third card-group__item">
                             <div class="card card--clickable">
                               <h2 class="govuk-heading-m card__heading">
@@ -66,7 +66,7 @@
                             <p class="govuk-body card__description">View the statistics for your establishment’s key workers.</p>
                           </div>
                         </div>
-                        {% if user.permissions.allocate %}
+                        {% if user.permissions.admin %}
                           <div class="govuk-grid-column-one-third card-group__item">
                             <div class="card card--clickable">
                               <h2 class="govuk-heading-m card__heading">
