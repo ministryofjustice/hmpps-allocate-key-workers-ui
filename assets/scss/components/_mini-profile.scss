@@ -9,6 +9,7 @@
 .mini-profile-inner {
   background-color: #f3f2f1 !important;
   width: 100%;
+  padding: 20px;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
@@ -50,4 +51,9 @@
 
 .govuk-summary-list__key {
   width: 50%;
+}
+
+.govuk-summary-card__title {
+  font-size: 1.6rem;
+  margin: 0;
 }

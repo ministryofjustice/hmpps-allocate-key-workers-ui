@@ -6,35 +6,33 @@
 
 {% block innerContent %}
 
-  <div class="govuk-grid-row govuk-!-margin-bottom-2 search-form">
-    <div class="govuk-grid-column-full">
-      <div class="mini-profile" data-qa="mini-profile">
-        <div class="mini-profile-inner">
-          <div class="mini-profile-left">
-            <img class="mini-profile-person-img" src="/prisoner-image/{{ prisoner.prisonerNumber }}"
-                 alt="Image of {{ prisoner | lastNameCommaFirstName }}"
-                 loading="lazy" />
-          </div>
-          <div class="mini-profile-right">
-            <p class="govuk-!-margin-bottom-0">
-              <a class="govuk-link--no-visited-state govuk-!-font-weight-bold" target="_blank"
-                 href="{{ prisonerProfileUrl }}/prisoner/{{ prisoner.prisonerNumber }}">{{ prisoner | lastNameCommaFirstName }}</a>
-            </p>
-            <p>{{ prisoner.prisonerNumber }}</p>
-          </div>
-          <div class="mini-profile-right">
-            <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-0">Location</p>
-            <p class="cell-location">{{ prisoner.cellLocation }}</p>
-          </div>
-        </div>
+  <div class="mini-profile govuk-!-margin-bottom-7" data-qa="mini-profile">
+    <div class="mini-profile-inner">
+      <div class="mini-profile-left">
+        <img class="mini-profile-person-img" src="/prisoner-image/{{ prisoner.prisonerNumber }}"
+             alt="Image of {{ prisoner | lastNameCommaFirstName }}"
+             loading="lazy" />
+      </div>
+      <div class="mini-profile-right">
+        <p class="govuk-!-margin-bottom-0">
+          <a class="govuk-link--no-visited-state govuk-!-font-weight-bold" target="_blank"
+             href="{{ prisonerProfileUrl }}/prisoner/{{ prisoner.prisonerNumber }}">{{ prisoner | lastNameCommaFirstName }}</a>
+        </p>
+        <p>{{ prisoner.prisonerNumber }}</p>
+      </div>
+      <div class="mini-profile-right">
+        <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-0">Location</p>
+        <p class="cell-location">{{ prisoner.cellLocation }}</p>
       </div>
     </div>
   </div>
 
+
   <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Prisoner key worker allocation history</h1>
   <hr />
 
-  <p class="govuk-heading-m govuk-!-margin-top-4 govuk-!-margin-bottom-4">Current and previous allocations: {{ allocationHistory.length }}</p>
+  <p class="govuk-heading-m govuk-!-margin-top-4 govuk-!-margin-bottom-4">Current and previous
+    allocations: {{ allocationHistory.length }}</p>
 
   <div class="govuk-!-width-one-half">
     {% for allocation in allocationHistory %}
