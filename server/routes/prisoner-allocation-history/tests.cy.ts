@@ -13,7 +13,7 @@ context('Prisoner Allocation History', () => {
 
     cy.get('.govuk-link--no-visited-state').eq(0).should('have.text', 'Cat, Tabby')
     cy.findByText('A9965EA')
-    cy.get('.govuk-\\!-font-weight-bold').eq(0).should('have.text', 'Location')
+    cy.get('.govuk-\\!-font-weight-bold').eq(1).should('have.text', 'Location')
     cy.findByText('2-1-005')
 
     cy.get('.govuk-heading-l').eq(0).should('have.text', 'Prisoner key worker allocation history')

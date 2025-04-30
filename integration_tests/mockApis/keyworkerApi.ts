@@ -565,57 +565,6 @@ const keyworkerSearchPrisoners = [
   },
 ]
 
-const prisonerAllocationResponse = [
-  {
-    active: true,
-    keyworker: {
-      staffId: 488021,
-      firstName: 'Tom',
-      lastName: 'Cat',
-    },
-    prison: {
-      code: 'MDI',
-      description: 'Moorland (HMP & YOI)',
-    },
-    allocated: {
-      at: '2025-04-17T14:41:23.931574',
-      by: 'Jerry Mouse',
-      reason: {
-        code: 'AUTO',
-        description: 'Automatic',
-      },
-    },
-    deallocated: null,
-  },
-  {
-    active: false,
-    keyworker: {
-      staffId: 488021,
-      firstName: 'Benny',
-      lastName: 'The Ball',
-    },
-    prison: {
-      code: 'MDI',
-      description: 'Moorland (HMP & YOI)',
-    },
-    allocated: {
-      at: '2024-12-18T10:56:37.073945',
-      by: 'Officer Dibble',
-      reason: {
-        code: 'MANUAL',
-        description: 'Manual',
-      },
-    },
-    deallocated: {
-      at: '2025-02-12T15:57:56.862492',
-      by: 'Top Cat',
-      reason: {
-        code: 'MANUAL',
-        description: 'Manual',
-      },
-    },
-  },
-]
 const prisonerAllocationResponse = {
   allocations: [
     {
