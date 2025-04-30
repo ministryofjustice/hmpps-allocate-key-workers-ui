@@ -1,5 +1,5 @@
 {% extends "partials/layout.njk" %}
-{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% set fullWidth = true %}
 {% set pageTitle = "Prisoner Allocation History" %}
@@ -38,11 +38,10 @@
 
   <div class="govuk-!-width-one-half">
     {% for allocation in allocationHistory %}
-
       {% if allocation.active %}
-        {% set tableCaption = "Current key worker: " + (allocation.keyworker | firstNameSpaceLastName) %}
+        {% set cardTitle = "Current key worker: " + (allocation.keyworker | firstNameSpaceLastName) %}
       {% else %}
-        {% set tableCaption = "Previous key worker: " + (allocation.keyworker | firstNameSpaceLastName) %}
+        {% set cardTitle = "Previous key worker: " + (allocation.keyworker | firstNameSpaceLastName) %}
       {% endif %}
 
       {% if allocation.deallocated %}
@@ -56,75 +55,41 @@
       {% endif %}
 
       <div class="dropshadow govuk-!-margin-bottom-6">
-        {{ govukTable({
-          caption: tableCaption,
-          captionClasses: "govuk-table__caption--m search-form",
-          firstCellIsHeader: true,
-          classes: "govuk-!-margin-bottom-0",
+        {{ govukSummaryList({
+          card: {
+            title: {
+              text: cardTitle
+            }
+          },
           rows: [
-            [
-              {
-                text: "Establishment",
-                classes: "govuk-!-padding-left-2 govuk-!-width-one-half"
-              },
-              {
-                text: allocation.prison.description
-              }
-            ],
-            [
-              {
-                text: "Allocated on",
-                classes: "govuk-!-padding-left-2 govuk-!-width-one-half"
-              },
-              {
-                text: allocation.allocated.at | formatDateTime
-              }
-            ],
-            [
-              {
-                text: "Allocation type",
-                classes: "govuk-!-padding-left-2 govuk-!-width-one-half"
-              },
-              {
-                text: allocation.allocated.reason.description
-              }
-            ],
-            [
-              {
-                text: "Allocated by",
-                classes: "govuk-!-padding-left-2 govuk-!-width-one-half"
-              },
-              {
-                text: allocation.allocated.by
-              }
-            ],
-            [
-              {
-                text: "Deallocated on",
-                classes: "govuk-!-padding-left-2 govuk-!-width-one-half"
-              },
-              {
-                text: deallocatedOn
-              }
-            ],
-            [
-              {
-                text: "Deallocated by",
-                classes: "govuk-!-padding-left-2 govuk-!-width-one-half"
-              },
-              {
-                text: deallocatedBy
-              }
-            ],
-            [
-              {
-                text: "Deallocation reason",
-                classes: "govuk-!-padding-left-2 govuk-!-width-one-half"
-              },
-              {
-                text: deallocationReason
-              }
-            ]
+            {
+              key: { text: "Establishment" },
+              value: { text: allocation.prison.description }
+            },
+            {
+              key: { text: "Allocated on" },
+              value: { text: allocation.allocated.at | formatDateTime }
+            },
+            {
+              key: { text: "Allocation type" },
+              value: { text: allocation.allocated.reason.description }
+            },
+            {
+              key: { text: "Allocated by" },
+              value: { text: allocation.allocated.by }
+            },
+            {
+              key: { text: "Deallocated on" },
+              value: { text: deallocatedOn }
+            },
+            {
+              key: { text: "Deallocated by" },
+              value: { text: deallocatedBy }
+            },
+            {
+              key: { text: "Deallocation reason" },
+              value: { text: deallocationReason }
+            }
           ]
         }) }}
       </div>
