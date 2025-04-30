@@ -1,7 +1,11 @@
-import { RequestHandler } from 'express'
+import { RequestHandler, Response } from 'express'
 import { services } from '../services'
 import logger from '../../logger'
 import AuthorisedRoles from '../authentication/authorisedRoles'
+
+function hasRole(res: Response, ...roles: AuthorisedRoles[]): boolean {
+  return roles.some(role => res.locals.user.userRoles.includes(role))
+}
 
 export default function populateUserPermissions(): RequestHandler {
   const { keyworkerApiService } = services()
@@ -15,8 +19,9 @@ export default function populateUserPermissions(): RequestHandler {
         (await keyworkerApiService.isKeyworker(req, prisonCode, res.locals.user.username))
 
       res.locals.user.permissions = {
-        view: userViewPermission,
-        allocate: res.locals.user.userRoles.includes(AuthorisedRoles.OMIC_ADMIN),
+        view: userViewPermission || hasRole(res, AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KW_MIGRATION),
+        allocate: hasRole(res, AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KW_MIGRATION),
+        admin: hasRole(res, AuthorisedRoles.KW_MIGRATION),
       }
 
       res.locals.prisonConfiguration = await keyworkerApiService.getPrisonConfig(req, prisonCode)

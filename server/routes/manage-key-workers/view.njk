@@ -21,28 +21,28 @@
           <h2 class="govuk-heading-m">Filter by</h2>
           <div class="horizontal-form">
             {{ govukInput({
-        id: "query",
-        name: "query",
-        value: params.query,
-        classes: "min-width-two-quarters",
-        label: {
-          text: 'Key worker name'
-        }
-      }) }}
+              id: "query",
+              name: "query",
+              value: params.query,
+              classes: "min-width-two-quarters",
+              label: {
+                text: 'Key worker name'
+              }
+            }) }}
 
             {{ govukSelect({
-        id: "status",
-        name: "status",
-        label: {
-          text: "Status"
-        },
-        items: status
-      }) }}
+              id: "status",
+              name: "status",
+              label: {
+                text: "Status"
+              },
+              items: status
+            }) }}
 
             {{ govukButton({
-        text: "Apply filters",
-        preventDoubleClick: true
-      }) }}
+              text: "Apply filters",
+              preventDoubleClick: true
+            }) }}
             <a class="govuk-link govuk-link--no-visited-state govuk-body no-label-form-clear-link" href="?clear=true">Clear</a>
           </div>
         </form>
