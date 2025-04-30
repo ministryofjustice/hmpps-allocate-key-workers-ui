@@ -139,7 +139,7 @@ context('Profile Info', () => {
 
   const checkResidentialLocationFilter = () => {
     cy.findByRole('textbox', { name: /Name or prison number/ }).clear()
-    cy.findByRole('combobox', { name: /Residential location/ }).select('3')
+    cy.findByRole('combobox', { name: /Residential location/ }).select('Houseblock 3')
     cy.findByRole('button', { name: /Apply filters/i }).click()
 
     cy.get('.moj-pagination').should('have.length', 2).eq(0).should('contain.text', 'Showing 1 to 1 of 1 result')
