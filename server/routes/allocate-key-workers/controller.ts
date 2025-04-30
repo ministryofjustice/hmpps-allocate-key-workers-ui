@@ -26,7 +26,7 @@ export class AllocateKeyWorkerController {
       location: req.query['location'],
       excludeActiveAllocations,
       records,
-      locations: locations.map(o => o.fullLocationPath),
+      locations: locations.map(o => ({ text: o.localName || o.fullLocationPath, value: o.fullLocationPath })),
       keyworkers: keyworkers
         .sort((a, b) => (a.numberAllocated > b.numberAllocated ? 1 : -1))
         .map(o => {

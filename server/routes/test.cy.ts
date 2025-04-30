@@ -123,17 +123,17 @@ context('test / homepage', () => {
     cy.findByRole('link', { name: /View all without a key worker$/i })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('to.equal', 'https://legacy.key-workers.url/manage-key-workers/allocate-key-worker')
+      .and('to.equal', '/allocate-key-workers?excludeActiveAllocations=true')
 
     cy.findByRole('link', { name: /View by residential location$/i })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('to.equal', 'https://legacy.key-workers.url/manage-key-workers/view-residential-location')
+      .and('to.equal', '/allocate-key-workers')
 
     cy.findByRole('link', { name: /Search for a prisoner$/i })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('to.equal', 'https://legacy.key-workers.url/manage-key-workers/search-for-prisoner')
+      .and('to.equal', '/allocate-key-workers')
 
     cy.findByRole('link', { name: /View key workers in your establishment$/i })
       .should('be.visible')
