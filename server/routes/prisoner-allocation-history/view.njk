@@ -31,7 +31,7 @@
   <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Prisoner key worker allocation history</h1>
   <hr />
 
-  <p class="govuk-heading-m govuk-!-margin-top-4 govuk-!-margin-bottom-4">Current and previous allocations: {{ allocationHistory.length }}</p>
+  <h2 class="govuk-heading-s govuk-!-margin-top-4 govuk-!-margin-bottom-4">Current and previous allocations: {{ allocationHistory.length }}</h2>
 
   <div class="govuk-!-width-one-half">
     {% for allocation in allocationHistory %}
@@ -55,12 +55,15 @@
         {{ govukSummaryList({
           card: {
             title: {
-              text: cardTitle
+              text: cardTitle,
+              classes: "allocation-summary-card__title"
             }
           },
           rows: [
             {
-              key: { text: "Establishment" },
+              key: {
+                text: "Establishment",
+                classes: "allocation-summary-list__key"},
               value: { text: allocation.prison.description }
             },
             {
