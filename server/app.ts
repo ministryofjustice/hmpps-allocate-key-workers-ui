@@ -30,6 +30,7 @@ import populateClientToken from './middleware/populateSystemClientToken'
 import breadcrumbs from './middleware/breadcrumbs'
 import populateUserPermissions from './middleware/permissionsMiddleware'
 import populateValidationErrors from './middleware/populateValidationErrors'
+import PrisonerImageRoutes from './routes/prisonerImageRoutes'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -55,6 +56,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
   app.use(populateClientToken())
+  app.get('/prisoner-image/:prisonerNumber', new PrisonerImageRoutes(services.prisonApiService).GET)
   app.get(
     /(.*)/,
     dpsComponents.getPageComponents({

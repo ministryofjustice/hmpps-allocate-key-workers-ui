@@ -97,6 +97,15 @@ export default {
       },
       agent: new AgentConfig(Number(get('KEYWORKER_API_TIMEOUT_RESPONSE', 20000))),
     },
+    prisonerSearchApi: {
+      url: get('PRISONER_SEARCH_API_URL', 'http://localhost:8082', requiredInProduction),
+      healthPath: '/health/ping',
+      timeout: {
+        response: Number(get('PRISONER_SEARCH_API_TIMEOUT_RESPONSE', 20000)),
+        deadline: Number(get('PRISONER_SEARCH_API_TIMEOUT_DEADLINE', 20000)),
+      },
+      agent: new AgentConfig(Number(get('PRISONER_SEARCH_API_TIMEOUT_RESPONSE', 20000))),
+    },
     prisonApi: {
       healthPath: '/health/ping',
       url: get('PRISON_API_URL', 'http://127.0.0.1:8080', requiredInProduction),

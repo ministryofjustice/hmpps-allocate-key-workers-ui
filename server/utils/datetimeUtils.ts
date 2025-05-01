@@ -68,3 +68,5 @@ export function getDateInReadableFormat(dateString: string) {
   const date = new Date(parseInt(split[2]!, 10), parseInt(split[1]!, 10) - 1, parseInt(split[0]!, 10))
   return `${date.getDate()} ${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`
 }
+
+export const formatDateTime = (value?: string) => value && format(new Date(Date.parse(value)), 'dd/MM/yyyy HH:mm')
