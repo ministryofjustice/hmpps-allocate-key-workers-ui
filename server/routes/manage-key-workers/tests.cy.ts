@@ -27,7 +27,7 @@ context('Manage key workers', () => {
       .should('contain.text', 'results')
 
     cy.get('#query').should('have.text', '')
-    cy.get('#status').should('have.value', 'ACTIVE')
+    cy.get('#status').should('have.value', '')
 
     cy.findByRole('button', { name: 'Apply filters' })
     cy.findByRole('link', { name: 'Clear' })
@@ -86,6 +86,7 @@ context('Manage key workers', () => {
     cy.get('.govuk-table__row').eq(4).children().eq(2).should('contain.text', '1')
     cy.get('.govuk-table__row').eq(5).children().eq(2).should('contain.text', '0')
 
+    cy.get('#status').select('ACTIVE')
     cy.get('#query').type('AVAILABLE-ACTIVE')
     cy.findByRole('button', { name: 'Apply filters' }).click()
 
