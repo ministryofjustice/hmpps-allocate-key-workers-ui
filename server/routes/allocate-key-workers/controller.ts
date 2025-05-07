@@ -61,6 +61,7 @@ export class AllocateKeyWorkerController {
 }
 
 function sanitizeQuery(query: string): string {
+  // Only allow: letters, spaces, (smart) apostrophes, hyphens, commas, periods, numbers
   if (query.match(/^[\p{L} .',0-9’-]+$/u)) {
     return query
   }
