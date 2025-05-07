@@ -12,10 +12,12 @@ export class PrisonerAllocationHistoryController {
     const prisoner = await this.prisonerSearchApiService.getPrisonerDetails(req, prisonerId)
     const keyworkerAllocations = await this.keyworkerApiService.getKeyworkerAllocations(req, prisonerId)
 
+    const searchParams = new URLSearchParams(req.query as Record<string, string>).toString()
+
     res.render('prisoner-allocation-history/view', {
       prisoner,
       allocationHistory: keyworkerAllocations.allocations,
-      backUrl: '/allocate-key-workers',
+      backUrl: `/allocate-key-workers${searchParams.length > 0 ? `?${searchParams}` : ''}`,
     })
   }
 }

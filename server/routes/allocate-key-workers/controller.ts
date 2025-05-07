@@ -21,7 +21,10 @@ export class AllocateKeyWorkerController {
     const locations = await this.locationsApiService.getResidentialLocations(req, prisonCode)
 
     const excludeActiveAllocations = req.query['excludeActiveAllocations'] === 'true'
+    const searchParams = new URLSearchParams(req.query as Record<string, string>).toString()
+
     res.render('allocate-key-workers/view', {
+      searchQuery: searchParams.length > 0 ? `?${searchParams}` : '',
       query: req.query['query'],
       location: req.query['location'],
       excludeActiveAllocations,
