@@ -1,0 +1,51 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "partials/submitButton/macro.njk" import submitButton %}
+
+{% set fullWidth = true %}
+{% set pageTitle = "Update capacity and status - Key worker profile - DPS" %}
+
+{% block innerContent %}
+
+  <div class="govuk-width-container">
+    <div class="govuk-grid-row govuk-!-margin-0">
+      <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0">{{ keyworker | firstNameSpaceLastName }}</h1>
+      <p class="govuk-!-margin-left-2 govuk-!-display-inline-block govuk-!-margin-0 "> {{ statusTag({ text: status.description }) }}</p>
+    </div>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <form method="post">
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-quarter left-aligned">
+          <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Establishment</h2>
+          <p>{{ prison.description }}</p>
+        </div>
+        <div class="govuk-grid-column-one-quarter left-aligned">
+          <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Schedule type</h2>
+          <p>{{ keyworker.scheduleType.description }}</p>
+        </div>
+        <div class="govuk-grid-column-one-quarter left-aligned">
+          <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Prisoners allocated</h2>
+          <p>{{ allocated }}</p>
+        </div>
+        <div class="govuk-grid-column-one-quarter left-aligned">
+          <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Maximum capacity</h2>
+          <p>17</p>
+        </div>
+        <div class="govuk-grid-column-one-quarter left-aligned">
+          <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Status</h2>
+          <p>Active</p>
+        </div>
+      </div>
+
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+
+      {{ submitButton({
+        text: "Save and continue"
+      }) }}
+    </form>
+
+  </div>
+
+{% endblock %}
