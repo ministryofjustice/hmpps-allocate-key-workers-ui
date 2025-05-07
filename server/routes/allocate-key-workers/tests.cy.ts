@@ -25,6 +25,20 @@ context('Profile Info', () => {
     checkResidentialLocationFilter()
   })
 
+  it('should handle invalid queries', () => {
+    navigateToTestPage()
+
+    cy.visit('/allocate-key-workers?query=<script>alert%28%27inject%27%29<%2Fscript>', { failOnStatusCode: false })
+    cy.findByRole('textbox', { name: /Name or prison number/ }).should('have.value', '')
+    cy.get('.govuk-table__row').should('have.length', 4)
+
+    cy.visit('/allocate-key-workers?cellLocationPrefix=<script>alert%28%27inject%27%29<%2Fscript>', {
+      failOnStatusCode: false,
+    })
+    cy.findByRole('combobox', { name: /Residential location/ }).should('have.value', '')
+    cy.get('.govuk-table__row').should('have.length', 4)
+  })
+
   const checkPageContentsNoFilter = () => {
     cy.findByRole('heading', { name: /Allocate key workers to prisoners/i }).should('be.visible')
     cy.findByRole('heading', { name: /Filter by/i }).should('be.visible')
@@ -119,7 +133,7 @@ context('Profile Info', () => {
       .should(
         'have.attr',
         'href',
-        '/prisoner-allocation-history/A2504EA?query=&location=&excludeActiveAllocations=true',
+        '/prisoner-allocation-history/A2504EA?query=&cellLocationPrefix=&excludeActiveAllocations=true',
       )
 
     cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'Capodilupo, Darwin')
@@ -159,7 +173,7 @@ context('Profile Info', () => {
       .should(
         'have.attr',
         'href',
-        '/prisoner-allocation-history/A2504EA?query=&location=3&excludeActiveAllocations=false',
+        '/prisoner-allocation-history/A2504EA?query=&cellLocationPrefix=3&excludeActiveAllocations=false',
       )
   }
 
@@ -183,7 +197,7 @@ context('Profile Info', () => {
       .should(
         'have.attr',
         'href',
-        '/prisoner-allocation-history/A4288DZ?query=Ayo&location=&excludeActiveAllocations=false',
+        '/prisoner-allocation-history/A4288DZ?query=Ayo&cellLocationPrefix=&excludeActiveAllocations=false',
       )
   }
 

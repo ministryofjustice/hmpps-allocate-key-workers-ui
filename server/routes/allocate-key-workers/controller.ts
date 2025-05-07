@@ -11,23 +11,31 @@ export class AllocateKeyWorkerController {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const prisonCode = res.locals.user.getActiveCaseloadId()!
-    const records = await this.keyworkerApiService.searchPrisoners(req, prisonCode, {
-      query: req.query['query']?.toString() || '',
-      cellLocationPrefix: req.query['location']?.toString() || '',
-      excludeActiveAllocations: req.query['excludeActiveAllocations'] === 'true',
-    })
 
     const keyworkers = await this.keyworkerApiService.getKeyworkerMembers(req, prisonCode, { status: 'ACTIVE' })
     const locations = await this.locationsApiService.getResidentialLocations(req, prisonCode)
 
-    const excludeActiveAllocations = req.query['excludeActiveAllocations'] === 'true'
-    const searchParams = new URLSearchParams(req.query as Record<string, string>).toString()
+    const query = {
+      query: sanitizeQuery(req.query['query']?.toString() || ''),
+      cellLocationPrefix: sanitizeLocation(
+        locations.map(o => o.fullLocationPath),
+        req.query['cellLocationPrefix']?.toString() || '',
+      ),
+      excludeActiveAllocations: req.query['excludeActiveAllocations'] === 'true',
+    }
+
+    const records = await this.keyworkerApiService.searchPrisoners(req, prisonCode, query)
+
+    const searchParams = new URLSearchParams({
+      ...query,
+      excludeActiveAllocations: String(query.excludeActiveAllocations),
+    }).toString()
 
     res.render('allocate-key-workers/view', {
-      searchQuery: searchParams.length > 0 ? `?${searchParams}` : '',
-      query: req.query['query'],
-      location: req.query['location'],
-      excludeActiveAllocations,
+      searchQuery: query.query || query.cellLocationPrefix || query.excludeActiveAllocations ? `?${searchParams}` : '',
+      query: query.query,
+      cellLocationPrefix: query.cellLocationPrefix,
+      excludeActiveAllocations: query.excludeActiveAllocations,
       records,
       locations: locations.map(o => ({ text: o.localName || o.fullLocationPath, value: o.fullLocationPath })),
       keyworkers: keyworkers
@@ -45,9 +53,25 @@ export class AllocateKeyWorkerController {
   POST = async (req: Request, res: Response): Promise<void> => {
     const params = new URLSearchParams({
       query: req.body.query || '',
-      location: req.body.location || '',
+      cellLocationPrefix: req.body.cellLocationPrefix || '',
       excludeActiveAllocations: req.body.excludeActiveAllocations || false,
     })
     return res.redirect(`/allocate-key-workers?${params.toString()}`)
   }
+}
+
+function sanitizeQuery(query: string): string {
+  if (query.match(/^[\p{L} .',0-9’-]+$/u)) {
+    return query
+  }
+
+  return ''
+}
+
+function sanitizeLocation(locations: string[], location: string): string {
+  if (locations.includes(location)) {
+    return location
+  }
+
+  return ''
 }
