@@ -1,5 +1,6 @@
 {% extends "partials/layout.njk" %}
 {% from "partials/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "partials/submitButton/macro.njk" import submitButton %}
 
@@ -31,15 +32,25 @@
         </div>
         <div class="govuk-grid-column-one-quarter left-aligned">
           <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Maximum capacity</h2>
-          <p>17</p>
+          {{ govukInput({
+            id: "capacity",
+            name: "capacity",
+            value: capacity,
+            classes: "govuk-!-width-one-quarter"
+          }) }}
         </div>
         <div class="govuk-grid-column-one-quarter left-aligned">
           <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Status</h2>
-          <p>Active</p>
+          {{ govukSelect({
+            id: "status",
+            name: "status",
+            items: statuses | setSelectedValue(status),
+            classes: "govuk-!-width-one-half"
+          }) }}
         </div>
       </div>
 
-      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-0" />
 
       {{ submitButton({
         text: "Save and continue"
