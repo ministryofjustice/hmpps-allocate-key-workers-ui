@@ -4,7 +4,7 @@ import { JourneyRouter } from '../base/routes'
 import { UpdateCapacityAndStatusController } from './controller'
 
 export const UpdateCapacityAndStatusRoutes = ({ keyworkerApiService }: Services) => {
-  const { router, get } = JourneyRouter()
+  const { router, get, post } = JourneyRouter()
   const controller = new UpdateCapacityAndStatusController(keyworkerApiService)
 
   get('/:staffId', async (req: Request, res: Response) => {
@@ -12,6 +12,8 @@ export const UpdateCapacityAndStatusRoutes = ({ keyworkerApiService }: Services)
 
     await controller.GET(req, res, staffId)
   })
+
+  post('/:staffId', controller.POST)
 
   return router
 }
