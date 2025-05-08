@@ -19,4 +19,13 @@ export class UpdateCapacityAndStatusController {
       showBreadcrumbs: true,
     })
   }
+
+  POST = async (req: Request, res: Response): Promise<void> => {
+    const prisonCode = res.locals.user.getActiveCaseloadId()!
+    const staffId = req.params['staffId'] as string
+    const updatedCapacity = req.body.capacity as number
+    const updatedStatus = req.body.status as string
+
+    await this.keyworkerApiService.updateKeyworkerProperties(req, prisonCode, staffId, updatedCapacity, updatedStatus)
+  }
 }
