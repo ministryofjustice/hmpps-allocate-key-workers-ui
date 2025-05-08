@@ -35,6 +35,6 @@ export class UpdateCapacityAndStatusController {
       updatedStatus,
     )
 
-    return res.redirect(`/update-capacity-status/${staffId}?updated=${success}`)
+    return res.redirect(`/key-worker-profile/${staffId}/update-capacity-status?updated=${success}`)
   }
 }
