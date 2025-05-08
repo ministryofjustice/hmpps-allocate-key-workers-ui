@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import { Services } from '../../services'
-import { JourneyRouter } from '../base/routes'
+import { Services } from '../../../services'
+import { JourneyRouter } from '../../base/routes'
 import { UpdateCapacityAndStatusController } from './controller'
 
 export const UpdateCapacityAndStatusRoutes = ({ keyworkerApiService }: Services) => {
