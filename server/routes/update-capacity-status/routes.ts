@@ -7,13 +7,13 @@ export const UpdateCapacityAndStatusRoutes = ({ keyworkerApiService }: Services)
   const { router, get, post } = JourneyRouter()
   const controller = new UpdateCapacityAndStatusController(keyworkerApiService)
 
-  get('/:staffId', async (req: Request, res: Response) => {
+  get('/', async (req: Request, res: Response) => {
     const staffId = req.params['staffId'] as string
 
     await controller.GET(req, res, staffId)
   })
 
-  post('/:staffId', controller.POST)
+  post('/', controller.POST)
 
   return router
 }
