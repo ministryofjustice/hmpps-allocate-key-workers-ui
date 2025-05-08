@@ -10,7 +10,7 @@ const createHttpStub = (
   queryParameters: object,
   bodyPatterns: Array<object> | undefined,
   status: number,
-  jsonBody?: object,
+  jsonBody?: object | boolean,
 ) => {
   return stubFor({
     request: { method, urlPathPattern, queryParameters, bodyPatterns },
@@ -260,18 +260,18 @@ const stubPrisonerAllocations = () =>
 const stubUpdateKeyworkerProperties = () =>
   createHttpStub(
     'POST',
-    '/keyworker-api/key-worker/.*/prison/.*',
+    '/keyworker-api/key-worker/485585/prison/LEI',
     undefined,
     [
       {
         equalToJson: {
-          capacity: 5,
+          capacity: '8',
           status: 'INACTIVE',
         },
       },
     ],
     200,
-    { content: true },
+    true,
   )
 
 const keyworkerManageResponse = {

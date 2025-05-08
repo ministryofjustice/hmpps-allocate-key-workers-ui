@@ -28,13 +28,20 @@ context('Update capacity and status', () => {
     cy.get('#status').should('have.value', 'ACTIVE')
   })
 
-  it('should update the keyworkers details', () => {
+  it("should update the keyworker's details", () => {
     navigateToTestPage()
+
+    cy.get('.govuk-notification-banner__heading').should('not.exist')
 
     cy.get('#capacity').clear().type('8')
     cy.get('#capacity').should('have.value', '8')
     cy.get('#status').select('INACTIVE')
     cy.get('#status').should('have.value', 'INACTIVE')
+    cy.findByRole('button', { name: /Save and continue/i }).click()
+
+    cy.get('.govuk-notification-banner__heading')
+      .should('exist')
+      .and('contain', "You have updated this keyworker's capacity.")
   })
 
   const navigateToTestPage = () => {
