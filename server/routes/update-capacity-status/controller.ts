@@ -17,6 +17,7 @@ export class UpdateCapacityAndStatusController {
       ...keyworkerData,
       statuses,
       showBreadcrumbs: true,
+      updated: req.query['updated'] === 'true',
     })
   }
 
@@ -26,6 +27,14 @@ export class UpdateCapacityAndStatusController {
     const updatedCapacity = req.body.capacity as number
     const updatedStatus = req.body.status as string
 
-    await this.keyworkerApiService.updateKeyworkerProperties(req, prisonCode, staffId, updatedCapacity, updatedStatus)
+    const success = await this.keyworkerApiService.updateKeyworkerProperties(
+      req,
+      prisonCode,
+      staffId,
+      updatedCapacity,
+      updatedStatus,
+    )
+
+    return res.redirect(`/update-capacity-status/${staffId}?updated=${success}`)
   }
 }

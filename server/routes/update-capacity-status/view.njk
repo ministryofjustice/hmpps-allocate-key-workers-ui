@@ -10,17 +10,18 @@
 
 {% block innerContent %}
 
-  {% set html %}
-    <h3 class="govuk-notification-banner__heading">
-      You have updated this keyworker's capacity.
-    </h3>
-  {% endset %}
+  {% if updated %}
+    {% set html %}
+      <h3 class="govuk-notification-banner__heading">
+        You have updated this keyworker's capacity.
+      </h3>
+    {% endset %}
 
-  {{ govukNotificationBanner({
-    html: html,
-    type: "success"
-  }) }}
-
+    {{ govukNotificationBanner({
+      html: html,
+      type: "success"
+    }) }}
+  {% endif %}
 
   <div class="govuk-width-container">
 
