@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
+import KeyworkerApiService from '../../../services/keyworkerApi/keyworkerApiService'
 
 export class UpdateCapacityAndStatusController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
