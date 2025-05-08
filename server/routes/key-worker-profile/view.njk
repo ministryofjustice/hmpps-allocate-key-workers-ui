@@ -15,10 +15,12 @@
 
     <div class="govuk-grid-row govuk-!-margin-0">
       <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0">{{ keyworker | firstNameSpaceLastName }}</h1>
-      <p class="govuk-!-margin-left-2 govuk-!-display-inline-block govuk-!-margin-0 "> {{ statusTag({ text: status.description }) }} </p>
+      <p class="govuk-!-margin-left-2 govuk-!-display-inline-block govuk-!-margin-0 ">
+        {{ statusTag({ text: status.description }) }}
+      </p>
       <a class="govuk-!-margin-left-2 govuk-link govuk-link--no-visited-state govuk-!-display-inline-block " href="/edit-key-worker-settings">Update capacity and status</a>
     </div>
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-quarter left-aligned">
@@ -42,9 +44,12 @@
       </div>
     </div>
 
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
 
-    <h2 class="govuk-body-l"><strong>Statistics for period:</strong> {{ stats.current.from | dateString }} to {{ stats.current.to | dateString }} </h2>
+    <h2 class="govuk-body-l">
+      <strong>Statistics for period:</strong>
+      {{ stats.current.from | dateString }} to {{ stats.current.to | dateString }}
+    </h2>
     <div class="govuk-grid-row">
       {{ statCard('Projected sessions', stats.current.projectedSessions, stats.previous.projectedSessions ) }}
 
@@ -55,15 +60,15 @@
       {{ statCard('Case notes written', stats.current.recordedEntries + stats.current.recordedSessions, stats.previous.recordedEntries + stats.previous.recordedSessions) }}
     </div>
 
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
 
-    <hr class="govuk-section-break govuk-section-break--m" />
+    <hr class="govuk-section-break govuk-section-break--m"/>
 
     <h2 class="govuk-heading-m govuk-!-display-inline">Current allocations</h2>
 
-      {% set rows = [] %}
-      {% for item in allocations %}
-        {% set rows = (rows.push([
+    {% set rows = [] %}
+    {% for item in allocations %}
+      {% set rows = (rows.push([
           {
             html: '<a class="govuk-link--no-visited-state" target="_blank" href="' + prisonerProfileUrl + '/prisoner/' + item.prisoner.prisonNumber + '">' + item.prisoner | lastNameCommaFirstName + "</a><br/>" + item.prisoner.prisonNumber,
             attributes: {
@@ -83,32 +88,24 @@
             text: item.latestSession.occurredAt | formatDateConcise | default('-', true) if item.latestSession else '-'
           },
           {
-            text: "Allocate Prisoner",
+            text: "Select keyworker",
             html: govukSelect({
-              id: "allocatePrisoner",
-              name: "allocatePrisoner",
+              id: "selectKeyworker",
+              name: "selectKeyworker",
+              text: 'Select key worker',
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: [
-                {
-                  value: 'reallocate',
-                  text: 'Reallocate'
-                },
-                {
-                  value: 'deallocate',
-                  text: 'Deallocate'
-                }
-              ] | addDefaultSelectedValue('No change', true)
-          })
+              items: keyworkers | excludeCurrentKeyworker(keyworker) | addSelectValue('Deallocate', true, 'deallocate', false) | addSelectValue('Select key worker')
+            })
           }
         ]), rows) %}
-      {% endfor %}
+    {% endfor %}
 
-      {% if allocations.length %}
-        {{ mojPagination(allocations.length) }}
+    {% if allocations.length %}
+      {{ mojPagination(allocations.length) }}
 
-        {{ govukTable({
+      {{ govukTable({
           attributes: {
             "data-module": "moj-sortable-table"
           },
@@ -156,16 +153,19 @@
           rows: rows
         }) }}
 
-        {{ mojPagination(allocations.length) }}
+      {{ mojPagination(allocations.length) }}
 
-      {% else %}
-        <p class="govuk-!-margin-bottom-6">There are no allocations for this keyworker.</p>
-      {% endif %}
+    {% else %}
+      <p class="govuk-!-margin-bottom-6">There are no allocations for this keyworker.</p>
+    {% endif %}
 
+    <form method="post" >
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
       {{ submitButton({
-        text: "Save changes"
+        text: "Save changes",
+        preventDoubleClick: true
       }) }}
-
+    </form>
   </div>
 
 {% endblock %}

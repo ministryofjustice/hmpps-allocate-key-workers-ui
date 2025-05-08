@@ -37,7 +37,7 @@
               label: {
                 text: "Residential location"
               },
-              items: locations | addDefaultSelectedValue('') | setSelectedValue(cellLocationPrefix)
+              items: locations | addSelectValue('') | setSelectedValue(cellLocationPrefix)
             }) }}
 
             {{ govukButton({
@@ -98,7 +98,7 @@
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: keyworkers | excludeCurrentKeyworker(item.keyworker)
+              items: keyworkers | excludeCurrentKeyworker(item.keyworker) | addSelectValue('Select key worker', true)
             })
           },
           {

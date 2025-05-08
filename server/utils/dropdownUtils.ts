@@ -5,10 +5,12 @@ interface SelectOption {
   attributes?: Record<string, string>
 }
 
-export const addDefaultSelectedValue = (
+export const addSelectValue = (
   items: SelectOption[] | null,
   text: string,
-  show: boolean,
+  show: boolean = true,
+  value: string = '',
+  selected: boolean = true,
 ): SelectOption[] | null => {
   if (!items) return null
   const attributes: Record<string, string> = {}
@@ -17,8 +19,8 @@ export const addDefaultSelectedValue = (
   return [
     {
       text,
-      value: '',
-      selected: true,
+      value,
+      selected,
       attributes,
     },
     ...items,

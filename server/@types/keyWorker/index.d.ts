@@ -646,11 +646,6 @@ export interface components {
     PersonStaffAllocations: {
       allocations: components['schemas']['PersonStaffAllocation'][]
       deallocations: components['schemas']['PersonStaffDeallocation'][]
-      personIdentifiersToAllocate: string[]
-      staffIdsToAllocate: number[]
-      personIdentifiersToDeallocate: string[]
-      staffIdsToDeallocate: number[]
-      isEmpty: boolean
     }
     PersonStaffDeallocation: {
       personIdentifier: string
