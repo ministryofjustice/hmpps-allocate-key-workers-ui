@@ -148,6 +148,22 @@ const stubKeyworkerMembersStatus = () =>
     { content: keyworkerManageResponse.content.filter(o => o.status.code === 'INA') },
   )
 
+const stubKeyworkerMembersStatusActive = () =>
+  createHttpStub(
+    'POST',
+    '/keyworker-api/search/prisons/LEI/keyworkers',
+    undefined,
+    [
+      {
+        equalToJson: {
+          status: 'ACTIVE',
+        },
+      },
+    ],
+    200,
+    { content: keyworkerManageResponse.content.filter(o => o.status.code === 'ACT') },
+  )
+
 const stubKeyworkerDetails = () =>
   createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/keyworkers/485585', 200, keyworkerDetailsResponse)
 
@@ -643,4 +659,5 @@ export default {
   stubSearchPrisoner,
   stubSearchPrisonersWithExcludeAllocations,
   stubPrisonerAllocations,
+  stubKeyworkerMembersStatusActive,
 }

@@ -9,6 +9,7 @@ context('Profile Info', () => {
     cy.task('stubSearchPrisoner')
     cy.task('stubKeyworkerMembersAll')
     cy.task('stubSearchPrisonersWithExcludeAllocations')
+    cy.task('stubKeyworkerMembersStatusActive')
   })
 
   it('should load page correctly', () => {
