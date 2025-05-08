@@ -44,7 +44,7 @@
           {{ govukSelect({
             id: "status",
             name: "status",
-            items: statuses | setSelectedValue(status),
+            items: statuses | setSelectedValue(status.code),
             classes: "govuk-!-width-one-half"
           }) }}
         </div>
