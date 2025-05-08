@@ -84,10 +84,9 @@ const stubKeyworkerMembersAll = () =>
     undefined,
     [
       {
-        doesNotMatch: '.*"query".*',
         equalToJson: {
-          name: 'query',
-          values: ['ALL'],
+          query: '',
+          status: 'ALL',
         },
       },
     ],

@@ -10,6 +10,20 @@ context('Manage key workers', () => {
     cy.task('stubKeyworkerStatuses')
   })
 
+  it('should handle invalid queries', () => {
+    navigateToTestPage()
+
+    cy.visit('/manage-key-workers?query=<script>alert%28%27inject%27%29<%2Fscript>', { failOnStatusCode: false })
+    cy.get('#query').should('have.value', '')
+    cy.get('.govuk-table__row').should('have.length', 6)
+
+    cy.visit('/manage-key-workers?status=<script>alert%28%27inject%27%29<%2Fscript>', {
+      failOnStatusCode: false,
+    })
+    cy.get('#status').should('have.value', '')
+    cy.get('.govuk-table__row').should('have.length', 6)
+  })
+
   it('happy path', () => {
     navigateToTestPage()
 

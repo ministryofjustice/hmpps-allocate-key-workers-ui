@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import { lastNameCommaFirstName } from '../../utils/formatUtils'
 import LocationsInsidePrisonApiService from '../../services/locationsInsidePrisonApi/locationsInsidePrisonApiService'
+import { sanitizeQueryName, sanitizeSelectValue } from '../../middleware/validationMiddleware'
 
 export class AllocateKeyWorkerController {
   constructor(
@@ -16,8 +17,8 @@ export class AllocateKeyWorkerController {
     const locations = await this.locationsApiService.getResidentialLocations(req, prisonCode)
 
     const query = {
-      query: sanitizeQuery(req.query['query']?.toString() || ''),
-      cellLocationPrefix: sanitizeLocation(
+      query: sanitizeQueryName(req.query['query']?.toString() || ''),
+      cellLocationPrefix: sanitizeSelectValue(
         locations.map(o => o.fullLocationPath),
         req.query['cellLocationPrefix']?.toString() || '',
       ),
@@ -58,21 +59,4 @@ export class AllocateKeyWorkerController {
     })
     return res.redirect(`/allocate-key-workers?${params.toString()}`)
   }
-}
-
-function sanitizeQuery(query: string): string {
-  // Only allow: letters, spaces, (smart) apostrophes, hyphens, commas, periods, numbers
-  if (query.match(/^[\p{L} .',0-9’-]+$/u)) {
-    return query
-  }
-
-  return ''
-}
-
-function sanitizeLocation(locations: string[], location: string): string {
-  if (locations.includes(location)) {
-    return location
-  }
-
-  return ''
 }
