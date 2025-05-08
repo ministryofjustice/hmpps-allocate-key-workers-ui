@@ -32,12 +32,12 @@
             }) }}
 
             {{ govukSelect({
-              id: "location",
-              name: "location",
+              id: "cellLocationPrefix",
+              name: "cellLocationPrefix",
               label: {
                 text: "Residential location"
               },
-              items: locations | addDefaultSelectedValue('') | setSelectedValue(location)
+              items: locations | addDefaultSelectedValue('') | setSelectedValue(cellLocationPrefix)
             }) }}
 
             {{ govukButton({
@@ -102,7 +102,7 @@
             })
           },
           {
-            html: '<a class="govuk-link govuk-link--no-visited-state" href="/prisoner-allocation-history/' + item.personIdentifier + '">View allocation history</a>' if item.hasAllocationHistory else ''
+            html: '<a class="govuk-link govuk-link--no-visited-state" href="/prisoner-allocation-history/' + item.personIdentifier + searchQuery + '">View allocation history</a>' if item.hasAllocationHistory else ''
           }
         ]), rows) %}
     {% endfor %}

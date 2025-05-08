@@ -9,6 +9,7 @@ context('Profile Info', () => {
     cy.task('stubSearchPrisoner')
     cy.task('stubKeyworkerMembersAll')
     cy.task('stubSearchPrisonersWithExcludeAllocations')
+    cy.task('stubKeyworkerMembersStatusActive')
   })
 
   it('should load page correctly', () => {
@@ -23,6 +24,20 @@ context('Profile Info', () => {
     checkNameOrPrisonNumberFilter()
 
     checkResidentialLocationFilter()
+  })
+
+  it('should handle invalid queries', () => {
+    navigateToTestPage()
+
+    cy.visit('/allocate-key-workers?query=<script>alert%28%27inject%27%29<%2Fscript>', { failOnStatusCode: false })
+    cy.findByRole('textbox', { name: /Name or prison number/ }).should('have.value', '')
+    cy.get('.govuk-table__row').should('have.length', 4)
+
+    cy.visit('/allocate-key-workers?cellLocationPrefix=<script>alert%28%27inject%27%29<%2Fscript>', {
+      failOnStatusCode: false,
+    })
+    cy.findByRole('combobox', { name: /Residential location/ }).should('have.value', '')
+    cy.get('.govuk-table__row').should('have.length', 4)
   })
 
   const checkPageContentsNoFilter = () => {
@@ -116,7 +131,11 @@ context('Profile Info', () => {
       .should('contain.text', 'View allocation history')
       .children()
       .eq(0)
-      .should('have.attr', 'href', '/prisoner-allocation-history/A2504EA')
+      .should(
+        'have.attr',
+        'href',
+        '/prisoner-allocation-history/A2504EA?query=&cellLocationPrefix=&excludeActiveAllocations=true',
+      )
 
     cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'Capodilupo, Darwin')
     cy.get('.govuk-table__row').eq(2).children().eq(1).should('contain.text', '4-2-031')
@@ -146,6 +165,17 @@ context('Profile Info', () => {
 
     cy.get('.govuk-table__row').should('have.length', 2)
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Bogisich, Astrid')
+    cy.get('.govuk-table__row')
+      .eq(1)
+      .children()
+      .eq(4)
+      .children()
+      .eq(0)
+      .should(
+        'have.attr',
+        'href',
+        '/prisoner-allocation-history/A2504EA?query=&cellLocationPrefix=3&excludeActiveAllocations=false',
+      )
   }
 
   const checkNameOrPrisonNumberFilter = () => {
@@ -159,6 +189,17 @@ context('Profile Info', () => {
 
     cy.get('.govuk-table__row').should('have.length', 2)
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Ayo, Zakira')
+    cy.get('.govuk-table__row')
+      .eq(1)
+      .children()
+      .eq(4)
+      .children()
+      .eq(0)
+      .should(
+        'have.attr',
+        'href',
+        '/prisoner-allocation-history/A4288DZ?query=Ayo&cellLocationPrefix=&excludeActiveAllocations=false',
+      )
   }
 
   const navigateToTestPage = () => {

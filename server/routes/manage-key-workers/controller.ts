@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import KeyworkerApiClient from '../../services/keyworkerApi/keyworkerApiClient'
+import { sanitizeQueryName, sanitizeSelectValue } from '../../middleware/validationMiddleware'
 
 export class ManageKeyWorkersController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
@@ -18,18 +19,25 @@ export class ManageKeyWorkersController {
       return { value: keyworkerStatus.code, text: keyworkerStatus.description }
     })
 
-    const { query, status } = req.query || {}
+    const query = {
+      query: sanitizeQueryName(req.query['query']?.toString() || ''),
+      status: sanitizeSelectValue(
+        keyworkerStatuses.map(o => o.code),
+        req.query['status']?.toString() || 'ALL',
+        'ALL',
+      ),
+    }
 
     const data = await this.keyworkerApiService.getKeyworkerMembers(req, activeCaseLoad!.caseLoadId, {
-      query,
-      status: status || 'ALL',
+      query: query.query,
+      status: query.status,
     } as Parameters<KeyworkerApiClient['getKeyworkerMembers']>[1])
 
     res.render('manage-key-workers/view', {
-      params: req.query,
+      params: query,
       showBreadcrumbs: true,
       records: data,
-      status: statuses.map(o => ({ ...o, selected: o.value === status })),
+      status: statuses.map(o => ({ ...o, selected: o.value === query.status })),
     })
   }
 

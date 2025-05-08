@@ -84,10 +84,9 @@ const stubKeyworkerMembersAll = () =>
     undefined,
     [
       {
-        doesNotMatch: '.*"query".*',
         equalToJson: {
-          name: 'query',
-          values: ['ALL'],
+          query: '',
+          status: 'ALL',
         },
       },
     ],
@@ -147,6 +146,22 @@ const stubKeyworkerMembersStatus = () =>
     ],
     200,
     { content: keyworkerManageResponse.content.filter(o => o.status.code === 'INA') },
+  )
+
+const stubKeyworkerMembersStatusActive = () =>
+  createHttpStub(
+    'POST',
+    '/keyworker-api/search/prisons/LEI/keyworkers',
+    undefined,
+    [
+      {
+        equalToJson: {
+          status: 'ACTIVE',
+        },
+      },
+    ],
+    200,
+    { content: keyworkerManageResponse.content.filter(o => o.status.code === 'ACT') },
   )
 
 const stubKeyworkerDetails = () =>
@@ -644,4 +659,5 @@ export default {
   stubSearchPrisoner,
   stubSearchPrisonersWithExcludeAllocations,
   stubPrisonerAllocations,
+  stubKeyworkerMembersStatusActive,
 }

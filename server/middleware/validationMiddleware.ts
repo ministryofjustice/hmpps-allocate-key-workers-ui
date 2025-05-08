@@ -134,3 +134,20 @@ export const validateTransformFutureDate = (requiredErr: string, invalidErr: str
     })
     .transform(date => date.toISOString().substring(0, 10))
 }
+
+export const sanitizeSelectValue = (items: string[], value: string, defaultValue: string = ''): string => {
+  if (items.includes(value)) {
+    return value
+  }
+
+  return defaultValue
+}
+
+export const sanitizeQueryName = (query: string, defaultValue: string = ''): string => {
+  // Only allow: letters, spaces, (smart) apostrophes, hyphens, commas, periods, numbers
+  if (query.match(/^[\p{L} .',0-9’-]+$/u)) {
+    return query
+  }
+
+  return defaultValue
+}

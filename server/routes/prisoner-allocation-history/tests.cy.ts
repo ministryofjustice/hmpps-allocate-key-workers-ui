@@ -8,8 +8,23 @@ context('Prisoner Allocation History', () => {
     cy.task('stubPrisonerAllocations')
   })
 
+  it('adds back query params on the back link', () => {
+    cy.signIn({ failOnStatusCode: false })
+    cy.visit('/prisoner-allocation-history/A9965EA?query=&location=&excludeActiveAllocations=true', {
+      failOnStatusCode: false,
+    })
+
+    cy.findByRole('link', { name: /back/i }).should(
+      'have.attr',
+      'href',
+      '/allocate-key-workers?query=&location=&excludeActiveAllocations=true',
+    )
+  })
+
   it('happy path', () => {
     navigateToTestPage()
+
+    cy.findByRole('link', { name: /back/i }).should('have.attr', 'href', '/allocate-key-workers')
 
     cy.get('.govuk-link--no-visited-state').eq(0).should('have.text', 'Cat, Tabby')
     cy.findByText('A9965EA')
