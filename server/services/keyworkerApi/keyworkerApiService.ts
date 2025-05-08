@@ -66,4 +66,19 @@ export default class KeyworkerApiService {
   ): ReturnType<KeyworkerApiClient['putAllocationDeallocations']> {
     return this.keyworkerApiClientBuilder(req.systemClientToken).putAllocationDeallocations(prisonCode, data)
   }
+
+  updateKeyworkerProperties(
+    req: Request,
+    prisonCode: string,
+    staffId: string,
+    capacity: number,
+    status: string,
+  ): ReturnType<KeyworkerApiClient['updateKeyworkerProperties']> {
+    return this.keyworkerApiClientBuilder(req.systemClientToken).updateKeyworkerProperties(
+      prisonCode,
+      staffId,
+      capacity,
+      status,
+    )
+  }
 }

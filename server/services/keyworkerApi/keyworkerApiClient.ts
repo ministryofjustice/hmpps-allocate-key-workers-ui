@@ -127,4 +127,21 @@ export default class KeyworkerApiClient {
 
     return response
   }
+
+  async updateKeyworkerProperties(
+    prisonCode: string,
+    staffId: string,
+    capacity: number,
+    status: string,
+  ): Promise<boolean> {
+    const response = await this.restClient.post<boolean>({
+      path: `/key-worker/${staffId}/prison/${prisonCode}`,
+      data: {
+        capacity,
+        status,
+      },
+    })
+
+    return response
+  }
 }
