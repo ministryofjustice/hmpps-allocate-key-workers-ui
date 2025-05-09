@@ -13,7 +13,7 @@ export class UpdateCapacityAndStatusController {
       return { value: keyworkerStatus.code, text: keyworkerStatus.description }
     })
 
-    res.render('update-capacity-status/view', {
+    res.render('key-worker-profile/update-capacity-status/view', {
       ...keyworkerData,
       statuses,
       showBreadcrumbs: true,
