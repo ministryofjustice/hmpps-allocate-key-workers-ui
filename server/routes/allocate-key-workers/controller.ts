@@ -1,19 +1,19 @@
 import { Request, Response } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
-import { lastNameCommaFirstName } from '../../utils/formatUtils'
 import LocationsInsidePrisonApiService from '../../services/locationsInsidePrisonApi/locationsInsidePrisonApiService'
 import { sanitizeQueryName, sanitizeSelectValue } from '../../middleware/validationMiddleware'
+import { ChangeKeyWorkerController } from '../base/changeKeyWorkerController'
 
-export class AllocateKeyWorkerController {
+export class AllocateKeyWorkerController extends ChangeKeyWorkerController {
   constructor(
-    private readonly keyworkerApiService: KeyworkerApiService,
+    keyworkerApiService: KeyworkerApiService,
     private readonly locationsApiService: LocationsInsidePrisonApiService,
-  ) {}
+  ) {
+    super(keyworkerApiService)
+  }
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const prisonCode = res.locals.user.getActiveCaseloadId()!
-
-    const keyworkers = await this.keyworkerApiService.getKeyworkerMembers(req, prisonCode, { status: 'ACTIVE' })
     const locations = await this.locationsApiService.getResidentialLocations(req, prisonCode)
 
     const query = {
@@ -39,19 +39,12 @@ export class AllocateKeyWorkerController {
       excludeActiveAllocations: query.excludeActiveAllocations,
       records,
       locations: locations.map(o => ({ text: o.localName || o.fullLocationPath, value: o.fullLocationPath })),
-      keyworkers: keyworkers
-        .sort((a, b) => (a.numberAllocated > b.numberAllocated ? 1 : -1))
-        .map(o => {
-          return {
-            text: `${lastNameCommaFirstName(o)} (allocations: ${o.numberAllocated})`,
-            value: o.staffId,
-          }
-        }),
+      ...(await this.getChangeKeyworkerData(req, res)),
       showBreadcrumbs: true,
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  override POST = async (req: Request, res: Response): Promise<void> => {
     const params = new URLSearchParams({
       query: req.body.query || '',
       cellLocationPrefix: req.body.cellLocationPrefix || '',

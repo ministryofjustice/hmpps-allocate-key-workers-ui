@@ -43,6 +43,7 @@ export default function createApp(services: Services): express.Application {
   app.set('trust proxy', true)
   app.set('port', process.env.PORT || 3000)
 
+  app.use(express.urlencoded({ extended: true, parameterLimit: 10000 }))
   app.use(sentryMiddleware())
   app.use(appInsightsMiddleware())
   app.use(setUpHealthChecks(services.applicationInfo))

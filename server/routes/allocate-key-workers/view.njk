@@ -74,9 +74,11 @@
 
     </div>
 
-    {% set rows = [] %}
-    {% for item in records %}
-      {% set rows = (rows.push([
+    <form method="post" >
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+      {% set rows = [] %}
+      {% for item in records %}
+        {% set rows = (rows.push([
           {
             html: '<a class="govuk-link--no-visited-state" target="_blank" href="' + prisonerProfileUrl + '/prisoner/' + item.personIdentifier + '">' + item | lastNameCommaFirstName + "</a><br/>" + item.personIdentifier,
             attributes: {
@@ -98,18 +100,18 @@
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: keyworkers | excludeCurrentKeyworker(item.keyworker) | addSelectValue('Select key worker', true)
+              items: keyworkers | excludeCurrentKeyworker(item.keyworker) | addSelectValue('Deallocate', true, 'deallocate:' + item.keyworker.staffId, false) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select key worker')
             })
           },
           {
             html: '<a class="govuk-link govuk-link--no-visited-state" href="/prisoner-allocation-history/' + item.personIdentifier + searchQuery + '">View allocation history</a>' if item.hasAllocationHistory else ''
           }
         ]), rows) %}
-    {% endfor %}
+      {% endfor %}
 
-    {{ mojPagination(records.length) }}
+      {{ mojPagination(records.length) }}
 
-    {{ govukTable({
+      {{ govukTable({
           attributes: {
             "data-module": "moj-sortable-table"
           },
@@ -147,12 +149,12 @@
           rows: rows
         }) }}
 
-    {{ mojPagination(records.length) }}
+      {{ mojPagination(records.length) }}
 
-    {{ govukButton({
+      {{ govukButton({
         text: "Save changes",
         preventDoubleClick: true
       }) }}
-
+    </form>
   </div>
 {% endblock %}

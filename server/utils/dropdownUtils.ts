@@ -40,5 +40,13 @@ export const excludeCurrentKeyworker = (
   currentKeyworker: { staffId: string } | null,
 ): SelectOption[] => {
   if (!currentKeyworker || !items) return items
-  return items.filter(o => o.value !== currentKeyworker.staffId)
+  return items.filter(o => !o.value.toString().endsWith(`:${currentKeyworker.staffId}`))
+}
+
+export const excludeDeallocate = (items: SelectOption[]): SelectOption[] => {
+  return items.filter(o => !o.value.toString().endsWith('deallocate'))
+}
+
+export const mergePrisonerKeyworkerIds = (items: SelectOption[], prisonerId: string): SelectOption[] => {
+  return items.map(o => ({ ...o, value: `${prisonerId}:${o.value}` }))
 }

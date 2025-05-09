@@ -13,11 +13,7 @@ export const KeyWorkerProfileRoutes = ({ keyworkerApiService }: Services) => {
     await controller.GET(req, res, staffId)
   })
 
-  post('/:staffId', async (req: Request, res: Response) => {
-    const staffId = req.params['staffId'] as string
-
-    await controller.POST(req, res, staffId)
-  })
+  post('/:staffId', controller.POST)
 
   return router
 }
