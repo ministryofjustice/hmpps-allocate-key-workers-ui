@@ -134,8 +134,8 @@ export default class KeyworkerApiClient {
     capacity: number,
     status: string,
   ): Promise<boolean> {
-    const response = await this.restClient.post<boolean>({
-      path: `/key-worker/${staffId}/prison/${prisonCode}`,
+    const response = await this.restClient.put<boolean>({
+      path: `/prisons/${prisonCode}/keyworkers/${staffId}`,
       data: {
         capacity,
         status,

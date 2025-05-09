@@ -259,8 +259,8 @@ const stubPrisonerAllocations = () =>
 
 const stubUpdateKeyworkerProperties = () =>
   createHttpStub(
-    'POST',
-    '/keyworker-api/key-worker/485585/prison/LEI',
+    'PUT',
+    '/keyworker-api/prisons/.*/keyworkers/.*',
     undefined,
     [
       {
