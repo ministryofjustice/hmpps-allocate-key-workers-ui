@@ -31,6 +31,7 @@ import breadcrumbs from './middleware/breadcrumbs'
 import populateUserPermissions from './middleware/permissionsMiddleware'
 import populateValidationErrors from './middleware/populateValidationErrors'
 import PrisonerImageRoutes from './routes/prisonerImageRoutes'
+import { handleApiError } from './middleware/handleApiError'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -89,6 +90,7 @@ export default function createApp(services: Services): express.Application {
   if (config.sentry.dsn) Sentry.setupExpressErrorHandler(app)
 
   app.use((_req, res) => res.notFound())
+  app.use(handleApiError)
   app.use(errorHandler(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'e2e-test'))
   return app
 }
