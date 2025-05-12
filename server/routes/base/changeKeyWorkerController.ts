@@ -53,7 +53,6 @@ export class ChangeKeyWorkerController {
       await this.keyworkerApiService.putAllocationDeallocations(req, res.locals.user.getActiveCaseloadId()!, apiBody)
       req.flash('successCount', String(apiBody.allocations.length + apiBody.deallocations.length))
     } catch (e) {
-      console.error(e)
       req.flash('errorCount', String(apiBody.allocations.length + apiBody.deallocations.length))
     }
 
@@ -62,7 +61,6 @@ export class ChangeKeyWorkerController {
 }
 
 function getActionableKeyworkersFromBody(req: Request) {
-  console.log(JSON.stringify(req.body))
   if (!req.body.selectKeyworker) {
     return []
   }
