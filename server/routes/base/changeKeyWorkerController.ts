@@ -52,7 +52,7 @@ export class ChangeKeyWorkerController {
     try {
       await this.keyworkerApiService.putAllocationDeallocations(req, res.locals.user.getActiveCaseloadId()!, apiBody)
       req.flash('successCount', String(apiBody.allocations.length + apiBody.deallocations.length))
-    } catch (_e) {
+    } catch {
       req.flash('errorCount', String(apiBody.allocations.length + apiBody.deallocations.length))
     }
 
