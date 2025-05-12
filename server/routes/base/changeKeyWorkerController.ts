@@ -25,7 +25,7 @@ export class ChangeKeyWorkerController {
     }
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  submitToApi = async (req: Request, res: Response): Promise<void> => {
     const apiBody: components['schemas']['PersonStaffAllocations'] = {
       allocations: [],
       deallocations: [],

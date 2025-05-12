@@ -13,7 +13,7 @@ export const KeyWorkerProfileRoutes = ({ keyworkerApiService }: Services) => {
     await controller.GET(req, res, staffId)
   })
 
-  post('/:staffId', controller.POST)
+  post('/:staffId', controller.submitToApi)
 
   return router
 }

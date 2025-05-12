@@ -5,36 +5,14 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "./components/statCard.njk" import statCard %}
 {% from "partials/mojPagination/macro.njk" import mojPagination %}
+{% from "partials/deallocateSuccessError/macro.njk" import deallocateSuccessError %}
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
 
 {% set fullWidth = true %}
 {% set pageTitle = "Key Worker Profile" %}
 
 {% block pageHeader %}
-  <br/>
-  {% if errorCount or successCount %}
-    {% set successHtml %}
-      <p>You have successfully made changes to {{ successCount }} prisoner{{ '' if successCount == 1 else 's' }}.</p>
-    {% endset %}
-    {% set errorHtml %}
-      <p class="govuk-!-margin-bottom-6">
-          This is because there are not enough key workers with available capacity.
-        </p>
-      <p class="govuk-!-margin-bottom-6">
-          To assign unallocated prisoners, you can:
-          <ul class="govuk-list govuk-list--bullet">
-          <li>view all prisoners without a key worker and manually allocate key workers</li>
-          <li>increase the capacity of your key workers</li>
-        </ul>
-      </p>
-    {% endset %}
-    {{ mojAlert({
-      variant: "warning" if errorCount else "success",
-      title: ('Key workers could not be assigned to ' + errorCount + ' prisoners') if errorCount else 'Changes made successfully',
-      showTitleAsHeading: true,
-      html: errorHtml if errorCount else successHtml
-    }) }}
-  {% endif %}
+  {{ deallocateSuccessError(errorCount, successCount) }}
 {% endblock %}
 
 {% block innerContent %}
@@ -124,7 +102,7 @@
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: keyworkers | excludeCurrentKeyworker(keyworker) | addSelectValue('Deallocate', true, 'deallocate:' + keyworker.staffId, false) | mergePrisonerKeyworkerIds(item.prisoner.prisonNumber) |addSelectValue('Select key worker')
+              items: keyworkers | excludeCurrentKeyworker(keyworker) | addSelectValue('Deallocate', true, 'deallocate:' + keyworker.staffId, false) | mergePrisonerKeyworkerIds(item.prisoner.prisonNumber) | addSelectValue('Select key worker')
             })
           }
         ]), rows) %}
