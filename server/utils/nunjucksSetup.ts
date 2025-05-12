@@ -9,7 +9,13 @@ import logger from '../../logger'
 import { formatDateConcise, formatDateTime, getDateInReadableFormat, todayStringGBFormat } from './datetimeUtils'
 import { findError } from '../middleware/validationMiddleware'
 import { firstNameSpaceLastName, lastNameCommaFirstName, nameCase } from './formatUtils'
-import { addSelectValue, excludeCurrentKeyworker, mergePrisonerKeyworkerIds, setSelectedValue } from './dropdownUtils'
+import {
+  addSelectValue,
+  conditionallyAddDeallocate,
+  excludeCurrentKeyworker,
+  mergePrisonerKeyworkerIds,
+  setSelectedValue,
+} from './dropdownUtils'
 import { formatValue, getStatChange } from './statsUtils'
 
 export default function nunjucksSetup(app: express.Express): void {
@@ -68,4 +74,5 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('excludeCurrentKeyworker', excludeCurrentKeyworker)
   njkEnv.addFilter('formatDateTime', formatDateTime)
   njkEnv.addFilter('mergePrisonerKeyworkerIds', mergePrisonerKeyworkerIds)
+  njkEnv.addFilter('conditionallyAddDeallocate', conditionallyAddDeallocate)
 }

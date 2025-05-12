@@ -70,6 +70,11 @@
 
     <hr class="govuk-section-break govuk-section-break--m"/>
 
+    <p>Select key workers from the dropdown lists to reallocate or deallocate prisoners.</p>
+    <p>Key workers will only be allocated when you save your changes.</p>
+
+    <br />
+
     <h2 class="govuk-heading-m govuk-!-display-inline">Current allocations</h2>
 
     {% set rows = [] %}
@@ -102,7 +107,7 @@
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: keyworkers | excludeCurrentKeyworker(keyworker) | addSelectValue('Deallocate', true, 'deallocate:' + keyworker.staffId, false) | mergePrisonerKeyworkerIds(item.prisoner.prisonNumber) | addSelectValue('Select key worker')
+              items: keyworkers | excludeCurrentKeyworker(keyworker) | conditionallyAddDeallocate(keyworker.staffId) | mergePrisonerKeyworkerIds(item.prisoner.prisonNumber) | addSelectValue('Select key worker')
             })
           }
         ]), rows) %}

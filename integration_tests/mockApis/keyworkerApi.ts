@@ -24,6 +24,65 @@ const createHttpStub = (
   })
 }
 
+const stubPutDeallocationSuccess = () => {
+  return createHttpStub(
+    'PUT',
+    '/keyworker-api/prisons/LEI/prisoners/keyworkers',
+    undefined,
+    [
+      {
+        equalToJson: {
+          allocations: [],
+          deallocations: [
+            {
+              personIdentifier: 'A4288DZ',
+              staffId: 488095,
+              deallocationReason: 'MANUAL',
+            },
+          ],
+        },
+      },
+    ],
+    204,
+    { content: [] },
+  )
+}
+
+const stubPutAllocationSuccess = () => {
+  return createHttpStub(
+    'PUT',
+    '/keyworker-api/prisons/LEI/prisoners/keyworkers',
+    undefined,
+    [
+      {
+        equalToJson: {
+          allocations: [
+            {
+              personIdentifier: 'A4288DZ',
+              staffId: 488096,
+              allocationReason: 'MANUAL',
+            },
+            {
+              personIdentifier: 'A2504EA',
+              staffId: 488096,
+              allocationReason: 'MANUAL',
+            },
+          ],
+          deallocations: [],
+        },
+      },
+    ],
+    204,
+    { content: [] },
+  )
+}
+
+const stubPutAllocationFail = () => {
+  return createHttpStub('PUT', '/keyworker-api/prisons/LEI/prisoners/keyworkers', undefined, undefined, 500, {
+    content: [],
+  })
+}
+
 const stubKeyworkerApiHealth = () => createBasicHttpStub('GET', '/keyworker-api/health/ping', 200, { status: 'UP' })
 
 const stubKeyworkerApiStatusIsKeyworker = (isKeyworker: boolean) =>
@@ -165,7 +224,7 @@ const stubKeyworkerMembersStatusActive = () =>
   )
 
 const stubKeyworkerDetails = () =>
-  createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/keyworkers/485585', 200, keyworkerDetailsResponse)
+  createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/keyworkers/488095', 200, keyworkerDetailsResponse)
 
 const stubKeyWorkerStatsWithNullPreviousValues = () =>
   createKeyworkerStatsStub('.+', '.+', {
@@ -204,6 +263,19 @@ const keyworkerManageResponse = {
     {
       staffId: 488095,
       firstName: 'AVAILABLE-ACTIVE',
+      lastName: 'KEY-WORKER',
+      status: {
+        code: 'ACT',
+        description: 'Active',
+      },
+      capacity: 28,
+      numberAllocated: 32,
+      autoAllocationAllowed: true,
+      numberOfKeyworkerSessions: 0,
+    },
+    {
+      staffId: 488096,
+      firstName: 'AVAILABLE-ACTIVE2',
       lastName: 'KEY-WORKER',
       status: {
         code: 'ACT',
@@ -399,7 +471,7 @@ const keyworkerStatisticsResponse = {
 
 const keyworkerDetailsResponse = {
   keyworker: {
-    staffId: 485585,
+    staffId: 488095,
     firstName: 'AVAILABLE-ACTIVE',
     lastName: 'KEY-WORKER',
     scheduleType: {
@@ -420,11 +492,25 @@ const keyworkerDetailsResponse = {
   allocations: [
     {
       prisoner: {
-        prisonNumber: 'A9013EA',
-        firstName: 'SECOND',
-        lastName: 'BLUE',
+        prisonNumber: 'A4288DZ',
+        firstName: 'ZAKIRA',
+        lastName: 'AYO',
         csra: 'Standard',
-        cellLocation: '	1-2-011',
+        cellLocation: '1-1-035',
+        releaseDate: '2025-02-01',
+      },
+      location: 'Leeds',
+      latestSession: {
+        occurredAt: '2025-01-23',
+      },
+    },
+    {
+      prisoner: {
+        prisonNumber: 'A2504EA',
+        firstName: 'ASTRID',
+        lastName: 'BOGISICH',
+        csra: 'Standard',
+        cellLocation: '3-1-027',
         releaseDate: '2025-02-01',
       },
       location: 'Leeds',
@@ -557,7 +643,7 @@ const keyworkerSearchPrisoners = [
     hasHighComplexityOfNeeds: false,
     hasAllocationHistory: true,
     keyworker: {
-      staffId: 485834,
+      staffId: 488095,
       firstName: 'ROB',
       lastName: 'COOPER',
     },
@@ -660,4 +746,7 @@ export default {
   stubSearchPrisonersWithExcludeAllocations,
   stubPrisonerAllocations,
   stubKeyworkerMembersStatusActive,
+  stubPutDeallocationSuccess,
+  stubPutAllocationSuccess,
+  stubPutAllocationFail,
 }

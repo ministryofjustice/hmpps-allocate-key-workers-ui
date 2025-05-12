@@ -17,7 +17,7 @@
     {% endset %}
     {{ mojAlert({
       variant: "warning" if errorCount else "success",
-      title: ('Key workers could not be assigned to ' + errorCount + ' prisoners') if errorCount else 'Changes made successfully',
+      title: ('Key workers could not be assigned to ' + errorCount + ' prisoner' + ('s' if errorCount != 1)) if errorCount else 'Changes made successfully',
       showTitleAsHeading: true,
       html: errorHtml if errorCount else successHtml
     }) }}

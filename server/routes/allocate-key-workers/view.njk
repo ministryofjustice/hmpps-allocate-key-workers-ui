@@ -67,8 +67,8 @@
       </div>
     </div>
 
-    <p>Select key workers from the dropdown lists or automatically assign them.</p>
-    <p>Keyworkers will only be allocated when you save your changes.</p>
+    <p>Select key workers from the dropdown lists to reallocate or deallocate prisoners.</p>
+    <p>Key workers will only be allocated when you save your changes.</p>
 
     <div class="govuk-grid-row">
       {{ govukButton({
@@ -105,7 +105,7 @@
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: keyworkers | excludeCurrentKeyworker(item.keyworker) | addSelectValue('Deallocate', true, 'deallocate:' + item.keyworker.staffId, false) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select key worker')
+              items: keyworkers | excludeCurrentKeyworker(item.keyworker) | conditionallyAddDeallocate(item.keyworker.staffId) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select key worker')
             })
           },
           {

@@ -47,6 +47,20 @@ export const excludeDeallocate = (items: SelectOption[]): SelectOption[] => {
   return items.filter(o => !o.value.toString().endsWith('deallocate'))
 }
 
+export const conditionallyAddDeallocate = (items: SelectOption[], currentKeyworkerStaffId: string): SelectOption[] => {
+  if (!currentKeyworkerStaffId) return items
+
+  return [
+    {
+      text: 'Deallocate',
+      value: `deallocate:${currentKeyworkerStaffId}`,
+      selected: false,
+    },
+    ...items,
+    { text: '', value: '', selected: false, attributes: { hidden: 'hidden' } },
+  ]
+}
+
 export const mergePrisonerKeyworkerIds = (items: SelectOption[], prisonerId: string): SelectOption[] => {
   return items.map(o => ({ ...o, value: `${prisonerId}:${o.value}` }))
 }
