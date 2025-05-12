@@ -4,7 +4,7 @@ import KeyworkerApiService from '../../../services/keyworkerApi/keyworkerApiServ
 export class UpdateCapacityAndStatusController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
-  GET = async (req: Request, res: Response, staffId: string): Promise<void> => {
+  GET = async (req: Request, res: Response, staffId: string) => {
     const prisonCode = res.locals.user.getActiveCaseloadId()!
     const keyworkerData = await this.keyworkerApiService.getKeyworkerDetails(req, prisonCode, staffId)
 
@@ -21,7 +21,7 @@ export class UpdateCapacityAndStatusController {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request, res: Response) => {
     const prisonCode = res.locals.user.getActiveCaseloadId()!
     const staffId = req.params['staffId'] as string
     const updatedCapacity = req.body.capacity as number
