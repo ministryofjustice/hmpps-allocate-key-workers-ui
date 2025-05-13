@@ -63,6 +63,17 @@ context('Profile Info', () => {
     cy.get('[data-sort-value="Ayo, Zakira"] > .govuk-link--no-visited-state').should('have.attr', 'target', '_blank')
   })
 
+  it('should show error when no allocations or deallocations are made', () => {
+    navigateToTestPage()
+
+    cy.findByRole('button', { name: /Save changes/i }).click()
+
+    cy.findByText('There is a problem').should('be.visible')
+    cy.findByRole('link', { name: 'At least one allocation or deallocation must be made' })
+      .should('be.visible')
+      .should('have.attr', 'href', '#selectKeyworker')
+  })
+
   it('should show error on de/allocation failure', () => {
     cy.task('stubPutAllocationFail')
     navigateToTestPage()

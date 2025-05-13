@@ -7,7 +7,7 @@ import { initialiseName } from './utils'
 import config from '../config'
 import logger from '../../logger'
 import { formatDateConcise, formatDateTime, getDateInReadableFormat, todayStringGBFormat } from './datetimeUtils'
-import { findError } from '../middleware/validationMiddleware'
+import { buildErrorSummaryList, customErrorOrderBuilder, findError } from '../middleware/validationMiddleware'
 import { firstNameSpaceLastName, lastNameCommaFirstName, nameCase } from './formatUtils'
 import {
   addSelectValue,
@@ -75,4 +75,6 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('formatDateTime', formatDateTime)
   njkEnv.addFilter('mergePrisonerKeyworkerIds', mergePrisonerKeyworkerIds)
   njkEnv.addFilter('conditionallyAddDeallocate', conditionallyAddDeallocate)
+  njkEnv.addFilter('buildErrorSummaryList', buildErrorSummaryList)
+  njkEnv.addFilter('customErrorOrderBuilder', customErrorOrderBuilder)
 }
