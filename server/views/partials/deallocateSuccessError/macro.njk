@@ -1,6 +1,6 @@
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
 
-{% macro deallocateSuccessError(success, count) %}
+{% macro deallocateSuccessError(failure, count) %}
   {% if count %}
     {% set prisoner = 'prisoner' if count == 1 else 'prisoners' %}
     {% set warningTitle = 'Key workers could not be assigned to ' + count + ' ' + prisoner %}
@@ -19,10 +19,10 @@
       </p>
     {% endset %}
     {{ mojAlert({
-      variant: 'success' if success else 'warning',
-      title: successTitle if success else warningTitle,
+      variant: 'warning' if failure else 'success',
+      title: warningTitle if failure else successTitle,
       showTitleAsHeading: true,
-      html: successHtml if success else warningHtml,
+      html: warningHtml if failure else successHtml,
       classes: 'govuk-!-margin-bottom-0 govuk-!-margin-top-5'
     }) }}
   {% endif %}

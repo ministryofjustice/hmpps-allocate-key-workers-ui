@@ -73,7 +73,6 @@ const stubPutAllocationSuccess = () => {
       },
     ],
     204,
-    { content: [] },
   )
 }
 

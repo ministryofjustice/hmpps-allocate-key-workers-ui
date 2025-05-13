@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import { lastNameCommaFirstName } from '../../utils/formatUtils'
 import { components } from '../../@types/keyWorker'
-import { FLASH_KEY__COUNT, FLASH_KEY__SUCCESS, FLASH_KEY__VALIDATION_ERRORS } from '../../utils/constants'
+import { FLASH_KEY__COUNT, FLASH_KEY__API_ERROR, FLASH_KEY__VALIDATION_ERRORS } from '../../utils/constants'
 
 export class ChangeKeyWorkerController {
   constructor(readonly keyworkerApiService: KeyworkerApiService) {}
@@ -14,7 +14,7 @@ export class ChangeKeyWorkerController {
 
     return {
       count: req.flash(FLASH_KEY__COUNT)[0],
-      success: req.flash(FLASH_KEY__SUCCESS)[0],
+      apiError: req.flash(FLASH_KEY__API_ERROR)[0],
       keyworkers: keyworkers
         .sort((a, b) => (a.numberAllocated > b.numberAllocated ? 1 : -1))
         .map(o => {
@@ -62,9 +62,8 @@ export class ChangeKeyWorkerController {
 
     try {
       await this.keyworkerApiService.putAllocationDeallocations(req, res.locals.user.getActiveCaseloadId()!, apiBody)
-      req.flash(FLASH_KEY__SUCCESS, 'true')
     } catch {
-      req.flash(FLASH_KEY__SUCCESS, '')
+      req.flash(FLASH_KEY__API_ERROR, 'ALLOCATE_FAILED')
     }
 
     return res.redirect(req.get('Referrer')!)
