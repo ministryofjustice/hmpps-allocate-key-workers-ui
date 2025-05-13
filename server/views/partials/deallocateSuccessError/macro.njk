@@ -22,7 +22,8 @@
       variant: 'success' if success else 'warning',
       title: successTitle if success else warningTitle,
       showTitleAsHeading: true,
-      html: successHtml if success else warningHtml
+      html: successHtml if success else warningHtml,
+      classes: 'govuk-!-margin-bottom-0 govuk-!-margin-top-5'
     }) }}
   {% endif %}
 {% endmacro %}
