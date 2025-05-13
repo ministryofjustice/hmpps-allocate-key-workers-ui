@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import { lastNameCommaFirstName } from '../../utils/formatUtils'
 import { components } from '../../@types/keyWorker'
+import { FLASH_KEY__ALLOCATE_ERROR_COUNT, FLASH_KEY__ALLOCATE_SUCCESS_COUNT } from '../../utils/constants'
 
 export class ChangeKeyWorkerController {
   constructor(readonly keyworkerApiService: KeyworkerApiService) {}
@@ -12,8 +13,8 @@ export class ChangeKeyWorkerController {
     })
 
     return {
-      errorCount: req.flash('errorCount')[0],
-      successCount: req.flash('successCount')[0],
+      errorCount: req.flash(FLASH_KEY__ALLOCATE_ERROR_COUNT)[0],
+      successCount: req.flash(FLASH_KEY__ALLOCATE_SUCCESS_COUNT)[0],
       keyworkers: keyworkers
         .sort((a, b) => (a.numberAllocated > b.numberAllocated ? 1 : -1))
         .map(o => {
@@ -51,9 +52,9 @@ export class ChangeKeyWorkerController {
 
     try {
       await this.keyworkerApiService.putAllocationDeallocations(req, res.locals.user.getActiveCaseloadId()!, apiBody)
-      req.flash('successCount', String(apiBody.allocations.length + apiBody.deallocations.length))
+      req.flash(FLASH_KEY__ALLOCATE_SUCCESS_COUNT, String(apiBody.allocations.length + apiBody.deallocations.length))
     } catch {
-      req.flash('errorCount', String(apiBody.allocations.length + apiBody.deallocations.length))
+      req.flash(FLASH_KEY__ALLOCATE_ERROR_COUNT, String(apiBody.allocations.length + apiBody.deallocations.length))
     }
 
     res.redirect(req.get('Referrer')!)
