@@ -646,11 +646,6 @@ export interface components {
     PersonStaffAllocations: {
       allocations: components['schemas']['PersonStaffAllocation'][]
       deallocations: components['schemas']['PersonStaffDeallocation'][]
-      personIdentifiersToAllocate: string[]
-      staffIdsToAllocate: number[]
-      personIdentifiersToDeallocate: string[]
-      staffIdsToDeallocate: number[]
-      isEmpty: boolean
     }
     PersonStaffDeallocation: {
       personIdentifier: string
@@ -891,12 +886,7 @@ export interface components {
       prisonCode: string
       current?: components['schemas']['StatSummary']
       previous?: components['schemas']['StatSummary']
-      sessionTimeline: components['schemas']['WeeklyStatInt'][]
-      /** Format: int32 */
-      averageSessions: number
-      complianceTimeline: components['schemas']['WeeklyStatDbl'][]
-      /** Format: double */
-      averageCompliance: number
+      hasPrisonersWithHighComplexityOfNeed: boolean
     }
     StatSummary: {
       /** Format: date */
@@ -905,6 +895,8 @@ export interface components {
       to: string
       /** Format: int32 */
       totalPrisoners: number
+      /** Format: int32 */
+      highComplexityOfNeedPrisoners: number
       /** Format: int32 */
       eligiblePrisoners: number
       /** Format: int32 */
@@ -925,18 +917,6 @@ export interface components {
       percentageWithKeyworker?: number
       /** Format: double */
       compliance: number
-    }
-    WeeklyStatDbl: {
-      /** Format: date */
-      date: string
-      /** Format: double */
-      value: number
-    }
-    WeeklyStatInt: {
-      /** Format: date */
-      date: string
-      /** Format: int32 */
-      value: number
     }
     CurrentAllocation: {
       keyworker: components['schemas']['CurrentKeyworker']
@@ -1281,7 +1261,7 @@ export interface components {
       /** @description Staff last name. */
       lastName: string
       /** @description Staff username */
-      username?: string
+      username: string
     }
     KeyworkerStatSummary: {
       /** @description Summary of all prisons specified */

@@ -1,0 +1,29 @@
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
+
+{% macro deallocateSuccessError(failure, count) %}
+  {% if count %}
+    {% set prisoner = 'prisoner' if count == 1 else 'prisoners' %}
+    {% set warningTitle = 'Key workers could not be assigned to ' + count + ' ' + prisoner %}
+    {% set successTitle = 'Changes made successfully' %}
+    {% set successHtml %}
+      <p>You have successfully made changes to {{ count }} {{ prisoner }}.</p>
+    {% endset %}
+    {% set warningHtml %}
+      <p class="govuk-!-margin-bottom-6">This is because there are not enough key workers with available capacity.</p>
+      <p class="govuk-!-margin-bottom-6">
+        To assign unallocated prisoners, you can:
+        <ul class="govuk-list govuk-list--bullet">
+          <li>view all prisoners without a key worker and manually allocate key workers</li>
+          <li>increase the capacity of your key workers</li>
+        </ul>
+      </p>
+    {% endset %}
+    {{ mojAlert({
+      variant: 'warning' if failure else 'success',
+      title: warningTitle if failure else successTitle,
+      showTitleAsHeading: true,
+      html: warningHtml if failure else successHtml,
+      classes: 'govuk-!-margin-bottom-0 govuk-!-margin-top-5'
+    }) }}
+  {% endif %}
+{% endmacro %}

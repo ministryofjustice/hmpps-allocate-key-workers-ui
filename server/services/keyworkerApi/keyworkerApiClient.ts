@@ -115,4 +115,16 @@ export default class KeyworkerApiClient {
 
     return response
   }
+
+  async putAllocationDeallocations(
+    prisonCode: string,
+    data: components['schemas']['PersonStaffAllocations'],
+  ): Promise<components['schemas']['PersonStaffAllocationHistory']> {
+    const response = await this.restClient.put<components['schemas']['PersonStaffAllocationHistory']>({
+      path: `/prisons/${prisonCode}/prisoners/keyworkers`,
+      data,
+    })
+
+    return response
+  }
 }

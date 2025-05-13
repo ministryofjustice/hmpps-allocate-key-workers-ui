@@ -155,8 +155,8 @@ context('Key worker statistics', () => {
 
     cy.findByRole('button', { name: /View/ }).click()
 
-    cy.findByText('From date must be a real date')
-    cy.findByText('To date must be a real date')
+    cy.findAllByText('From date must be a real date').should('have.length', 2)
+    cy.findAllByText('To date must be a real date').should('have.length', 2)
   }
 
   it('shows "no data" message when there is no data', () => {

@@ -6,9 +6,14 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "partials/mojPagination/macro.njk" import mojPagination %}
+{% from "partials/deallocateSuccessError/macro.njk" import deallocateSuccessError %}
 
 {% set fullWidth = true %}
 {% set pageTitle = "Allocate key workers to prisoners" %}
+
+{% block pageHeader %}
+  {{ deallocateSuccessError(apiError, count) }}
+{% endblock %}
 
 {% block innerContent %}
   <h1 class="govuk-heading-l govuk-!-margin-bottom-6">{{ pageTitle }}</h1>
@@ -17,7 +22,7 @@
     <div class="govuk-grid-row">
 
       <div class="govuk-grid-column-three-quarters">
-        <form method="post" class="govuk-grid-row govuk-!-margin-bottom-7 govuk-!-padding-6 search-form">
+        <form method="post" action="/allocate-key-workers/filter" class="govuk-grid-row govuk-!-margin-bottom-7 govuk-!-padding-6 search-form">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
           <h2 class="govuk-heading-m">Filter by</h2>
           <div class="horizontal-form">
@@ -37,7 +42,7 @@
               label: {
                 text: "Residential location"
               },
-              items: locations | addDefaultSelectedValue('') | setSelectedValue(cellLocationPrefix)
+              items: locations | addSelectValue('') | setSelectedValue(cellLocationPrefix)
             }) }}
 
             {{ govukButton({
@@ -62,8 +67,8 @@
       </div>
     </div>
 
-    <p>Select key workers from the dropdown lists or automatically assign them.</p>
-    <p>Keyworkers will only be allocated when you save your changes.</p>
+    <p>Select key workers from the dropdown lists to reallocate or deallocate prisoners.</p>
+    <p>Key workers will only be allocated when you save your changes.</p>
 
     <div class="govuk-grid-row">
       {{ govukButton({
@@ -74,9 +79,11 @@
 
     </div>
 
-    {% set rows = [] %}
-    {% for item in records %}
-      {% set rows = (rows.push([
+    <form method="post">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+      {% set rows = [] %}
+      {% for item in records %}
+        {% set rows = (rows.push([
           {
             html: '<a class="govuk-link--no-visited-state" target="_blank" href="' + prisonerProfileUrl + '/prisoner/' + item.personIdentifier + '">' + item | lastNameCommaFirstName + "</a><br/>" + item.personIdentifier,
             attributes: {
@@ -98,18 +105,18 @@
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: keyworkers | excludeCurrentKeyworker(item.keyworker)
+              items: keyworkers | excludeCurrentKeyworker(item.keyworker) | conditionallyAddDeallocate(item.keyworker.staffId) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select key worker')
             })
           },
           {
             html: '<a class="govuk-link govuk-link--no-visited-state" href="/prisoner-allocation-history/' + item.personIdentifier + searchQuery + '">View allocation history</a>' if item.hasAllocationHistory else ''
           }
         ]), rows) %}
-    {% endfor %}
+      {% endfor %}
 
-    {{ mojPagination(records.length) }}
+      {{ mojPagination(records.length) }}
 
-    {{ govukTable({
+      {{ govukTable({
           attributes: {
             "data-module": "moj-sortable-table"
           },
@@ -147,12 +154,12 @@
           rows: rows
         }) }}
 
-    {{ mojPagination(records.length) }}
+      {{ mojPagination(records.length) }}
 
-    {{ govukButton({
+      {{ govukButton({
         text: "Save changes",
         preventDoubleClick: true
       }) }}
-
+    </form>
   </div>
 {% endblock %}

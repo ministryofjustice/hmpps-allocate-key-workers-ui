@@ -7,7 +7,8 @@ export const AllocateKeyWorkerRoutes = ({ keyworkerApiService, locationsApiServi
   const controller = new AllocateKeyWorkerController(keyworkerApiService, locationsApiService)
 
   get('/', controller.GET)
-  post('/', controller.POST)
+  post('/filter', controller.POST)
+  post('/', controller.submitToApi)
 
   return router
 }

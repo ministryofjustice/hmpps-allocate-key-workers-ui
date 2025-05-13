@@ -4,7 +4,7 @@ import { JourneyRouter } from '../base/routes'
 import { KeyWorkerProfileController } from './controller'
 
 export const KeyWorkerProfileRoutes = ({ keyworkerApiService }: Services) => {
-  const { router, get } = JourneyRouter()
+  const { router, get, post } = JourneyRouter()
   const controller = new KeyWorkerProfileController(keyworkerApiService)
 
   get('/:staffId', async (req: Request, res: Response) => {
@@ -12,6 +12,8 @@ export const KeyWorkerProfileRoutes = ({ keyworkerApiService }: Services) => {
 
     await controller.GET(req, res, staffId)
   })
+
+  post('/:staffId', controller.submitToApi)
 
   return router
 }

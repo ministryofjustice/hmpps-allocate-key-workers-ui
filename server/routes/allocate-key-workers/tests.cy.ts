@@ -10,6 +10,8 @@ context('Profile Info', () => {
     cy.task('stubKeyworkerMembersAll')
     cy.task('stubSearchPrisonersWithExcludeAllocations')
     cy.task('stubKeyworkerMembersStatusActive')
+    cy.task('stubPutAllocationSuccess')
+    cy.task('stubPutDeallocationSuccess')
   })
 
   it('should load page correctly', () => {
@@ -40,6 +42,113 @@ context('Profile Info', () => {
     cy.get('.govuk-table__row').should('have.length', 4)
   })
 
+  it('should show error when no allocations or deallocations are made', () => {
+    navigateToTestPage()
+
+    cy.findByRole('button', { name: /Save changes/i }).click()
+
+    cy.findByText('There is a problem').should('be.visible')
+    cy.findByRole('link', { name: 'At least one allocation or deallocation must be made' })
+      .should('be.visible')
+      .should('have.attr', 'href', '#selectKeyworker')
+  })
+
+  it('should show error on de/allocation failure', () => {
+    cy.task('stubPutAllocationFail')
+    navigateToTestPage()
+
+    cy.visit('/allocate-key-workers?query=Ayo', { failOnStatusCode: false })
+
+    cy.get('.govuk-table__row').should('have.length', 2)
+    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Ayo, Zakira')
+
+    cy.get('#selectKeyworker').select('Deallocate')
+
+    cy.findByRole('button', { name: /Save changes/i }).click()
+
+    cy.verifyLastAPICall(
+      { method: 'PUT' },
+      {
+        allocations: [],
+        deallocations: [{ personIdentifier: 'A4288DZ', staffId: 488095, deallocationReason: 'MANUAL' }],
+      },
+    )
+
+    cy.get('.moj-alert').should('contain.text', 'Key workers could not be assigned to 1 prisoner')
+    cy.findByText('This is because there are not enough key workers with available capacity.').should('exist')
+    cy.findByText('To assign unallocated prisoners, you can:').should('exist')
+    cy.findByText('view all prisoners without a key worker and manually allocate key workers').should('exist')
+    cy.findByText('increase the capacity of your key workers').should('exist')
+  })
+
+  it('should show success message on deallocation', () => {
+    cy.task('stubPutAllocationSuccess')
+    cy.task('stubPutDeallocationSuccess')
+    navigateToTestPage()
+
+    cy.visit('/allocate-key-workers?query=Ayo', { failOnStatusCode: false })
+
+    cy.get('.govuk-table__row').should('have.length', 2)
+    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Ayo, Zakira')
+
+    cy.get('#selectKeyworker').should('contain', 'Select key worker')
+    cy.get('#selectKeyworker').should('contain', 'Deallocate')
+    cy.get('#selectKeyworker').should('not.contain', 'Key-Worker, Available-Active (allocations: 32)')
+    cy.get('#selectKeyworker').select('Deallocate')
+
+    cy.findByRole('button', { name: /Save changes/i }).click()
+
+    cy.verifyLastAPICall(
+      { method: 'PUT' },
+      {
+        allocations: [],
+        deallocations: [{ personIdentifier: 'A4288DZ', staffId: 488095, deallocationReason: 'MANUAL' }],
+      },
+    )
+
+    cy.get('.moj-alert').should('contain.text', 'Changes made successfully')
+    cy.findByText('You have successfully made changes to 1 prisoner.').should('exist')
+  })
+
+  it('should show success message on allocation', () => {
+    cy.task('stubPutAllocationSuccess')
+    cy.task('stubPutDeallocationSuccess')
+    navigateToTestPage()
+
+    cy.visit('/allocate-key-workers', { failOnStatusCode: false })
+
+    cy.get('.govuk-table__row').should('have.length', 4)
+    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Ayo, Zakira')
+
+    // First select should contain deallocate and not the active key worker - the rest should should key worker but not deallocate
+    cy.get('select').eq(1).should('contain', 'Deallocate')
+    cy.get('select').eq(1).should('not.contain', 'Key-Worker, Available-Active (allocations: 32)')
+
+    cy.get('select').eq(2).should('not.contain', 'Deallocate')
+    cy.get('select').eq(2).should('contain', 'Key-Worker, Available-Active (allocations: 32)')
+    cy.get('select').eq(3).should('not.contain', 'Deallocate')
+    cy.get('select').eq(3).should('contain', 'Key-Worker, Available-Active (allocations: 32)')
+
+    cy.get('select').eq(1).select('Key-Worker, Available-Active2 (allocations: 32)')
+    cy.get('select').eq(2).select('Key-Worker, Available-Active2 (allocations: 32)')
+
+    cy.findByRole('button', { name: /Save changes/i }).click()
+
+    cy.verifyLastAPICall(
+      { method: 'PUT' },
+      {
+        allocations: [
+          { personIdentifier: 'A4288DZ', staffId: 488096, allocationReason: 'MANUAL' },
+          { personIdentifier: 'A2504EA', staffId: 488096, allocationReason: 'MANUAL' },
+        ],
+        deallocations: [],
+      },
+    )
+
+    cy.get('.moj-alert').should('contain.text', 'Changes made successfully')
+    cy.findByText('You have successfully made changes to 2 prisoners.').should('exist')
+  })
+
   const checkPageContentsNoFilter = () => {
     cy.findByRole('heading', { name: /Allocate key workers to prisoners/i }).should('be.visible')
     cy.findByRole('heading', { name: /Filter by/i }).should('be.visible')
@@ -51,8 +160,8 @@ context('Profile Info', () => {
 
     cy.findByRole('checkbox', { name: /Prisoners without a key worker/ }).should('exist')
 
-    cy.findByText('Select key workers from the dropdown lists or automatically assign them.').should('exist')
-    cy.findByText('Keyworkers will only be allocated when you save your changes.').should('exist')
+    cy.findByText('Select key workers from the dropdown lists to reallocate or deallocate prisoners.').should('exist')
+    cy.findByText('Key workers will only be allocated when you save your changes.').should('exist')
 
     cy.findByRole('button', { name: 'Assign key workers automatically' }).should('exist')
 
@@ -96,7 +205,7 @@ context('Profile Info', () => {
       .eq(1)
       .children()
       .eq(3)
-      .should('contain.text', 'Key-Worker, Available-Active (allocations: 32)')
+      .should('contain.text', 'Key-Worker, Available-Active2 (allocations: 32)')
     cy.get('.govuk-table__row')
       .eq(1)
       .children()

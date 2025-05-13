@@ -7,9 +7,15 @@ import { initialiseName } from './utils'
 import config from '../config'
 import logger from '../../logger'
 import { formatDateConcise, formatDateTime, getDateInReadableFormat, todayStringGBFormat } from './datetimeUtils'
-import { findError } from '../middleware/validationMiddleware'
+import { buildErrorSummaryList, customErrorOrderBuilder, findError } from '../middleware/validationMiddleware'
 import { firstNameSpaceLastName, lastNameCommaFirstName, nameCase } from './formatUtils'
-import { addDefaultSelectedValue, excludeCurrentKeyworker, setSelectedValue } from './dropdownUtils'
+import {
+  addSelectValue,
+  conditionallyAddDeallocate,
+  excludeCurrentKeyworker,
+  mergePrisonerKeyworkerIds,
+  setSelectedValue,
+} from './dropdownUtils'
 import { formatValue, getStatChange } from './statsUtils'
 
 export default function nunjucksSetup(app: express.Express): void {
@@ -58,7 +64,7 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
   njkEnv.addFilter('dateString', getDateInReadableFormat)
   njkEnv.addFilter('lastNameCommaFirstName', lastNameCommaFirstName)
-  njkEnv.addFilter('addDefaultSelectedValue', addDefaultSelectedValue)
+  njkEnv.addFilter('addSelectValue', addSelectValue)
   njkEnv.addFilter('setSelectedValue', setSelectedValue)
   njkEnv.addFilter('nameCase', nameCase)
   njkEnv.addFilter('formatValue', formatValue)
@@ -67,4 +73,8 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('formatDateConcise', formatDateConcise)
   njkEnv.addFilter('excludeCurrentKeyworker', excludeCurrentKeyworker)
   njkEnv.addFilter('formatDateTime', formatDateTime)
+  njkEnv.addFilter('mergePrisonerKeyworkerIds', mergePrisonerKeyworkerIds)
+  njkEnv.addFilter('conditionallyAddDeallocate', conditionallyAddDeallocate)
+  njkEnv.addFilter('buildErrorSummaryList', buildErrorSummaryList)
+  njkEnv.addFilter('customErrorOrderBuilder', customErrorOrderBuilder)
 }
