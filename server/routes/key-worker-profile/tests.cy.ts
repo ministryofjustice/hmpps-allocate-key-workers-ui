@@ -86,6 +86,13 @@ context('Profile Info', () => {
     cy.get('#selectKeyworker').select('Deallocate')
 
     cy.findByRole('button', { name: /Save changes/i }).click()
+    cy.verifyLastAPICall(
+      { method: 'PUT' },
+      {
+        allocations: [],
+        deallocations: [{ personIdentifier: 'A4288DZ', staffId: 488095, deallocationReason: 'MANUAL' }],
+      },
+    )
 
     cy.get('.moj-alert').should('contain.text', 'Key workers could not be assigned to 1 prisoner')
     cy.findByText('This is because there are not enough key workers with available capacity.').should('exist')
@@ -110,6 +117,13 @@ context('Profile Info', () => {
     cy.get('#selectKeyworker').select('Deallocate')
 
     cy.findByRole('button', { name: /Save changes/i }).click()
+    cy.verifyLastAPICall(
+      { method: 'PUT' },
+      {
+        allocations: [],
+        deallocations: [{ personIdentifier: 'A4288DZ', staffId: 488095, deallocationReason: 'MANUAL' }],
+      },
+    )
 
     cy.get('.moj-alert').should('contain.text', 'Changes made successfully')
     cy.findByText('You have successfully made changes to 1 prisoner.').should('exist')
@@ -137,6 +151,17 @@ context('Profile Info', () => {
     cy.get('select').eq(1).select('Key-Worker, Available-Active2 (allocations: 32)')
 
     cy.findByRole('button', { name: /Save changes/i }).click()
+
+    cy.verifyLastAPICall(
+      { method: 'PUT' },
+      {
+        allocations: [
+          { personIdentifier: 'A4288DZ', staffId: 488096, allocationReason: 'MANUAL' },
+          { personIdentifier: 'A2504EA', staffId: 488096, allocationReason: 'MANUAL' },
+        ],
+        deallocations: [],
+      },
+    )
 
     cy.get('.moj-alert').should('contain.text', 'Changes made successfully')
     cy.findByText('You have successfully made changes to 2 prisoners.').should('exist')

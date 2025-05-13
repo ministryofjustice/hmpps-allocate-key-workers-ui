@@ -5,5 +5,6 @@ declare namespace Cypress {
      * @example cy.signIn({ failOnStatusCode: boolean })
      */
     signIn(options?: { failOnStatusCode: boolean }): Chainable<string>
+    verifyLastAPICall(matching: string | object, expected: object): Chainable<unknown>
   }
 }
