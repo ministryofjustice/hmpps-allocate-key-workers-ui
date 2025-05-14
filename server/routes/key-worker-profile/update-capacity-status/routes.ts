@@ -2,6 +2,8 @@ import { Request, Response } from 'express'
 import { Services } from '../../../services'
 import { JourneyRouter } from '../../base/routes'
 import { UpdateCapacityAndStatusController } from './controller'
+import { schema } from './schema'
+import { validate } from '../../../middleware/validationMiddleware'
 
 export const UpdateCapacityAndStatusRoutes = ({ keyworkerApiService }: Services) => {
   const { router, get, post } = JourneyRouter()
@@ -13,7 +15,7 @@ export const UpdateCapacityAndStatusRoutes = ({ keyworkerApiService }: Services)
     await controller.GET(req, res, staffId)
   })
 
-  post('/', controller.POST)
+  post('/', validate(schema), controller.POST)
 
   return router
 }

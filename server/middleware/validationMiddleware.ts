@@ -1,6 +1,6 @@
-import { RequestHandler, Request, Response } from 'express'
-import { z, RefinementCtx } from 'zod'
-import { isValid, isBefore, parseISO, isAfter, isEqual } from 'date-fns'
+import { Request, RequestHandler, Response } from 'express'
+import { RefinementCtx, z } from 'zod'
+import { isAfter, isBefore, isEqual, isValid, parseISO } from 'date-fns'
 import { FLASH_KEY__FORM_RESPONSES, FLASH_KEY__VALIDATION_ERRORS } from '../utils/constants'
 
 export type fieldErrors = {
@@ -150,4 +150,14 @@ export const sanitizeQueryName = (query: string, defaultValue: string = ''): str
   }
 
   return defaultValue
+}
+
+export const validateNumberBetween = (requiredErr: string, invalidErr: string, rangeErr: string) => {
+  // Validate that the input is a number and between 0-999
+  return z
+    .string({ required_error: requiredErr })
+    .min(1, { message: requiredErr })
+    .refine(val => /^\d+$/.test(val), { message: invalidErr })
+    .transform(Number)
+    .refine(val => val >= 0 && val <= 999, { message: rangeErr })
 }

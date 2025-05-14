@@ -52,7 +52,8 @@
             id: "capacity",
             name: "capacity",
             value: capacity,
-            classes: "govuk-!-width-one-quarter"
+            classes: "govuk-!-width-one-quarter",
+            errorMessage: validationErrors | findError('capacity')
           }) }}
         </div>
         <div class="govuk-grid-column-one-quarter left-aligned">
