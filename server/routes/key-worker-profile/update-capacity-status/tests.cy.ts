@@ -44,6 +44,18 @@ context('Update capacity and status', () => {
       .and('contain', "You have updated this keyworker's capacity.")
   })
 
+  it('should reject an invalid number and show a message', () => {
+    navigateToTestPage()
+
+    cy.get('.govuk-error-summary').should('not.exist')
+
+    cy.get('#capacity').clear().type('1001')
+    cy.get('#capacity').should('have.value', '1001')
+    cy.findByRole('button', { name: /Save and continue/i }).click()
+    cy.get('.govuk-error-summary').should('exist')
+    cy.get('ul.govuk-error-summary__list a').should('have.text', 'Number must be between 0 and 999')
+  })
+
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit('/key-worker-profile/488095/update-capacity-status', { failOnStatusCode: false })
