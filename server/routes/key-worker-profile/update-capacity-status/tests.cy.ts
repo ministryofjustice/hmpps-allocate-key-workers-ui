@@ -46,6 +46,6 @@ context('Update capacity and status', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-worker-profile/485585/update-capacity-status', { failOnStatusCode: false })
+    cy.visit('/key-worker-profile/488095/update-capacity-status', { failOnStatusCode: false })
   }
 })

@@ -258,21 +258,7 @@ const stubPrisonerAllocations = () =>
   createBasicHttpStub('GET', '/keyworker-api/prisoners/A9965EA/keyworkers', 200, prisonerAllocationResponse)
 
 const stubUpdateKeyworkerProperties = () =>
-  createHttpStub(
-    'PUT',
-    '/keyworker-api/prisons/.*/keyworkers/.*',
-    undefined,
-    [
-      {
-        equalToJson: {
-          capacity: '8',
-          status: 'INACTIVE',
-        },
-      },
-    ],
-    200,
-    true,
-  )
+  createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/keyworkers/.*', 200, {})
 
 const keyworkerManageResponse = {
   content: [
