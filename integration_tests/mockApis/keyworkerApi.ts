@@ -10,7 +10,7 @@ const createHttpStub = (
   queryParameters: object,
   bodyPatterns: Array<object> | undefined,
   status: number,
-  jsonBody?: object,
+  jsonBody?: object | boolean,
 ) => {
   return stubFor({
     request: { method, urlPathPattern, queryParameters, bodyPatterns },
@@ -256,6 +256,9 @@ const stubKeyworkerStatuses = () =>
 
 const stubPrisonerAllocations = () =>
   createBasicHttpStub('GET', '/keyworker-api/prisoners/A9965EA/keyworkers', 200, prisonerAllocationResponse)
+
+const stubUpdateKeyworkerProperties = () =>
+  createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/keyworkers/.*', 200, {})
 
 const keyworkerManageResponse = {
   content: [
@@ -748,4 +751,5 @@ export default {
   stubPutDeallocationSuccess,
   stubPutAllocationSuccess,
   stubPutAllocationFail,
+  stubUpdateKeyworkerProperties,
 }
