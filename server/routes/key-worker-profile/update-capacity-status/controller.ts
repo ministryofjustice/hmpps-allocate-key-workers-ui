@@ -18,7 +18,7 @@ export class UpdateCapacityAndStatusController {
     res.render('key-worker-profile/update-capacity-status/view', {
       ...keyworkerData,
       statuses,
-      showBreadcrumbs: true,
+      backUrl: `/key-worker-profile/${staffId}`,
       updated,
     })
   }
