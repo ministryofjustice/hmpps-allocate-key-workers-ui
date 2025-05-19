@@ -674,8 +674,8 @@ const prisonerAllocationResponse = {
       active: true,
       keyworker: {
         staffId: 488021,
-        firstName: 'Tom',
-        lastName: 'Cat',
+        firstName: 'John',
+        lastName: 'Smith',
       },
       prison: {
         code: 'MDI',
@@ -683,7 +683,7 @@ const prisonerAllocationResponse = {
       },
       allocated: {
         at: '2025-04-17T14:41:23.931574',
-        by: 'Jerry Mouse',
+        by: 'Jane Doe',
         reason: {
           code: 'AUTO',
           description: 'Automatic',
@@ -695,8 +695,8 @@ const prisonerAllocationResponse = {
       active: false,
       keyworker: {
         staffId: 488021,
-        firstName: 'Benny',
-        lastName: 'The Ball',
+        firstName: 'Robert',
+        lastName: 'James',
       },
       prison: {
         code: 'MDI',
@@ -704,7 +704,7 @@ const prisonerAllocationResponse = {
       },
       allocated: {
         at: '2024-12-18T10:56:37.073945',
-        by: 'Officer Dibble',
+        by: 'Jane Doe',
         reason: {
           code: 'MANUAL',
           description: 'Manual',
@@ -712,7 +712,7 @@ const prisonerAllocationResponse = {
       },
       deallocated: {
         at: '2025-02-12T15:57:56.862492',
-        by: 'Top Cat',
+        by: 'James Smith',
         reason: {
           code: 'MANUAL',
           description: 'Manual',

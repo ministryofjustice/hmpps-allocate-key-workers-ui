@@ -26,7 +26,7 @@ context('Prisoner Allocation History', () => {
 
     cy.findByRole('link', { name: /back/i }).should('have.attr', 'href', '/allocate-key-workers')
 
-    cy.get('.govuk-link--no-visited-state').eq(0).should('have.text', 'Cat, Tabby')
+    cy.get('.govuk-link--no-visited-state').eq(0).should('have.text', 'Prisoner, Test')
     cy.findByText('A9965EA')
     cy.get('.govuk-\\!-font-weight-bold').eq(1).should('have.text', 'Location')
     cy.findByText('2-1-005')
@@ -39,7 +39,7 @@ context('Prisoner Allocation History', () => {
       .eq(0)
       .invoke('text')
       .then(text => {
-        expect(text.trim()).to.equal('Current key worker: Tom Cat')
+        expect(text.trim()).to.equal('Current key worker: John Smith')
       })
 
     cy.get('.govuk-summary-list__key')
@@ -91,7 +91,7 @@ context('Prisoner Allocation History', () => {
       .eq(3)
       .invoke('text')
       .then(text => {
-        expect(text.trim()).to.equal('Jerry Mouse')
+        expect(text.trim()).to.equal('Jane Doe')
       })
 
     cy.get('.govuk-summary-list__key')
@@ -138,7 +138,7 @@ context('Prisoner Allocation History', () => {
       .eq(1)
       .invoke('text')
       .then(text => {
-        expect(text.trim()).to.equal('Previous key worker: Benny The Ball')
+        expect(text.trim()).to.equal('Previous key worker: Robert James')
       })
 
     cy.get('.govuk-summary-list__key')
@@ -190,7 +190,7 @@ context('Prisoner Allocation History', () => {
       .eq(10)
       .invoke('text')
       .then(text => {
-        expect(text.trim()).to.equal('Officer Dibble')
+        expect(text.trim()).to.equal('Jane Doe')
       })
 
     cy.get('.govuk-summary-list__key')
@@ -216,7 +216,7 @@ context('Prisoner Allocation History', () => {
       .eq(12)
       .invoke('text')
       .then(text => {
-        expect(text.trim()).to.equal('Top Cat')
+        expect(text.trim()).to.equal('James Smith')
       })
 
     cy.get('.govuk-summary-list__key')
