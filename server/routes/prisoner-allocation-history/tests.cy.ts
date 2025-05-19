@@ -39,7 +39,7 @@ context('Prisoner Allocation History', () => {
       .eq(0)
       .invoke('text')
       .then(text => {
-        expect(text.trim()).to.equal('Current key worker: Tom Cat')
+        expect(text.trim()).to.equal('Current key worker: Sample Keyworker')
       })
 
     cy.get('.govuk-summary-list__key')
@@ -91,7 +91,7 @@ context('Prisoner Allocation History', () => {
       .eq(3)
       .invoke('text')
       .then(text => {
-        expect(text.trim()).to.equal('Jerry Mouse')
+        expect(text.trim()).to.equal('Test Keyworker')
       })
 
     cy.get('.govuk-summary-list__key')
@@ -138,7 +138,7 @@ context('Prisoner Allocation History', () => {
       .eq(1)
       .invoke('text')
       .then(text => {
-        expect(text.trim()).to.equal('Previous key worker: Benny The Ball')
+        expect(text.trim()).to.equal('Previous key worker: Smith Last-Name')
       })
 
     cy.get('.govuk-summary-list__key')
@@ -190,7 +190,7 @@ context('Prisoner Allocation History', () => {
       .eq(10)
       .invoke('text')
       .then(text => {
-        expect(text.trim()).to.equal('Officer Dibble')
+        expect(text.trim()).to.equal('Foo Baz')
       })
 
     cy.get('.govuk-summary-list__key')
@@ -216,7 +216,7 @@ context('Prisoner Allocation History', () => {
       .eq(12)
       .invoke('text')
       .then(text => {
-        expect(text.trim()).to.equal('Top Cat')
+        expect(text.trim()).to.equal('Fake Doe')
       })
 
     cy.get('.govuk-summary-list__key')
