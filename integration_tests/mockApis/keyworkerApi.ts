@@ -58,12 +58,12 @@ const stubPutAllocationSuccess = () => {
         equalToJson: {
           allocations: [
             {
-              personIdentifier: 'A4288DZ',
+              personIdentifier: 'A2504EA',
               staffId: 488096,
               allocationReason: 'MANUAL',
             },
             {
-              personIdentifier: 'A2504EA',
+              personIdentifier: 'A4288DZ',
               staffId: 488096,
               allocationReason: 'MANUAL',
             },
@@ -495,8 +495,8 @@ const keyworkerDetailsResponse = {
     {
       prisoner: {
         prisonNumber: 'A4288DZ',
-        firstName: 'ZAKIRA',
-        lastName: 'AYO',
+        firstName: 'DOE',
+        lastName: 'JOHN',
         csra: 'Standard',
         cellLocation: '1-1-035',
         releaseDate: '2025-02-01',
@@ -509,8 +509,8 @@ const keyworkerDetailsResponse = {
     {
       prisoner: {
         prisonNumber: 'A2504EA',
-        firstName: 'ASTRID',
-        lastName: 'BOGISICH',
+        firstName: 'Foo',
+        lastName: 'Bar',
         csra: 'Standard',
         cellLocation: '3-1-027',
         releaseDate: '2025-02-01',
@@ -572,7 +572,7 @@ const stubSearchPrisonersWithQuery = () =>
     [
       {
         equalToJson: {
-          query: 'Ayo',
+          query: 'John',
           cellLocationPrefix: '',
           excludeActiveAllocations: false,
         },
@@ -639,29 +639,29 @@ const stubSearchPrisoner = () =>
 const keyworkerSearchPrisoners = [
   {
     personIdentifier: 'A4288DZ',
-    firstName: 'ZAKIRA',
-    lastName: 'AYO',
+    firstName: 'DOE',
+    lastName: 'JOHN',
     location: '1-1-035',
     hasHighComplexityOfNeeds: false,
     hasAllocationHistory: true,
     keyworker: {
       staffId: 488095,
-      firstName: 'ROB',
-      lastName: 'COOPER',
+      firstName: 'AVAILABLE-ACTIVE',
+      lastName: 'KEY-WORKER',
     },
   },
   {
     personIdentifier: 'A2504EA',
-    firstName: 'ASTRID',
-    lastName: 'BOGISICH',
+    firstName: 'FOO',
+    lastName: 'BAR',
     location: '3-1-027',
     hasHighComplexityOfNeeds: false,
     hasAllocationHistory: true,
   },
   {
     personIdentifier: 'G7189VT',
-    firstName: 'DARWIN',
-    lastName: 'CAPODILUPO',
+    firstName: 'JANE',
+    lastName: 'TESTER',
     location: '4-2-031',
     hasHighComplexityOfNeeds: false,
     hasAllocationHistory: false,
@@ -674,8 +674,8 @@ const prisonerAllocationResponse = {
       active: true,
       keyworker: {
         staffId: 488021,
-        firstName: 'Tom',
-        lastName: 'Cat',
+        firstName: 'Sample',
+        lastName: 'Keyworker',
       },
       prison: {
         code: 'MDI',
@@ -683,7 +683,7 @@ const prisonerAllocationResponse = {
       },
       allocated: {
         at: '2025-04-17T14:41:23.931574',
-        by: 'Jerry Mouse',
+        by: 'Test Keyworker',
         reason: {
           code: 'AUTO',
           description: 'Automatic',
@@ -695,8 +695,8 @@ const prisonerAllocationResponse = {
       active: false,
       keyworker: {
         staffId: 488021,
-        firstName: 'Benny',
-        lastName: 'The Ball',
+        firstName: 'Smith',
+        lastName: 'Last-Name',
       },
       prison: {
         code: 'MDI',
@@ -704,7 +704,7 @@ const prisonerAllocationResponse = {
       },
       allocated: {
         at: '2024-12-18T10:56:37.073945',
-        by: 'Officer Dibble',
+        by: 'Foo Baz',
         reason: {
           code: 'MANUAL',
           description: 'Manual',
@@ -712,7 +712,7 @@ const prisonerAllocationResponse = {
       },
       deallocated: {
         at: '2025-02-12T15:57:56.862492',
-        by: 'Top Cat',
+        by: 'Fake Doe',
         reason: {
           code: 'MANUAL',
           description: 'Manual',

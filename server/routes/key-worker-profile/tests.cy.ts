@@ -49,18 +49,18 @@ context('Profile Info', () => {
     cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(2).should('have.text', '+5 increase')
 
     // Allocations panel
-    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Ayo, Zakira')
-    cy.get('.govuk-table__row').eq(1).children().eq(1).should('contain.text', '1-1-035')
-    cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', '1/2/2025')
-    cy.get('.govuk-table__row').eq(1).children().eq(3).should('contain.text', 'Standard')
-    cy.get('.govuk-table__row').eq(1).children().eq(4).should('contain.text', '23/1/2025')
-    cy.get('[data-sort-value="Ayo, Zakira"] > .govuk-link--no-visited-state').should(
+    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
+    cy.get('.govuk-table__row').eq(2).children().eq(1).should('contain.text', '1-1-035')
+    cy.get('.govuk-table__row').eq(2).children().eq(2).should('contain.text', '1/2/2025')
+    cy.get('.govuk-table__row').eq(2).children().eq(3).should('contain.text', 'Standard')
+    cy.get('.govuk-table__row').eq(2).children().eq(4).should('contain.text', '23/1/2025')
+    cy.get('[data-sort-value="John, Doe"] > .govuk-link--no-visited-state').should(
       'have.attr',
       'href',
       'http://localhost:3001/prisoner/A4288DZ',
     )
 
-    cy.get('[data-sort-value="Ayo, Zakira"] > .govuk-link--no-visited-state').should('have.attr', 'target', '_blank')
+    cy.get('[data-sort-value="John, Doe"] > .govuk-link--no-visited-state').should('have.attr', 'target', '_blank')
   })
 
   it('should show error when no allocations or deallocations are made', () => {
@@ -81,9 +81,9 @@ context('Profile Info', () => {
     cy.visit('/key-worker-profile/488095', { failOnStatusCode: false })
 
     cy.get('.govuk-table__row').should('have.length', 3)
-    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Ayo, Zakira')
+    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
 
-    cy.get('#selectKeyworker').select('Deallocate')
+    cy.findAllByRole('combobox').eq(1).select('Deallocate')
 
     cy.findByRole('button', { name: /Save changes/i }).click()
     cy.verifyLastAPICall(
@@ -109,12 +109,12 @@ context('Profile Info', () => {
     cy.visit('/key-worker-profile/488095', { failOnStatusCode: false })
 
     cy.get('.govuk-table__row').should('have.length', 3)
-    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Ayo, Zakira')
+    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
 
     cy.get('#selectKeyworker').should('contain', 'Select key worker')
     cy.get('#selectKeyworker').should('contain', 'Deallocate')
     cy.get('#selectKeyworker').should('not.contain', 'Key-Worker, Available-Active (allocations: 32)')
-    cy.get('#selectKeyworker').select('Deallocate')
+    cy.findAllByRole('combobox').eq(1).select('Deallocate')
 
     cy.findByRole('button', { name: /Save changes/i }).click()
     cy.verifyLastAPICall(
@@ -137,7 +137,7 @@ context('Profile Info', () => {
     cy.visit('/key-worker-profile/488095', { failOnStatusCode: false })
 
     cy.get('.govuk-table__row').should('have.length', 3)
-    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Ayo, Zakira')
+    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
 
     cy.get('select').eq(0).should('contain', 'Deallocate')
     cy.get('select').eq(0).should('not.contain', 'Key-Worker, Available-Active (allocations: 32)')
@@ -156,8 +156,8 @@ context('Profile Info', () => {
       { method: 'PUT' },
       {
         allocations: [
-          { personIdentifier: 'A4288DZ', staffId: 488096, allocationReason: 'MANUAL' },
           { personIdentifier: 'A2504EA', staffId: 488096, allocationReason: 'MANUAL' },
+          { personIdentifier: 'A4288DZ', staffId: 488096, allocationReason: 'MANUAL' },
         ],
         deallocations: [],
       },

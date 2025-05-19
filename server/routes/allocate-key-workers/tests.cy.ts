@@ -57,10 +57,10 @@ context('Profile Info', () => {
     cy.task('stubPutAllocationFail')
     navigateToTestPage()
 
-    cy.visit('/allocate-key-workers?query=Ayo', { failOnStatusCode: false })
+    cy.visit('/allocate-key-workers?query=John', { failOnStatusCode: false })
 
     cy.get('.govuk-table__row').should('have.length', 2)
-    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Ayo, Zakira')
+    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'John, Doe')
 
     cy.get('#selectKeyworker').select('Deallocate')
 
@@ -86,10 +86,10 @@ context('Profile Info', () => {
     cy.task('stubPutDeallocationSuccess')
     navigateToTestPage()
 
-    cy.visit('/allocate-key-workers?query=Ayo', { failOnStatusCode: false })
+    cy.visit('/allocate-key-workers?query=John', { failOnStatusCode: false })
 
     cy.get('.govuk-table__row').should('have.length', 2)
-    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Ayo, Zakira')
+    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'John, Doe')
 
     cy.get('#selectKeyworker').should('contain', 'Select key worker')
     cy.get('#selectKeyworker').should('contain', 'Deallocate')
@@ -118,14 +118,13 @@ context('Profile Info', () => {
     cy.visit('/allocate-key-workers', { failOnStatusCode: false })
 
     cy.get('.govuk-table__row').should('have.length', 4)
-    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Ayo, Zakira')
+    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
 
-    // First select should contain deallocate and not the active key worker - the rest should should key worker but not deallocate
-    cy.get('select').eq(1).should('contain', 'Deallocate')
-    cy.get('select').eq(1).should('not.contain', 'Key-Worker, Available-Active (allocations: 32)')
+    cy.get('select').eq(2).should('contain', 'Deallocate')
+    cy.get('select').eq(2).should('not.contain', 'Key-Worker, Available-Active (allocations: 32)')
 
-    cy.get('select').eq(2).should('not.contain', 'Deallocate')
-    cy.get('select').eq(2).should('contain', 'Key-Worker, Available-Active (allocations: 32)')
+    cy.get('select').eq(1).should('not.contain', 'Deallocate')
+    cy.get('select').eq(1).should('contain', 'Key-Worker, Available-Active (allocations: 32)')
     cy.get('select').eq(3).should('not.contain', 'Deallocate')
     cy.get('select').eq(3).should('contain', 'Key-Worker, Available-Active (allocations: 32)')
 
@@ -138,8 +137,8 @@ context('Profile Info', () => {
       { method: 'PUT' },
       {
         allocations: [
-          { personIdentifier: 'A4288DZ', staffId: 488096, allocationReason: 'MANUAL' },
           { personIdentifier: 'A2504EA', staffId: 488096, allocationReason: 'MANUAL' },
+          { personIdentifier: 'A4288DZ', staffId: 488096, allocationReason: 'MANUAL' },
         ],
         deallocations: [],
       },
@@ -198,16 +197,16 @@ context('Profile Info', () => {
       .should('have.length', 0)
     cy.get('.govuk-table__row').eq(0).children().eq(4).should('contain.text', '').children().should('have.length', 0)
 
-    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Ayo, Zakira')
-    cy.get('.govuk-table__row').eq(1).children().eq(1).should('contain.text', '1-1-035')
-    cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', 'Cooper, Rob')
+    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
+    cy.get('.govuk-table__row').eq(2).children().eq(1).should('contain.text', '1-1-035')
+    cy.get('.govuk-table__row').eq(2).children().eq(2).should('contain.text', 'Key-Worker, Available-Active')
     cy.get('.govuk-table__row')
-      .eq(1)
+      .eq(2)
       .children()
       .eq(3)
       .should('contain.text', 'Key-Worker, Available-Active2 (allocations: 32)')
     cy.get('.govuk-table__row')
-      .eq(1)
+      .eq(2)
       .children()
       .eq(4)
       .should('contain.text', 'View allocation history')
@@ -225,7 +224,7 @@ context('Profile Info', () => {
     cy.get('.moj-pagination').should('have.length', 2).eq(0).should('contain.text', 'Showing 1 to 2 of 2 results')
 
     cy.get('.govuk-table__row').should('have.length', 3)
-    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Bogisich, Astrid')
+    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Bar, Foo')
     cy.get('.govuk-table__row').eq(1).children().eq(1).should('contain.text', '3-1-027')
     cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', '-')
     cy.get('.govuk-table__row')
@@ -246,7 +245,7 @@ context('Profile Info', () => {
         '/prisoner-allocation-history/A2504EA?query=&cellLocationPrefix=&excludeActiveAllocations=true',
       )
 
-    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'Capodilupo, Darwin')
+    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'Tester, Jane')
     cy.get('.govuk-table__row').eq(2).children().eq(1).should('contain.text', '4-2-031')
     cy.get('.govuk-table__row').eq(2).children().eq(2).should('contain.text', '-')
     cy.get('.govuk-table__row')
@@ -260,9 +259,9 @@ context('Profile Info', () => {
   const checkSorting = () => {
     cy.get('.govuk-table__row').eq(0).children().eq(2).should('contain.text', 'Key worker').click()
 
-    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Bogisich, Astrid')
-    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'Capodilupo, Darwin')
-    cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'Ayo, Zakira')
+    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Bar, Foo')
+    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'Tester, Jane')
+    cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'John, Doe')
   }
 
   const checkResidentialLocationFilter = () => {
@@ -273,7 +272,7 @@ context('Profile Info', () => {
     cy.get('.moj-pagination').should('have.length', 2).eq(0).should('contain.text', 'Showing 1 to 1 of 1 result')
 
     cy.get('.govuk-table__row').should('have.length', 2)
-    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Bogisich, Astrid')
+    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Bar, Foo')
     cy.get('.govuk-table__row')
       .eq(1)
       .children()
@@ -291,13 +290,13 @@ context('Profile Info', () => {
     cy.findByRole('checkbox', { name: /Prisoners without a key worker/ }).uncheck()
     cy.findByRole('textbox', { name: /Name or prison number/ })
       .clear()
-      .type('Ayo')
+      .type('John')
     cy.findByRole('button', { name: /Apply filters/i }).click()
 
     cy.get('.moj-pagination').should('have.length', 2).eq(0).should('contain.text', 'Showing 1 to 1 of 1 result')
 
     cy.get('.govuk-table__row').should('have.length', 2)
-    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Ayo, Zakira')
+    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'John, Doe')
     cy.get('.govuk-table__row')
       .eq(1)
       .children()
@@ -307,7 +306,7 @@ context('Profile Info', () => {
       .should(
         'have.attr',
         'href',
-        '/prisoner-allocation-history/A4288DZ?query=Ayo&cellLocationPrefix=&excludeActiveAllocations=false',
+        '/prisoner-allocation-history/A4288DZ?query=John&cellLocationPrefix=&excludeActiveAllocations=false',
       )
   }
 
