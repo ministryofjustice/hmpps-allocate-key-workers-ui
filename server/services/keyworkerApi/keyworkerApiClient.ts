@@ -1,3 +1,4 @@
+import { Request, Response } from 'express'
 import RestClient from '../../data/restClient'
 import config from '../../config'
 import type { components } from '../../@types/keyWorker'
@@ -28,8 +29,17 @@ export interface ServiceConfigInfo {
 export default class KeyworkerApiClient {
   private readonly restClient: RestClient
 
-  constructor(token: string) {
-    this.restClient = new RestClient('Keyworker API', config.apis.keyworkerApi, token)
+  constructor(req: Request, res?: Response) {
+    this.restClient = new RestClient(
+      'Keyworker API',
+      config.apis.keyworkerApi,
+      req.systemClientToken,
+      res?.locals?.user?.activeCaseLoad?.caseLoadId
+        ? {
+            CaseloadId: res.locals.user.activeCaseLoad.caseLoadId,
+          }
+        : {},
+    )
   }
 
   async getServiceConfigInfo(): Promise<ServiceConfigInfo> {

@@ -1,5 +1,6 @@
 import { CsrfTokenGenerator } from 'csrf-sync'
 import { HmppsUser } from '../../interfaces/hmppsUser'
+import { components } from '../keyWorker'
 
 export declare module 'express-session' {
   // Declare that the session will potentially contain these additional fields
@@ -8,6 +9,23 @@ export declare module 'express-session' {
     nowInMinutes: number
   }
 }
+
+export type JourneyData = {
+  instanceUnixEpoch: number
+  isCheckAnswers?: boolean
+  journeyCompleted?: boolean
+  keyWorker?: components['schemas']['KeyworkerDetails']
+  unavailability?: UnavailabilityJourney
+}
+
+export type KeyWorkerStatus = 'ACT' | 'UAL' | 'ULT' | 'UNP' | 'INA'
+
+export type UnavailabilityJourney = Partial<{
+  status: KeyWorkerStatus
+  deactivateActiveAllocations: boolean
+  removeFromAutoAllocation: boolean
+  reactivateOn: string
+}>
 
 export declare global {
   namespace Express {

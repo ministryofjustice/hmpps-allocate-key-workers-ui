@@ -32,6 +32,7 @@ export class UpdateCapacityAndStatusController {
     try {
       const success = await this.keyworkerApiService.updateKeyworkerProperties(
         req,
+        res,
         prisonCode,
         staffId,
         capacity,
