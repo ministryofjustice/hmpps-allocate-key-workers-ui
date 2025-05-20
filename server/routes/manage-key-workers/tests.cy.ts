@@ -83,9 +83,9 @@ context('Manage key workers', () => {
     cy.get('.govuk-table__row').eq(5).children().eq(3).should('contain.text', '4')
     cy.get('.govuk-table__row').eq(6).children().eq(3).should('contain.text', '12')
 
-    cy.get('.govuk-table__row').eq(1).children().eq(4).should('contain.text', 'No')
-    cy.get('.govuk-table__row').eq(2).children().eq(4).should('contain.text', 'No')
-    cy.get('.govuk-table__row').eq(3).children().eq(4).should('contain.text', 'No')
+    cy.get('.govuk-table__row').eq(1).children().eq(4).should('contain.text', 'Yes')
+    cy.get('.govuk-table__row').eq(2).children().eq(4).should('contain.text', 'Yes')
+    cy.get('.govuk-table__row').eq(3).children().eq(4).should('contain.text', 'Yes')
     cy.get('.govuk-table__row').eq(4).children().eq(4).should('contain.text', 'No')
     cy.get('.govuk-table__row').eq(5).children().eq(4).should('contain.text', 'No')
     cy.get('.govuk-table__row').eq(6).children().eq(4).should('contain.text', 'No')
