@@ -14,7 +14,7 @@ export type JourneyData = {
   instanceUnixEpoch: number
   isCheckAnswers?: boolean
   journeyCompleted?: boolean
-  keyWorker?: components['schemas']['KeyworkerDetails']
+  keyWorkerDetails?: components['schemas']['KeyworkerDetails']
   unavailability?: UnavailabilityJourney
 }
 

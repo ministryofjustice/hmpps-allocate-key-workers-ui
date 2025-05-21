@@ -14,7 +14,10 @@ context('Profile Info', () => {
 
     cy.findByRole('heading', { name: /^AVAILABLE-ACTIVE KEY-WORKER$/i }).should('be.visible')
     cy.get('.status-tag').eq(0).should('have.text', 'Active')
-    cy.get('.govuk-link').eq(0).should('have.text', 'Update capacity and status')
+    cy.findByRole('link', { name: 'Update capacity and status' })
+      .should('be.visible')
+      .and('have.attr', 'href')
+      .and('equal', '/start-update-key-worker/488095?proceedTo=update-capacity-status')
 
     cy.findByText('Select key workers from the dropdown lists to reallocate or deallocate prisoners.').should('exist')
     cy.findByText('Key workers will only be allocated when you save your changes.').should('exist')

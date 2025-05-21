@@ -2,11 +2,16 @@ import { Router } from 'express'
 import { DataAccess } from '../../data'
 import { Services } from '../../services'
 import setUpJourneyData from '../../middleware/journey/setUpJourneyData'
+import { StartUpdateKeyWorkerRoutes } from './start-update-key-worker/routes'
+import { UpdateCapacityAndStatusRoutes } from './update-capacity-status/routes'
 
-export default function JourneyRoutes(dataAccess: DataAccess, _services: Services) {
+export default function JourneyRoutes(dataAccess: DataAccess, services: Services) {
   const router = Router({ mergeParams: true })
 
   router.use(setUpJourneyData(dataAccess.tokenStore))
+
+  router.use('/start-update-key-worker/:staffId', StartUpdateKeyWorkerRoutes(services))
+  router.use('/update-capacity-status', UpdateCapacityAndStatusRoutes(services))
 
   if (process.env.NODE_ENV === 'e2e-test') {
     /* eslint-disable no-param-reassign */

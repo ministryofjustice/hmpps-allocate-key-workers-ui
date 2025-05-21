@@ -38,13 +38,16 @@ export default class KeyworkerApiService {
   getKeyworkerDetails(
     req: Request,
     prisonCode: string,
-    staffId: string,
+    staffId: string | number,
   ): ReturnType<KeyworkerApiClient['getKeyworkerDetails']> {
     return this.keyworkerApiClientBuilder(req).getKeyworkerDetails(prisonCode, staffId)
   }
 
-  getKeyworkerStatuses(req: Request): ReturnType<KeyworkerApiClient['getKeyworkerStatuses']> {
-    return this.keyworkerApiClientBuilder(req).getKeyworkerStatuses()
+  getReferenceData(
+    req: Request,
+    domain: 'keyworker-status' | 'allocation-reason' | 'deallocation-reason',
+  ): ReturnType<KeyworkerApiClient['getReferenceData']> {
+    return this.keyworkerApiClientBuilder(req).getReferenceData(domain)
   }
 
   searchPrisoners(
@@ -72,7 +75,7 @@ export default class KeyworkerApiService {
     req: Request,
     res: Response,
     prisonCode: string,
-    staffId: string,
+    staffId: string | number,
     capacity: number,
     status: string,
   ): ReturnType<KeyworkerApiClient['updateKeyworkerProperties']> {

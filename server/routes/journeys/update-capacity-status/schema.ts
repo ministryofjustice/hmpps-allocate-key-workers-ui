@@ -4,7 +4,7 @@ import { createSchema, validateNumberBetween } from '../../../middleware/validat
 import KeyworkerApiService from '../../../services/keyworkerApi/keyworkerApiService'
 
 export const schemaFactory = (keyworkerApiService: KeyworkerApiService) => async (req: Request) => {
-  const statuses = await keyworkerApiService.getKeyworkerStatuses(req)
+  const statuses = await keyworkerApiService.getReferenceData(req, 'keyworker-status')
   const validStatusCodes = new Set(statuses.map(status => status.code))
 
   return createSchema({

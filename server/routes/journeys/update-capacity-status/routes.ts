@@ -9,7 +9,6 @@ export const UpdateCapacityAndStatusRoutes = ({ keyworkerApiService }: Services)
   const controller = new UpdateCapacityAndStatusController(keyworkerApiService)
 
   get('/', controller.GET)
-
   post('/', validate(schemaFactory(keyworkerApiService)), controller.POST)
 
   return router

@@ -22,7 +22,7 @@
     <div class="govuk-grid-row govuk-!-margin-0">
       <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0">{{ keyworker | firstNameSpaceLastName }}</h1>
       <p class="govuk-!-margin-left-2 govuk-!-display-inline-block govuk-!-margin-0 "> {{ statusTag({ text: status.description }) }} </p>
-      <a class="govuk-!-margin-left-2 govuk-link govuk-link--no-visited-state govuk-!-display-inline-block " href="{{ keyworker.staffId }}/update-capacity-status">Update capacity and status</a>
+      <a class="govuk-!-margin-left-2 govuk-link govuk-link--no-visited-state govuk-!-display-inline-block " href="/start-update-key-worker/{{ keyworker.staffId }}?proceedTo=update-capacity-status">Update capacity and status</a>
     </div>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 

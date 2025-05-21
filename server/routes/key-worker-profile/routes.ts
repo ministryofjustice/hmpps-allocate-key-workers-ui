@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import { Services } from '../../services'
 import { JourneyRouter } from '../base/routes'
 import { KeyWorkerProfileController } from './controller'
-import { UpdateCapacityAndStatusRoutes } from './update-capacity-status/routes'
 
 export const KeyWorkerProfileRoutes = (services: Services) => {
   const { keyworkerApiService } = services
@@ -16,8 +15,6 @@ export const KeyWorkerProfileRoutes = (services: Services) => {
   })
 
   post('/:staffId', controller.submitToApi)
-
-  router.use('/:staffId/update-capacity-status', UpdateCapacityAndStatusRoutes(services))
 
   return router
 }

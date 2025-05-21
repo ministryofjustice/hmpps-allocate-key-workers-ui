@@ -10,6 +10,7 @@ context('Update capacity and status', () => {
 
   it('should show initial data', () => {
     navigateToTestPage()
+    cy.url().should('match', /\/update-capacity-status$/)
 
     cy.get('.govuk-heading-l').eq(0).should('have.text', 'Available-Active Key-Worker')
     cy.get('.status-tag').eq(0).should('have.text', 'Active')
@@ -58,6 +59,6 @@ context('Update capacity and status', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-worker-profile/488095/update-capacity-status', { failOnStatusCode: false })
+    cy.visit('/start-update-key-worker/488095?proceedTo=update-capacity-status', { failOnStatusCode: false })
   }
 })

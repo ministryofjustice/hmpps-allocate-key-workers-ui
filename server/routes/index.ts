@@ -10,6 +10,8 @@ import { AllocateKeyWorkerRoutes } from './allocate-key-workers/routes'
 import { PrisonerAllocationHistoryRoutes } from './prisoner-allocation-history/routes'
 import removeTrailingSlashMiddleware from '../middleware/removeTrailingSlashMiddleware'
 import insertJourneyIdentifier from '../middleware/journey/insertJourneyIdentifier'
+import JourneyRoutes from './journeys/routes'
+import { dataAccess } from '../data'
 
 export default function routes(services: Services): Router {
   const router = Router()
@@ -27,6 +29,7 @@ export default function routes(services: Services): Router {
   router.use('/prisoner-allocation-history', PrisonerAllocationHistoryRoutes(services))
 
   router.use(insertJourneyIdentifier())
+  router.use('/:journeyId', JourneyRoutes(dataAccess(), services))
 
   return router
 }
