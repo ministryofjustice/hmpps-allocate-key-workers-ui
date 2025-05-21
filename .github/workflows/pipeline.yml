@@ -42,6 +42,7 @@ jobs:
   generate_unit_tests_report:
     name: generate unit tests report
     runs-on: ubuntu-latest
+    if: always()
     steps:
     - uses: actions/checkout@v4
     - name: download test artifacts

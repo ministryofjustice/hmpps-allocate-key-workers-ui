@@ -1,4 +1,8 @@
+import { v4 as uuidV4 } from 'uuid'
+
 context('Update capacity and status', () => {
+  const journeyId = uuidV4()
+
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn')
@@ -59,6 +63,8 @@ context('Update capacity and status', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/start-update-key-worker/488095?proceedTo=update-capacity-status', { failOnStatusCode: false })
+    cy.visit(`/${journeyId}/start-update-key-worker/488095?proceedTo=update-capacity-status`, {
+      failOnStatusCode: false,
+    })
   }
 })
