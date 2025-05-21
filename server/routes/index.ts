@@ -8,6 +8,7 @@ import { KeyWorkerMembersRoutes } from './manage-key-workers/routes'
 import { KeyWorkerProfileRoutes } from './key-worker-profile/routes'
 import { AllocateKeyWorkerRoutes } from './allocate-key-workers/routes'
 import { PrisonerAllocationHistoryRoutes } from './prisoner-allocation-history/routes'
+import { KeyWorkersDataRoutes } from './key-workers-data/routes'
 
 export default function routes(services: Services): Router {
   const router = Router()
@@ -21,6 +22,7 @@ export default function routes(services: Services): Router {
   router.use('/key-worker-profile', KeyWorkerProfileRoutes(services))
   router.use('/allocate-key-workers', AllocateKeyWorkerRoutes(services))
   router.use('/prisoner-allocation-history', PrisonerAllocationHistoryRoutes(services))
+  router.use('/key-workers-data', KeyWorkersDataRoutes(services))
 
   return router
 }
