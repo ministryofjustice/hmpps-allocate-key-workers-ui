@@ -14,7 +14,7 @@ export class ManageKeyWorkersController {
       throw new Error('No active caseload')
     }
 
-    const keyworkerStatuses = await this.keyworkerApiService.getKeyworkerStatuses(req)
+    const keyworkerStatuses = await this.keyworkerApiService.getReferenceData(req, 'keyworker-status')
     const statuses = keyworkerStatuses.map(keyworkerStatus => {
       return { value: keyworkerStatus.code, text: keyworkerStatus.description }
     })

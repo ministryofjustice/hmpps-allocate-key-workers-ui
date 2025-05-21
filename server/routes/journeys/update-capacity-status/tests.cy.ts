@@ -1,6 +1,11 @@
+import { v4 as uuidV4 } from 'uuid'
+
 context('Update capacity and status', () => {
+  const journeyId = uuidV4()
+
   beforeEach(() => {
     cy.task('reset')
+    cy.task('stubComponents')
     cy.task('stubSignIn')
     cy.task('stubEnabledPrison')
     cy.task('stubKeyworkerDetails')
@@ -10,6 +15,7 @@ context('Update capacity and status', () => {
 
   it('should show initial data', () => {
     navigateToTestPage()
+    cy.url().should('match', /\/update-capacity-status$/)
 
     cy.get('.govuk-heading-l').eq(0).should('have.text', 'Available-Active Key-Worker')
     cy.get('.status-tag').eq(0).should('have.text', 'Active')
@@ -58,6 +64,8 @@ context('Update capacity and status', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-worker-profile/488095/update-capacity-status', { failOnStatusCode: false })
+    cy.visit(`/${journeyId}/start-update-key-worker/488095?proceedTo=update-capacity-status`, {
+      failOnStatusCode: false,
+    })
   }
 })

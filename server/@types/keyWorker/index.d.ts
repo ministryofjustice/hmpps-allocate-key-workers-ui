@@ -24,6 +24,30 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/prisons/{prisonCode}/keyworkers/{staffId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_KEY_WORKER__RO */
+    get: operations['getKeyworkerDetails']
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_KEY_WORKER__RW */
+    put: operations['modifyKeyworkerConfig']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/key-worker/deallocate/{offenderNo}': {
     parameters: {
       query?: never
@@ -98,7 +122,7 @@ export interface paths {
      * getKeyworkerDetails
      * @description Key worker details.
      */
-    get: operations['getKeyworkerDetails']
+    get: operations['getKeyworkerDetails_1']
     put?: never
     /**
      * addOrUpdateKeyworker
@@ -335,7 +359,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/prisons/{prisonCode}/keyworkers/{staffId}': {
+  '/prisons/{prisonCode}/prisoners/keyworker-recommendations': {
     parameters: {
       query?: never
       header?: never
@@ -346,7 +370,7 @@ export interface paths {
      *
      *     Requires one of the following roles:
      *     * ROLE_KEY_WORKER__RO */
-    get: operations['getKeyworkerDetails_1']
+    get: operations['getKeyworkerRecommendations']
     put?: never
     post?: never
     delete?: never
@@ -642,6 +666,8 @@ export interface components {
       /** Format: int64 */
       staffId: number
       allocationReason: string
+      /** Format: int64 */
+      recommendedAllocationStaffId?: number
     }
     PersonStaffAllocations: {
       allocations: components['schemas']['PersonStaffAllocation'][]
@@ -652,6 +678,16 @@ export interface components {
       /** Format: int64 */
       staffId: number
       deallocationReason: string
+    }
+    KeyworkerConfigRequest: {
+      /** @enum {string} */
+      status: 'ACT' | 'UAL' | 'ULT' | 'UNP' | 'INA'
+      /** Format: int32 */
+      capacity: number
+      deactivateActiveAllocations: boolean
+      removeFromAutoAllocation: boolean
+      /** Format: date */
+      reactivateOn?: string
     }
     ErrorResponse: {
       /** Format: int32 */
@@ -933,6 +969,14 @@ export interface components {
       /** Format: date */
       latestSession?: string
     }
+    RecommendedAllocation: {
+      personIdentifier: string
+      keyworker: components['schemas']['Keyworker']
+    }
+    RecommendedAllocations: {
+      allocations: components['schemas']['RecommendedAllocation'][]
+      noAvailableKeyworkersFor: string[]
+    }
     Allocation: {
       prisoner: components['schemas']['Prisoner']
       latestSession?: components['schemas']['LatestKeyworkerSession']
@@ -947,6 +991,9 @@ export interface components {
       allocated: number
       allocations: components['schemas']['Allocation'][]
       stats: components['schemas']['KeyworkerStats']
+      allowAutoAllocation: boolean
+      /** Format: date */
+      reactivateOn?: string
     }
     KeyworkerSessionStats: {
       /** Format: date */
@@ -1462,6 +1509,59 @@ export interface operations {
       }
     }
   }
+  getKeyworkerDetails: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        prisonCode: string
+        staffId: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['KeyworkerDetails']
+        }
+      }
+    }
+  }
+  modifyKeyworkerConfig: {
+    parameters: {
+      query?: never
+      header?: {
+        /** @description
+         *         Relevant caseload id for the client identity in context e.g. the active caseload id of the logged in user.
+         *          */
+        CaseloadId?: string
+      }
+      path: {
+        prisonCode: string
+        staffId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['KeyworkerConfigRequest']
+      }
+    }
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
   deallocate: {
     parameters: {
       query?: never
@@ -1561,7 +1661,7 @@ export interface operations {
       }
     }
   }
-  getKeyworkerDetails: {
+  getKeyworkerDetails_1: {
     parameters: {
       query?: never
       header?: never
@@ -1614,7 +1714,12 @@ export interface operations {
   addOrUpdateKeyworker: {
     parameters: {
       query?: never
-      header?: never
+      header?: {
+        /** @description
+         *         Relevant caseload id for the client identity in context e.g. the active caseload id of the logged in user.
+         *          */
+        CaseloadId?: string
+      }
       path: {
         staffId: number
         prisonId: string
@@ -2122,13 +2227,12 @@ export interface operations {
       }
     }
   }
-  getKeyworkerDetails_1: {
+  getKeyworkerRecommendations: {
     parameters: {
       query?: never
       header?: never
       path: {
         prisonCode: string
-        staffId: number
       }
       cookie?: never
     }
@@ -2140,7 +2244,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          '*/*': components['schemas']['KeyworkerDetails']
+          '*/*': components['schemas']['RecommendedAllocations']
         }
       }
     }

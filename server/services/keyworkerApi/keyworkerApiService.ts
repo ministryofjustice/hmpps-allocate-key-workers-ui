@@ -1,17 +1,17 @@
-import { Request } from 'express'
-import { RestClientBuilder } from '../../data'
+import { Request, Response } from 'express'
+import { EnhancedRestClientBuilder } from '../../data'
 import KeyworkerApiClient, { ServiceConfigInfo } from './keyworkerApiClient'
 import { components } from '../../@types/keyWorker'
 
 export default class KeyworkerApiService {
-  constructor(private readonly keyworkerApiClientBuilder: RestClientBuilder<KeyworkerApiClient>) {}
+  constructor(private readonly keyworkerApiClientBuilder: EnhancedRestClientBuilder<KeyworkerApiClient>) {}
 
   getServiceConfigInfo(req: Request): Promise<ServiceConfigInfo> {
-    return this.keyworkerApiClientBuilder(req.systemClientToken).getServiceConfigInfo()
+    return this.keyworkerApiClientBuilder(req).getServiceConfigInfo()
   }
 
   isKeyworker(req: Request, prisonCode: string, username: string): ReturnType<KeyworkerApiClient['isKeyworker']> {
-    return this.keyworkerApiClientBuilder(req.systemClientToken).isKeyworker(prisonCode, username)
+    return this.keyworkerApiClientBuilder(req).isKeyworker(prisonCode, username)
   }
 
   getPrisonStats(
@@ -20,11 +20,11 @@ export default class KeyworkerApiService {
     fromDate: string,
     toDate: string,
   ): ReturnType<KeyworkerApiClient['getPrisonStats']> {
-    return this.keyworkerApiClientBuilder(req.systemClientToken).getPrisonStats(prisonId, fromDate, toDate)
+    return this.keyworkerApiClientBuilder(req).getPrisonStats(prisonId, fromDate, toDate)
   }
 
   getPrisonConfig(req: Request, prisonId: string): ReturnType<KeyworkerApiClient['getPrisonConfig']> {
-    return this.keyworkerApiClientBuilder(req.systemClientToken).getPrisonConfig(prisonId)
+    return this.keyworkerApiClientBuilder(req).getPrisonConfig(prisonId)
   }
 
   getKeyworkerMembers(
@@ -32,19 +32,22 @@ export default class KeyworkerApiService {
     prisonId: string,
     query: Parameters<KeyworkerApiClient['getKeyworkerMembers']>[1],
   ): ReturnType<KeyworkerApiClient['getKeyworkerMembers']> {
-    return this.keyworkerApiClientBuilder(req.systemClientToken).getKeyworkerMembers(prisonId, query)
+    return this.keyworkerApiClientBuilder(req).getKeyworkerMembers(prisonId, query)
   }
 
   getKeyworkerDetails(
     req: Request,
     prisonCode: string,
-    staffId: string,
+    staffId: string | number,
   ): ReturnType<KeyworkerApiClient['getKeyworkerDetails']> {
-    return this.keyworkerApiClientBuilder(req.systemClientToken).getKeyworkerDetails(prisonCode, staffId)
+    return this.keyworkerApiClientBuilder(req).getKeyworkerDetails(prisonCode, staffId)
   }
 
-  getKeyworkerStatuses(req: Request): ReturnType<KeyworkerApiClient['getKeyworkerStatuses']> {
-    return this.keyworkerApiClientBuilder(req.systemClientToken).getKeyworkerStatuses()
+  getReferenceData(
+    req: Request,
+    domain: 'keyworker-status' | 'allocation-reason' | 'deallocation-reason',
+  ): ReturnType<KeyworkerApiClient['getReferenceData']> {
+    return this.keyworkerApiClientBuilder(req).getReferenceData(domain)
   }
 
   searchPrisoners(
@@ -52,33 +55,30 @@ export default class KeyworkerApiService {
     prisonCode: string,
     body: components['schemas']['PersonSearchRequest'],
   ): ReturnType<KeyworkerApiClient['searchPrisoners']> {
-    return this.keyworkerApiClientBuilder(req.systemClientToken).searchPrisoners(prisonCode, body)
+    return this.keyworkerApiClientBuilder(req).searchPrisoners(prisonCode, body)
   }
 
   getKeyworkerAllocations(req: Request, prisonerId: string): ReturnType<KeyworkerApiClient['getKeyworkerAllocations']> {
-    return this.keyworkerApiClientBuilder(req.systemClientToken).getKeyworkerAllocations(prisonerId)
+    return this.keyworkerApiClientBuilder(req).getKeyworkerAllocations(prisonerId)
   }
 
   putAllocationDeallocations(
     req: Request,
+    res: Response,
     prisonCode: string,
     data: components['schemas']['PersonStaffAllocations'],
   ): ReturnType<KeyworkerApiClient['putAllocationDeallocations']> {
-    return this.keyworkerApiClientBuilder(req.systemClientToken).putAllocationDeallocations(prisonCode, data)
+    return this.keyworkerApiClientBuilder(req, res).putAllocationDeallocations(prisonCode, data)
   }
 
   updateKeyworkerProperties(
     req: Request,
+    res: Response,
     prisonCode: string,
-    staffId: string,
+    staffId: string | number,
     capacity: number,
     status: string,
   ): ReturnType<KeyworkerApiClient['updateKeyworkerProperties']> {
-    return this.keyworkerApiClientBuilder(req.systemClientToken).updateKeyworkerProperties(
-      prisonCode,
-      staffId,
-      capacity,
-      status,
-    )
+    return this.keyworkerApiClientBuilder(req, res).updateKeyworkerProperties(prisonCode, staffId, capacity, status)
   }
 }

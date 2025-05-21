@@ -1,3 +1,4 @@
+import { Request, Response } from 'express'
 import RestClient from '../../data/restClient'
 import config from '../../config'
 import type { components } from '../../@types/keyWorker'
@@ -28,8 +29,17 @@ export interface ServiceConfigInfo {
 export default class KeyworkerApiClient {
   private readonly restClient: RestClient
 
-  constructor(token: string) {
-    this.restClient = new RestClient('Keyworker API', config.apis.keyworkerApi, token)
+  constructor(req: Request, res?: Response) {
+    this.restClient = new RestClient(
+      'Keyworker API',
+      config.apis.keyworkerApi,
+      req.systemClientToken,
+      res?.locals?.user?.activeCaseLoad?.caseLoadId
+        ? {
+            CaseloadId: res.locals.user.activeCaseLoad.caseLoadId,
+          }
+        : {},
+    )
   }
 
   async getServiceConfigInfo(): Promise<ServiceConfigInfo> {
@@ -78,7 +88,10 @@ export default class KeyworkerApiClient {
     return response.content
   }
 
-  async getKeyworkerDetails(prisonCode: string, staffId: string): Promise<components['schemas']['KeyworkerDetails']> {
+  async getKeyworkerDetails(
+    prisonCode: string,
+    staffId: string | number,
+  ): Promise<components['schemas']['KeyworkerDetails']> {
     const response = await this.restClient.get<components['schemas']['KeyworkerDetails']>({
       path: `/prisons/${prisonCode}/keyworkers/${staffId}`,
     })
@@ -86,9 +99,11 @@ export default class KeyworkerApiClient {
     return response
   }
 
-  async getKeyworkerStatuses(): Promise<components['schemas']['CodedDescription'][]> {
+  async getReferenceData(
+    domain: 'keyworker-status' | 'allocation-reason' | 'deallocation-reason',
+  ): Promise<components['schemas']['CodedDescription'][]> {
     const response = await this.restClient.get<components['schemas']['CodedDescription'][]>({
-      path: '/reference-data/keyworker-status',
+      path: `/reference-data/${domain}`,
     })
 
     return response
@@ -128,20 +143,13 @@ export default class KeyworkerApiClient {
     return response
   }
 
-  async updateKeyworkerProperties(
-    prisonCode: string,
-    staffId: string,
-    capacity: number,
-    status: string,
-  ): Promise<boolean> {
-    const response = await this.restClient.put<boolean>({
+  async updateKeyworkerProperties(prisonCode: string, staffId: string | number, capacity: number, status: string) {
+    await this.restClient.put<boolean>({
       path: `/prisons/${prisonCode}/keyworkers/${staffId}`,
       data: {
         capacity,
         status,
       },
     })
-
-    return response
   }
 }
