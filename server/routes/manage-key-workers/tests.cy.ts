@@ -1,6 +1,7 @@
 context('Manage key workers', () => {
   beforeEach(() => {
     cy.task('reset')
+    cy.task('stubComponents')
     cy.task('stubSignIn')
     cy.task('stubKeyworkerMembersAll')
     cy.task('stubKeyworkerMembersQuery')

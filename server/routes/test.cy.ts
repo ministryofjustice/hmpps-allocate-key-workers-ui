@@ -3,6 +3,7 @@ import AuthorisedRoles from '../authentication/authorisedRoles'
 context('test / homepage', () => {
   beforeEach(() => {
     cy.task('reset')
+    cy.task('stubComponents')
   })
 
   describe('Role based access', () => {

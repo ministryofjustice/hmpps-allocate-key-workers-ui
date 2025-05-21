@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken'
 import type { Response } from 'superagent'
 
 import { stubFor, getMatchingRequests } from './wiremock'
-import ComponentsApi from './componentsApi'
 import tokenVerification from './tokenVerification'
 import AuthorisedRoles from '../../server/authentication/authorisedRoles'
 
@@ -162,7 +161,7 @@ export default {
   stubAuthManageDetails: manageDetails,
   stubSignIn: (
     userToken: UserToken = { roles: [AuthorisedRoles.KEYWORKER_MONITOR] },
-  ): Promise<[Response, Response, Response, Response, Response, Response, Response]> =>
+  ): Promise<[Response, Response, Response, Response, Response, Response]> =>
     Promise.all([
       favicon(),
       redirect(),
@@ -170,6 +169,5 @@ export default {
       token(userToken),
       tokenVerification.stubVerifyToken(),
       stubGetCaseLoads(),
-      ComponentsApi.stubComponents(),
     ]),
 }

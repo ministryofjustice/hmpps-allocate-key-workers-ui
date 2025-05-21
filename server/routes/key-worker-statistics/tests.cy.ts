@@ -3,6 +3,7 @@ import { comparisonDateFrom, comparisonDateTo, dateFrom, dateTo } from '../../ut
 context('Key worker statistics', () => {
   beforeEach(() => {
     cy.task('reset')
+    cy.task('stubComponents')
     cy.task('stubSignIn')
     cy.task('stubEnabledPrisonWithHighComplexityNeedsPrisoners')
   })

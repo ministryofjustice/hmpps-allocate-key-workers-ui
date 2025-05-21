@@ -7,7 +7,7 @@ export class UpdateCapacityAndStatusController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
   GET = async (req: Request, res: Response) => {
-    res.render('key-worker-profile/update-capacity-status/view', {
+    res.render('journeys/update-capacity-status/view', {
       ...req.journeyData.keyWorkerDetails!,
       statuses: (await this.keyworkerApiService.getReferenceData(req, 'keyworker-status')).map(
         ({ code, description }) => ({ value: code, text: description }),

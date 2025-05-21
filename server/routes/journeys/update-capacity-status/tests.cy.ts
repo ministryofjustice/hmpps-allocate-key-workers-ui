@@ -5,6 +5,7 @@ context('Update capacity and status', () => {
 
   beforeEach(() => {
     cy.task('reset')
+    cy.task('stubComponents')
     cy.task('stubSignIn')
     cy.task('stubEnabledPrison')
     cy.task('stubKeyworkerDetails')

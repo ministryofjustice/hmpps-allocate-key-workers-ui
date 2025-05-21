@@ -1,6 +1,7 @@
 context('Prisoner Allocation History', () => {
   beforeEach(() => {
     cy.task('reset')
+    cy.task('stubComponents')
     cy.task('stubSignIn')
     cy.task('stubEnabledPrison')
     cy.task('stubGetPrisonerImage')
