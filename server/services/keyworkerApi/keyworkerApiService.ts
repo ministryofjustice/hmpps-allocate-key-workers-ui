@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { EnhancedRestClientBuilder } from '../../data'
-import KeyworkerApiClient, { ServiceConfigInfo } from './keyworkerApiClient'
+import KeyworkerApiClient, { KeyworkerConfigRequest, ServiceConfigInfo } from './keyworkerApiClient'
 import { components } from '../../@types/keyWorker'
 
 export default class KeyworkerApiService {
@@ -76,9 +76,8 @@ export default class KeyworkerApiService {
     res: Response,
     prisonCode: string,
     staffId: string | number,
-    capacity: number,
-    status: string,
+    requestBody: KeyworkerConfigRequest,
   ): ReturnType<KeyworkerApiClient['updateKeyworkerProperties']> {
-    return this.keyworkerApiClientBuilder(req, res).updateKeyworkerProperties(prisonCode, staffId, capacity, status)
+    return this.keyworkerApiClientBuilder(req, res).updateKeyworkerProperties(prisonCode, staffId, requestBody)
   }
 }

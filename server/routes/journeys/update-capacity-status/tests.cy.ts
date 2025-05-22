@@ -8,7 +8,7 @@ context('Update capacity and status', () => {
     cy.task('stubComponents')
     cy.task('stubSignIn')
     cy.task('stubEnabledPrison')
-    cy.task('stubKeyworkerDetails')
+    cy.task('stubKeyworkerDetails', { status: { code: 'INACTIVE', description: 'Inactive' } })
     cy.task('stubKeyworkerStatuses')
     cy.task('stubUpdateKeyworkerProperties')
   })
@@ -18,7 +18,7 @@ context('Update capacity and status', () => {
     cy.url().should('match', /\/update-capacity-status$/)
 
     cy.get('.govuk-heading-l').eq(0).should('have.text', 'Available-Active Key-Worker')
-    cy.get('.status-tag').eq(0).should('have.text', 'Active')
+    cy.get('.status-tag').eq(0).should('have.text', 'Inactive')
 
     cy.get('.govuk-heading-s').eq(0).should('have.text', 'Establishment')
     cy.get('p').eq(1).should('have.text', 'Leeds')
@@ -31,7 +31,7 @@ context('Update capacity and status', () => {
     cy.get('#capacity').should('have.value', '6')
     cy.get('.govuk-heading-s').eq(4).should('have.text', 'Status')
     cy.get('#status').should('be.visible')
-    cy.get('#status').should('have.value', 'ACTIVE')
+    cy.get('#status').should('have.value', 'INACTIVE')
   })
 
   it("should update the keyworker's details", () => {
@@ -41,13 +41,21 @@ context('Update capacity and status', () => {
 
     cy.get('#capacity').clear().type('8')
     cy.get('#capacity').should('have.value', '8')
-    cy.get('#status').select('INACTIVE')
-    cy.get('#status').should('have.value', 'INACTIVE')
+    cy.get('#status').select('ACTIVE')
+    cy.get('#status').should('have.value', 'ACTIVE')
     cy.findByRole('button', { name: /Save and continue/i }).click()
 
     cy.get('.govuk-notification-banner__heading')
-      .should('exist')
-      .and('contain', "You have updated this keyworker's capacity.")
+      .should('be.visible')
+      .and('contain.text', 'You have updated this key worker’s status and capacity.')
+  })
+
+  it('should proceed to update-status-inactive', () => {
+    navigateToTestPage()
+    cy.get('#status').select('INACTIVE')
+    cy.findByRole('button', { name: /Save and continue/i }).click()
+
+    cy.url().should('match', /\/update-status-inactive$/)
   })
 
   it('should reject an invalid number and show a message', () => {

@@ -4,6 +4,7 @@ import { components } from '../../@types/keyWorker'
 import { formatDateConcise } from '../../utils/datetimeUtils'
 import { FLASH_KEY__FORM_RESPONSES } from '../../utils/constants'
 import { formatChange, formatNumber, formatValue } from '../../utils/statsUtils'
+import { SchemaType } from './schema'
 
 export class KeyWorkerStatisticsController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
@@ -91,7 +92,10 @@ export class KeyWorkerStatisticsController {
   }
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const nowSpan = res.locals[FLASH_KEY__FORM_RESPONSES]?.nowSpan || this.getLastFullMonthAsIsoDateString()
+    const nowSpan =
+      res.locals.formResponses?.['start'] && res.locals.formResponses?.['end']
+        ? res.locals.formResponses
+        : this.getLastFullMonthAsIsoDateString()
     const previousSpan = this.getComparisonDates(nowSpan.start, nowSpan.end)
     const prisonId = res.locals.user.getActiveCaseloadId()!
     const stats = await this.keyworkerApiService.getPrisonStats(req, prisonId, nowSpan.start, nowSpan.end)
@@ -115,12 +119,9 @@ export class KeyWorkerStatisticsController {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request<unknown, unknown, SchemaType>, res: Response): Promise<void> => {
     // Date entry is updated - reload this page with the latest data
-    req.flash(
-      FLASH_KEY__FORM_RESPONSES,
-      JSON.stringify({ nowSpan: { start: req.body.dateFrom, end: req.body.dateTo } }),
-    )
+    req.flash(FLASH_KEY__FORM_RESPONSES, JSON.stringify({ start: req.body.dateFrom, end: req.body.dateTo }))
     return res.redirect('/key-worker-statistics')
   }
 }

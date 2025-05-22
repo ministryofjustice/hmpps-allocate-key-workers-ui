@@ -10,18 +10,22 @@ export declare module 'express-session' {
   }
 }
 
+type ReferenceData = {
+  code: string
+  description: string
+}
+
 export type JourneyData = {
   instanceUnixEpoch: number
   isCheckAnswers?: boolean
   journeyCompleted?: boolean
   keyWorkerDetails?: components['schemas']['KeyworkerDetails']
-  unavailability?: UnavailabilityJourney
+  updateCapacityStatus?: UpdateCapacityStatusJourney
 }
 
-export type KeyWorkerStatus = 'ACT' | 'UAL' | 'ULT' | 'UNP' | 'INA'
-
-export type UnavailabilityJourney = Partial<{
-  status: KeyWorkerStatus
+export type UpdateCapacityStatusJourney = Partial<{
+  capacity: number
+  status: ReferenceData
   deactivateActiveAllocations: boolean
   removeFromAutoAllocation: boolean
   reactivateOn: string
@@ -52,6 +56,7 @@ export declare global {
       cspNonce: string
       csrfToken: ReturnType<CsrfTokenGenerator>
       user: HmppsUser
+      formResponses?: { [key: string]: string }
       digitalPrisonServicesUrl: string
       legacyKeyWorkersUiUrl: string
       breadcrumbs: Breadcrumbs

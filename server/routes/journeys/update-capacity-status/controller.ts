@@ -1,46 +1,82 @@
 import { NextFunction, Request, Response } from 'express'
 import KeyworkerApiService from '../../../services/keyworkerApi/keyworkerApiService'
-import { FLASH_KEY__FORM_RESPONSES } from '../../../utils/constants'
+import { FLASH_KEY__SUCCESS_MESSAGE } from '../../../utils/constants'
 import { SchemaType } from './schema'
+import { getUpdateCapacityStatusSuccessMessage } from './common/utils'
 
 export class UpdateCapacityAndStatusController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
   GET = async (req: Request, res: Response) => {
+    req.journeyData.updateCapacityStatus ??= {}
+
     res.render('journeys/update-capacity-status/view', {
       ...req.journeyData.keyWorkerDetails!,
+      capacity:
+        res.locals.formResponses?.['capacity'] ??
+        req.journeyData.updateCapacityStatus!.capacity ??
+        req.journeyData.keyWorkerDetails!.capacity,
+      statusCode: res.locals.formResponses?.['status'] ?? req.journeyData.keyWorkerDetails!.status?.code,
       statuses: (await this.keyworkerApiService.getReferenceData(req, 'keyworker-status')).map(
         ({ code, description }) => ({ value: code, text: description }),
       ),
       backUrl: `/key-worker-profile/${req.journeyData.keyWorkerDetails!.keyworker.staffId}`,
-      updated: res.locals[FLASH_KEY__FORM_RESPONSES]?.updateSuccess || false,
+      successMessage: req.flash(FLASH_KEY__SUCCESS_MESSAGE)[0],
     })
   }
 
-  POST = async (req: Request<unknown, unknown, SchemaType>, res: Response, next: NextFunction) => {
+  SubmitToApi = async (req: Request<unknown, unknown, SchemaType>, res: Response, next: NextFunction) => {
     const { capacity, status } = req.body
-
     try {
+      // special logic: save both capacity and status only if status=ACTIVE, otherwise, save capacity only
       await this.keyworkerApiService.updateKeyworkerProperties(
         req as Request,
         res,
         res.locals.user.getActiveCaseloadId()!,
         req.journeyData.keyWorkerDetails!.keyworker.staffId,
-        capacity,
-        status,
+        {
+          status: status.code === 'ACTIVE' ? status.code : req.journeyData.keyWorkerDetails!.status.code,
+          capacity,
+          deactivateActiveAllocations: false,
+          removeFromAutoAllocation: false,
+        },
       )
 
-      req.journeyData.keyWorkerDetails = await this.keyworkerApiService.getKeyworkerDetails(
-        req as Request,
-        res.locals.user.getActiveCaseloadId()!,
-        req.journeyData.keyWorkerDetails!.keyworker.staffId,
-      )
+      if (status.code === 'ACTIVE') {
+        req.flash(
+          FLASH_KEY__SUCCESS_MESSAGE,
+          getUpdateCapacityStatusSuccessMessage(status.code, capacity, req.journeyData.keyWorkerDetails!),
+        )
+      }
 
-      req.flash(FLASH_KEY__FORM_RESPONSES, JSON.stringify({ updateSuccess: true }))
+      next()
     } catch (e) {
       next(e)
     }
+  }
 
-    return res.redirect(`update-capacity-status`)
+  POST = async (req: Request<unknown, unknown, SchemaType>, res: Response) => {
+    const { capacity, status } = req.body
+
+    req.journeyData.updateCapacityStatus!.status = status
+    req.journeyData.updateCapacityStatus!.capacity = capacity
+
+    switch (status.code) {
+      case 'UNAVAILABLE_ANNUAL_LEAVE':
+        return res.redirect('update-capacity-status/update-status-annual-leave')
+      case 'UNAVAILABLE_LONG_TERM_ABSENCE':
+      case 'UNAVAILABLE_NO_PRISONER_CONTACT':
+        return res.redirect('update-capacity-status/update-status-absence')
+      case 'INACTIVE':
+        return res.redirect('update-capacity-status/update-status-inactive')
+      case 'ACTIVE':
+      default:
+        req.journeyData.keyWorkerDetails = await this.keyworkerApiService.getKeyworkerDetails(
+          req as Request,
+          res.locals.user.getActiveCaseloadId()!,
+          req.journeyData.keyWorkerDetails!.keyworker.staffId,
+        )
+        return res.redirect('update-capacity-status')
+    }
   }
 }
