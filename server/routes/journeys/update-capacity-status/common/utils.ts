@@ -1,4 +1,6 @@
+import { Request, Response } from 'express'
 import { components } from '../../../../@types/keyWorker'
+import KeyworkerApiService from '../../../../services/keyworkerApi/keyworkerApiService'
 
 export const getUpdateCapacityStatusSuccessMessage = (
   statusCode: string,
@@ -18,4 +20,18 @@ export const getUpdateCapacityStatusSuccessMessage = (
   }
 
   return `You have updated this key worker’s ${subjects.join(' and ')}.`
+}
+
+export const resetJourneyAndReloadKeyWorkerDetails = async (
+  service: KeyworkerApiService,
+  req: Request,
+  res: Response,
+) => {
+  delete req.journeyData.updateCapacityStatus
+  delete req.journeyData.isCheckAnswers
+  req.journeyData.keyWorkerDetails = await service.getKeyworkerDetails(
+    req as Request,
+    res.locals.user.getActiveCaseloadId()!,
+    req.journeyData.keyWorkerDetails!.keyworker.staffId,
+  )
 }

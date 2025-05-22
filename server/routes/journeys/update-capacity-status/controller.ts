@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import KeyworkerApiService from '../../../services/keyworkerApi/keyworkerApiService'
 import { FLASH_KEY__SUCCESS_MESSAGE } from '../../../utils/constants'
 import { SchemaType } from './schema'
-import { getUpdateCapacityStatusSuccessMessage } from './common/utils'
+import { getUpdateCapacityStatusSuccessMessage, resetJourneyAndReloadKeyWorkerDetails } from './common/utils'
 
 export class UpdateCapacityAndStatusController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
@@ -16,7 +16,10 @@ export class UpdateCapacityAndStatusController {
         res.locals.formResponses?.['capacity'] ??
         req.journeyData.updateCapacityStatus!.capacity ??
         req.journeyData.keyWorkerDetails!.capacity,
-      statusCode: res.locals.formResponses?.['status'] ?? req.journeyData.keyWorkerDetails!.status?.code,
+      statusCode:
+        res.locals.formResponses?.['status'] ??
+        req.journeyData.updateCapacityStatus!.status?.code ??
+        req.journeyData.keyWorkerDetails!.status?.code,
       statuses: (await this.keyworkerApiService.getReferenceData(req, 'keyworker-status')).map(
         ({ code, description }) => ({ value: code, text: description }),
       ),
@@ -63,19 +66,26 @@ export class UpdateCapacityAndStatusController {
 
     switch (status.code) {
       case 'UNAVAILABLE_ANNUAL_LEAVE':
-        return res.redirect('update-capacity-status/update-status-annual-leave')
+        if (req.journeyData.isCheckAnswers && !req.journeyData.updateCapacityStatus!.reactivateOn) {
+          delete req.journeyData.isCheckAnswers
+        }
+        return res.redirect(
+          req.journeyData.isCheckAnswers
+            ? 'update-capacity-status/check-answers'
+            : 'update-capacity-status/update-status-unavailable',
+        )
       case 'UNAVAILABLE_LONG_TERM_ABSENCE':
       case 'UNAVAILABLE_NO_PRISONER_CONTACT':
-        return res.redirect('update-capacity-status/update-status-absence')
+        return res.redirect(
+          req.journeyData.isCheckAnswers
+            ? 'update-capacity-status/check-answers'
+            : 'update-capacity-status/update-status-unavailable',
+        )
       case 'INACTIVE':
         return res.redirect('update-capacity-status/update-status-inactive')
       case 'ACTIVE':
       default:
-        req.journeyData.keyWorkerDetails = await this.keyworkerApiService.getKeyworkerDetails(
-          req as Request,
-          res.locals.user.getActiveCaseloadId()!,
-          req.journeyData.keyWorkerDetails!.keyworker.staffId,
-        )
+        await resetJourneyAndReloadKeyWorkerDetails(this.keyworkerApiService, req as Request, res)
         return res.redirect('update-capacity-status')
     }
   }

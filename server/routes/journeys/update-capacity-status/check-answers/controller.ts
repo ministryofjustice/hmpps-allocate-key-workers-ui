@@ -3,17 +3,31 @@ import KeyworkerApiService from '../../../../services/keyworkerApi/keyworkerApiS
 import { FLASH_KEY__SUCCESS_MESSAGE } from '../../../../utils/constants'
 import { getUpdateCapacityStatusSuccessMessage, resetJourneyAndReloadKeyWorkerDetails } from '../common/utils'
 
-export class UpdateStatusInactiveController {
+export class UpdateStatusCheckAnswersController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
   GET = async (req: Request, res: Response) => {
-    res.render('journeys/update-capacity-status/update-status-inactive/view', {
+    req.journeyData.isCheckAnswers = true
+
+    const { status, deactivateActiveAllocations, removeFromAutoAllocation, reactivateOn } =
+      req.journeyData.updateCapacityStatus!
+
+    res.render('journeys/update-capacity-status/check-answers/view', {
       ...req.journeyData.keyWorkerDetails!,
-      backUrl: '../update-capacity-status',
+      newStatus: status,
+      deactivateActiveAllocations,
+      removeFromAutoAllocation,
+      reactivateOn,
+      backUrl:
+        req.journeyData.updateCapacityStatus!.status?.code === 'UNAVAILABLE_ANNUAL_LEAVE'
+          ? 'update-status-annual-leave-return'
+          : 'update-status-unavailable',
     })
   }
 
   submitToApi = async (req: Request, res: Response, next: NextFunction) => {
+    const { status, capacity, deactivateActiveAllocations, removeFromAutoAllocation, reactivateOn } =
+      req.journeyData.updateCapacityStatus!
     try {
       await this.keyworkerApiService.updateKeyworkerProperties(
         req as Request,
@@ -21,10 +35,11 @@ export class UpdateStatusInactiveController {
         res.locals.user.getActiveCaseloadId()!,
         req.journeyData.keyWorkerDetails!.keyworker.staffId,
         {
-          status: req.journeyData.updateCapacityStatus!.status!.code,
-          capacity: req.journeyData.updateCapacityStatus!.capacity!,
-          deactivateActiveAllocations: true,
-          removeFromAutoAllocation: true,
+          status: status!.code,
+          capacity: capacity!,
+          deactivateActiveAllocations: deactivateActiveAllocations!,
+          removeFromAutoAllocation: removeFromAutoAllocation!,
+          ...(status?.code === 'UNAVAILABLE_ANNUAL_LEAVE' ? { reactivateOn } : {}),
         },
       )
 
