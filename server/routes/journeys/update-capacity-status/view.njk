@@ -10,15 +10,9 @@
 
 {% block innerContent %}
 
-  {% if updated %}
-    {% set html %}
-      <h3 class="govuk-notification-banner__heading">
-        You have updated this keyworker's capacity.
-      </h3>
-    {% endset %}
-
+  {% if successMessage %}
     {{ govukNotificationBanner({
-      html: html,
+      text: successMessage,
       type: "success"
     }) }}
   {% endif %}
@@ -52,7 +46,8 @@
             id: "capacity",
             name: "capacity",
             value: capacity,
-            classes: "govuk-!-width-one-quarter"
+            classes: "govuk-!-width-one-quarter",
+            errorMessage: { text: 'Invalid value' } if (validationErrors | findError('capacity'))
           }) }}
         </div>
         <div class="govuk-grid-column-one-quarter left-aligned">
@@ -60,7 +55,7 @@
           {{ govukSelect({
             id: "status",
             name: "status",
-            items: statuses | setSelectedValue(status.code),
+            items: statuses | setSelectedValue(statusCode),
             classes: "govuk-!-width-one-half"
           }) }}
         </div>

@@ -26,6 +26,10 @@ export interface ServiceConfigInfo {
   productId: string
 }
 
+export type KeyworkerConfigRequest = Omit<components['schemas']['KeyworkerConfigRequest'], 'status'> & {
+  status: string
+}
+
 export default class KeyworkerApiClient {
   private readonly restClient: RestClient
 
@@ -143,13 +147,10 @@ export default class KeyworkerApiClient {
     return response
   }
 
-  async updateKeyworkerProperties(prisonCode: string, staffId: string | number, capacity: number, status: string) {
+  async updateKeyworkerProperties(prisonCode: string, staffId: string | number, requestBody: KeyworkerConfigRequest) {
     await this.restClient.put<boolean>({
       path: `/prisons/${prisonCode}/keyworkers/${staffId}`,
-      data: {
-        capacity,
-        status,
-      },
+      data: requestBody,
     })
   }
 }
