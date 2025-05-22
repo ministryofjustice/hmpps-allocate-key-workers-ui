@@ -13,30 +13,34 @@
     </div>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
-    <h1 class="govuk-heading-xl">
-      Are you sure you want to change this key worker’s status to Inactive?
-    </h1>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">
+          Are you sure you want to change this key worker’s status to Inactive?
+        </h1>
 
-    <p>
-      This will deallocate the key worker’s current prisoners. It will also remove the key worker from having prisoners auto-assigned to them.
-    </p>
+        <p class="govuk-!-margin-bottom-6">
+          This will deallocate the key worker’s current prisoners. It will also remove the key worker from having prisoners auto-assigned to them.
+        </p>
 
-    <form method="post">
-      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-      <div class="govuk-button-group">
-        {{ govukButton({
-          text: "Yes, save this change",
-          classes: "govuk-button--warning",
-          preventDoubleClick: true
-        }) }}
+        <form method="post">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+          <div class="govuk-button-group">
+            {{ govukButton({
+              text: "Yes, save this change",
+              classes: "govuk-button--warning",
+              preventDoubleClick: true
+            }) }}
 
-        {{ govukButton({
-          text: "No, return to key worker profile",
-          classes: "govuk-button--secondary",
-          href: "cancel",
-          preventDoubleClick: true
-        }) }}
+            {{ govukButton({
+              text: "No, return to key worker profile",
+              classes: "govuk-button--secondary",
+              href: "cancel",
+              preventDoubleClick: true
+            }) }}
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   </div>
 {% endblock %}
