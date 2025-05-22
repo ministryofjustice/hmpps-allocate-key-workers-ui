@@ -12,7 +12,7 @@ export const UpdateCapacityAndStatusRoutes = (services: Services) => {
   const controller = new UpdateCapacityAndStatusController(keyworkerApiService)
 
   get('/', controller.GET)
-  post('/', validate(schemaFactory(keyworkerApiService)), controller.SubmitToApi, controller.POST)
+  post('/', validate(schemaFactory(keyworkerApiService)), controller.submitToApi, controller.POST)
 
   router.use('/update-status-inactive', UpdateStatusInactiveRoutes(services))
   router.use('/cancel', CancelUpdateStatusRoutes(services))

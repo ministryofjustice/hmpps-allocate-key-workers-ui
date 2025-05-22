@@ -14,9 +14,8 @@ export class UpdateStatusInactiveController {
     })
   }
 
-  SubmitToApi = async (req: Request, res: Response, next: NextFunction) => {
+  submitToApi = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // special logic: save both capacity and status only if status=ACTIVE, otherwise, save capacity only
       await this.keyworkerApiService.updateKeyworkerProperties(
         req as Request,
         res,

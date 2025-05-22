@@ -7,7 +7,7 @@ export const UpdateStatusInactiveRoutes = ({ keyworkerApiService }: Services) =>
   const controller = new UpdateStatusInactiveController(keyworkerApiService)
 
   get('/', controller.GET)
-  post('/', controller.SubmitToApi, controller.POST)
+  post('/', controller.submitToApi, controller.POST)
 
   return router
 }

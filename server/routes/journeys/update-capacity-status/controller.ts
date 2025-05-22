@@ -25,7 +25,7 @@ export class UpdateCapacityAndStatusController {
     })
   }
 
-  SubmitToApi = async (req: Request<unknown, unknown, SchemaType>, res: Response, next: NextFunction) => {
+  submitToApi = async (req: Request<unknown, unknown, SchemaType>, res: Response, next: NextFunction) => {
     const { capacity, status } = req.body
     try {
       // special logic: save both capacity and status only if status=ACTIVE, otherwise, save capacity only
