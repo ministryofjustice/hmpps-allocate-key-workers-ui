@@ -1,5 +1,8 @@
 name: Pipeline [test -> build -> deploy]
 
+env:
+  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
 on:
   push:
     branches:
@@ -25,7 +28,7 @@ jobs:
   # main node build workflow
   node_build:
     name: node build
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_build.yml@v2 # WORKFLOW_VERSION
+    uses: ./.github/workflows/node_build.yml # Referencing a copy from master of the hmpps-github-actions repo
     secrets: inherit
   # generic node unit tests - feel free to override with local tests if required
   node_unit_tests:
@@ -77,14 +80,14 @@ jobs:
   build:
     name: Build docker image from hmpps-github-actions
     if: github.ref == 'refs/heads/main'
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@v2 # WORKFLOW_VERSION
+    uses: ./.github/workflows/docker_build.yml # Referencing a copy from master of the hmpps-github-actions repo
+    secrets: inherit
     needs:
       - node_integration_tests
       - node_unit_tests
     with:
       docker_registry: 'ghcr.io'
       registry_org: 'ministryofjustice'
-      additional_docker_tag: ${{ inputs.additional_docker_tag }}
       push: ${{ inputs.push || true }}
       docker_multiplatform: true
   deploy_dev:
