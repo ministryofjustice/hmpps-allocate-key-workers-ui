@@ -1,6 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
-import { RefinementCtx, z } from 'zod'
-import { isAfter, isBefore, isEqual, isValid, parseISO } from 'date-fns'
+import { z, ZodError } from 'zod'
 import { FLASH_KEY__FORM_RESPONSES, FLASH_KEY__VALIDATION_ERRORS } from '../utils/constants'
 
 export type fieldErrors = {
@@ -42,25 +41,37 @@ const zodAlwaysRefine = <T extends z.ZodTypeAny>(zodType: T) =>
     return res.data || val
   }) as unknown as T
 
-export const validateAndTransformReferenceData =
-  <T>(refDataMap: Map<string, T>, errorMessage: string) =>
-  (val: string, ctx: RefinementCtx) => {
-    if (!refDataMap.has(val)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: errorMessage,
-      })
-      return z.NEVER
-    }
-    return refDataMap.get(val)!
-  }
-
 export type SchemaFactory = (request: Request, res: Response) => Promise<z.ZodTypeAny>
 
 const normaliseNewLines = (body: Record<string, unknown>) => {
   return Object.fromEntries(
     Object.entries(body).map(([k, v]) => [k, typeof v === 'string' ? v.replace(/\r\n/g, '\n') : v]),
   )
+}
+
+const pathArrayToString = (previous: string | number, next: string | number): string | number => {
+  if (!previous) {
+    return next.toString()
+  }
+  if (typeof next === 'number') {
+    return `${previous}[${next.toString()}]`
+  }
+  return `${previous}.${next.toString()}`
+}
+
+export const deduplicateFieldErrors = (error: ZodError) => {
+  const flattened: Record<string, Set<string>> = {}
+  error.issues.forEach(issue => {
+    // only field issues have a path
+    if (issue.path.length > 0) {
+      const path = issue.path.reduce(pathArrayToString)
+      if (!flattened[path]) {
+        flattened[path] = new Set([])
+      }
+      flattened[path]!.add(issue.message)
+    }
+  })
+  return Object.fromEntries(Object.entries(flattened).map(([key, value]) => [key, [...value]]))
 }
 
 export const validate = (schema: z.ZodTypeAny | SchemaFactory): RequestHandler => {
@@ -76,9 +87,8 @@ export const validate = (schema: z.ZodTypeAny | SchemaFactory): RequestHandler =
     }
     req.flash(FLASH_KEY__FORM_RESPONSES, JSON.stringify(req.body))
 
-    const deduplicatedFieldErrors = Object.fromEntries(
-      Object.entries(result.error.flatten().fieldErrors).map(([key, value]) => [key, [...new Set(value || [])]]),
-    )
+    const deduplicatedFieldErrors = deduplicateFieldErrors(result.error)
+
     if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'e2e-test') {
       // eslint-disable-next-line no-console
       console.error(
@@ -89,50 +99,6 @@ export const validate = (schema: z.ZodTypeAny | SchemaFactory): RequestHandler =
     // Remove any hash from the URL by appending an empty hash string
     return res.redirect(`${req.baseUrl}#`)
   }
-}
-
-const validateDateBase = (requiredErr: string, invalidErr: string) => {
-  return z
-    .string({ message: requiredErr })
-    .min(1, { message: requiredErr })
-    .transform(value => value.split(/[-/]/).reverse())
-    .transform(value => {
-      // Prefix month and date with a 0 if needed
-      const month = value[1]?.length === 2 ? value[1] : `0${value[1]}`
-      const date = value[2]?.length === 2 ? value[2] : `0${value[2]}`
-      return `${value[0]}-${month}-${date}T00:00:00Z` // We put a full timestamp on it so it gets parsed as UTC time and the date doesn't get changed due to locale
-    })
-    .transform(date => parseISO(date))
-    .superRefine((date, ctx) => {
-      return isValid(date) || ctx.addIssue({ code: z.ZodIssueCode.custom, message: invalidErr })
-    })
-}
-
-export const validateTransformDate = (requiredErr: string, invalidErr: string) => {
-  return validateDateBase(requiredErr, invalidErr).transform(date => date.toISOString().substring(0, 10))
-}
-
-export const validateTransformPastDate = (requiredErr: string, invalidErr: string, maxErr: string) => {
-  return validateDateBase(requiredErr, invalidErr)
-    .superRefine(
-      (date, ctx) => isBefore(date, new Date()) || ctx.addIssue({ code: z.ZodIssueCode.custom, message: maxErr }),
-    )
-    .transform(date => date.toISOString().substring(0, 10))
-}
-
-export const validateTransformFutureDate = (requiredErr: string, invalidErr: string, maxErr: string) => {
-  return validateDateBase(requiredErr, invalidErr)
-    .superRefine((date, ctx) => {
-      const today = new Date()
-      today.setHours(0)
-      today.setMinutes(0)
-      today.setSeconds(0)
-      today.setMilliseconds(0)
-      return (
-        isAfter(date, today) || isEqual(date, today) || ctx.addIssue({ code: z.ZodIssueCode.custom, message: maxErr })
-      )
-    })
-    .transform(date => date.toISOString().substring(0, 10))
 }
 
 export const sanitizeSelectValue = (items: string[], value: string, defaultValue: string = ''): string => {
@@ -150,14 +116,4 @@ export const sanitizeQueryName = (query: string, defaultValue: string = ''): str
   }
 
   return defaultValue
-}
-
-export const validateNumberBetween = (requiredErr: string, invalidErr: string, rangeErr: string) => {
-  // Validate that the input is a number and between 0-999
-  return z
-    .string({ required_error: requiredErr })
-    .min(1, { message: requiredErr })
-    .refine(val => /^\d+$/.test(val), { message: invalidErr })
-    .transform(Number)
-    .refine(val => val >= 0 && val <= 999, { message: rangeErr })
 }
