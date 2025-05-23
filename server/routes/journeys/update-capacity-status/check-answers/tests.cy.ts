@@ -2,7 +2,7 @@ import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../integration_tests/support/commands'
 
 context('/update-capacity-status/check-answers', () => {
-  const journeyId = uuidV4()
+  let journeyId = uuidV4()
 
   beforeEach(() => {
     cy.task('reset')
@@ -15,7 +15,17 @@ context('/update-capacity-status/check-answers', () => {
   })
 
   it('should try UNAVAILABLE_LONG_TERM_ABSENCE scenario', () => {
-    navigateToTestPage()
+    navigateToTestPage({
+      updateCapacityStatus: {
+        status: {
+          code: 'UNAVAILABLE_LONG_TERM_ABSENCE',
+          description: 'Unavailable (long-term absence)',
+        },
+        capacity: 999,
+        deactivateActiveAllocations: false,
+        removeFromAutoAllocation: false,
+      },
+    })
     cy.url().should('match', /\/check-answers$/)
 
     verifyPageCommonContent()
@@ -28,6 +38,51 @@ context('/update-capacity-status/check-answers', () => {
       .should('be.visible')
       .and('have.attr', 'href')
       .and('to.match', /update-capacity-status$/)
+
+    cy.findByRole('link', { name: /Change whether to continue automatically assigning prisoners/i })
+      .should('be.visible')
+      .and('have.attr', 'href')
+      .and('to.match', /update-status-unavailable$/)
+
+    cy.findByRole('link', { name: /Change whether to deallocate prisoners/i })
+      .should('be.visible')
+      .and('have.attr', 'href')
+      .and('to.match', /update-status-unavailable$/)
+
+    proceedToNextPage()
+  })
+
+  it('should try UNAVAILABLE_ANNUAL_LEAVE scenario', () => {
+    navigateToTestPage({
+      updateCapacityStatus: {
+        status: {
+          code: 'UNAVAILABLE_ANNUAL_LEAVE',
+          description: 'Unavailable (annual leave)',
+        },
+        capacity: 999,
+        deactivateActiveAllocations: true,
+        removeFromAutoAllocation: true,
+        reactivateOn: '2070-09-05T00:00:00.000Z',
+      },
+    })
+    cy.url().should('match', /\/check-answers$/)
+
+    verifyPageCommonContent()
+
+    cy.contains('dt', 'New status').next().should('include.text', 'Unavailable (annual leave)')
+    cy.contains('dt', 'Return date').next().should('include.text', '5/9/2070')
+    cy.contains('dt', 'Continue automatically assigning prisoners?').next().should('include.text', 'No')
+    cy.contains('dt', 'Deallocate prisoners?').next().should('include.text', 'Yes')
+
+    cy.findByRole('link', { name: /Change the new status/i })
+      .should('be.visible')
+      .and('have.attr', 'href')
+      .and('to.match', /update-capacity-status$/)
+
+    cy.findByRole('link', { name: /Change the return date/i })
+      .should('be.visible')
+      .and('have.attr', 'href')
+      .and('to.match', /update-status-annual-leave-return$/)
 
     cy.findByRole('link', { name: /Change whether to continue automatically assigning prisoners/i })
       .should('be.visible')
@@ -59,23 +114,15 @@ context('/update-capacity-status/check-answers', () => {
       .and('contain.text', 'You have updated this key worker’s status and capacity.')
   }
 
-  const navigateToTestPage = () => {
+  const navigateToTestPage = (journeyData: PartialJourneyData) => {
+    journeyId = uuidV4()
+
     cy.signIn({ failOnStatusCode: false })
     cy.visit(`/${journeyId}/start-update-key-worker/488095?proceedTo=update-capacity-status`, {
       failOnStatusCode: false,
     })
 
-    cy.injectJourneyDataAndReload<PartialJourneyData>(journeyId, {
-      updateCapacityStatus: {
-        status: {
-          code: 'UNAVAILABLE_LONG_TERM_ABSENCE',
-          description: 'Unavailable (long-term absence)',
-        },
-        capacity: 999,
-        deactivateActiveAllocations: false,
-        removeFromAutoAllocation: false,
-      },
-    })
+    cy.injectJourneyDataAndReload<PartialJourneyData>(journeyId, journeyData)
 
     cy.visit(`/${journeyId}/update-capacity-status/check-answers`)
   }

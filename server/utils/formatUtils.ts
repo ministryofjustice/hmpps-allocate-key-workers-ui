@@ -22,6 +22,11 @@ export const sentenceCase = (val: string, startsWithUppercase: boolean = true): 
   return startsWithUppercase ? sentence.charAt(0).toUpperCase() + sentence.slice(1) : sentence
 }
 
+const titleCase = (val: string) => {
+  const words = val.split(/\s+/)
+  return words.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
+}
+
 export const nameCase = (name: string): string => {
   const uniformWhitespaceName = uniformWhitespace(name)
   return uniformWhitespaceName
@@ -30,9 +35,9 @@ export const nameCase = (name: string): string => {
       s.includes('-')
         ? s
             .split('-')
-            .map(val => sentenceCase(val))
+            .map(val => titleCase(val))
             .join('-')
-        : sentenceCase(s),
+        : titleCase(s),
     )
     .join(' ')
 }
