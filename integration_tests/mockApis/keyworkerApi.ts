@@ -486,7 +486,7 @@ const keyworkerDetailsResponse = {
     },
   },
   status: {
-    code: 'ACT',
+    code: 'ACTIVE',
     description: 'Active',
   },
   prison: {

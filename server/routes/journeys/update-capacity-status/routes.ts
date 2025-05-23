@@ -8,6 +8,7 @@ import { UpdateStatusInactiveRoutes } from './update-status-inactive/routes'
 import redirectCheckAnswersMiddleware from '../../../middleware/journey/redirectCheckAnswersMiddleware'
 import { UpdateStatusUnavailableRoutes } from './update-status-unavailable/routes'
 import { UpdateStatusCheckAnswersRoutes } from './check-answers/routes'
+import { UpdateStatusReturnDateRoutes } from './update-status-annual-leave-return/routes'
 
 export const UpdateCapacityAndStatusRoutes = (services: Services) => {
   const { router, get, post } = JourneyRouter()
@@ -21,6 +22,7 @@ export const UpdateCapacityAndStatusRoutes = (services: Services) => {
 
   router.use('/update-status-unavailable', UpdateStatusUnavailableRoutes())
   router.use('/update-status-inactive', UpdateStatusInactiveRoutes(services))
+  router.use('/update-status-annual-leave-return', UpdateStatusReturnDateRoutes())
   router.use('/cancel', CancelUpdateStatusRoutes(services))
   router.use('/check-answers', UpdateStatusCheckAnswersRoutes(services))
 

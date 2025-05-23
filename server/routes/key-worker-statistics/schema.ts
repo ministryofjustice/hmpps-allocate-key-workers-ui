@@ -1,5 +1,6 @@
 import { z } from 'zod'
-import { createSchema, validateTransformPastDate } from '../../middleware/validationMiddleware'
+import { createSchema } from '../../middleware/validationMiddleware'
+import { validateTransformPastDate } from '../../utils/validation/validateDatePicker'
 
 export const schema = createSchema({
   dateFrom: validateTransformPastDate(

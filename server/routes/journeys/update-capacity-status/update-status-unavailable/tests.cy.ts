@@ -11,7 +11,7 @@ context('/update-capacity-status/update-status-unavailable', () => {
   const continueButton = () => cy.findByRole('button', { name: 'Continue' })
   const cancelButton = () => cy.findByRole('button', { name: 'Cancel' })
 
-  const journeyId = uuidV4()
+  let journeyId = uuidV4()
 
   beforeEach(() => {
     cy.task('reset')
@@ -23,27 +23,39 @@ context('/update-capacity-status/update-status-unavailable', () => {
     cy.task('stubUpdateKeyworkerProperties')
   })
 
-  it('should try all cases', () => {
-    navigateToTestPage()
+  it('should try non-annual-leave case', () => {
+    navigateToTestPage('UNAVAILABLE_LONG_TERM_ABSENCE', 'Unavailable (long-term absence)')
     cy.url().should('match', /\/update-status-unavailable$/)
 
-    verifyPageContent()
+    verifyPageContent('Unavailable (long-term absence)')
 
     verifyValidationErrors()
 
-    proceedToNextPage()
+    proceedToNextPage(/\/check-answers$/)
+
+    verifyInputValuesArePersisted()
   })
 
-  const verifyPageContent = () => {
-    cy.title().should(
-      'equal',
-      'Change this key worker’s status to Unavailable (long-term absence) - Key worker profile - DPS',
-    )
+  it('should try annual-leave case', () => {
+    navigateToTestPage('UNAVAILABLE_ANNUAL_LEAVE', 'Unavailable (annual leave)')
+    cy.url().should('match', /\/update-status-unavailable$/)
+
+    verifyPageContent('Unavailable (annual leave)')
+
+    verifyValidationErrors()
+
+    proceedToNextPage(/\/update-status-annual-leave-return$/)
+
+    verifyInputValuesArePersisted()
+  })
+
+  const verifyPageContent = (statusDescription: string) => {
+    cy.title().should('equal', `Change this key worker’s status to ${statusDescription} - Key worker profile - DPS`)
     cy.findByRole('heading', { name: 'Available-Active Key-Worker' }).should('be.visible')
     cy.get('.status-tag').eq(0).should('have.text', 'Active')
 
     cy.findByRole('heading', {
-      name: 'This key worker’s status is changing to Unavailable (long-term absence). Do you want to continue automatically assigning them to prisoners?',
+      name: `This key worker’s status is changing to ${statusDescription}. Do you want to continue automatically assigning them to prisoners?`,
     }).should('be.visible')
 
     radioContinue().should('exist')
@@ -67,13 +79,20 @@ context('/update-capacity-status/update-status-unavailable', () => {
     radioContinue().should('be.focused')
   }
 
-  const proceedToNextPage = () => {
+  const proceedToNextPage = (nextPage: RegExp) => {
     radioContinue().click()
     continueButton().click()
-    cy.url().should('match', /\/check-answers$/)
+    cy.url().should('match', nextPage)
   }
 
-  const navigateToTestPage = () => {
+  const verifyInputValuesArePersisted = () => {
+    cy.go('back')
+    radioContinue().should('be.checked')
+  }
+
+  const navigateToTestPage = (statusCode: string, statusDescription: string) => {
+    journeyId = uuidV4()
+
     cy.signIn({ failOnStatusCode: false })
     cy.visit(`/${journeyId}/start-update-key-worker/488095?proceedTo=update-capacity-status`, {
       failOnStatusCode: false,
@@ -82,8 +101,8 @@ context('/update-capacity-status/update-status-unavailable', () => {
     cy.injectJourneyDataAndReload<PartialJourneyData>(journeyId, {
       updateCapacityStatus: {
         status: {
-          code: 'UNAVAILABLE_LONG_TERM_ABSENCE',
-          description: 'Unavailable (long-term absence)',
+          code: statusCode,
+          description: statusDescription,
         },
         capacity: 999,
       },

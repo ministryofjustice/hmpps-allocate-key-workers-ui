@@ -1,11 +1,9 @@
 import { z } from 'zod'
 import { Request } from 'express'
-import {
-  createSchema,
-  validateAndTransformReferenceData,
-  validateNumberBetween,
-} from '../../../middleware/validationMiddleware'
+import { createSchema } from '../../../middleware/validationMiddleware'
 import KeyworkerApiService from '../../../services/keyworkerApi/keyworkerApiService'
+import { validateNumberBetween } from '../../../utils/validation/validateNumber'
+import { validateAndTransformReferenceData } from '../../../utils/validation/validateReferenceData'
 
 export const schemaFactory = (keyworkerApiService: KeyworkerApiService) => async (req: Request) => {
   const refDataMap = new Map(
