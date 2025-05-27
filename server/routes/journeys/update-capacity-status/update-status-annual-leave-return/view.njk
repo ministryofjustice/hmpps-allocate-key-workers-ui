@@ -1,9 +1,10 @@
 {% extends "partials/layout.njk" %}
 {% from "partials/statusTag/macro.njk" import statusTag %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "partials/validatedDateInput/macro.njk" import validatedDateInput %}
 
 {% set fullWidth = true %}
-{% set pageTitle = "Change this key worker’s status to Inactive - Key worker profile" %}
+{% set pageTitle = "When will the key worker return from annual leave? - Key worker profile" %}
 
 {% block innerContent %}
   <div class="govuk-width-container govuk-body">
@@ -15,25 +16,30 @@
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-xl">
-          Are you sure you want to change this key worker’s status to Inactive?
-        </h1>
-
-        <p class="govuk-!-margin-bottom-6">
-          This will deallocate the key worker’s current prisoners. It will also remove the key worker from having prisoners auto-assigned to them.
-        </p>
-
         <form method="post">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+          {{ validatedDateInput({
+            id: "reactivateOn",
+            title: {
+              text: "When will the key worker return from annual leave?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6 main-heading"
+            },
+            hintText: "For example, 27 3 2025. The key worker will automatically be set to Active from this date.",
+            validationErrors: validationErrors,
+            day: day,
+            month: month,
+            year: year
+          }) }}
+
           <div class="govuk-button-group">
             {{ govukButton({
-              text: "Yes, save this change",
-              classes: "govuk-button--warning",
+              text: "Continue",
               preventDoubleClick: true
             }) }}
 
             {{ govukButton({
-              text: "No, return to key worker profile",
+              text: "Cancel",
               classes: "govuk-button--secondary",
               href: "cancel",
               preventDoubleClick: true
