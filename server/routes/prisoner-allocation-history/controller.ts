@@ -1,15 +1,11 @@
 import { Request, Response } from 'express'
-import PrisonerSearchApiService from '../../services/prisonerSearch/prisonerSearchApiService'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 
 export class PrisonerAllocationHistoryController {
-  constructor(
-    private readonly prisonerSearchApiService: PrisonerSearchApiService,
-    private readonly keyworkerApiService: KeyworkerApiService,
-  ) {}
+  constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
   GET = async (req: Request, res: Response, prisonerId: string): Promise<void> => {
-    const prisoner = await this.prisonerSearchApiService.getPrisonerDetails(req, prisonerId)
+    const prisoner = req.middleware!.prisonerData!
     const keyworkerAllocations = await this.keyworkerApiService.getKeyworkerAllocations(req, prisonerId)
 
     const searchParams = new URLSearchParams(req.query as Record<string, string>).toString()

@@ -18,7 +18,7 @@ import PrisonerSearchApiRestClient from '../services/prisonerSearch/prisonerSear
 
 const applicationInfo = applicationInfoSupplier()
 initialiseAppInsights()
-buildAppInsightsClient(applicationInfo)
+const telemetryClient = buildAppInsightsClient(applicationInfo)!
 
 type RestClientBuilder<T> = (token: string) => T
 type EnhancedRestClientBuilder<T> = (req: Request, res?: Response) => T
@@ -34,6 +34,7 @@ export const dataAccess = () => ({
   locationsWithinPrisonApiClient: (token: string) => new LocationsInsidePrisonApiRestClient(token),
   prisonerSearchApiClient: (token: string) => new PrisonerSearchApiRestClient(token),
   tokenStore,
+  telemetryClient,
 })
 
 export type DataAccess = ReturnType<typeof dataAccess>
