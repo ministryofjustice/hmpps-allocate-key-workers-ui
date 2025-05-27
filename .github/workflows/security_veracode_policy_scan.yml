@@ -1,9 +1,8 @@
 name: Security veracode policy scan
 on:
-  push:
-    branches:
-      - '**'
   workflow_dispatch:
+  schedule:
+    - cron: "57 8 * * 1" # Every Monday
 jobs:
   security-veracode-policy-check:
     name: Project security veracode policy scan
