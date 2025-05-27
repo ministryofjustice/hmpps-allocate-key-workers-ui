@@ -40,6 +40,15 @@ const stubPrisonerSearchApiHealth = () =>
 const stubGetPrisonerDetails = () =>
   createBasicHttpStub('GET', '/prisoner-search-api/prisoner/A9965EA', 200, prisonerDetailsResponse)
 
+const stubGetPrisonerDetailsMDI = () =>
+  createBasicHttpStub('GET', '/prisoner-search-api/prisoner/A9965EB', 200, {
+    ...prisonerDetailsResponse,
+    prisonId: 'MDI',
+    lastPrisonId: 'MDI',
+    prisonName: 'Moorland (HMP & YOI)',
+    locationDescription: 'Moorland (HMP & YOI)',
+  })
+
 const prisonerDetailsResponse = {
   prisonerNumber: 'A9965EA',
   bookingId: '1223167',
@@ -93,4 +102,5 @@ const prisonerDetailsResponse = {
 export default {
   stubPrisonerSearchApiHealth,
   stubGetPrisonerDetails,
+  stubGetPrisonerDetailsMDI,
 }

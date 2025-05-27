@@ -6,7 +6,17 @@ context('Prisoner Allocation History', () => {
     cy.task('stubEnabledPrison')
     cy.task('stubGetPrisonerImage')
     cy.task('stubGetPrisonerDetails')
+    cy.task('stubGetPrisonerDetailsMDI')
     cy.task('stubPrisonerAllocations')
+  })
+
+  it('denies access to prisoner allocation history page if user does not have the correct role', () => {
+    cy.signIn({ failOnStatusCode: false })
+    cy.visit('/prisoner-allocation-history/A9965EB?query=&location=&excludeActiveAllocations=true', {
+      failOnStatusCode: false,
+    })
+
+    cy.findByText('Sign in')
   })
 
   it('adds back query params on the back link', () => {
