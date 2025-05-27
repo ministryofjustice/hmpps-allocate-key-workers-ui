@@ -37,22 +37,25 @@ export class KeyWorkersDataController {
     if (!current) return []
 
     const items = {
-      activeKeyworkers: { heading: 'Total number of active key workers', type: 'number' },
+      keyworkerSessions: { heading: 'Number of recorded key worker sessions', type: 'number' },
+      keyworkerEntries: { heading: 'Number of recorded key worker entries', type: 'number' },
+      totalPrisoners: { heading: 'Total number of prisoners', type: 'number' },
+      highComplexityOfNeedPrisoners: { heading: 'Total number of high complexity prisoners', type: 'number' },
       percentageWithKeyworker: {
         heading: 'Percentage of prisoners with an allocated key worker',
         type: 'percentage',
+      },
+      activeKeyworkers: { heading: 'Total number of active key workers', type: 'number' },
+      avgReceptionToSessionDays: {
+        heading: 'Average time from reception to first key worker session',
+        type: 'day',
       },
       avgReceptionToAllocationDays: {
         heading: 'Average time from reception to key worker allocation',
         type: 'day',
       },
-      avgReceptionToSessionDays: {
-        heading: 'Average time from reception to first key worker session',
-        type: 'day',
-      },
-      projectedSessions: { heading: 'Number of projected key worker sessions', type: 'number' },
-      keyworkerSessions: { heading: 'Number of recorded key worker sessions', type: 'number' },
       compliance: { heading: 'Compliance rate', type: 'percentage' },
+      projectedSessions: { heading: 'Number of projected key worker sessions', type: 'number' },
     }
 
     const nullCheckFields = new Set([
