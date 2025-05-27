@@ -49,7 +49,7 @@ context('Profile Info', () => {
     cy.findByRole('button', { name: /Save changes/i }).click()
 
     cy.findByText('There is a problem').should('be.visible')
-    cy.findByRole('link', { name: 'At least one allocation or deallocation must be made' })
+    cy.findByRole('link', { name: /Select key workers from the dropdown lists/ })
       .should('be.visible')
       .should('have.attr', 'href', '#selectKeyworker')
   })

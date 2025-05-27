@@ -10,7 +10,7 @@ export const KeyWorkerProfileRoutes = (services: Services) => {
   const controller = new KeyWorkerProfileController(keyworkerApiService)
 
   get('/', controller.GET)
-  post('/', validate(schema), controller.submitToApi)
+  post('/', validate(schema), controller.submitToApi, controller.POST)
 
   return router
 }

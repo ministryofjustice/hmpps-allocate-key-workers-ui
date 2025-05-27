@@ -12,4 +12,6 @@ export class KeyWorkerProfileController extends ChangeKeyWorkerController {
       showBreadcrumbs: true,
     })
   }
+
+  POST = async (req: Request, res: Response) => res.redirect(req.get('Referrer')!)
 }
