@@ -37,8 +37,7 @@ export class ChangeKeyWorkerController {
       deallocations: [],
     }
 
-    const changeKeyworkers = getActionableKeyworkersFromBody(req)
-    for (const prisonerKeyworker of changeKeyworkers) {
+    for (const prisonerKeyworker of req.body.selectKeyworker.filter(Boolean)) {
       const [prisonNumber, action, keyWorkerId] = prisonerKeyworker.split(':')
       if (action === 'deallocate') {
         apiBody.deallocations.push({
@@ -70,16 +69,4 @@ export class ChangeKeyWorkerController {
 
     next()
   }
-}
-
-function getActionableKeyworkersFromBody(req: Request<unknown, unknown, SchemaType>) {
-  if (!req.body.selectKeyworker) {
-    return []
-  }
-
-  if (typeof req.body.selectKeyworker === 'string') {
-    return [req.body.selectKeyworker]
-  }
-
-  return req.body.selectKeyworker.filter(Boolean) || []
 }

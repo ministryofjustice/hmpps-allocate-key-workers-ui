@@ -1,4 +1,4 @@
-context('Profile Info', () => {
+context('/allocate-key-workers', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubComponents')
