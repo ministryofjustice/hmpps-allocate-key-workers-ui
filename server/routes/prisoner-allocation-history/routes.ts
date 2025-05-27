@@ -13,19 +13,11 @@ export const PrisonerAllocationHistoryRoutes = ({ keyworkerApiService, prisonPer
     getPrisonerNumberFunction: req => req.params['prisonerId'] as string,
   })
 
-  get(
-    '/:prisonerId',
-    (_req, _res, next) => {
-      console.log(`BEFORE CHECK`)
-      next()
-    },
-    permissionGuard,
-    async (req: Request, res: Response) => {
-      const prisonerId = req.params['prisonerId'] as string
+  get('/:prisonerId', permissionGuard, async (req: Request, res: Response) => {
+    const prisonerId = req.params['prisonerId'] as string
 
-      await controller.GET(req, res, prisonerId)
-    },
-  )
+    await controller.GET(req, res, prisonerId)
+  })
 
   return router
 }
