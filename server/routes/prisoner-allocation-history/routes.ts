@@ -5,7 +5,6 @@ import { JourneyRouter } from '../base/routes'
 import { PrisonerAllocationHistoryController } from './controller'
 
 export const PrisonerAllocationHistoryRoutes = ({ keyworkerApiService, prisonPermissionsService }: Services) => {
-  console.log(`PrisonerAllocationHistoryRoutes check START`)
   const { router, get } = JourneyRouter()
   const controller = new PrisonerAllocationHistoryController(keyworkerApiService)
   const permissionGuard = prisonerPermissionsGuard(prisonPermissionsService, {
