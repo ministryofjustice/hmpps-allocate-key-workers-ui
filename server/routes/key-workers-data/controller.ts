@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import { components } from '../../@types/keyWorker'
-import { formatChange, formatNumber, formatValue } from '../../utils/statsUtils'
 import { FLASH_KEY__FORM_RESPONSES } from '../../utils/constants'
 import { formatDateConcise } from '../../utils/datetimeUtils'
 
@@ -36,61 +35,85 @@ export class KeyWorkersDataController {
   ) => {
     if (!current) return []
 
-    const items = {
-      keyworkerSessions: { heading: 'Number of recorded key worker sessions', type: 'number' },
-      keyworkerEntries: { heading: 'Number of recorded key worker entries', type: 'number' },
-      totalPrisoners: { heading: 'Total number of prisoners', type: 'number' },
-      highComplexityOfNeedPrisoners: { heading: 'Total number of high complexity prisoners', type: 'number' },
+    const items = this.createStatsItems(current, previous)
+
+    return Object.entries(items).map(([key, val]) => {
+      return {
+        name: key,
+        heading: val.heading,
+        currentValue: val.currentValue,
+        previousValue: val.previousValue,
+        type: val.type || 'number',
+      }
+    })
+  }
+
+  private createStatsItems(
+    current: components['schemas']['PrisonStats']['current'],
+    previous: components['schemas']['PrisonStats']['previous'],
+  ) {
+    return {
+      keyworkerSessions: {
+        heading: 'Number of recorded key worker sessions',
+        type: 'number',
+        currentValue: current?.keyworkerSessions,
+        previousValue: previous?.keyworkerSessions,
+      },
+      keyworkerEntries: {
+        heading: 'Number of recorded key worker entries',
+        type: 'number',
+        currentValue: current?.keyworkerEntries,
+        previousValue: previous?.keyworkerEntries,
+      },
+      totalPrisoners: {
+        heading: 'Total number of prisoners',
+        type: 'number',
+        currentValue: current?.totalPrisoners,
+        previousValue: previous?.totalPrisoners,
+      },
+      highComplexityOfNeedPrisoners: {
+        heading: 'Total number of high complexity prisoners',
+        type: 'number',
+        currentValue: current?.highComplexityOfNeedPrisoners,
+        previousValue: previous?.highComplexityOfNeedPrisoners,
+      },
       percentageWithKeyworker: {
         heading: 'Percentage of prisoners with an allocated key worker',
         type: 'percentage',
+        currentValue: current?.percentageWithKeyworker,
+        previousValue: previous?.percentageWithKeyworker,
       },
-      activeKeyworkers: { heading: 'Total number of active key workers', type: 'number' },
+      activeKeyworkers: {
+        heading: 'Total number of active key workers',
+        type: 'number',
+        currentValue: current?.activeKeyworkers,
+        previousValue: previous?.activeKeyworkers,
+      },
       avgReceptionToSessionDays: {
         heading: 'Average time from reception to first key worker session',
         type: 'day',
+        currentValue: current?.avgReceptionToSessionDays,
+        previousValue: previous?.avgReceptionToSessionDays,
       },
       avgReceptionToAllocationDays: {
         heading: 'Average time from reception to key worker allocation',
         type: 'day',
+        currentValue: current?.avgReceptionToAllocationDays,
+        previousValue: previous?.avgReceptionToAllocationDays,
       },
-      compliance: { heading: 'Compliance rate', type: 'percentage' },
-      projectedSessions: { heading: 'Number of projected key worker sessions', type: 'number' },
+      compliance: {
+        heading: 'Compliance rate',
+        type: 'percentage',
+        currentValue: current?.compliance,
+        previousValue: previous?.compliance,
+      },
+      projectedSessions: {
+        heading: 'Number of projected key worker sessions',
+        type: 'number',
+        currentValue: current?.projectedSessions,
+        previousValue: previous?.projectedSessions,
+      },
     }
-
-    const nullCheckFields = new Set([
-      'percentageWithKeyworker',
-      'avgReceptionToAllocationDays',
-      'avgReceptionToSessionDays',
-    ])
-
-    return Object.entries(items).map(([key, val]) => {
-      const currentVal = current[key as keyof components['schemas']['PrisonStats']['current']] as number
-      const previousVal = previous
-        ? (previous[key as keyof components['schemas']['PrisonStats']['previous']] as number)
-        : undefined
-
-      const displayValue =
-        nullCheckFields.has(key) && (currentVal == null || previousVal == null)
-          ? '-'
-          : formatValue(currentVal ?? 0, val.type || 'number')
-
-      const changeValue =
-        nullCheckFields.has(key) && (currentVal == null || previousVal == null)
-          ? 'No change'
-          : formatChange(previousVal ? formatNumber(currentVal - previousVal, val.type) : currentVal || 0, val.type)
-
-      return {
-        name: key,
-        heading: val.heading,
-        value: displayValue,
-        change: {
-          value: changeValue,
-          period: 'period',
-        },
-        type: val.type || 'number',
-      }
-    })
   }
 
   GET = async (req: Request, res: Response) => {
