@@ -11,7 +11,7 @@
     }) }}
     <div class="key-worker-data-stats">
       <p class="govuk-!-margin-bottom-1 govuk-!-padding-top-6 govuk-heading-l">{{ currentValue | formatValue(format) }}</p>
-      <p class="govuk-!-padding-bottom-6">{{ currentValue | getStatChange(previousValue, format) }}</p>
+      <p class="govuk-!-padding-bottom-6">{{ currentValue | getHighlightedStatChange(previousValue, format) | safe }}</p>
     </div>
   </div>
 {% endmacro %}
