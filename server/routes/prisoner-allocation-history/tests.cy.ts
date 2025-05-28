@@ -6,7 +6,17 @@ context('Prisoner Allocation History', () => {
     cy.task('stubEnabledPrison')
     cy.task('stubGetPrisonerImage')
     cy.task('stubGetPrisonerDetails')
+    cy.task('stubGetPrisonerDetailsMDI')
     cy.task('stubPrisonerAllocations')
+  })
+
+  it('redirects to "not found" page if user does not have the correct role', () => {
+    cy.signIn({ failOnStatusCode: false })
+    cy.visit('/prisoner-allocation-history/A9965EB?query=&location=&excludeActiveAllocations=true', {
+      failOnStatusCode: false,
+    })
+
+    cy.findByText('Page not found')
   })
 
   it('adds back query params on the back link', () => {

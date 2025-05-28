@@ -40,6 +40,15 @@ const stubPrisonerSearchApiHealth = () =>
 const stubGetPrisonerDetails = () =>
   createBasicHttpStub('GET', '/prisoner-search-api/prisoner/A9965EA', 200, prisonerDetailsResponse)
 
+const stubGetPrisonerDetailsMDI = () =>
+  createBasicHttpStub('GET', '/prisoner-search-api/prisoner/A9965EB', 200, {
+    ...prisonerDetailsResponse,
+    prisonId: 'MDI',
+    lastPrisonId: 'MDI',
+    prisonName: 'Moorland (HMP & YOI)',
+    locationDescription: 'Moorland (HMP & YOI)',
+  })
+
 const prisonerDetailsResponse = {
   prisonerNumber: 'A9965EA',
   bookingId: '1223167',
@@ -53,9 +62,9 @@ const prisonerDetailsResponse = {
   lastMovementTypeCode: 'ADM',
   lastMovementReasonCode: '24',
   inOutStatus: 'IN',
-  prisonId: 'MDI',
-  lastPrisonId: 'MDI',
-  prisonName: 'Moorland (HMP & YOI)',
+  prisonId: 'LEI',
+  lastPrisonId: 'LEI',
+  prisonName: 'Leeds (HMP)',
   cellLocation: '2-1-005',
   aliases: [],
   alerts: [
@@ -73,7 +82,7 @@ const prisonerDetailsResponse = {
   recall: false,
   indeterminateSentence: false,
   receptionDate: '2024-11-26',
-  locationDescription: 'Moorland (HMP & YOI)',
+  locationDescription: 'Leeds (HMP)',
   restrictedPatient: false,
   currentIncentive: {
     level: {
@@ -93,4 +102,5 @@ const prisonerDetailsResponse = {
 export default {
   stubPrisonerSearchApiHealth,
   stubGetPrisonerDetails,
+  stubGetPrisonerDetailsMDI,
 }
