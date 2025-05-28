@@ -6,7 +6,13 @@ import fs from 'fs'
 import { initialiseName } from './utils'
 import config from '../config'
 import logger from '../../logger'
-import { formatDateConcise, formatDateTime, getDateInReadableFormat, todayStringGBFormat } from './datetimeUtils'
+import {
+  formatDateConcise,
+  formatDateTime,
+  getDateInReadableFormat,
+  todayStringGBFormat,
+  yesterdayStringGBFormat,
+} from './datetimeUtils'
 import { buildErrorSummaryList, customErrorOrderBuilder, findError } from '../middleware/validationMiddleware'
 import { firstNameSpaceLastName, lastNameCommaFirstName, nameCase } from './formatUtils'
 import {
@@ -79,4 +85,5 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('customErrorOrderBuilder', customErrorOrderBuilder)
   njkEnv.addFilter('removeUndefined', arr => arr.filter((o: unknown) => o !== undefined))
   njkEnv.addFilter('getHighlightedStatChange', getHighlightedStatChange)
+  njkEnv.addGlobal('yesterdayStringGBFormat', yesterdayStringGBFormat)
 }

@@ -58,6 +58,12 @@ export const todayString = () => new Date().toISOString().substring(0, 10)
 
 export const todayStringGBFormat = () => DATE_FORMAT_GB.format(new Date())
 
+export const yesterdayStringGBFormat = () => {
+  const currentDate = new Date()
+  currentDate.setDate(currentDate.getDate() - 1)
+  return DATE_FORMAT_GB.format(currentDate)
+}
+
 export function getDateInReadableFormat(dateString: string) {
   const split = dateString?.split(/-|\//) || []
   if (split.length < 3) throw new Error(`Invalid date string: ${dateString}`)
