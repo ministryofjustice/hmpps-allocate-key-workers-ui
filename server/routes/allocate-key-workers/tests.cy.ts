@@ -1,4 +1,4 @@
-context('Profile Info', () => {
+context('/allocate-key-workers', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubComponents')
@@ -49,9 +49,21 @@ context('Profile Info', () => {
     cy.findByRole('button', { name: /Save changes/i }).click()
 
     cy.findByText('There is a problem').should('be.visible')
-    cy.findByRole('link', { name: 'At least one allocation or deallocation must be made' })
+    cy.findByRole('link', { name: /Select key workers from the dropdown lists/ })
       .should('be.visible')
       .should('have.attr', 'href', '#selectKeyworker')
+  })
+
+  it('should preserve queries on submit form validation error', () => {
+    navigateToTestPage()
+    cy.visit('/allocate-key-workers?excludeActiveAllocations=true', {
+      failOnStatusCode: false,
+    })
+
+    cy.findByRole('button', { name: /Save changes/i }).click()
+    cy.findByRole('link', { name: /Select key workers from the dropdown lists/ }).should('be.visible')
+
+    cy.url().should('match', /\/allocate-key-workers\?excludeActiveAllocations=true#$/)
   })
 
   it('should show error on de/allocation failure', () => {

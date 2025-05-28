@@ -24,7 +24,7 @@ export default function routes(services: Services): Router {
 
   router.use('/key-worker-statistics', KeyWorkerStatisticsRoutes(services))
   router.use('/manage-key-workers', KeyWorkerMembersRoutes(services))
-  router.use('/key-worker-profile', KeyWorkerProfileRoutes(services))
+  router.use('/key-worker-profile/:staffId', KeyWorkerProfileRoutes(services))
   router.use('/allocate-key-workers', AllocateKeyWorkerRoutes(services))
   router.use('/prisoner-allocation-history', PrisonerAllocationHistoryRoutes(services))
 
