@@ -20,3 +20,15 @@
   box-shadow: 0 5px govuk-colour('mid-grey');
 }
 
+.grid-column-one-fifth {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 15px;
+}
+
+@media (min-width: 40.0625em) {
+  .grid-column-one-fifth {
+    width: 20%;
+    float: left;
+  }
+}

@@ -11,7 +11,7 @@ export const schemaFactory = (keyworkerApiService: KeyworkerApiService) => async
   )
 
   return createSchema({
-    capacity: validateNumberBetween('Enter a number', 'Enter a valid number', 'Number must be between 0 and 999'),
+    capacity: validateNumberBetween('Enter a number', 'Enter a valid number', 'Enter a number between 0 to 999'),
     status: z
       .string({ required_error: 'Select a status' })
       .transform(validateAndTransformReferenceData(refDataMap, 'Select a valid status')),
