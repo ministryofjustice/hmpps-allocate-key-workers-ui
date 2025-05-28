@@ -1,0 +1,47 @@
+.heading-area-fixed-height {
+  min-height: 70px;
+}
+
+.key-worker-data-stat-card {
+  max-width: 70%;
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+}
+
+.key-worker-data-stats {
+  background-color: govuk-colour('light-grey');
+  padding-left: 10px;
+  min-width: 100%;
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+.stat-change--decrease {
+  color: govuk-colour('red');
+  font-weight: bold;
+}
+
+.stat-change--increase {
+  color: govuk-colour('green');
+  font-weight: bold;
+}
+
+.date-search-form {
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+}
+
+.stat-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  align-items: start;
+}
+
+.stat-card-grid > .govuk-grid-column-one-half {
+  width: auto;
+  margin-left: 0;
+  float: none;
+}
