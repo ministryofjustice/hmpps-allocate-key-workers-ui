@@ -7,7 +7,7 @@ export const schema = createSchema({
   selectKeyworker: z.union(
     [
       z.string().transform((val, ctx) => {
-        if (val?.length) {
+        if (!val?.length) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             message: ERROR_MSG,
