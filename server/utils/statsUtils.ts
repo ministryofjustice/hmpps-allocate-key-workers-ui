@@ -5,6 +5,7 @@ export const formatNumber = (value: string | number, type?: string): number => {
 
 export const formatValue = (value: number, type: string = 'number'): string | number => {
   if (type === 'percentage') return `${value} %`
+  if (type === 'day') return `${value} days`
   if (value === 0) return 0
   if (!value) return '-'
   return Number(value)
