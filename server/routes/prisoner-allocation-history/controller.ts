@@ -4,9 +4,9 @@ import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService
 export class PrisonerAllocationHistoryController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
-  GET = async (req: Request, res: Response, prisonerId: string): Promise<void> => {
+  GET = async (req: Request, res: Response): Promise<void> => {
     const prisoner = req.middleware!.prisonerData!
-    const keyworkerAllocations = await this.keyworkerApiService.getKeyworkerAllocations(req, prisonerId)
+    const keyworkerAllocations = await this.keyworkerApiService.getKeyworkerAllocations(req, prisoner.prisonerNumber)
 
     const searchParams = new URLSearchParams(req.query as Record<string, string>).toString()
 
