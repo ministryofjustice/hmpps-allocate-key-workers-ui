@@ -7,12 +7,12 @@ import { formatDateConcise } from '../../utils/datetimeUtils'
 export class KeyWorkersDataController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
-  private getLastFullMonthAsIsoDateString = () => {
-    const lastMonth = new Date()
-    lastMonth.setMonth(lastMonth.getMonth() - 1)
+  private getDateAsIsoString = () => {
+    const currentDate = new Date()
+    currentDate.setDate(currentDate.getDate() - 1)
 
-    const firstDay = new Date(lastMonth.getFullYear(), lastMonth.getMonth(), 1)
-    const lastDay = new Date(lastMonth.getFullYear(), lastMonth.getMonth() + 1, 0)
+    const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 2)
+    const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1)
 
     return { start: firstDay.toISOString().substring(0, 10), end: lastDay.toISOString().substring(0, 10) }
   }
@@ -142,7 +142,7 @@ export class KeyWorkersDataController {
   }
 
   GET = async (req: Request, res: Response) => {
-    const nowSpan = res.locals[FLASH_KEY__FORM_RESPONSES]?.nowSpan || this.getLastFullMonthAsIsoDateString()
+    const nowSpan = res.locals[FLASH_KEY__FORM_RESPONSES]?.nowSpan || this.getDateAsIsoString()
     const previousSpan = this.getComparisonDates(nowSpan.start, nowSpan.end)
     const prisonCode = res.locals.user.getActiveCaseloadId()!
     const stats = await this.keyworkerApiService.getPrisonStats(req, prisonCode, nowSpan.start, nowSpan.end)
