@@ -1,13 +1,13 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 
-{% macro statCard(title, currentValue, previousValue, format='number') %}
+{% macro statCard(title, currentValue, previousValue, calculationMethod, format='number') %}
   <div class="key-worker-data-stat-card left-aligned govuk-!-margin-bottom-4 govuk-!-margin-top-4">
     <div class="heading-area-fixed-height">
       <h2 class="govuk-heading-s govuk-!-margin-bottom-2">{{ title }}</h2>
     </div>
     {{ govukDetails({
       summaryText: "How this data is calculated",
-      text: "We need to know your nationality so we can work out which elections you’re entitled to vote in. If you cannot provide your nationality, you’ll have to send copies of identity documents through the post."
+      text: calculationMethod
     }) }}
     <div class="key-worker-data-stats">
       <p class="govuk-!-margin-bottom-1 govuk-!-padding-top-6 govuk-heading-l">{{ currentValue | formatValue(format) }}</p>
