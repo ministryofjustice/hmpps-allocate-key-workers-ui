@@ -1,6 +1,6 @@
 {% extends "partials/layout.njk" %}
 {% from "moj/components/date-picker/macro.njk" import mojDatePicker %}
-{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "./components/statCard.njk" import statCard %}
 
 {% set fullWidth = true %}
 {% set pageTitle = "Key Workers Data" %}
@@ -50,13 +50,7 @@
     <div class="govuk-grid-row">
       {% for statistic in data %}
         <div class="govuk-grid-column-one-half">
-          <h2 class="govuk-heading-s">{{ statistic.heading }}</h2>
-          {{ govukDetails({
-            summaryText: "Help this data is calculated",
-            text: "We need to know your nationality so we can work out which elections you’re entitled to vote in. If you cannot provide your nationality, you’ll have to send copies of identity documents through the post."
-          }) }}
-          <p class="govuk-!-font-size-36">{{ statistic.value }}</p>
-          {% if hasPreviousStats %}<p>{{ statistic.change.value }}</p>{% endif %}
+          {{ statCard(statistic.heading, statistic.currentValue, statistic.previousValue, statistic.type) }}
         </div>
       {% endfor %}
     </div>
