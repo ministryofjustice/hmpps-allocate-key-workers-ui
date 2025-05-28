@@ -3,7 +3,7 @@ import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService
 import { lastNameCommaFirstName } from '../../utils/formatUtils'
 import { components } from '../../@types/keyWorker'
 import { FLASH_KEY__COUNT, FLASH_KEY__API_ERROR } from '../../utils/constants'
-import { SchemaType } from '../key-worker-profile/schema'
+import { SelectKeyworkerSchemaType } from './selectKeyworkerSchema'
 
 export class ChangeKeyWorkerController {
   constructor(readonly keyworkerApiService: KeyworkerApiService) {}
@@ -28,7 +28,7 @@ export class ChangeKeyWorkerController {
   }
 
   submitToApi = async (
-    req: Request<unknown, unknown, SchemaType>,
+    req: Request<unknown, unknown, SelectKeyworkerSchemaType>,
     res: Response,
     next: NextFunction,
   ): Promise<void> => {

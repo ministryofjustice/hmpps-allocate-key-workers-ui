@@ -3,7 +3,7 @@ import { createSchema } from '../../middleware/validationMiddleware'
 
 const ERROR_MSG = 'Select key workers from the dropdown lists'
 
-export const schema = createSchema({
+export const selectKeyworkerSchema = createSchema({
   selectKeyworker: z.union(
     [
       z.string().transform((val, ctx) => {
@@ -22,4 +22,4 @@ export const schema = createSchema({
   ),
 })
 
-export type SchemaType = z.infer<typeof schema>
+export type SelectKeyworkerSchemaType = z.infer<typeof selectKeyworkerSchema>

@@ -74,7 +74,7 @@ export const deduplicateFieldErrors = (error: ZodError) => {
   return Object.fromEntries(Object.entries(flattened).map(([key, value]) => [key, [...value]]))
 }
 
-export const validate = (schema: z.ZodTypeAny | SchemaFactory): RequestHandler => {
+export const validate = (schema: z.ZodTypeAny | SchemaFactory, retainQueryString: boolean = false): RequestHandler => {
   return async (req, res, next) => {
     if (!schema) {
       return next()
@@ -96,8 +96,8 @@ export const validate = (schema: z.ZodTypeAny | SchemaFactory): RequestHandler =
       )
     }
     req.flash(FLASH_KEY__VALIDATION_ERRORS, JSON.stringify(deduplicatedFieldErrors))
-    // Remove any hash from the URL by appending an empty hash string
-    return res.redirect(`${req.baseUrl}#`)
+    // Remove any hash from the URL by appending an empty hash string)
+    return res.redirect(`${retainQueryString ? req.originalUrl : req.baseUrl}#`)
   }
 }
 

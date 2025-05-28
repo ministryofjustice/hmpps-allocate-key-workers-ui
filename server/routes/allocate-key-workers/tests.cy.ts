@@ -54,6 +54,18 @@ context('/allocate-key-workers', () => {
       .should('have.attr', 'href', '#selectKeyworker')
   })
 
+  it('should preserve queries on submit form validation error', () => {
+    navigateToTestPage()
+    cy.visit('/allocate-key-workers?excludeActiveAllocations=true', {
+      failOnStatusCode: false,
+    })
+
+    cy.findByRole('button', { name: /Save changes/i }).click()
+    cy.findByRole('link', { name: /Select key workers from the dropdown lists/ }).should('be.visible')
+
+    cy.url().should('match', /\/allocate-key-workers\?excludeActiveAllocations=true#$/)
+  })
+
   it('should show error on de/allocation failure', () => {
     cy.task('stubPutAllocationFail')
     navigateToTestPage()
