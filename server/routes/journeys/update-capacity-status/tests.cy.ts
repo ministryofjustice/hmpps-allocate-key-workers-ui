@@ -26,12 +26,8 @@ context('Update capacity and status', () => {
     cy.get('p').eq(2).should('have.text', 'Full Time')
     cy.get('.govuk-heading-s').eq(2).should('have.text', 'Prisoners allocated')
     cy.get('p').eq(3).should('have.text', '1')
-    cy.get('.govuk-heading-s').eq(3).should('have.text', 'Maximum capacity')
-    cy.get('#capacity').should('be.visible')
-    cy.get('#capacity').should('have.value', '6')
-    cy.get('.govuk-heading-s').eq(4).should('have.text', 'Status')
-    cy.get('#status').should('be.visible')
-    cy.get('#status').should('have.value', 'INACTIVE')
+    cy.findByRole('textbox', { name: 'Maximum capacity' }).should('be.visible').and('have.value', '6')
+    cy.findByRole('combobox', { name: 'Status' }).should('be.visible').and('have.value', 'INACTIVE')
   })
 
   it("should update the keyworker's details", () => {
