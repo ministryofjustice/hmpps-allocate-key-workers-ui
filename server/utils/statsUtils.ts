@@ -22,3 +22,31 @@ export const formatChange = (change: number, type: string = 'number'): string | 
 export function getStatChange(current?: number, previous?: number, type: string = 'number') {
   return formatChange((current || 0) - (previous || 0), type)
 }
+
+export const formatChangeWithHighlight = (change: number, type: string = 'number'): string | number => {
+  const formatted = formatValue(change, type)
+  let className = ''
+  let formattedValue = ''
+  let changeType = ''
+
+  if (change > 0) {
+    className = 'stat-change--increase'
+    formattedValue = `+${formatted}`
+    changeType = 'increase'
+  } else if (change < 0) {
+    className = 'stat-change--decrease'
+    formattedValue = `${formatted}`
+    changeType = 'decrease'
+  } else {
+    return 'No change'
+  }
+
+  if (className) {
+    return `<span class="${className}">${formattedValue}</span><span> ${changeType}</span>`
+  }
+  return formatted
+}
+
+export function getHighlightedStatChange(current?: number, previous?: number, type: string = 'number') {
+  return formatChangeWithHighlight((current || 0) - (previous || 0), type)
+}

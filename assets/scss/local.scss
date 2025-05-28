@@ -35,3 +35,12 @@
   flex-shrink: 0;
 }
 
+.stat-change--decrease {
+  color: govuk-colour('red');
+  font-weight: bold;
+}
+
+.stat-change--increase {
+  color: govuk-colour('green');
+  font-weight: bold;
+}
