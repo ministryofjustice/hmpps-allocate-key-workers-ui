@@ -48,7 +48,7 @@
     <div class="govuk-grid-row">
       {% for statistic in data %}
         <div class="govuk-grid-column-one-half">
-          {{ statCard(statistic.heading, statistic.currentValue, statistic.previousValue, statistic.type) }}
+          {{ statCard(statistic.heading, statistic.currentValue, statistic.previousValue, statistic.calculationMethod, statistic.type) }}
         </div>
       {% endfor %}
     </div>
