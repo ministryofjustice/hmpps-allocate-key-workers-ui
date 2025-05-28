@@ -20,3 +20,18 @@
   box-shadow: 0 5px govuk-colour('mid-grey');
 }
 
+.heading-area-fixed-height {
+  min-height: 70px;
+}
+
+.key-worker-data-stat-card {
+  max-width: 70%;
+}
+
+.key-worker-data-stats {
+  background-color: govuk-colour('light-grey');
+  padding-left: 10px;
+  min-width: 100%;
+  flex-shrink: 0;
+}
+
