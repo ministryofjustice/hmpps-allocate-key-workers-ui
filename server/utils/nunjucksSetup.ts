@@ -16,7 +16,7 @@ import {
   mergePrisonerKeyworkerIds,
   setSelectedValue,
 } from './dropdownUtils'
-import { formatValue, getStatChange } from './statsUtils'
+import { formatValue, getHighlightedStatChange, getStatChange } from './statsUtils'
 
 export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
@@ -78,4 +78,5 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('buildErrorSummaryList', buildErrorSummaryList)
   njkEnv.addFilter('customErrorOrderBuilder', customErrorOrderBuilder)
   njkEnv.addFilter('removeUndefined', arr => arr.filter((o: unknown) => o !== undefined))
+  njkEnv.addFilter('getHighlightedStatChange', getHighlightedStatChange)
 }
