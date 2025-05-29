@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import { components } from '../../@types/keyWorker'
 import { FLASH_KEY__FORM_RESPONSES } from '../../utils/constants'
-import { formatDateConcise } from '../../utils/datetimeUtils'
+import { formatDateConcise, getDateInReadableFormat } from '../../utils/datetimeUtils'
 
 export class KeyWorkersDataController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
@@ -152,6 +152,7 @@ export class KeyWorkersDataController {
     const prison = await this.keyworkerApiService.getPrisonConfig(req, prisonCode)
     const hasCurrentStats = stats.current !== undefined && stats.current !== null
     const hasPreviousStats = stats.previous !== undefined && stats.previous !== null
+    const dataUpdateDate = getDateInReadableFormat(new Date().toISOString())
 
     const data = this.createPayload(stats.current, stats.previous)
 
@@ -160,6 +161,7 @@ export class KeyWorkersDataController {
       data,
       dateFrom: formatDateConcise(nowSpan.start),
       dateTo: formatDateConcise(nowSpan.end),
+      dataUpdateDate,
     })
   }
 

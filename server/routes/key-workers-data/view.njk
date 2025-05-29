@@ -50,6 +50,8 @@
     <p>Displaying statistics from {{ dateFrom | dateString }} to {{ dateTo | dateString }}.
       {% if hasPreviousStats %}Comparing against statistics from {{ comparisonDateFrom | dateString }} to {{ comparisonDateTo | dateString }}. {% endif %}</p>
 
+    <p class="govuk-!-margin-top-6">Date updated: {{ dataUpdateDate }}</p>
+
     <div class="govuk-grid-row stat-card-grid">
       {% for statistic in data %}
         <div class="govuk-grid-column-one-half">
