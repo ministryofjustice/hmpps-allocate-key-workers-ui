@@ -32,6 +32,7 @@ export class KeyWorkersDataController {
   private createPayload = (
     current: components['schemas']['PrisonStats']['current'],
     previous: components['schemas']['PrisonStats']['previous'],
+    hasHighComplexityPrisoners: boolean,
   ) => {
     if (!current) return []
 
@@ -45,6 +46,7 @@ export class KeyWorkersDataController {
         previousValue: val.previousValue,
         type: val.type || 'number',
         calculationMethod: val.calculationMethod,
+        isHidden: key === 'highComplexityOfNeedPrisoners' && !hasHighComplexityPrisoners,
       }
     })
   }
@@ -154,7 +156,7 @@ export class KeyWorkersDataController {
 
     const dataUpdateDate = getDateInReadableFormat(new Date().toISOString())
 
-    const data = this.createPayload(stats.current, stats.previous)
+    const data = this.createPayload(stats.current, stats.previous, prison.hasPrisonersWithHighComplexityNeeds)
 
     res.render('key-workers-data/view', {
       showBreadcrumbs: true,
