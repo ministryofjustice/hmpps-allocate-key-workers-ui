@@ -142,7 +142,10 @@ export class KeyWorkersDataController {
   }
 
   GET = async (req: Request, res: Response) => {
-    const nowSpan = res.locals[FLASH_KEY__FORM_RESPONSES]?.nowSpan || this.getDateAsIsoString()
+    const nowSpan =
+      res.locals.formResponses?.['start'] && res.locals.formResponses?.['end']
+        ? res.locals.formResponses
+        : this.getDateAsIsoString()
     const previousSpan = this.getComparisonDates(nowSpan.start, nowSpan.end)
     const prisonCode = res.locals.user.getActiveCaseloadId()!
     const stats = await this.keyworkerApiService.getPrisonStats(req, prisonCode, nowSpan.start, nowSpan.end)
@@ -161,10 +164,7 @@ export class KeyWorkersDataController {
   }
 
   POST = async (req: Request, res: Response) => {
-    req.flash(
-      FLASH_KEY__FORM_RESPONSES,
-      JSON.stringify({ nowSpan: { start: req.body.dateFrom, end: req.body.dateTo } }),
-    )
+    req.flash(FLASH_KEY__FORM_RESPONSES, JSON.stringify({ start: req.body.dateFrom, end: req.body.dateTo }))
 
     res.redirect('/key-workers-data')
   }

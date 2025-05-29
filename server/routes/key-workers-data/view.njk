@@ -1,5 +1,6 @@
 {% extends "partials/layout.njk" %}
 {% from "moj/components/date-picker/macro.njk" import mojDatePicker %}
+{% from "partials/submitButton/macro.njk" import submitButton %}
 {% from "./components/statCard.njk" import statCard %}
 
 {% set fullWidth = true %}
@@ -35,6 +36,10 @@
           value: dateTo,
           maxDate: yesterdayStringGBFormat()
         }) }}
+
+      {{ submitButton({
+        text: "View"
+      }) }}
     </form>
   </div>
 
