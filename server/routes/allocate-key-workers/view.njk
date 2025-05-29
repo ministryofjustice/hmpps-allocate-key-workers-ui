@@ -70,9 +70,7 @@
     {% if user.permissions.allocate %}
       <p>Select key workers from the dropdown lists to reallocate or deallocate prisoners.</p>
       <p>Key workers will only be allocated when you save your changes.</p>
-    {% endif %}
 
-    {% if user.permissions.allocate %}
       <div class="govuk-grid-row">
         {{ govukButton({
           text: "Assign key workers automatically",
@@ -81,6 +79,7 @@
         }) }}
       </div>
     {% endif %}
+
     <form method="post">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
       {% set rows = [] %}
@@ -109,7 +108,7 @@
               },
               items: keyworkers | excludeCurrentKeyworker(item.keyworker) | conditionallyAddDeallocate(item.keyworker.staffId) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select key worker')
             })
-          } if user.permissions.allocate,
+          } if user.permissions.allocate else undefined,
           {
             html: '<a class="govuk-link govuk-link--no-visited-state" href="/prisoner-allocation-history/' + item.personIdentifier + searchQuery + '">View allocation history</a>' if item.hasAllocationHistory else ''
           }
@@ -148,7 +147,7 @@
             {
               text: "Change key worker",
               key: 'change'
-            } if user.permissions.allocate,
+            } if user.permissions.allocate else undefined,
             {
               text: ""
             }
