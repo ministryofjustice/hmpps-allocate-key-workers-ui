@@ -1,0 +1,135 @@
+{% extends "partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+{% set fullWidth = true %}
+{% set pageTitle = "When will the key worker return from annual leave? - Key worker profile" %}
+
+{% block innerContent %}
+  <div class="govuk-width-container govuk-body">
+    {% if successMessage %}
+      {{ govukNotificationBanner({
+        text: successMessage,
+        type: "success"
+      }) }}
+    {% endif %}
+
+    <div class="govuk-grid-row govuk-!-margin-0">
+      <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0">Establishment settings for {{ prisonName }}</h1>
+    </div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        {% if not isAdmin %}
+          <p>Key worker sessions at {{ prisonName }} take place every {{ frequencyInWeeks }} {{ "week" if frequencyInWeeks === 1 else "weeks" }}.</p>
+          <p class="govuk-!-margin-bottom-7">If you think this is incorrect or have any questions about session frequency, please contact <a href="mailto:omicenquiries@justice.gov.uk">omicenquiries@justice.gov.uk</a>.</p>
+        {% endif %}
+        <form method="post">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+          {{ govukRadios({
+            classes: "govuk-radios--inline govuk-!-margin-bottom-6",
+            name: "allowAutoAllocation",
+            errorMessage: validationErrors | findError('allowAutoAllocation'),
+            fieldset: {
+              legend: {
+                text: "Allow key workers to be recommended automatically",
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--m"
+              }
+            },
+            hint: {
+              text: "This will enable you to use the ‘recommend key workers automatically’ option on the allocation page."
+            },
+            items: [
+              {
+                value: "TRUE",
+                text: "Yes",
+                checked: allowAutoAllocation === true
+              },
+              {
+                value: "FALSE",
+                text: "No",
+                checked: allowAutoAllocation === false
+              }
+            ]
+          }) }}
+
+          {{ govukInput({
+            id: "maximumCapacity",
+            name: "maximumCapacity",
+            value: maximumCapacity,
+            errorMessage: validationErrors | findError('maximumCapacity'),
+            classes: "govuk-input--width-2 govuk-!-margin-bottom-6",
+            label: {
+              text: 'Maximum number of prisoners to be allocated to each key worker',
+              classes: "govuk-label--m",
+              isPageHeading: false
+            },
+            hint: {
+              text: "The ‘recommend key workers automatically’ function will not recommend prisoners to key workers over this limit. You’ll still be able to manually allocate more prisoners than this to a key worker."
+            }
+          }) }}
+
+          {% if isAdmin %}
+            {{ govukSelect({
+              id: "frequencyInWeeks",
+              name: "frequencyInWeeks",
+              errorMessage: validationErrors | findError('frequencyInWeeks'),
+              classes: "govuk-!-margin-bottom-6",
+              label: {
+                text: "How often should key worker sessions take place?",
+                classes: "govuk-label--m",
+                isPageHeading: false
+              },
+              items: [
+                {
+                  value: "",
+                  text: "Select session frequency",
+                  selected: true
+                } if frequencyInWeeks !== 1 and frequencyInWeeks !== 2 and frequencyInWeeks !== 3 and frequencyInWeeks !== 4,
+                {
+                  value: "1WK",
+                  text: "Every 1 week",
+                  selected: frequencyInWeeks === 1
+                },
+                {
+                  value: "2WK",
+                  text: "Every 2 weeks",
+                  selected: frequencyInWeeks === 2
+                },
+                {
+                  value: "3WK",
+                  text: "Every 3 weeks",
+                  selected: frequencyInWeeks === 3
+                },
+                {
+                  value: "4WK",
+                  text: "Every 4 weeks",
+                  selected: frequencyInWeeks === 4
+                }
+              ]
+            }) }}
+          {% endif %}
+
+          <div class="govuk-button-group">
+            {{ govukButton({
+              text: "Save",
+              preventDoubleClick: true
+            }) }}
+
+            {{ govukButton({
+              text: "Cancel",
+              classes: "govuk-button--secondary",
+              href: "/",
+              preventDoubleClick: true
+            }) }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

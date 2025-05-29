@@ -80,6 +80,13 @@ export default class KeyworkerApiClient {
     return response
   }
 
+  async updatePrisonConfig(prisonId: string, requestBody: components['schemas']['PrisonConfigRequest']) {
+    return this.restClient.put({
+      path: `/prisons/${prisonId}/configurations`,
+      data: requestBody,
+    })
+  }
+
   async getKeyworkerMembers(
     prisonId: string,
     query: components['schemas']['KeyworkerSearchRequest'],
