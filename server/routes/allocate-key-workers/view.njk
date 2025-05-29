@@ -67,18 +67,20 @@
       </div>
     </div>
 
-    <p>Select key workers from the dropdown lists to reallocate or deallocate prisoners.</p>
-    <p>Key workers will only be allocated when you save your changes.</p>
+    {% if user.permissions.allocate %}
+      <p>Select key workers from the dropdown lists to reallocate or deallocate prisoners.</p>
+      <p>Key workers will only be allocated when you save your changes.</p>
+    {% endif %}
 
-    <div class="govuk-grid-row">
-      {{ govukButton({
-        text: "Assign key workers automatically",
-        classes: "govuk-button--secondary float-right govuk-!-margin-bottom-2",
-        preventDoubleClick: true
-      }) }}
-
-    </div>
-
+    {% if user.permissions.allocate %}
+      <div class="govuk-grid-row">
+        {{ govukButton({
+          text: "Assign key workers automatically",
+          classes: "govuk-button--secondary float-right govuk-!-margin-bottom-2",
+          preventDoubleClick: true
+        }) }}
+      </div>
+    {% endif %}
     <form method="post">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
       {% set rows = [] %}
@@ -107,11 +109,11 @@
               },
               items: keyworkers | excludeCurrentKeyworker(item.keyworker) | conditionallyAddDeallocate(item.keyworker.staffId) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select key worker')
             })
-          },
+          } if user.permissions.allocate,
           {
             html: '<a class="govuk-link govuk-link--no-visited-state" href="/prisoner-allocation-history/' + item.personIdentifier + searchQuery + '">View allocation history</a>' if item.hasAllocationHistory else ''
           }
-        ]), rows) %}
+        ] | removeUndefined), rows) %}
       {% endfor %}
 
       {{ mojPagination(records.length) }}
@@ -146,20 +148,22 @@
             {
               text: "Change key worker",
               key: 'change'
-            },
+            } if user.permissions.allocate,
             {
               text: ""
             }
-          ],
+          ] | removeUndefined,
           rows: rows
         }) }}
 
       {{ mojPagination(records.length) }}
 
-      {{ govukButton({
-        text: "Save changes",
-        preventDoubleClick: true
-      }) }}
+      {% if user.permissions.allocate %}
+        {{ govukButton({
+          text: "Save changes",
+          preventDoubleClick: true
+        }) }}
+      {% endif %}
     </form>
   </div>
 {% endblock %}
