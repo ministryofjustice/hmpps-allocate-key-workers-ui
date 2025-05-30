@@ -10,7 +10,7 @@ const getLastFullMonthAsIsoDateString = () => {
   return { start: firstDay.toISOString().substring(0, 10), end: lastDay.toISOString().substring(0, 10) }
 }
 
-const getComparisonDates = (fromDate: string, toDate: string) => {
+export const getComparisonDates = (fromDate: string, toDate: string) => {
   const fromDateDate = new Date(fromDate)
   const toDateDate = new Date(toDate)
   const diff = Math.abs(toDateDate.getTime() - fromDateDate.getTime())

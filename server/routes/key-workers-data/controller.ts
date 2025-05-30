@@ -8,12 +8,12 @@ export class KeyWorkersDataController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
   private getDateAsIsoString = () => {
-    const currentDate = new Date()
-    currentDate.setDate(currentDate.getDate() - 1)
+    const lastDay = new Date()
+    lastDay.setDate(lastDay.getDate() - 1)
 
-    const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate() + 1)
+    const firstDay = new Date(lastDay.getFullYear(), lastDay.getMonth() - 1, lastDay.getDate() + 1)
 
-    return { start: firstDay.toISOString().substring(0, 10), end: currentDate.toISOString().substring(0, 10) }
+    return { start: firstDay.toISOString().substring(0, 10), end: lastDay.toISOString().substring(0, 10) }
   }
 
   private getComparisonDates = (fromDate: string, toDate: string) => {
