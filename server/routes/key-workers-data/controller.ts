@@ -32,10 +32,11 @@ export class KeyWorkersDataController {
     current: components['schemas']['PrisonStats']['current'],
     previous: components['schemas']['PrisonStats']['previous'],
     hasHighComplexityPrisoners: boolean,
+    kwSessionFrequencyInWeeks: number,
   ) => {
     if (!current) return []
 
-    const items = this.createStatsItems(current, previous)
+    const items = this.createStatsItems(current, previous, kwSessionFrequencyInWeeks)
 
     return Object.entries(items).map(([key, val]) => {
       return {
@@ -53,6 +54,7 @@ export class KeyWorkersDataController {
   private createStatsItems(
     current: components['schemas']['PrisonStats']['current'],
     previous: components['schemas']['PrisonStats']['previous'],
+    kwSessionFrequencyInWeeks: number,
   ) {
     return {
       keyworkerSessions: {
@@ -122,7 +124,7 @@ export class KeyWorkersDataController {
           'The reception date is calculated by taking the date from the latest instance of a transfer case note for the prisoner within the last 6 months.',
       },
       compliance: {
-        heading: 'Compliance rate',
+        heading: `Delivery rate against target of ${kwSessionFrequencyInWeeks} sessions per month`,
         type: 'percentage',
         currentValue: current?.compliance,
         previousValue: previous?.compliance,
@@ -154,7 +156,13 @@ export class KeyWorkersDataController {
     const hasPreviousStats = stats.previous !== undefined && stats.previous !== null
     const dataUpdateDate = getDateInReadableFormat(new Date().toISOString())
     const prisonName = res.locals.user.caseLoads?.find(caseLoad => caseLoad.caseLoadId === prisonCode)?.description
-    const data = this.createPayload(stats.current, stats.previous, prison.hasPrisonersWithHighComplexityNeeds)
+
+    const data = this.createPayload(
+      stats.current,
+      stats.previous,
+      prison.hasPrisonersWithHighComplexityNeeds,
+      prison.kwSessionFrequencyInWeeks,
+    )
 
     res.render('key-workers-data/view', {
       showBreadcrumbs: true,
