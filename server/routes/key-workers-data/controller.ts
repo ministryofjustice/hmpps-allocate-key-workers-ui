@@ -11,7 +11,9 @@ export class KeyWorkersDataController {
     const lastDay = new Date()
     lastDay.setDate(lastDay.getDate() - 1)
 
-    const firstDay = new Date(lastDay.getFullYear(), lastDay.getMonth() - 1, lastDay.getDate() + 1)
+    const daysInMonth = new Date(lastDay.getFullYear(), lastDay.getMonth() + 1, 0).getDate()
+    const firstDay = new Date(lastDay)
+    firstDay.setDate(lastDay.getDate() - daysInMonth)
 
     return { start: firstDay.toISOString().substring(0, 10), end: lastDay.toISOString().substring(0, 10) }
   }
