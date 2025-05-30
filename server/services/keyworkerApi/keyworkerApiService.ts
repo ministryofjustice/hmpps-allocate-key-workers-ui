@@ -27,6 +27,27 @@ export default class KeyworkerApiService {
     return this.keyworkerApiClientBuilder(req).getPrisonConfig(prisonId)
   }
 
+  updatePrisonConfig(
+    req: Request,
+    res: Response,
+    allowAutoAllocation: boolean,
+    maximumCapacity: number,
+    frequencyInWeeks?: number,
+  ) {
+    const config = res.locals.prisonConfiguration
+
+    const requestBody = {
+      isEnabled: config.isEnabled,
+      hasPrisonersWithHighComplexityNeeds: config.hasPrisonersWithHighComplexityNeeds,
+      allowAutoAllocation,
+      maximumCapacity,
+      capacity: maximumCapacity,
+      frequencyInWeeks: frequencyInWeeks ?? config.kwSessionFrequencyInWeeks,
+    }
+
+    return this.keyworkerApiClientBuilder(req).updatePrisonConfig(res.locals.user.getActiveCaseloadId()!, requestBody)
+  }
+
   getKeyworkerMembers(
     req: Request,
     prisonId: string,

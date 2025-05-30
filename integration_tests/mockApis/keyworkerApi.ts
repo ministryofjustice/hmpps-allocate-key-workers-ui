@@ -640,6 +640,9 @@ const stubSearchPrisoner = () =>
     { content: keyworkerSearchPrisoners },
   )
 
+const stubPutPrisonConfiguration = () =>
+  createBasicHttpStub('PUT', '/keyworker-api/prisons/LEI/configurations', 200, {})
+
 const keyworkerSearchPrisoners = [
   {
     personIdentifier: 'A4288DZ',
@@ -756,4 +759,5 @@ export default {
   stubPutAllocationSuccess,
   stubPutAllocationFail,
   stubUpdateKeyworkerProperties,
+  stubPutPrisonConfiguration,
 }

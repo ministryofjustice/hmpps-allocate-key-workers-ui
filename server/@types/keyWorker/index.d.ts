@@ -48,6 +48,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/prisons/{prisonCode}/configurations': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
+    put: operations['setPrisonConfiguration']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/key-worker/deallocate/{offenderNo}': {
     parameters: {
       query?: never
@@ -689,14 +709,33 @@ export interface components {
       /** Format: date */
       reactivateOn?: string
     }
+    PrisonConfigRequest: {
+      isEnabled: boolean
+      allowAutoAllocation: boolean
+      /** Format: int32 */
+      capacity: number
+      /** Format: int32 */
+      maximumCapacity: number
+      /** Format: int32 */
+      frequencyInWeeks: number
+      hasPrisonersWithHighComplexityNeeds?: boolean
+    }
+    PrisonConfigResponse: {
+      isEnabled: boolean
+      hasPrisonersWithHighComplexityNeeds: boolean
+      allowAutoAllocation: boolean
+      /** Format: int32 */
+      capacity: number
+      /** Format: int32 */
+      maximumCapacity: number
+      /** Format: int32 */
+      frequencyInWeeks: number
+    }
     ErrorResponse: {
       /** Format: int32 */
-      status?: number
-      /** Format: int32 */
-      errorCode?: number
+      status: number
       userMessage?: string
       developerMessage?: string
-      moreInfo?: string
     }
     PersonSearchRequest: {
       query?: string
@@ -1559,6 +1598,41 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+    }
+  }
+  setPrisonConfiguration: {
+    parameters: {
+      query?: never
+      header: {
+        /** @description
+         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
+         *          */
+        Policy: string
+        /** @description
+         *         Relevant caseload id for the client identity in context e.g. the active caseload id of the logged in user.
+         *          */
+        CaseloadId?: string
+      }
+      path: {
+        prisonCode: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PrisonConfigRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['PrisonConfigResponse']
+        }
       }
     }
   }

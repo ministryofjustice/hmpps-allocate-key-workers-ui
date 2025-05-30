@@ -1,5 +1,4 @@
 import { type RequestHandler, Router } from 'express'
-
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
 import { HomePageController } from './controller'
@@ -12,6 +11,7 @@ import removeTrailingSlashMiddleware from '../middleware/removeTrailingSlashMidd
 import insertJourneyIdentifier from '../middleware/journey/insertJourneyIdentifier'
 import JourneyRoutes from './journeys/routes'
 import { dataAccess } from '../data'
+import { EstablishmentSettingsRoutes } from './establishment-settings/routes'
 
 export default function routes(services: Services): Router {
   const router = Router()
@@ -27,6 +27,7 @@ export default function routes(services: Services): Router {
   router.use('/key-worker-profile/:staffId', KeyWorkerProfileRoutes(services))
   router.use('/allocate-key-workers', AllocateKeyWorkerRoutes(services))
   router.use('/prisoner-allocation-history', PrisonerAllocationHistoryRoutes(services))
+  router.use('/establishment-settings', EstablishmentSettingsRoutes(services))
 
   router.use(insertJourneyIdentifier())
   router.use('/:journeyId', JourneyRoutes(dataAccess(), services))

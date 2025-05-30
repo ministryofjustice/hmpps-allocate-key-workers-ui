@@ -71,10 +71,7 @@ export declare global {
       applicationName: string
       environmentName: string
       environmentNameColour: string
-      prisonConfiguration: {
-        isEnabled: boolean
-        hasPrisonersWithHighComplexityNeeds: boolean
-      }
+      prisonConfiguration: components['schemas']['PrisonKeyworkerConfiguration']
       feComponents?: {
         sharedData?: {
           activeCaseLoad: CaseLoad
