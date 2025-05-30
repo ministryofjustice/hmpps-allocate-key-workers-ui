@@ -56,6 +56,13 @@ export class KeyWorkersDataController {
     previous: components['schemas']['PrisonStats']['previous'],
     kwSessionFrequencyInWeeks: number,
   ) {
+    let complianceTitle = ''
+    if (kwSessionFrequencyInWeeks > 1) {
+      complianceTitle = `Delivery rate against frequency of a session every ${kwSessionFrequencyInWeeks} weeks`
+    } else {
+      complianceTitle = 'Delivery rate against frequency of a session every week'
+    }
+
     return {
       keyworkerSessions: {
         heading: 'Number of recorded key worker sessions',
@@ -124,7 +131,7 @@ export class KeyWorkersDataController {
           'The reception date is calculated by taking the date from the latest instance of a transfer case note for the prisoner within the last 6 months.',
       },
       compliance: {
-        heading: `Delivery rate against target of ${kwSessionFrequencyInWeeks} sessions per month`,
+        heading: complianceTitle,
         type: 'percentage',
         currentValue: current?.compliance,
         previousValue: previous?.compliance,
