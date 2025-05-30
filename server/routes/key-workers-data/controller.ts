@@ -11,10 +11,9 @@ export class KeyWorkersDataController {
     const currentDate = new Date()
     currentDate.setDate(currentDate.getDate() - 1)
 
-    const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 2)
-    const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1)
+    const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate() + 1)
 
-    return { start: firstDay.toISOString().substring(0, 10), end: lastDay.toISOString().substring(0, 10) }
+    return { start: firstDay.toISOString().substring(0, 10), end: currentDate.toISOString().substring(0, 10) }
   }
 
   private getComparisonDates = (fromDate: string, toDate: string) => {
