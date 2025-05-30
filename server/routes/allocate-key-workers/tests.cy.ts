@@ -330,11 +330,11 @@ context('/allocate-key-workers', () => {
   }
 
   const checkSorting = () => {
-    cy.get('.govuk-table__row').eq(0).children().eq(2).should('contain.text', 'Key worker').click()
+    cy.get('.govuk-table__row').eq(0).children().eq(2).should('contain.text', 'Key worker').children().eq(0).click()
 
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Bar, Foo')
-    cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'Tester, Jane')
-    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
+    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'Tester, Jane')
+    cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'John, Doe')
   }
 
   const checkResidentialLocationFilter = (readonly = false) => {
