@@ -16,7 +16,7 @@ context('Key workers data', () => {
 
     navigateToTestPage()
 
-    cy.findByRole('heading', { name: /^Key workers data for Leeds \(HMP\)$/i }).should('be.visible')
+    cy.findByRole('heading', { name: /^Key worker data for Leeds \(HMP\)$/i }).should('be.visible')
     cy.findByText('Select a date range to view')
 
     cy.findByRole('textbox', { name: 'From' }).should('be.visible')
@@ -164,7 +164,7 @@ context('Key workers data', () => {
 
     navigateToTestPage()
 
-    cy.findByRole('heading', { name: /^Key workers data for Leeds \(HMP\)$/i }).should('be.visible')
+    cy.findByRole('heading', { name: /^Key worker data for Leeds \(HMP\)$/i }).should('be.visible')
 
     cy.findByRole('textbox', { name: 'From' }).should('be.visible')
     cy.findByRole('textbox', { name: 'To' }).should('be.visible')
