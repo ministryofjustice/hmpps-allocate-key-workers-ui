@@ -152,9 +152,8 @@ export class KeyWorkersDataController {
     const stats = await this.keyworkerApiService.getPrisonStats(req, prisonCode, nowSpan.start, nowSpan.end)
     const prison = await this.keyworkerApiService.getPrisonConfig(req, prisonCode)
     const hasPreviousStats = stats.previous !== undefined && stats.previous !== null
-
     const dataUpdateDate = getDateInReadableFormat(new Date().toISOString())
-
+    const prisonName = res.locals.user.caseLoads?.find(caseLoad => caseLoad.caseLoadId === prisonCode)?.description
     const data = this.createPayload(stats.current, stats.previous, prison.hasPrisonersWithHighComplexityNeeds)
 
     res.render('key-workers-data/view', {
@@ -166,6 +165,7 @@ export class KeyWorkersDataController {
       comparisonDateTo: formatDateConcise(previousSpan.end),
       dataUpdateDate,
       hasPreviousStats,
+      prisonName,
     })
   }
 
