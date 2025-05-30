@@ -5,7 +5,7 @@ export const formatNumber = (value: string | number, type?: string): number => {
 
 export const formatValue = (value: number, type: string = 'number'): string | number => {
   if (type === 'percentage') {
-    const roundedValue = value.toFixed(2)
+    const roundedValue = value !== 0 ? value.toFixed(2) : 0
     return `${roundedValue} %`
   }
   if (type === 'day') return `${value} days`
