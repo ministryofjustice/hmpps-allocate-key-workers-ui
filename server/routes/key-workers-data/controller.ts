@@ -120,8 +120,7 @@ export class KeyWorkersDataController {
         currentValue: current?.avgReceptionToSessionDays,
         previousValue: previous?.avgReceptionToSessionDays,
         calculationMethod:
-          'The reception date is calculated by taking the date from the latest instance of a transfer case note for the prisoner within the last 6 months. \n' +
-          '\n' +
+          'The reception date is calculated by taking the date from the latest instance of a transfer case note for the prisoner within the last 6 months. <br /> <br />' +
           'The first key worker session is taken from the date of the first key worker session case note added in the prison in the last 6 months. ',
       },
       avgReceptionToAllocationDays: {
@@ -138,8 +137,7 @@ export class KeyWorkersDataController {
         currentValue: current?.compliance,
         previousValue: previous?.compliance,
         calculationMethod:
-          'This figure is calculated by comparing the number of recorded key worker sessions against the number of projected key worker sessions.\n' +
-          '\n' +
+          'This figure is calculated by comparing the number of recorded key worker sessions against the number of projected key worker sessions. <br /> <br />' +
           'The number of projected key worker sessions is calculated by taking the total number of prisoners with an allocated key worker and comparing it to the expected frequency of key worker sessions in the establishment.',
       },
       projectedSessions: {

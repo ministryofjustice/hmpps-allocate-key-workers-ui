@@ -7,7 +7,7 @@
     </div>
     {{ govukDetails({
       summaryText: "How this data is calculated",
-      text: calculationMethod
+      html: calculationMethod
     }) }}
     <div class="key-worker-data-stats">
       <p class="govuk-!-margin-bottom-1 govuk-!-padding-top-6 govuk-heading-l">{{ currentValue | formatValue(format) }}</p>
