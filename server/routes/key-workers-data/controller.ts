@@ -159,7 +159,7 @@ export class KeyWorkersDataController {
     const previousSpan = this.getComparisonDates(nowSpan.start, nowSpan.end)
     const prisonCode = res.locals.user.getActiveCaseloadId()!
     const stats = await this.keyworkerApiService.getPrisonStats(req, prisonCode, nowSpan.start, nowSpan.end)
-    const prison = await this.keyworkerApiService.getPrisonConfig(req, prisonCode)
+    const prison = res.locals.prisonConfiguration
     const hasPreviousStats = stats.previous !== undefined && stats.previous !== null
     const dataUpdateDate = getDateInReadableFormat(new Date().toISOString())
     const prisonName = res.locals.user.caseLoads?.find(caseLoad => caseLoad.caseLoadId === prisonCode)?.description
