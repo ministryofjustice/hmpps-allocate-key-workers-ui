@@ -1,13 +1,10 @@
 import { Request, Response, NextFunction } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import { FLASH_KEY__SUCCESS_MESSAGE } from '../../utils/constants'
-import { AdminViewSchemaType, NonAdminViewSchemaType, parseFrequencyInWeeks } from './schema'
+import { SchemaType, parseFrequencyInWeeks } from './schema'
 
 export class EstablishmentSettingsController {
-  constructor(
-    private readonly keyworkerApiService: KeyworkerApiService,
-    private readonly isAdmin: boolean,
-  ) {}
+  constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
   GET = async (req: Request, res: Response) => {
     const { allowAutoAllocate, capacityTier1, capacityTier2, kwSessionFrequencyInWeeks } =
@@ -24,16 +21,12 @@ export class EstablishmentSettingsController {
         res.locals.formResponses?.['frequencyInWeeks'] === undefined
           ? kwSessionFrequencyInWeeks
           : parseFrequencyInWeeks(res.locals.formResponses?.['frequencyInWeeks']),
-      isAdmin: this.isAdmin,
+      isAdmin: res.locals.user.permissions.admin,
       successMessage: req.flash(FLASH_KEY__SUCCESS_MESSAGE)[0],
     })
   }
 
-  submitToApi = async (
-    req: Request<unknown, unknown, AdminViewSchemaType | NonAdminViewSchemaType>,
-    res: Response,
-    next: NextFunction,
-  ) => {
+  submitToApi = async (req: Request<unknown, unknown, SchemaType>, res: Response, next: NextFunction) => {
     const { allowAutoAllocation, maximumCapacity, frequencyInWeeks } = req.body
 
     try {
