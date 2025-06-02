@@ -1,0 +1,72 @@
+{% extends "partials/layout.njk" %}
+{% from "moj/components/date-picker/macro.njk" import mojDatePicker %}
+{% from "partials/submitButton/macro.njk" import submitButton %}
+{% from "./components/statCard.njk" import statCard %}
+
+{% set fullWidth = true %}
+{% set pageTitle = "Key Workers Data" %}
+
+{% block innerContent %}
+
+  <h1 class="govuk-heading-l">Key worker data for {{ prisonName }}</h1>
+
+  <hr class="govuk-footer__section-break" />
+
+  <h2 class="govuk-heading-m">Select a date range to view</h2>
+
+  <div class="govuk-!-margin-bottom-4">
+    <form method="post" class="date-search-form">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        {{ mojDatePicker({
+          id: "dateFrom",
+          name: "dateFrom",
+          label: {
+            text: "From"
+          },
+          value: dateFrom,
+          maxDate: yesterdayStringGBFormat()
+        }) }}
+
+        {{ mojDatePicker({
+          id: "dateTo",
+          name: "dateTo",
+          label: {
+            text: "To"
+          },
+          value: dateTo,
+          maxDate: yesterdayStringGBFormat()
+        }) }}
+
+      {{ submitButton({
+        text: "View"
+      }) }}
+    </form>
+  </div>
+
+  <hr class="govuk-footer__section-break" />
+
+  {% if data.length %}
+
+    <p>Displaying statistics from {{ dateFrom | dateString }} to {{ dateTo | dateString }}.
+      {% if hasPreviousStats %}Comparing against statistics from {{ comparisonDateFrom | dateString }} to {{ comparisonDateTo | dateString }}. {% endif %}</p>
+
+    <p class="govuk-!-margin-top-6">Date updated: {{ dataUpdateDate }}</p>
+
+    <div class="govuk-grid-row stat-card-grid">
+      {% for statistic in data %}
+
+        {% set isHiddenClass = '' %}
+        {% if statistic.isHidden %}
+          {% set isHiddenClass = ' card-hidden' %}
+        {% endif %}
+
+        <div class="govuk-grid-column-one-half{{ isHiddenClass }}">
+          {{ statCard(statistic) }}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <h2 class="govuk-heading-s">There is no data for this period.</h2>
+  {% endif %}
+
+{% endblock %}

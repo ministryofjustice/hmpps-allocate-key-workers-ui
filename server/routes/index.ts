@@ -12,6 +12,7 @@ import insertJourneyIdentifier from '../middleware/journey/insertJourneyIdentifi
 import JourneyRoutes from './journeys/routes'
 import { dataAccess } from '../data'
 import { EstablishmentSettingsRoutes } from './establishment-settings/routes'
+import { KeyWorkersDataRoutes } from './key-workers-data/routes'
 
 export default function routes(services: Services): Router {
   const router = Router()
@@ -28,6 +29,7 @@ export default function routes(services: Services): Router {
   router.use('/allocate-key-workers', AllocateKeyWorkerRoutes(services))
   router.use('/prisoner-allocation-history', PrisonerAllocationHistoryRoutes(services))
   router.use('/establishment-settings', EstablishmentSettingsRoutes(services))
+  router.use('/key-workers-data', KeyWorkersDataRoutes(services))
 
   router.use(insertJourneyIdentifier())
   router.use('/:journeyId', JourneyRoutes(dataAccess(), services))

@@ -1,0 +1,23 @@
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% macro statCard(stat) %}
+  {% set title = stat.heading %}
+  {% set currentValue = stat.currentValue %}
+  {% set previousValue = stat.previousValue %}
+  {% set calculationMethod = stat.calculationMethod %}
+  {% set format = stat.type or 'number' %}
+
+  <div class="key-worker-data-stat-card left-aligned govuk-!-margin-bottom-4 govuk-!-margin-top-4">
+    <div class="heading-area-fixed-height">
+      <h2 class="govuk-heading-s govuk-!-margin-bottom-2">{{ title }}</h2>
+    </div>
+    {{ govukDetails({
+      summaryText: "How this data is calculated",
+      html: calculationMethod
+    }) }}
+    <div class="key-worker-data-stats">
+      <p class="govuk-!-margin-bottom-1 govuk-!-padding-top-6 govuk-heading-l">{{ currentValue | formatValue(format) }}</p>
+      <p class="govuk-!-padding-bottom-6">{{ currentValue | getHighlightedStatChange(previousValue, format) | safe }}</p>
+    </div>
+  </div>
+{% endmacro %}
