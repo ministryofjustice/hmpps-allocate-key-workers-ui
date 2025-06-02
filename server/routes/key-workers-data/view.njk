@@ -61,7 +61,7 @@
         {% endif %}
 
         <div class="govuk-grid-column-one-half{{ isHiddenClass }}">
-          {{ statCard(statistic.heading, statistic.currentValue, statistic.previousValue, statistic.calculationMethod, statistic.type) }}
+          {{ statCard(statistic) }}
         </div>
       {% endfor %}
     </div>
