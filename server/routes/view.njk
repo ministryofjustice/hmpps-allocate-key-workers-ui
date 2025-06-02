@@ -66,11 +66,11 @@
                             <p class="govuk-body card__description">View the statistics for your establishment’s key workers.</p>
                           </div>
                         </div>
-                        {% if user.permissions.admin %}
+                        {% if user.permissions.admin or user.permission.allocate %}
                           <div class="govuk-grid-column-one-third card-group__item">
                             <div class="card card--clickable">
                               <h2 class="govuk-heading-m card__heading">
-                                <a class="govuk-link govuk-link--no-visited-state card__link" href="{{ legacyKeyWorkersUiUrl }}/manage-key-worker-settings">Manage your establishment’s key worker settings</a>
+                                <a class="govuk-link govuk-link--no-visited-state card__link" href="/establishment-settings">Manage your establishment’s key worker settings</a>
                               </h2>
                               <p class="govuk-body card__description">Allow auto-allocation, edit key worker capacity and session frequency.</p>
                             </div>
