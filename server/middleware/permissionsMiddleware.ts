@@ -1,4 +1,4 @@
-import { RequestHandler, Response } from 'express'
+import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { services } from '../services'
 import logger from '../../logger'
 import AuthorisedRoles from '../authentication/authorisedRoles'
@@ -7,7 +7,15 @@ function hasRole(res: Response, ...roles: AuthorisedRoles[]): boolean {
   return roles.some(role => res.locals.user.userRoles.includes(role))
 }
 
-export default function populateUserPermissions(): RequestHandler {
+export const requireAllocateRole = (req: Request, res: Response, next: NextFunction) => {
+  if (res.locals.user.permissions.allocate) {
+    return next()
+  }
+
+  return res.redirect(req.headers['referer'] || '/')
+}
+
+export function populateUserPermissions(): RequestHandler {
   const { keyworkerApiService } = services()
 
   return async (req, res, next) => {
