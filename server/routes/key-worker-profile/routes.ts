@@ -3,6 +3,7 @@ import { Services } from '../../services'
 import { JourneyRouter } from '../base/routes'
 import { KeyWorkerProfileController } from './controller'
 import { selectKeyworkerSchema } from '../base/selectKeyworkerSchema'
+import { requireAllocateRole } from '../../middleware/permissionsMiddleware'
 
 export const KeyWorkerProfileRoutes = (services: Services) => {
   const { keyworkerApiService } = services
@@ -10,7 +11,7 @@ export const KeyWorkerProfileRoutes = (services: Services) => {
   const controller = new KeyWorkerProfileController(keyworkerApiService)
 
   get('/', controller.GET)
-  post('/', validate(selectKeyworkerSchema), controller.submitToApi, controller.POST)
+  post('/', requireAllocateRole, validate(selectKeyworkerSchema), controller.submitToApi, controller.POST)
 
   return router
 }

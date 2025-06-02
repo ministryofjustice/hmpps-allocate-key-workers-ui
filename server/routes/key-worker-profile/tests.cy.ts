@@ -1,8 +1,12 @@
+import AuthorisedRoles from '../../authentication/authorisedRoles'
+
 context('Profile Info', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubComponents')
-    cy.task('stubSignIn')
+    cy.task('stubSignIn', {
+      roles: [AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.KW_MIGRATION],
+    })
     cy.task('stubEnabledPrison')
     cy.task('stubKeyworkerMembersStatusActive')
     cy.task('stubPutAllocationSuccess')
@@ -13,58 +17,18 @@ context('Profile Info', () => {
   it('should show profile info', () => {
     navigateToTestPage()
 
-    cy.findByRole('heading', { name: /^AVAILABLE-ACTIVE KEY-WORKER$/i }).should('be.visible')
-    cy.get('.status-tag').eq(0).should('have.text', 'Active')
-    cy.findByRole('link', { name: 'Update capacity and status' })
-      .should('be.visible')
-      .and('have.attr', 'href')
-      .and('equal', '/start-update-key-worker/488095?proceedTo=update-capacity-status')
+    validatePageContents()
+  })
 
-    cy.findByText('Select key workers from the dropdown lists to reallocate or deallocate prisoners.').should('exist')
-    cy.findByText('Key workers will only be allocated when you save your changes.').should('exist')
+  it('should show profile info (read only)', () => {
+    cy.task('stubSignIn', {
+      roles: [],
+    })
+    cy.task('stubKeyworkerApiStatusIsKeyworker')
 
-    // Details panel
-    cy.get('.govuk-grid-column-one-quarter').eq(0).children().eq(0).should('have.text', 'Establishment')
-    cy.get('.govuk-grid-column-one-quarter').eq(0).children().eq(1).should('have.text', 'Leeds')
-    cy.get('.govuk-grid-column-one-quarter').eq(1).children().eq(0).should('have.text', 'Schedule type')
-    cy.get('.govuk-grid-column-one-quarter').eq(1).children().eq(1).should('have.text', 'Full Time')
+    navigateToTestPage()
 
-    cy.get('.govuk-grid-column-one-quarter').eq(2).children().eq(0).should('have.text', 'Prisoners allocated')
-    cy.get('.govuk-grid-column-one-quarter').eq(2).children().eq(1).should('have.text', '1')
-
-    cy.get('.govuk-grid-column-one-quarter').eq(3).children().eq(0).should('have.text', 'Maximum capacity')
-    cy.get('.govuk-grid-column-one-quarter').eq(3).children().eq(1).should('have.text', '6')
-
-    // Stats panel
-    cy.get('.govuk-grid-column-one-quarter').eq(4).children().eq(0).should('have.text', 'Projected sessions')
-    cy.get('.govuk-grid-column-one-quarter').eq(4).children().eq(1).should('have.text', '1')
-    cy.get('.govuk-grid-column-one-quarter').eq(4).children().eq(2).should('have.text', '+4 increase')
-
-    cy.get('.govuk-grid-column-one-quarter').eq(5).children().eq(0).should('have.text', 'Recorded sessions')
-    cy.get('.govuk-grid-column-one-quarter').eq(5).children().eq(1).should('have.text', '3')
-    cy.get('.govuk-grid-column-one-quarter').eq(5).children().eq(2).should('have.text', '+3 increase')
-
-    cy.get('.govuk-grid-column-one-quarter').eq(6).children().eq(0).should('have.text', 'Session compliance')
-    cy.get('.govuk-grid-column-one-quarter').eq(6).children().eq(1).should('have.text', '0 %')
-    cy.get('.govuk-grid-column-one-quarter').eq(6).children().eq(2).should('have.text', 'No change')
-
-    cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(0).should('have.text', 'Case notes written')
-    cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(1).should('have.text', '5')
-    cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(2).should('have.text', '+5 increase')
-
-    // Allocations panel
-    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
-    cy.get('.govuk-table__row').eq(2).children().eq(1).should('contain.text', '1-1-035')
-    cy.get('.govuk-table__row').eq(2).children().eq(2).should('contain.text', '1/2/2025')
-    cy.get('.govuk-table__row').eq(2).children().eq(3).should('contain.text', 'Standard')
-    cy.get('.govuk-table__row').eq(2).children().eq(4).should('contain.text', '23/1/2025')
-    cy.get('[data-sort-value="John, Doe"] > .govuk-link--no-visited-state').should(
-      'have.attr',
-      'href',
-      'http://localhost:3001/prisoner/A4288DZ',
-    )
-
-    cy.get('[data-sort-value="John, Doe"] > .govuk-link--no-visited-state').should('have.attr', 'target', '_blank')
+    validatePageContents(true)
   })
 
   it('should show error when no allocations or deallocations are made', () => {
@@ -174,5 +138,79 @@ context('Profile Info', () => {
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit('/key-worker-profile/488095', { failOnStatusCode: false })
+  }
+
+  const validatePageContents = (readonly = false) => {
+    cy.findByRole('heading', { name: /^AVAILABLE-ACTIVE KEY-WORKER$/i }).should('be.visible')
+    cy.get('.status-tag').eq(0).should('have.text', 'Active')
+
+    if (readonly) {
+      cy.get('a[href*="/start-update-key-worker/488095?proceedTo=update-capacity-status"]').should('not.exist')
+    } else {
+      cy.get('a[href*="/start-update-key-worker/488095?proceedTo=update-capacity-status"]')
+        .should('be.visible')
+        .should('contain.text', 'Update capacity and status')
+    }
+
+    cy.contains('Select key workers from the dropdown lists to reallocate or deallocate prisoners.').should(
+      readonly ? 'not.exist' : 'exist',
+    )
+    cy.contains('Key workers will only be allocated when you save your changes.').should(
+      readonly ? 'not.exist' : 'exist',
+    )
+
+    // Details panel
+    cy.get('.govuk-grid-column-one-quarter').eq(0).children().eq(0).should('have.text', 'Establishment')
+    cy.get('.govuk-grid-column-one-quarter').eq(0).children().eq(1).should('have.text', 'Leeds')
+    cy.get('.govuk-grid-column-one-quarter').eq(1).children().eq(0).should('have.text', 'Schedule type')
+    cy.get('.govuk-grid-column-one-quarter').eq(1).children().eq(1).should('have.text', 'Full Time')
+
+    cy.get('.govuk-grid-column-one-quarter').eq(2).children().eq(0).should('have.text', 'Prisoners allocated')
+    cy.get('.govuk-grid-column-one-quarter').eq(2).children().eq(1).should('have.text', '1')
+
+    cy.get('.govuk-grid-column-one-quarter').eq(3).children().eq(0).should('have.text', 'Maximum capacity')
+    cy.get('.govuk-grid-column-one-quarter').eq(3).children().eq(1).should('have.text', '6')
+
+    // Stats panel
+    cy.get('.govuk-grid-column-one-quarter').eq(4).children().eq(0).should('have.text', 'Projected sessions')
+    cy.get('.govuk-grid-column-one-quarter').eq(4).children().eq(1).should('have.text', '1')
+    cy.get('.govuk-grid-column-one-quarter').eq(4).children().eq(2).should('have.text', '+4 increase')
+
+    cy.get('.govuk-grid-column-one-quarter').eq(5).children().eq(0).should('have.text', 'Recorded sessions')
+    cy.get('.govuk-grid-column-one-quarter').eq(5).children().eq(1).should('have.text', '3')
+    cy.get('.govuk-grid-column-one-quarter').eq(5).children().eq(2).should('have.text', '+3 increase')
+
+    cy.get('.govuk-grid-column-one-quarter').eq(6).children().eq(0).should('have.text', 'Session compliance')
+    cy.get('.govuk-grid-column-one-quarter').eq(6).children().eq(1).should('have.text', '0 %')
+    cy.get('.govuk-grid-column-one-quarter').eq(6).children().eq(2).should('have.text', 'No change')
+
+    cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(0).should('have.text', 'Case notes written')
+    cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(1).should('have.text', '5')
+    cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(2).should('have.text', '+5 increase')
+
+    // Allocations panel
+    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
+    cy.get('.govuk-table__row').eq(2).children().eq(1).should('contain.text', '1-1-035')
+    cy.get('.govuk-table__row').eq(2).children().eq(2).should('contain.text', '1/2/2025')
+    cy.get('.govuk-table__row').eq(2).children().eq(3).should('contain.text', 'Standard')
+    cy.get('.govuk-table__row').eq(2).children().eq(4).should('contain.text', '23/1/2025')
+
+    cy.get('.govuk-table__row')
+      .eq(2)
+      .children()
+      .should('have.length', readonly ? 5 : 6)
+
+    if (readonly) {
+      cy.get('.govuk-button').should('not.exist')
+    } else {
+      cy.get('[data-sort-value="John, Doe"] > .govuk-link--no-visited-state').should(
+        'have.attr',
+        'href',
+        'http://localhost:3001/prisoner/A4288DZ',
+      )
+
+      cy.get('[data-sort-value="John, Doe"] > .govuk-link--no-visited-state').should('have.attr', 'target', '_blank')
+      cy.get('.govuk-button').should('contain.text', 'Save changes')
+    }
   }
 })
