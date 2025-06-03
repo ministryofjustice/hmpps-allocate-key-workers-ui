@@ -38,21 +38,7 @@ context('test / homepage', () => {
 
       navigateToTestPage()
 
-      cy.findByRole('heading', { name: /^Key workers$/i }).should('be.visible')
-
-      cy.findByRole('link', { name: /View all without a key worker$/i }).should('be.visible')
-
-      cy.findByRole('link', { name: /View by residential location$/i }).should('be.visible')
-
-      cy.findByRole('link', { name: /Search for a prisoner$/i }).should('be.visible')
-
-      cy.findByRole('link', { name: /View key workers in your establishment$/i }).should('be.visible')
-
-      cy.findByText('You can view a key worker’s availability and check their individual statistics.')
-
-      cy.findByRole('link', { name: /Key worker statistics$/i }).should('be.visible')
-
-      cy.findAllByRole('link', { name: /Manage your establishment’s key worker settings$/i }).should('not.exist')
+      validateTiles(true)
     })
 
     it('should show correct services when user has allocate permission', () => {
@@ -64,23 +50,7 @@ context('test / homepage', () => {
 
       navigateToTestPage()
 
-      cy.findByRole('heading', { name: /^Key workers$/i }).should('be.visible')
-
-      cy.findByRole('link', { name: /View all without a key worker$/i }).should('be.visible')
-
-      cy.findByRole('link', { name: /View by residential location$/i }).should('be.visible')
-
-      cy.findByRole('link', { name: /Search for a prisoner$/i }).should('be.visible')
-
-      cy.findByRole('link', { name: /View key workers in your establishment$/i }).should('be.visible')
-
-      cy.findByText(
-        'You can manage a key worker’s availability, reassign their prisoners and check their individual statistics.',
-      )
-
-      cy.findByRole('link', { name: /Key worker statistics$/i }).should('be.visible')
-
-      cy.findAllByRole('link', { name: /Manage your establishment’s key worker settings$/i }).should('not.exist')
+      validateTiles(false)
     })
 
     it('should show correct services when user has admin permission', () => {
@@ -92,109 +62,59 @@ context('test / homepage', () => {
 
       navigateToTestPage()
 
-      cy.findByRole('heading', { name: /^Key workers$/i }).should('be.visible')
+      validateTiles(false)
+    })
+  })
 
-      cy.findByRole('link', { name: /View all without a key worker$/i }).should('be.visible')
+  const validateTiles = (readonly = false) => {
+    cy.get('h2 > .card__link').should('have.length', readonly ? 3 : 5)
 
-      cy.findByRole('link', { name: /View by residential location$/i }).should('be.visible')
-
-      cy.findByRole('link', { name: /Search for a prisoner$/i }).should('be.visible')
-
-      cy.findByRole('link', { name: /View key workers in your establishment$/i }).should('be.visible')
-
-      cy.findByText(
-        'You can manage a key worker’s availability, reassign their prisoners and check their individual statistics.',
+    cy.get('h2 > .card__link')
+      .eq(0)
+      .should('contain.text', 'Allocate key workers to prisoners')
+      .and('have.attr', 'href', '/allocate-key-workers')
+    cy.get('.card__description')
+      .eq(0)
+      .should(
+        'contain.text',
+        'View all prisoners or filter by location or allocation status, search for individuals, and automatically assign key workers.',
       )
+    cy.get('h2 > .card__link')
+      .eq(1)
+      .should('contain.text', 'Manage key workers')
+      .and('have.attr', 'href', '/manage-key-workers')
+    cy.get('.card__description')
+      .eq(1)
+      .should(
+        'contain.text',
+        'View key workers, change their status and capacity, and view and reassign their prisoners.',
+      )
+    cy.get('h2 > .card__link')
+      .eq(2)
+      .should('contain.text', 'View key worker data')
+      .and('have.attr', 'href', '/key-workers-data')
+    cy.get('.card__description').eq(2).should('contain.text', 'View key worker data for your establishment.')
 
-      cy.findByRole('link', { name: /Key worker statistics$/i }).should('be.visible')
-
-      cy.findAllByRole('link', { name: /Manage your establishment’s key worker settings$/i }).should('be.visible')
-    })
-  })
-
-  it('shows all tiles when user has all required roles', () => {
-    cy.task('stubSignIn', {
-      roles: [AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.KW_MIGRATION],
-    })
-    cy.task('stubEnabledPrison')
-    navigateToTestPage()
-
-    cy.findByRole('heading', { name: /^Key workers$/i }).should('be.visible')
-
-    cy.findByRole('link', { name: /View all without a key worker$/i })
-      .should('be.visible')
-      .and('have.attr', 'href')
-      .and('to.equal', '/allocate-key-workers?excludeActiveAllocations=true')
-
-    cy.findByRole('link', { name: /View by residential location$/i })
-      .should('be.visible')
-      .and('have.attr', 'href')
-      .and('to.equal', '/allocate-key-workers')
-
-    cy.findByRole('link', { name: /Search for a prisoner$/i })
-      .should('be.visible')
-      .and('have.attr', 'href')
-      .and('to.equal', '/allocate-key-workers')
-
-    cy.findByRole('link', { name: /View key workers in your establishment$/i })
-      .should('be.visible')
-      .and('have.attr', 'href')
-      .and('to.match', /manage-key-workers/)
-
-    cy.findByRole('link', { name: /Key worker statistics$/i })
-      .should('be.visible')
-      .and('have.attr', 'href')
-      .and('to.equal', '/key-workers-data')
-
-    cy.findByRole('link', { name: /Manage your establishment’s key worker settings$/i })
-      .should('be.visible')
-      .and('have.attr', 'href')
-      .and('to.match', /\/establishment-settings$/)
-  })
-
-  it('should not show extra text when prison has no high risk prisoners', () => {
-    cy.task('stubSignIn', {
-      roles: [AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KEYWORKER_MONITOR],
-    })
-    cy.task('stubEnabledPrison')
-
-    navigateToTestPage()
-
-    cy.findByRole('heading', { name: /^Key workers$/i }).should('be.visible')
-
-    cy.findByRole('link', { name: /View all without a key worker$/i }).should('be.visible')
-
-    cy.findByRole('link', { name: /View by residential location$/i }).should('be.visible')
-
-    cy.findByRole('link', { name: /Search for a prisoner$/i }).should('be.visible')
-
-    cy.findByRole('link', { name: /View key workers in your establishment$/i }).should('be.visible')
-
-    cy.findByText('View all prisoners in a residential location and allocate or change key workers.')
-  })
-
-  it('should show extra text when prison has high risk prisoners', () => {
-    cy.task('stubSignIn', {
-      roles: [AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KEYWORKER_MONITOR],
-    })
-    cy.task('stubEnabledPrisonWithHighComplexityNeedsPrisoners')
-
-    navigateToTestPage()
-
-    cy.findByRole('heading', { name: /^Key workers$/i }).should('be.visible')
-
-    cy.findByRole('link', { name: /View all without a key worker$/i }).should('be.visible')
-
-    cy.findByRole('link', { name: /View by residential location$/i }).should('be.visible')
-
-    cy.findByRole('link', { name: /Search for a prisoner$/i }).should('be.visible')
-
-    cy.findByRole('link', { name: /View key workers in your establishment$/i }).should('be.visible')
-
-    cy.contains(
-      /View all prisoners in a residential location and allocate or change key workers\. You can also see high complexity prisoners/,
-    ).should('be.visible')
-  })
+    if (!readonly) {
+      cy.get('h2 > .card__link')
+        .eq(3)
+        .should('contain.text', 'Make someone a key worker')
+        .and('have.attr', 'href', '/assign-key-worker-staff-role')
+      cy.get('.card__description')
+        .eq(3)
+        .should('contain.text', 'Assign the key worker role to staff members in your establishment.')
+      cy.get('h2 > .card__link')
+        .eq(4)
+        .should('contain.text', 'Manage your establishment’s key worker settings')
+        .and('have.attr', 'href', '/establishment-settings')
+      cy.get('.card__description')
+        .eq(4)
+        .should(
+          'contain.text',
+          'Enable automatic assignment of key workers, set capacity and view session frequency settings.',
+        )
+    }
+  }
 
   it('should show service unavailable if prison does not have service enabled', () => {
     cy.task('stubSignIn')
