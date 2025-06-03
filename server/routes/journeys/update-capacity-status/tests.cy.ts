@@ -63,7 +63,7 @@ context('Update capacity and status', () => {
     cy.get('#capacity').should('have.value', '1001')
     cy.findByRole('button', { name: /Save and continue/i }).click()
     cy.get('.govuk-error-summary').should('exist')
-    cy.get('ul.govuk-error-summary__list a').should('have.text', 'Enter a number between 0 to 999')
+    cy.get('ul.govuk-error-summary__list a').should('have.text', 'Enter a maximum capacity between 1 and 999')
   })
 
   const navigateToTestPage = () => {

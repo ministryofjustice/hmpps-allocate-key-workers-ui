@@ -256,7 +256,7 @@ const stubKeyWorkerStatsWithNullPreviousData = () =>
   })
 
 const stubKeyworkerStatuses = () =>
-  createBasicHttpStub('GET', '/keyworker-api/reference-data/keyworker-status', 200, keyworkerStatuses)
+  createBasicHttpStub('GET', '/keyworker-api/reference-data/staff-status', 200, keyworkerStatuses)
 
 const stubPrisonerAllocations = () =>
   createBasicHttpStub('GET', '/keyworker-api/prisoners/A9965EA/keyworkers', 200, prisonerAllocationResponse)
