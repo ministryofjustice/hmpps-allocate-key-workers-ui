@@ -4,6 +4,46 @@
  */
 
 export interface paths {
+  '/prisons/{prisonCode}/staff/{staffId}/job-classification': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
+    put: operations['modifyStaffJob']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/prisons/{prisonCode}/staff/{staffId}/configuration': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
+    put: operations['modifyStaffConfig']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/prisons/{prisonCode}/prisoners/keyworkers': {
     parameters: {
       query?: never
@@ -678,11 +718,34 @@ export interface paths {
     trace?: never
   }
 }
-
 export type webhooks = Record<string, never>
-
 export interface components {
   schemas: {
+    StaffJobClassificationRequest: {
+      position: string
+      scheduleType: string
+      /** Format: int32 */
+      hoursPerWeek: number
+      /** Format: date */
+      fromDate: string
+      /** Format: date */
+      toDate?: string
+    }
+    StaffConfigRequest: {
+      /** @enum {string} */
+      status:
+        | 'ACTIVE'
+        | 'UNAVAILABLE_ANNUAL_LEAVE'
+        | 'UNAVAILABLE_LONG_TERM_ABSENCE'
+        | 'UNAVAILABLE_NO_PRISONER_CONTACT'
+        | 'INACTIVE'
+      /** Format: int32 */
+      capacity: number
+      deactivateActiveAllocations: boolean
+      removeFromAutoAllocation: boolean
+      /** Format: date */
+      reactivateOn?: string
+    }
     PersonStaffAllocation: {
       personIdentifier: string
       /** Format: int64 */
@@ -700,16 +763,6 @@ export interface components {
       /** Format: int64 */
       staffId: number
       deallocationReason: string
-    }
-    KeyworkerConfigRequest: {
-      /** @enum {string} */
-      status: 'ACT' | 'UAL' | 'ULT' | 'UNP' | 'INA'
-      /** Format: int32 */
-      capacity: number
-      deactivateActiveAllocations: boolean
-      removeFromAutoAllocation: boolean
-      /** Format: date */
-      reactivateOn?: string
     }
     PrisonConfigRequest: {
       isEnabled: boolean
@@ -805,7 +858,12 @@ export interface components {
        * @description Key worker's status.
        * @enum {string}
        */
-      status: 'ACT' | 'UAL' | 'ULT' | 'UNP' | 'INA'
+      status:
+        | 'ACTIVE'
+        | 'UNAVAILABLE_ANNUAL_LEAVE'
+        | 'UNAVAILABLE_LONG_TERM_ABSENCE'
+        | 'UNAVAILABLE_NO_PRISONER_CONTACT'
+        | 'INACTIVE'
       /**
        * @description Determines behaviour to apply to auto-allocation
        * @enum {string}
@@ -932,7 +990,7 @@ export interface components {
       deallocationReason?:
         | 'OVERRIDE'
         | 'RELEASED'
-        | 'KEYWORKER_STATUS_CHANGE'
+        | 'STAFF_STATUS_CHANGE'
         | 'TRANSFER'
         | 'MERGED'
         | 'MISSING'
@@ -1143,7 +1201,12 @@ export interface components {
        * @description Key worker's status.
        * @enum {string}
        */
-      status?: 'ACT' | 'UAL' | 'ULT' | 'UNP' | 'INA'
+      status?:
+        | 'ACTIVE'
+        | 'UNAVAILABLE_ANNUAL_LEAVE'
+        | 'UNAVAILABLE_LONG_TERM_ABSENCE'
+        | 'UNAVAILABLE_NO_PRISONER_CONTACT'
+        | 'INACTIVE'
       /** @description Key worker is eligible for auto allocation. */
       autoAllocationAllowed?: boolean
       /**
@@ -1524,10 +1587,76 @@ export interface components {
   headers: never
   pathItems: never
 }
-
 export type $defs = Record<string, never>
-
 export interface operations {
+  modifyStaffJob: {
+    parameters: {
+      query?: never
+      header: {
+        /** @description
+         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
+         *          */
+        Policy: string
+        /** @description
+         *         Relevant caseload id for the client identity in context e.g. the active caseload id of the logged in user.
+         *          */
+        CaseloadId?: string
+      }
+      path: {
+        prisonCode: string
+        staffId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['StaffJobClassificationRequest']
+      }
+    }
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  modifyStaffConfig: {
+    parameters: {
+      query?: never
+      header: {
+        /** @description
+         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
+         *          */
+        Policy: string
+        /** @description
+         *         Relevant caseload id for the client identity in context e.g. the active caseload id of the logged in user.
+         *          */
+        CaseloadId?: string
+      }
+      path: {
+        prisonCode: string
+        staffId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['StaffConfigRequest']
+      }
+    }
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
   manageAllocations: {
     parameters: {
       query?: never
@@ -1592,7 +1721,7 @@ export interface operations {
     }
     requestBody: {
       content: {
-        'application/json': components['schemas']['KeyworkerConfigRequest']
+        'application/json': components['schemas']['StaffConfigRequest']
       }
     }
     responses: {
@@ -2596,7 +2725,12 @@ export interface operations {
         /** @description Filter results by first name and/or last name of key worker. Supplied filter term is matched to start of key worker's first and last name. */
         nameFilter?: string
         /** @description Filter results by status of key worker. */
-        statusFilter?: 'ACT' | 'UAL' | 'ULT' | 'UNP' | 'INA'
+        statusFilter?:
+          | 'ACTIVE'
+          | 'UNAVAILABLE_ANNUAL_LEAVE'
+          | 'UNAVAILABLE_LONG_TERM_ABSENCE'
+          | 'UNAVAILABLE_NO_PRISONER_CONTACT'
+          | 'INACTIVE'
       }
       header?: {
         /**

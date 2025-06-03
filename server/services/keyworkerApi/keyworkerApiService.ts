@@ -66,7 +66,7 @@ export default class KeyworkerApiService {
 
   getReferenceData(
     req: Request,
-    domain: 'keyworker-status' | 'allocation-reason' | 'deallocation-reason',
+    domain: 'staff-status' | 'allocation-reason' | 'deallocation-reason',
   ): ReturnType<KeyworkerApiClient['getReferenceData']> {
     return this.keyworkerApiClientBuilder(req).getReferenceData(domain)
   }

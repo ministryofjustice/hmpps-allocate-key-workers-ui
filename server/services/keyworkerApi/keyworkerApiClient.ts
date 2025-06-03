@@ -26,7 +26,7 @@ export interface ServiceConfigInfo {
   productId: string
 }
 
-export type KeyworkerConfigRequest = Omit<components['schemas']['KeyworkerConfigRequest'], 'status'> & {
+export type KeyworkerConfigRequest = Omit<components['schemas']['StaffConfigRequest'], 'status'> & {
   status: string
 }
 
@@ -111,7 +111,7 @@ export default class KeyworkerApiClient {
   }
 
   async getReferenceData(
-    domain: 'keyworker-status' | 'allocation-reason' | 'deallocation-reason',
+    domain: 'staff-status' | 'allocation-reason' | 'deallocation-reason',
   ): Promise<components['schemas']['CodedDescription'][]> {
     const response = await this.restClient.get<components['schemas']['CodedDescription'][]>({
       path: `/reference-data/${domain}`,

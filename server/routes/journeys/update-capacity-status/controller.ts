@@ -20,9 +20,10 @@ export class UpdateCapacityAndStatusController {
         res.locals.formResponses?.['status'] ??
         req.journeyData.updateCapacityStatus!.status?.code ??
         req.journeyData.keyWorkerDetails!.status?.code,
-      statuses: (await this.keyworkerApiService.getReferenceData(req, 'keyworker-status')).map(
-        ({ code, description }) => ({ value: code, text: description }),
-      ),
+      statuses: (await this.keyworkerApiService.getReferenceData(req, 'staff-status')).map(({ code, description }) => ({
+        value: code,
+        text: description,
+      })),
       backUrl: `/key-worker-profile/${req.journeyData.keyWorkerDetails!.keyworker.staffId}`,
       successMessage: req.flash(FLASH_KEY__SUCCESS_MESSAGE)[0],
     })
