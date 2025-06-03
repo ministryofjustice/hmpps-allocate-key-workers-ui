@@ -15,6 +15,7 @@ export const schemaFactory = (keyworkerApiService: KeyworkerApiService) => async
       'Enter a number',
       'Enter a valid number',
       'Enter a maximum capacity between 1 and 999',
+      1,
     ),
     status: z
       .string({ required_error: 'Select a status' })
