@@ -14,7 +14,7 @@
   {% endfor %}
 {% endblock %}
 
-{% block pageTitle %}{{pageTitle | default(applicationName)}}{% endblock %}
+{% block pageTitle %}{{pageTitle | default(applicationName)}} - DPS{% endblock %}
 
 {% block header %}
   {{ feComponents.header | safe }}

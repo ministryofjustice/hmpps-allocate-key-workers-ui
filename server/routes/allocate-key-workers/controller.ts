@@ -44,7 +44,9 @@ export class AllocateKeyWorkerController extends ChangeKeyWorkerController {
     })
   }
 
-  POST = async (req: Request, res: Response): Promise<void> => {
+  POST = async (req: Request, res: Response) => res.redirect(req.get('Referrer')!)
+
+  filter = async (req: Request, res: Response): Promise<void> => {
     const params = new URLSearchParams({
       query: req.body.query || '',
       cellLocationPrefix: req.body.cellLocationPrefix || '',

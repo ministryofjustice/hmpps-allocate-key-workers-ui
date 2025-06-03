@@ -1,0 +1,46 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set fullWidth = true %}
+{% set pageTitle = "Change this key worker’s status to Inactive - Key worker profile" %}
+
+{% block innerContent %}
+  <div class="govuk-width-container govuk-body">
+    <div class="govuk-grid-row govuk-!-margin-0">
+      <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0">{{ keyworker | firstNameSpaceLastName }}</h1>
+      <p class="govuk-!-margin-left-2 govuk-!-display-inline-block govuk-!-margin-0 "> {{ statusTag({ text: status.description }) }}</p>
+    </div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">
+          Are you sure you want to change this key worker’s status to Inactive?
+        </h1>
+
+        <p class="govuk-!-margin-bottom-6">
+          This will deallocate the key worker’s current prisoners. It will also remove the key worker from having prisoners auto-assigned to them.
+        </p>
+
+        <form method="post">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+          <div class="govuk-button-group">
+            {{ govukButton({
+              text: "Yes, save this change",
+              classes: "govuk-button--warning",
+              preventDoubleClick: true
+            }) }}
+
+            {{ govukButton({
+              text: "No, return to key worker profile",
+              classes: "govuk-button--secondary",
+              href: "cancel",
+              preventDoubleClick: true
+            }) }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

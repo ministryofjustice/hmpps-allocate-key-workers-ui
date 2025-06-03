@@ -2,9 +2,9 @@ import { Request, Response } from 'express'
 import { ChangeKeyWorkerController } from '../base/changeKeyWorkerController'
 
 export class KeyWorkerProfileController extends ChangeKeyWorkerController {
-  GET = async (req: Request, res: Response, staffId: string): Promise<void> => {
+  GET = async (req: Request<{ staffId: string }>, res: Response): Promise<void> => {
     const prisonCode = res.locals.user.getActiveCaseloadId()!
-    const keyworkerData = await this.keyworkerApiService.getKeyworkerDetails(req, prisonCode, staffId)
+    const keyworkerData = await this.keyworkerApiService.getKeyworkerDetails(req, prisonCode, req.params.staffId)
 
     res.render('key-worker-profile/view', {
       ...keyworkerData,
@@ -12,4 +12,6 @@ export class KeyWorkerProfileController extends ChangeKeyWorkerController {
       showBreadcrumbs: true,
     })
   }
+
+  POST = async (req: Request, res: Response) => res.redirect(req.get('Referrer')!)
 }

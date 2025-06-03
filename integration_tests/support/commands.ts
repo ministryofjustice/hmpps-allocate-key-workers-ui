@@ -1,4 +1,13 @@
 import { getLastAPICallMatching } from '../mockApis/wiremock'
+import { JourneyData } from '../../server/@types/express'
+
+type RecursivePartial<T> = T extends unknown
+  ? T extends object
+    ? { [K in keyof T]?: RecursivePartial<T[K]> }
+    : T
+  : never
+
+export type PartialJourneyData = RecursivePartial<JourneyData>
 
 Cypress.Commands.add('signIn', (options = { failOnStatusCode: true }) => {
   cy.request('/')
@@ -9,4 +18,10 @@ Cypress.Commands.add('signIn', (options = { failOnStatusCode: true }) => {
 
 Cypress.Commands.add('verifyLastAPICall', (matching: string | object, expected: object) => {
   return cy.wrap(getLastAPICallMatching(matching)).should('deep.equal', expected)
+})
+
+Cypress.Commands.add('injectJourneyDataAndReload', <T>(uuid: string, json: T) => {
+  const data = encodeURIComponent(btoa(JSON.stringify(json)))
+  cy.request('GET', `/${uuid}/inject-journey-data?data=${data}`)
+  cy.reload()
 })

@@ -1,4 +1,5 @@
 import { stubFor } from './wiremock'
+import { components } from '../../server/@types/keyWorker'
 
 const createBasicHttpStub = (method: string, urlPattern: string, status: number, jsonBody: object = {}) => {
   return createHttpStub(method, urlPattern, undefined, undefined, status, jsonBody)
@@ -222,8 +223,11 @@ const stubKeyworkerMembersStatusActive = () =>
     { content: keyworkerManageResponse.content.filter(o => o.status.code === 'ACT') },
   )
 
-const stubKeyworkerDetails = () =>
-  createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/keyworkers/488095', 200, keyworkerDetailsResponse)
+const stubKeyworkerDetails = (details: Partial<components['schemas']['KeyworkerDetails']> = {}) =>
+  createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/keyworkers/488095', 200, {
+    ...keyworkerDetailsResponse,
+    ...details,
+  })
 
 const stubKeyWorkerStatsWithNullPreviousValues = () =>
   createKeyworkerStatsStub('.+', '.+', {
@@ -482,7 +486,7 @@ const keyworkerDetailsResponse = {
     },
   },
   status: {
-    code: 'ACT',
+    code: 'ACTIVE',
     description: 'Active',
   },
   prison: {
@@ -636,6 +640,9 @@ const stubSearchPrisoner = () =>
     { content: keyworkerSearchPrisoners },
   )
 
+const stubPutPrisonConfiguration = () =>
+  createBasicHttpStub('PUT', '/keyworker-api/prisons/LEI/configurations', 200, {})
+
 const keyworkerSearchPrisoners = [
   {
     personIdentifier: 'A4288DZ',
@@ -752,4 +759,5 @@ export default {
   stubPutAllocationSuccess,
   stubPutAllocationFail,
   stubUpdateKeyworkerProperties,
+  stubPutPrisonConfiguration,
 }

@@ -1,3 +1,4 @@
+import { Request, Response } from 'express'
 /*
  * Do appinsights first as it does some magic instrumentation work, i.e. it affects other 'require's
  * In particular, applicationinsights automatically collects bunyan logs
@@ -17,22 +18,25 @@ import PrisonerSearchApiRestClient from '../services/prisonerSearch/prisonerSear
 
 const applicationInfo = applicationInfoSupplier()
 initialiseAppInsights()
-buildAppInsightsClient(applicationInfo)
+const telemetryClient = buildAppInsightsClient(applicationInfo)!
 
 type RestClientBuilder<T> = (token: string) => T
+type EnhancedRestClientBuilder<T> = (req: Request, res?: Response) => T
+
+const tokenStore = config.redis.enabled ? new RedisTokenStore(createRedisClient()) : new InMemoryTokenStore()
 
 export const dataAccess = () => ({
   applicationInfo,
-  hmppsAuthClient: new HmppsAuthClient(
-    config.redis.enabled ? new RedisTokenStore(createRedisClient()) : new InMemoryTokenStore(),
-  ),
+  hmppsAuthClient: new HmppsAuthClient(tokenStore),
   hmppsAuditClient: new HmppsAuditClient(config.sqs.audit),
-  keyworkerApiClient: (token: string) => new KeyworkerApiClient(token),
+  keyworkerApiClient: (req: Request, res?: Response) => new KeyworkerApiClient(req, res),
   prisonApiClient: (token: string) => new PrisonApiRestClient(token),
   locationsWithinPrisonApiClient: (token: string) => new LocationsInsidePrisonApiRestClient(token),
   prisonerSearchApiClient: (token: string) => new PrisonerSearchApiRestClient(token),
+  tokenStore,
+  telemetryClient,
 })
 
 export type DataAccess = ReturnType<typeof dataAccess>
 
-export { HmppsAuthClient, RestClientBuilder, HmppsAuditClient }
+export { HmppsAuthClient, RestClientBuilder, EnhancedRestClientBuilder, HmppsAuditClient }

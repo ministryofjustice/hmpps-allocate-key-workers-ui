@@ -1,0 +1,111 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set fullWidth = true %}
+{% set pageTitle = "Check your answers - Key worker profile" %}
+
+{% block innerContent %}
+  <div class="govuk-width-container govuk-body">
+    <div class="govuk-grid-row govuk-!-margin-0">
+      <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0">{{ keyworker | firstNameSpaceLastName }}</h1>
+      <p class="govuk-!-margin-left-2 govuk-!-display-inline-block govuk-!-margin-0 "> {{ statusTag({ text: status.description }) }}</p>
+    </div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">
+          Check your answers
+        </h1>
+
+        {{ govukSummaryList({
+          classes: "govuk-!-margin-bottom-7",
+          rows: [
+            {
+              key: {
+              text: "New status"
+            },
+              value: {
+              text: newStatus.description
+            },
+              actions: {
+              items: [
+                {
+                  href: "../update-capacity-status",
+                  text: "Change",
+                  visuallyHiddenText: "the new status",
+                  classes: "govuk-link--no-visited-state"
+                }
+              ]
+            }
+            },
+            {
+              key: {
+              text: "Return date"
+            },
+              value: {
+              text: reactivateOn | formatDateConcise
+            },
+              actions: {
+              items: [
+                {
+                  href: "update-status-annual-leave-return",
+                  text: "Change",
+                  visuallyHiddenText: "the return date",
+                  classes: "govuk-link--no-visited-state"
+                }
+              ]
+            }
+            } if newStatus.code === 'UNAVAILABLE_ANNUAL_LEAVE' else undefined,
+            {
+              key: {
+              text: "Continue automatically assigning prisoners?"
+            },
+              value: {
+              text: 'No' if deactivateActiveAllocations else 'Yes'
+            },
+              actions: {
+              items: [
+                {
+                  href: "update-status-unavailable",
+                  text: "Change",
+                  visuallyHiddenText: "whether to continue automatically assigning prisoners",
+                  classes: "govuk-link--no-visited-state"
+                }
+              ]
+            }
+            },
+            {
+              key: {
+              text: "Deallocate prisoners?"
+            },
+              value: {
+              text: 'Yes' if removeFromAutoAllocation else 'No'
+            },
+              actions: {
+              items: [
+                {
+                  href: "update-status-unavailable",
+                  text: "Change",
+                  visuallyHiddenText: "whether to deallocate prisoners",
+                  classes: "govuk-link--no-visited-state"
+                }
+              ]
+            }
+            }
+          ]
+        }) }}
+
+        <form method="post">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+          {{ govukButton({
+            text: "Confirm and submit",
+            preventDoubleClick: true
+          }) }}
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

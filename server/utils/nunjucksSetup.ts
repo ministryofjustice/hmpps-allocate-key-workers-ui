@@ -77,4 +77,5 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('conditionallyAddDeallocate', conditionallyAddDeallocate)
   njkEnv.addFilter('buildErrorSummaryList', buildErrorSummaryList)
   njkEnv.addFilter('customErrorOrderBuilder', customErrorOrderBuilder)
+  njkEnv.addFilter('removeUndefined', arr => arr.filter((o: unknown) => o !== undefined))
 }

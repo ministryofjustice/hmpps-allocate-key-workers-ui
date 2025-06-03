@@ -3,6 +3,7 @@ import AuthorisedRoles from '../authentication/authorisedRoles'
 context('test / homepage', () => {
   beforeEach(() => {
     cy.task('reset')
+    cy.task('stubComponents')
   })
 
   describe('Role based access', () => {
@@ -148,7 +149,7 @@ context('test / homepage', () => {
     cy.findByRole('link', { name: /Manage your establishment’s key worker settings$/i })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('to.equal', 'https://legacy.key-workers.url/manage-key-worker-settings')
+      .and('to.match', /\/establishment-settings$/)
   })
 
   it('should not show extra text when prison has no high risk prisoners', () => {

@@ -1,0 +1,69 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set fullWidth = true %}
+{% set pageTitle = "Change this key worker’s status to " + newStatus.description + " - Key worker profile" %}
+
+{% block innerContent %}
+  <div class="govuk-width-container govuk-body">
+    <div class="govuk-grid-row govuk-!-margin-0">
+      <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0">{{ keyworker | firstNameSpaceLastName }}</h1>
+      <p class="govuk-!-margin-left-2 govuk-!-display-inline-block govuk-!-margin-0 "> {{ statusTag({ text: status.description }) }}</p>
+    </div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <form method="post">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+          {{ govukRadios({
+            name: "allocation",
+            fieldset: {
+              legend: {
+                text: "This key worker’s status is changing to " + newStatus.description + ". Do you want to continue automatically assigning them to prisoners?",
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--xl"
+              }
+            },
+            hint: {
+              text: "If you choose to stop, this key worker will not be included when you select ‘assign key workers automatically’ when allocating prisoners."
+            },
+            items: [
+              {
+                value: 'NEITHER',
+                text: "Continue automatically assigning them to prisoners",
+                checked: deactivateActiveAllocations === false and removeFromAutoAllocation === false
+              },
+              {
+                value: 'DEACTIVATE',
+                text: "Stop automatically assigning them to prisoners",
+                checked: deactivateActiveAllocations === true and removeFromAutoAllocation === false
+              },
+              {
+                value: 'DEACTIVATE_AND_REMOVE',
+                text: "Stop automatically assigning them to prisoners and deallocate their current prisoners",
+                checked: deactivateActiveAllocations === true and removeFromAutoAllocation === true
+              }
+            ]
+          }) }}
+
+          <div class="govuk-button-group">
+            {{ govukButton({
+              text: "Continue",
+              preventDoubleClick: true
+            }) }}
+
+            {{ govukButton({
+              text: "Cancel",
+              classes: "govuk-button--secondary",
+              href: "cancel",
+              preventDoubleClick: true
+            }) }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,5 +1,7 @@
 import { CsrfTokenGenerator } from 'csrf-sync'
 import { HmppsUser } from '../../interfaces/hmppsUser'
+import { components } from '../keyWorker'
+import Prisoner from '../../services/prisonerSearch/prisoner'
 
 export declare module 'express-session' {
   // Declare that the session will potentially contain these additional fields
@@ -8,6 +10,27 @@ export declare module 'express-session' {
     nowInMinutes: number
   }
 }
+
+type ReferenceData = {
+  code: string
+  description: string
+}
+
+export type JourneyData = {
+  instanceUnixEpoch: number
+  isCheckAnswers?: boolean
+  journeyCompleted?: boolean
+  keyWorkerDetails?: components['schemas']['KeyworkerDetails']
+  updateCapacityStatus?: UpdateCapacityStatusJourney
+}
+
+export type UpdateCapacityStatusJourney = Partial<{
+  capacity: number
+  status: ReferenceData
+  deactivateActiveAllocations: boolean
+  removeFromAutoAllocation: boolean
+  reactivateOn: string
+}>
 
 export declare global {
   namespace Express {
@@ -24,6 +47,10 @@ export declare global {
 
       logout(done: (err: unknown) => void): void
       systemClientToken: string
+
+      middleware?: {
+        prisonerData?: Prisoner
+      }
     }
 
     interface Response {
@@ -34,6 +61,7 @@ export declare global {
       cspNonce: string
       csrfToken: ReturnType<CsrfTokenGenerator>
       user: HmppsUser
+      formResponses?: { [key: string]: string }
       digitalPrisonServicesUrl: string
       legacyKeyWorkersUiUrl: string
       breadcrumbs: Breadcrumbs
@@ -43,10 +71,7 @@ export declare global {
       applicationName: string
       environmentName: string
       environmentNameColour: string
-      prisonConfiguration: {
-        isEnabled: boolean
-        hasPrisonersWithHighComplexityNeeds: boolean
-      }
+      prisonConfiguration: components['schemas']['PrisonKeyworkerConfiguration']
       feComponents?: {
         sharedData?: {
           activeCaseLoad: CaseLoad
