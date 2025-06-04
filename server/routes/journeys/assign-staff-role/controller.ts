@@ -1,22 +1,27 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import KeyworkerApiService from '../../../services/keyworkerApi/keyworkerApiService'
 
 export class AssignStaffRoleController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
-  GET = async (req: Request, res: Response) => {
+  GET = async (req: Request, res: Response, next: NextFunction) => {
     req.journeyData.assignStaffRole ??= {}
 
     if (req.journeyData.assignStaffRole!.query && !req.journeyData.assignStaffRole!.searchResults) {
-      req.journeyData.assignStaffRole!.searchResults = (
-        await this.keyworkerApiService.searchStaff(req as Request, res, req.journeyData.assignStaffRole.query)
-      ).content.map(itm => ({
-        staffId: itm.staffId,
-        firstName: itm.firstName,
-        lastName: itm.lastName,
-        username: itm.username,
-        email: itm.email,
-      }))
+      try {
+        req.journeyData.assignStaffRole!.searchResults = (
+          await this.keyworkerApiService.searchStaff(req as Request, res, req.journeyData.assignStaffRole.query)
+        ).content.map(itm => ({
+          staffId: itm.staffId,
+          firstName: itm.firstName,
+          lastName: itm.lastName,
+          username: itm.username,
+          email: itm.email,
+        }))
+      } catch (e) {
+        req.journeyData.assignStaffRole!.searchResults = []
+        return next(e)
+      }
     }
 
     return res.render('assign-staff-role/view', {

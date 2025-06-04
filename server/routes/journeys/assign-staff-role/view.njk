@@ -44,12 +44,21 @@
         {% for item in searchResults %}
           {% set rows = (rows.push([
             {
+              attributes: {
+                "data-sort-value": item | firstNameSpaceLastName
+              },
               html: '<a class="govuk-link govuk-link--no-visited-state" href="assign-staff-role/select?staffId=' + item.staffId + '">' + (item | firstNameSpaceLastName) + '</a>'
             },
             {
+              attributes: {
+                "data-sort-value": item.email
+              },
               text: item.email
             },
             {
+              attributes: {
+                "data-sort-value": item.username
+              },
               text: item.username
             }
           ]), rows) %}
@@ -65,14 +74,26 @@
         }) }}
 
         {{ govukTable({
+          attributes: {
+            'data-module': 'moj-sortable-table'
+          },
           head: [
             {
+              attributes: {
+                "aria-sort": "none"
+              },
               text: "Name"
             },
             {
+              attributes: {
+                "aria-sort": "none"
+              },
               text: "Email addres"
             },
             {
+              attributes: {
+                "aria-sort": "none"
+              },
               text: "Username"
             }
           ],
