@@ -22,6 +22,7 @@ export type JourneyData = {
   journeyCompleted?: boolean
   keyWorkerDetails?: components['schemas']['KeyworkerDetails']
   updateCapacityStatus?: UpdateCapacityStatusJourney
+  assignStaffRole?: AssignStaffRoleJourney
 }
 
 export type UpdateCapacityStatusJourney = Partial<{
@@ -30,6 +31,11 @@ export type UpdateCapacityStatusJourney = Partial<{
   deactivateActiveAllocations: boolean
   removeFromAutoAllocation: boolean
   reactivateOn: string
+}>
+
+export type AssignStaffRoleJourney = Partial<{
+  query: string
+  searchResults: object[]
 }>
 
 export declare global {
@@ -50,6 +56,7 @@ export declare global {
 
       middleware?: {
         prisonerData?: Prisoner
+        policy?: 'KEY_WORKER' | 'PERSONAL_OFFICER'
       }
     }
 
@@ -66,6 +73,7 @@ export declare global {
       legacyKeyWorkersUiUrl: string
       breadcrumbs: Breadcrumbs
       prisoner?: PrisonerSummary
+      policyName?: string
       buildNumber?: string
       asset_path: string
       applicationName: string

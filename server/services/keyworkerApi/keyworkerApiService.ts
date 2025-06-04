@@ -101,4 +101,9 @@ export default class KeyworkerApiService {
   ): ReturnType<KeyworkerApiClient['updateKeyworkerProperties']> {
     return this.keyworkerApiClientBuilder(req, res).updateKeyworkerProperties(prisonCode, staffId, requestBody)
   }
+
+  // TODO: placeholder until api endpoint is available
+  searchStaff(_req: Request, _res: Response, _query: string) {
+    return []
+  }
 }

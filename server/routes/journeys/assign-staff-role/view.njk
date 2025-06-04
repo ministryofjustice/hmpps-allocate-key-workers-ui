@@ -1,0 +1,43 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "partials/submitButton/macro.njk" import submitButton %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+{% set pageTitle = "Make someone a key worker - " + policyName %}
+
+{% block innerContent %}
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-6">Make someone a {{ policyName }}</h1>
+
+  <div class="govuk-width-container">
+    <form method="post">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      <div class="horizontal-form">
+        {{ govukInput({
+          formGroup: {
+            classes: "govuk-!-width-three-quarters"
+          },
+          classes: "govuk-!-width-full",
+          label: {
+            text: "Find a staff member",
+            classes: "govuk-fieldset__legend--s",
+            isPageHeading: false
+          },
+          hint: {
+            text: "Search by name, work email address or username."
+          },
+          id: "query",
+          name: "query",
+          value: query,
+          errorMessage: validationErrors | findError('query')
+        }) }}
+        {{ submitButton({
+          text: "Search"
+        }) }}
+      </div>
+    </form>
+
+  </div>
+
+{% endblock %}

@@ -34,16 +34,14 @@ export default class KeyworkerApiClient {
   private readonly restClient: RestClient
 
   constructor(req: Request, res?: Response) {
-    this.restClient = new RestClient(
-      'Keyworker API',
-      config.apis.keyworkerApi,
-      req.systemClientToken,
-      res?.locals?.user?.activeCaseLoad?.caseLoadId
-        ? {
-            CaseloadId: res.locals.user.activeCaseLoad.caseLoadId,
-          }
-        : {},
-    )
+    const headers: { [key: string]: string } = {}
+    if (req.middleware?.policy) {
+      headers['Policy'] = req.middleware.policy
+    }
+    if (res?.locals?.user?.activeCaseLoad?.caseLoadId) {
+      headers['CaseloadId'] = res.locals.user.activeCaseLoad.caseLoadId
+    }
+    this.restClient = new RestClient('Keyworker API', config.apis.keyworkerApi, req.systemClientToken, headers)
   }
 
   async getServiceConfigInfo(): Promise<ServiceConfigInfo> {
