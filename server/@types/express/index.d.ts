@@ -33,9 +33,19 @@ export type UpdateCapacityStatusJourney = Partial<{
   reactivateOn: string
 }>
 
+export type StaffSummary = {
+  staffId: number
+  firstName: string
+  lastName: string
+  username: string
+  email: string
+}
+
 export type AssignStaffRoleJourney = Partial<{
   query: string
-  searchResults: object[]
+  searchResults: StaffSummary[]
+  staff: StaffSummary['StaffSummary']
+  page: number
 }>
 
 export declare global {

@@ -13,6 +13,7 @@ export const AssignStaffRoleRoutes = (services: Services) => {
   router.use(redirectCheckAnswersMiddleware([/check-answers$/]))
 
   get('/', controller.GET)
+  get('/select', controller.selectStaff)
   post('/', validate(schema), controller.POST)
 
   return router

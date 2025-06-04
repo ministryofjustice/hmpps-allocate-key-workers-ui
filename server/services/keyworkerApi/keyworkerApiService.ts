@@ -102,8 +102,10 @@ export default class KeyworkerApiService {
     return this.keyworkerApiClientBuilder(req, res).updateKeyworkerProperties(prisonCode, staffId, requestBody)
   }
 
-  // TODO: placeholder until api endpoint is available
-  searchStaff(_req: Request, _res: Response, _query: string) {
-    return []
+  searchStaff(req: Request, res: Response, query: string) {
+    return this.keyworkerApiClientBuilder(req, res).searchStaff(res.locals.user.getActiveCaseloadId()!, {
+      query,
+      status: 'ALL',
+    })
   }
 }

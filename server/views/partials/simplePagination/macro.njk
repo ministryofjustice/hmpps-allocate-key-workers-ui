@@ -1,0 +1,44 @@
+{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
+
+{% macro simplePagination(params) %}
+    {% if params.totalPages > 1 %}
+        {% set previous = undefined if params.currentPage <= 1 else ({ text: 'Previous', href: params.hrefTemplate | replace('{page}', params.currentPage - 1) }) %}
+        {% set next = undefined if params.currentPage >= params.totalPages else ({ text: 'Next', href: params.hrefTemplate | replace('{page}', params.currentPage + 1) }) %}
+
+        {% set items = [] %}
+        {% for page in range(1, params.totalPages + 1) %}
+            {% if page == 1 or page == params.totalPages or (page - params.currentPage) | abs <= 2 %}
+                {% set items = (items.push({
+                    text: page,
+                    selected: page === params.currentPage,
+                    href: params.hrefTemplate | replace ('{page}', page)
+                }), items) %}
+            {% elseif page == 2 or page == params.totalPages - 1 %}
+                {% set items = (items.push({
+                    type: 'dots'
+                }), items) %}
+            {% endif %}
+        {% endfor %}
+
+        {{ mojPagination({
+            previous: previous,
+            next: next,
+            items: items,
+            results: {
+                count: params.totalRows,
+                from: params.rowFrom,
+                to: params.rowTo,
+                text: 'results'
+            }
+        }) }}
+    {% else %}
+        {{ mojPagination({
+            results: {
+                count: params.totalRows,
+                from: params.rowFrom,
+                to: params.rowTo,
+                text: 'results'
+            }
+        }) }}
+    {% endif %}
+{% endmacro %}

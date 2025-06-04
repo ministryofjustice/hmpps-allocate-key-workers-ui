@@ -99,7 +99,7 @@ context('test / homepage', () => {
       cy.get('h2 > .card__link')
         .eq(3)
         .should('contain.text', 'Make someone a key worker')
-        .and('have.attr', 'href', '/assign-key-worker-staff-role')
+        .and('have.attr', 'href', '/key-worker/assign-staff-role')
       cy.get('.card__description')
         .eq(3)
         .should('contain.text', 'Assign the key worker role to staff members in your establishment.')

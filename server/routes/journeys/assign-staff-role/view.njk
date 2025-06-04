@@ -1,17 +1,16 @@
 {% extends "partials/layout.njk" %}
-{% from "partials/statusTag/macro.njk" import statusTag %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
-{% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "partials/submitButton/macro.njk" import submitButton %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "partials/simplePagination/macro.njk" import simplePagination %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% set pageTitle = "Make someone a key worker - " + policyName %}
+{% set pageTitle = "Make someone a " + policyName + " - " + policyName | sentenceCase %}
 
 {% block innerContent %}
   <h1 class="govuk-heading-l govuk-!-margin-bottom-6">Make someone a {{ policyName }}</h1>
 
   <div class="govuk-width-container">
-    <form method="post">
+    <form class="govuk-!-margin-bottom-6" method="post">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
       <div class="horizontal-form">
         {{ govukInput({
@@ -37,6 +36,48 @@
         }) }}
       </div>
     </form>
+
+    {% if searchResults %}
+      {% if searchResults.length %}
+
+        {% set rows = [] %}
+        {% for item in searchResults %}
+          {% set rows = (rows.push([
+            {
+              html: '<a class="govuk-link govuk-link--no-visited-state" href="assign-staff-role/select?staffId=' + item.staffId + '">' + (item | firstNameSpaceLastName) + '</a>'
+            },
+            {
+              text: item.email
+            },
+            {
+              text: item.username
+            }
+          ]), rows) %}
+        {% endfor %}
+
+
+        {{ simplePagination(paginationParams)  }}
+        {{ govukTable({
+          head: [
+            {
+              text: "Name"
+            },
+            {
+              text: "Email addres"
+            },
+            {
+              text: "Username"
+            }
+          ],
+          rows: rows
+        }) }}
+        {{ simplePagination(paginationParams)  }}
+      {% else %}
+        <p>
+          There are no results for this name or email address at {{ user.activeCaseLoad.description }}
+        </p>
+      {% endif %}
+    {% endif %}
 
   </div>
 
