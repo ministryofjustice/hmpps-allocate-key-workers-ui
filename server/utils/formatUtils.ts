@@ -22,7 +22,7 @@ export const sentenceCase = (val: string, startsWithUppercase: boolean = true): 
   return startsWithUppercase ? sentence.charAt(0).toUpperCase() + sentence.slice(1) : sentence
 }
 
-export const titleCase = (val: string) => {
+const titleCase = (val: string) => {
   const words = val.split(/\s+/)
   return words.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ')
 }
