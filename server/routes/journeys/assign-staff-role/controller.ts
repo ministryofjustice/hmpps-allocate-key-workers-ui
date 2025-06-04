@@ -5,18 +5,8 @@ import { setPaginationLocals } from '../../../views/partials/simplePagination/ut
 export class AssignStaffRoleController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
-  private ITEMS_PER_PAGE = 20
-
-  GET = async (req: Request<unknown, unknown, unknown, { page?: string }>, res: Response) => {
+  GET = async (req: Request, res: Response) => {
     req.journeyData.assignStaffRole ??= {}
-
-    if (req.query.page) {
-      const queryPage = Number(req.query.page)
-      if (!Number.isNaN(queryPage)) {
-        req.journeyData.assignStaffRole!.page = queryPage
-      }
-      return res.redirect('assign-staff-role')
-    }
 
     if (req.journeyData.assignStaffRole!.query && !req.journeyData.assignStaffRole!.searchResults) {
       req.journeyData.assignStaffRole!.searchResults = (
@@ -30,25 +20,20 @@ export class AssignStaffRoleController {
       }))
     }
 
-    const page = req.journeyData.assignStaffRole!.page ?? 1
-    const searchResults = req.journeyData.assignStaffRole!.searchResults?.slice(
-      (page - 1) * this.ITEMS_PER_PAGE,
-      page * this.ITEMS_PER_PAGE,
-    )
-
     if (req.journeyData.assignStaffRole!.searchResults?.length) {
       setPaginationLocals(
         res,
-        this.ITEMS_PER_PAGE,
-        page,
+        Number.MAX_VALUE,
+        1,
         req.journeyData.assignStaffRole!.searchResults.length,
-        searchResults!.length,
+        req.journeyData.assignStaffRole!.searchResults.length,
       )
     }
 
     return res.render('assign-staff-role/view', {
+      backUrl: '/',
       query: req.journeyData.assignStaffRole!.query,
-      searchResults,
+      searchResults: req.journeyData.assignStaffRole!.searchResults,
     })
   }
 
