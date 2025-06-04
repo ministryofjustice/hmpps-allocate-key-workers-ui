@@ -856,7 +856,7 @@ export interface components {
       numberOfEntries: number
       staffRole?: components['schemas']['StaffRoleInfo']
       username: string
-      email: string
+      email?: string
     }
     PersonSearchRequest: {
       query?: string

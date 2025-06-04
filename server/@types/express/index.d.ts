@@ -38,7 +38,7 @@ export type StaffSummary = {
   firstName: string
   lastName: string
   username: string
-  email: string
+  email: string | undefined
 }
 
 export type AssignStaffRoleJourney = Partial<{
