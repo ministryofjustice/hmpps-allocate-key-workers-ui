@@ -41,12 +41,12 @@ context('/assign-staff-role', () => {
 
     getSearchInput().type('Joe')
     getSearchButton().click()
-    cy.findByRole('link', { name: 'Joe Doe' })
+    cy.findByRole('link', { name: 'Doe, Joe' })
       .should('be.visible')
       .and('have.attr', 'href')
       .should('match', /assign-staff-role\/select\?staffId=1001/)
-    cy.contains('td', 'Joe Doe').next().should('contain.text', 'joe.doe@email.com')
-    cy.contains('td', 'Joe Doe').next().next().should('contain.text', 'JOE_DOE')
+    cy.contains('td', 'Doe, Joe').next().should('contain.text', 'joe.doe@email.com')
+    cy.contains('td', 'Doe, Joe').next().next().should('contain.text', 'JOE_DOE')
   })
 
   it('should show no results when there is no match', () => {
