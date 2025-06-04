@@ -1,5 +1,6 @@
 import { stubFor } from './wiremock'
 import { components } from '../../server/@types/keyWorker'
+import { StaffSummary } from '../../server/@types/express'
 
 const createBasicHttpStub = (method: string, urlPattern: string, status: number, jsonBody: object = {}) => {
   return createHttpStub(method, urlPattern, undefined, undefined, status, jsonBody)
@@ -640,6 +641,9 @@ const stubSearchPrisoner = () =>
     { content: keyworkerSearchPrisoners },
   )
 
+const stubSearchStaff = (results: StaffSummary[] = []) =>
+  createBasicHttpStub('POST', '/keyworker-api/search/prisons/.*/staff', 200, { content: results })
+
 const stubPutPrisonConfiguration = () =>
   createBasicHttpStub('PUT', '/keyworker-api/prisons/LEI/configurations', 200, {})
 
@@ -752,6 +756,7 @@ export default {
   stubSearchPrisonersWithQuery,
   stubSearchPrisonersWithLocation,
   stubSearchPrisoner,
+  stubSearchStaff,
   stubSearchPrisonersWithExcludeAllocations,
   stubPrisonerAllocations,
   stubKeyworkerMembersStatusActive,

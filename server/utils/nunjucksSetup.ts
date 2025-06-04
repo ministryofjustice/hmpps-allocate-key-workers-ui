@@ -14,7 +14,7 @@ import {
   yesterdayStringGBFormat,
 } from './datetimeUtils'
 import { buildErrorSummaryList, customErrorOrderBuilder, findError } from '../middleware/validationMiddleware'
-import { firstNameSpaceLastName, lastNameCommaFirstName, nameCase } from './formatUtils'
+import { firstNameSpaceLastName, lastNameCommaFirstName, nameCase, sentenceCase } from './formatUtils'
 import {
   addSelectValue,
   conditionallyAddDeallocate,
@@ -73,6 +73,7 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('addSelectValue', addSelectValue)
   njkEnv.addFilter('setSelectedValue', setSelectedValue)
   njkEnv.addFilter('nameCase', nameCase)
+  njkEnv.addFilter('sentenceCase', sentenceCase)
   njkEnv.addFilter('formatValue', formatValue)
   njkEnv.addFilter('getStatChange', getStatChange)
   njkEnv.addFilter('firstNameSpaceLastName', firstNameSpaceLastName)

@@ -131,6 +131,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/search/prisons/{prisonCode}/staff': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
+    post: operations['searchStaff']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/search/prisons/{prisonCode}/prisoners': {
     parameters: {
       query?: never
@@ -724,7 +744,6 @@ export interface components {
     StaffJobClassificationRequest: {
       position: string
       scheduleType: string
-      /** Format: int32 */
       hoursPerWeek: number
       /** Format: date */
       fromDate: string
@@ -792,6 +811,53 @@ export interface components {
       userMessage?: string
       developerMessage?: string
     }
+    StaffSearchRequest: {
+      query?: string
+      /** @enum {string} */
+      status:
+        | 'ALL'
+        | 'ACTIVE'
+        | 'UNAVAILABLE_ANNUAL_LEAVE'
+        | 'UNAVAILABLE_LONG_TERM_ABSENCE'
+        | 'UNAVAILABLE_NO_PRISONER_CONTACT'
+        | 'INACTIVE'
+      hasPolicyStaffRole?: boolean
+    }
+    CodedDescription: {
+      code: string
+      description: string
+    }
+    StaffRoleInfo: {
+      position: components['schemas']['CodedDescription']
+      scheduleType: components['schemas']['CodedDescription']
+      hoursPerWeek: number
+      /** Format: date */
+      fromDate: string
+      /** Format: date */
+      toDate?: string
+    }
+    StaffSearchResponse: {
+      content: components['schemas']['StaffSummary'][]
+    }
+    StaffSummary: {
+      /** Format: int64 */
+      staffId: number
+      firstName: string
+      lastName: string
+      status: components['schemas']['CodedDescription']
+      /** Format: int32 */
+      capacity: number
+      /** Format: int32 */
+      numberAllocated: number
+      autoAllocationAllowed: boolean
+      /** Format: int32 */
+      numberOfSessions: number
+      /** Format: int32 */
+      numberOfEntries: number
+      staffRole?: components['schemas']['StaffRoleInfo']
+      username: string
+      email?: string
+    }
     PersonSearchRequest: {
       query?: string
       cellLocationPrefix?: string
@@ -825,10 +891,6 @@ export interface components {
         | 'UNAVAILABLE_LONG_TERM_ABSENCE'
         | 'UNAVAILABLE_NO_PRISONER_CONTACT'
         | 'INACTIVE'
-    }
-    CodedDescription: {
-      code: string
-      description: string
     }
     KeyworkerSearchResponse: {
       content: components['schemas']['KeyworkerSummary'][]
@@ -1816,6 +1878,32 @@ export interface operations {
       }
     }
   }
+  searchStaff: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        prisonCode: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['StaffSearchRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['StaffSearchResponse']
+        }
+      }
+    }
+  }
   searchPeople: {
     parameters: {
       query?: never
@@ -2369,7 +2457,7 @@ export interface operations {
       header?: never
       path: {
         /** @description The reference data domain required. This is case insensitive. */
-        domain: 'keyworker-status' | 'allocation-reason' | 'deallocation-reason'
+        domain: 'allocation-reason' | 'deallocation-reason' | 'staff-position' | 'staff-schedule' | 'staff-status'
       }
       cookie?: never
     }
