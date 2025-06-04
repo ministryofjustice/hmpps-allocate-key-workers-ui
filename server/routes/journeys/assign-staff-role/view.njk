@@ -1,8 +1,8 @@
 {% extends "partials/layout.njk" %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "partials/submitButton/macro.njk" import submitButton %}
-{% from "partials/simplePagination/macro.njk" import simplePagination %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
 
 {% set pageTitle = "Make someone a " + policyName + " - " + policyName | sentenceCase %}
 
@@ -55,8 +55,15 @@
           ]), rows) %}
         {% endfor %}
 
+        {{ mojPagination({
+          results: {
+            count: searchResults.length,
+            from: 1,
+            to: searchResults.length,
+            text: 'results'
+          }
+        }) }}
 
-        {{ simplePagination(paginationParams)  }}
         {{ govukTable({
           head: [
             {
@@ -71,7 +78,15 @@
           ],
           rows: rows
         }) }}
-        {{ simplePagination(paginationParams)  }}
+
+        {{ mojPagination({
+          results: {
+            count: searchResults.length,
+            from: 1,
+            to: searchResults.length,
+            text: 'results'
+          }
+        }) }}
       {% else %}
         <p>
           There are no results for this name or email address at {{ user.activeCaseLoad.description }}

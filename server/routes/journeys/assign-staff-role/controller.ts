@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import KeyworkerApiService from '../../../services/keyworkerApi/keyworkerApiService'
-import { setPaginationLocals } from '../../../views/partials/simplePagination/utils'
 
 export class AssignStaffRoleController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
@@ -18,16 +17,6 @@ export class AssignStaffRoleController {
         username: itm.username,
         email: itm.email,
       }))
-    }
-
-    if (req.journeyData.assignStaffRole!.searchResults?.length) {
-      setPaginationLocals(
-        res,
-        Number.MAX_VALUE,
-        1,
-        req.journeyData.assignStaffRole!.searchResults.length,
-        req.journeyData.assignStaffRole!.searchResults.length,
-      )
     }
 
     return res.render('assign-staff-role/view', {
