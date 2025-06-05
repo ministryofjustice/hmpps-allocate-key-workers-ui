@@ -259,6 +259,36 @@ const stubKeyWorkerStatsWithNullPreviousData = () =>
 const stubKeyworkerStatuses = () =>
   createBasicHttpStub('GET', '/keyworker-api/reference-data/staff-status', 200, keyworkerStatuses)
 
+const stubStaffPositions = () =>
+  createBasicHttpStub('GET', '/keyworker-api/reference-data/staff-position', 200, [
+    { code: 'SUP2', description: 'Support Grade Band 2' },
+    { code: 'IG5', description: 'Industrial Grade 5' },
+    { code: 'CHAP', description: 'Chaplain' },
+    { code: 'PRO', description: 'Prison Officer' },
+    { code: 'PPO', description: 'Principal Prison Officer' },
+    { code: 'PS', description: 'Personal Secretary' },
+    { code: 'CON', description: 'Contractor' },
+    { code: 'FP', description: 'Fee Paid' },
+    { code: 'PSY', description: 'Psychologist' },
+    { code: 'IG4', description: 'Industrial Grade 4' },
+    { code: 'PYST', description: 'Psychologist Trainee' },
+    { code: 'SUP1', description: 'Support Grade Band 1' },
+    { code: 'PO', description: 'Probation Officer' },
+    { code: 'AA', description: 'Administrative Assistant' },
+    { code: 'SCS3', description: 'Senior Civil Servant Pay Band 3' },
+    { code: 'SCS2', description: 'Senior Civil Servant Pay Band 2' },
+    { code: 'SCS1', description: 'Senior Civil Servant Pay Band 1' },
+    { code: 'SPSEC', description: 'Senior Personal Secretary' },
+    { code: 'EO', description: 'Executive Officer' },
+    { code: 'OSG', description: 'Operational Support Grade' },
+    { code: 'PSYA', description: 'Psychological Assistant' },
+    { code: 'AO', description: 'Admin Officer' },
+    { code: 'TYP', description: 'Typist' },
+    { code: 'SECMGR', description: 'Security Manager' },
+    { code: 'PTO', description: 'Professional and Technology Officer' },
+    { code: 'TECH1', description: 'Technical Grade 1' },
+  ])
+
 const stubPrisonerAllocations = () =>
   createBasicHttpStub('GET', '/keyworker-api/prisoners/A9965EA/keyworkers', 200, prisonerAllocationResponse)
 
@@ -753,6 +783,7 @@ export default {
   stubKeyWorkerStatsWithNullPreviousValues,
   stubKeyWorkerStatsWithNullPreviousData,
   stubKeyworkerStatuses,
+  stubStaffPositions,
   stubSearchPrisonersWithQuery,
   stubSearchPrisonersWithLocation,
   stubSearchPrisoner,

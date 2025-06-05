@@ -72,6 +72,9 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('lastNameCommaFirstName', lastNameCommaFirstName)
   njkEnv.addFilter('addSelectValue', addSelectValue)
   njkEnv.addFilter('setSelectedValue', setSelectedValue)
+  njkEnv.addFilter('setCheckedValue', (options: { value: string }[], checked?: string) =>
+    options.map(itm => ({ ...itm, checked: itm.value === checked })),
+  )
   njkEnv.addFilter('nameCase', nameCase)
   njkEnv.addFilter('sentenceCase', sentenceCase)
   njkEnv.addFilter('formatValue', formatValue)
