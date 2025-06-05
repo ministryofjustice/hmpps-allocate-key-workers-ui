@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { EnhancedRestClientBuilder } from '../../data'
 import KeyworkerApiClient, { KeyworkerConfigRequest, ServiceConfigInfo } from './keyworkerApiClient'
-import { components } from '../../@types/keyWorker'
+import { components, operations } from '../../@types/keyWorker'
 
 export default class KeyworkerApiService {
   constructor(private readonly keyworkerApiClientBuilder: EnhancedRestClientBuilder<KeyworkerApiClient>) {}
@@ -66,7 +66,7 @@ export default class KeyworkerApiService {
 
   getReferenceData(
     req: Request,
-    domain: 'staff-status' | 'allocation-reason' | 'deallocation-reason',
+    domain: operations['findReferenceDataForDomain']['parameters']['path']['domain'],
   ): ReturnType<KeyworkerApiClient['getReferenceData']> {
     return this.keyworkerApiClientBuilder(req).getReferenceData(domain)
   }

@@ -29,6 +29,7 @@ context('/assign-staff-role', () => {
       .click()
     getSearchInput().should('be.focused')
 
+    // search for staff members
     cy.task('stubSearchStaff', [
       {
         staffId: 1001,
@@ -47,6 +48,10 @@ context('/assign-staff-role', () => {
       .should('match', /assign-staff-role\/select\?staffId=1001/)
     cy.contains('td', 'Doe, Joe').next().should('contain.text', 'joe.doe@email.com')
     cy.contains('td', 'Doe, Joe').next().next().should('contain.text', 'JOE_DOE')
+
+    // select a staff and proceed to next page
+    cy.findByRole('link', { name: 'Doe, Joe' }).click()
+    cy.url().should('match', /\/assign-staff-role\/role$/)
   })
 
   it('should show no results when there is no match', () => {

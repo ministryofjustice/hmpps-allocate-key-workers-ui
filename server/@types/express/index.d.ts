@@ -44,7 +44,8 @@ export type StaffSummary = {
 export type AssignStaffRoleJourney = Partial<{
   query: string
   searchResults: StaffSummary[]
-  staff: StaffSummary['StaffSummary']
+  staff: StaffSummary
+  role: ReferenceData
 }>
 
 export declare global {

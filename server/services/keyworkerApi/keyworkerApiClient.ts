@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import RestClient from '../../data/restClient'
 import config from '../../config'
-import type { components } from '../../@types/keyWorker'
+import { components, operations } from '../../@types/keyWorker'
 
 export interface ServiceConfigInfo {
   git: {
@@ -109,13 +109,11 @@ export default class KeyworkerApiClient {
   }
 
   async getReferenceData(
-    domain: 'staff-status' | 'allocation-reason' | 'deallocation-reason',
+    domain: operations['findReferenceDataForDomain']['parameters']['path']['domain'],
   ): Promise<components['schemas']['CodedDescription'][]> {
-    const response = await this.restClient.get<components['schemas']['CodedDescription'][]>({
+    return this.restClient.get<components['schemas']['CodedDescription'][]>({
       path: `/reference-data/${domain}`,
     })
-
-    return response
   }
 
   async searchPrisoners(
