@@ -419,6 +419,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/prisons/{prisonCode}/staff/{staffId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
+    get: operations['getStaffDetails']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/prisons/{prisonCode}/prisoners/{prisonNumber}/keyworkers/current': {
     parameters: {
       query?: never
@@ -738,7 +758,9 @@ export interface paths {
     trace?: never
   }
 }
+
 export type webhooks = Record<string, never>
+
 export interface components {
   schemas: {
     StaffJobClassificationRequest: {
@@ -837,9 +859,9 @@ export interface components {
       toDate?: string
     }
     StaffSearchResponse: {
-      content: components['schemas']['StaffSummary'][]
+      content: components['schemas']['StaffSearchResult'][]
     }
-    StaffSummary: {
+    StaffSearchResult: {
       /** Format: int64 */
       staffId: number
       firstName: string
@@ -848,8 +870,8 @@ export interface components {
       /** Format: int32 */
       capacity: number
       /** Format: int32 */
-      numberAllocated: number
-      autoAllocationAllowed: boolean
+      allocated: number
+      allowAutoAllocation: boolean
       /** Format: int32 */
       numberOfSessions: number
       /** Format: int32 */
@@ -1115,6 +1137,59 @@ export interface components {
       /** Format: double */
       compliance: number
     }
+    Allocation: {
+      prisoner: components['schemas']['Prisoner']
+      latestSession?: components['schemas']['LatestSession']
+    }
+    LatestSession: {
+      /** Format: date */
+      occurredAt: string
+    }
+    Prisoner: {
+      prisonNumber: string
+      firstName: string
+      lastName: string
+      csra?: string
+      cellLocation?: string
+      /** Format: date */
+      releaseDate?: string
+    }
+    StaffCountStats: {
+      /** Format: date */
+      from: string
+      /** Format: date */
+      to: string
+      /** Format: int32 */
+      projectedSessions: number
+      /** Format: int32 */
+      recordedSessions: number
+      /** Format: int32 */
+      recordedEntries: number
+      /** Format: double */
+      complianceRate: number
+    }
+    StaffDetails: {
+      /** Format: int64 */
+      staffId: number
+      firstName: string
+      lastName: string
+      status: components['schemas']['CodedDescription']
+      prison: components['schemas']['CodedDescription']
+      /** Format: int32 */
+      capacity: number
+      /** Format: int32 */
+      allocated: number
+      allocations: components['schemas']['Allocation'][]
+      stats: components['schemas']['StaffStats']
+      allowAutoAllocation: boolean
+      /** Format: date */
+      reactivateOn?: string
+      staffRole?: components['schemas']['StaffRoleInfo']
+    }
+    StaffStats: {
+      current: components['schemas']['StaffCountStats']
+      previous: components['schemas']['StaffCountStats']
+    }
     CurrentAllocation: {
       keyworker: components['schemas']['CurrentKeyworker']
       prisonCode: string
@@ -1138,10 +1213,6 @@ export interface components {
       allocations: components['schemas']['RecommendedAllocation'][]
       noAvailableKeyworkersFor: string[]
     }
-    Allocation: {
-      prisoner: components['schemas']['Prisoner']
-      latestSession?: components['schemas']['LatestKeyworkerSession']
-    }
     KeyworkerDetails: {
       keyworker: components['schemas']['KeyworkerWithSchedule']
       status: components['schemas']['CodedDescription']
@@ -1150,11 +1221,15 @@ export interface components {
       capacity: number
       /** Format: int32 */
       allocated: number
-      allocations: components['schemas']['Allocation'][]
+      allocations: components['schemas']['KeyworkerPrisoner'][]
       stats: components['schemas']['KeyworkerStats']
       allowAutoAllocation: boolean
       /** Format: date */
       reactivateOn?: string
+    }
+    KeyworkerPrisoner: {
+      prisoner: components['schemas']['Prisoner']
+      latestSession?: components['schemas']['LatestKeyworkerSession']
     }
     KeyworkerSessionStats: {
       /** Format: date */
@@ -1184,15 +1259,6 @@ export interface components {
     LatestKeyworkerSession: {
       /** Format: date */
       occurredAt: string
-    }
-    Prisoner: {
-      prisonNumber: string
-      firstName: string
-      lastName: string
-      csra?: string
-      cellLocation?: string
-      /** Format: date */
-      releaseDate?: string
     }
     UsernameKeyworker: {
       username: string
@@ -1649,7 +1715,9 @@ export interface components {
   headers: never
   pathItems: never
 }
+
 export type $defs = Record<string, never>
+
 export interface operations {
   modifyStaffJob: {
     parameters: {
@@ -1881,7 +1949,12 @@ export interface operations {
   searchStaff: {
     parameters: {
       query?: never
-      header?: never
+      header: {
+        /** @description
+         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
+         *          */
+        Policy: string
+      }
       path: {
         prisonCode: string
       }
@@ -2495,6 +2568,34 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['PrisonStats']
+        }
+      }
+    }
+  }
+  getStaffDetails: {
+    parameters: {
+      query?: never
+      header: {
+        /** @description
+         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
+         *          */
+        Policy: string
+      }
+      path: {
+        prisonCode: string
+        staffId: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['StaffDetails']
         }
       }
     }
