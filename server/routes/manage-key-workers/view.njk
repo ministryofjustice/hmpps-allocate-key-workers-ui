@@ -66,16 +66,16 @@
             }
           },
           {
-            text: item.numberAllocated
+            text: item.allocated
           },
           {
             text: item.capacity
           },
           {
-            text: "Yes" if item.autoAllocationAllowed else "No"
+            text: "Yes" if item.allowAutoAllocation else "No"
           },
           {
-            text: item.numberOfKeyworkerSessions
+            text: item.numberOfSessions
           }
         ]), rows) %}
       {% endfor %}
