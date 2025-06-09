@@ -102,10 +102,7 @@ export default class KeyworkerApiService {
     return this.keyworkerApiClientBuilder(req, res).updateKeyworkerProperties(prisonCode, staffId, requestBody)
   }
 
-  searchStaff(req: Request, res: Response, query: string) {
-    return this.keyworkerApiClientBuilder(req, res).searchStaff(res.locals.user.getActiveCaseloadId()!, {
-      query,
-      status: 'ALL',
-    })
+  searchStaff(req: Request, res: Response, searchOptions: components['schemas']['StaffSearchRequest']) {
+    return this.keyworkerApiClientBuilder(req, res).searchStaff(res.locals.user.getActiveCaseloadId()!, searchOptions)
   }
 }

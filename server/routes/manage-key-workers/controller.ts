@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
-import KeyworkerApiClient from '../../services/keyworkerApi/keyworkerApiClient'
 import { sanitizeQueryName, sanitizeSelectValue } from '../../middleware/validationMiddleware'
+import { components } from '../../@types/keyWorker'
 
 export class ManageKeyWorkersController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
@@ -28,15 +28,18 @@ export class ManageKeyWorkersController {
       ),
     }
 
-    const data = await this.keyworkerApiService.getKeyworkerMembers(req, activeCaseLoad!.caseLoadId, {
+    const searchOptions = {
       query: query.query,
-      status: query.status,
-    } as Parameters<KeyworkerApiClient['getKeyworkerMembers']>[1])
+      status: query.status as components['schemas']['StaffSearchRequest']['status'],
+      hasPolicyStaffRole: true,
+    }
+
+    const data = await this.keyworkerApiService.searchStaff(req, res, searchOptions)
 
     res.render('manage-key-workers/view', {
       params: query,
       showBreadcrumbs: true,
-      records: data,
+      records: data.content,
       status: statuses.map(o => ({ ...o, selected: o.value === query.status })),
     })
   }

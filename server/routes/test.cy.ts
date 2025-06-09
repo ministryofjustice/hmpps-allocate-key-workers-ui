@@ -82,7 +82,7 @@ context('test / homepage', () => {
     cy.get('h2 > .card__link')
       .eq(1)
       .should('contain.text', 'Manage key workers')
-      .and('have.attr', 'href', '/manage-key-workers')
+      .and('have.attr', 'href', '/key-worker/manage-key-workers')
     cy.get('.card__description')
       .eq(1)
       .should(
