@@ -644,6 +644,9 @@ const stubSearchPrisoner = () =>
 const stubSearchStaff = (results: StaffSummary[] = []) =>
   createBasicHttpStub('POST', '/keyworker-api/search/prisons/.*/staff', 200, { content: results })
 
+const stubSearchStaffError = () =>
+  createHttpStub('POST', '/keyworker-api/search/prisons/.*/staff', undefined, undefined, 502, {})
+
 const stubPutPrisonConfiguration = () =>
   createBasicHttpStub('PUT', '/keyworker-api/prisons/LEI/configurations', 200, {})
 
@@ -765,4 +768,5 @@ export default {
   stubPutAllocationFail,
   stubUpdateKeyworkerProperties,
   stubPutPrisonConfiguration,
+  stubSearchStaffError,
 }

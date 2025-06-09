@@ -3,22 +3,22 @@ context('Manage key workers', () => {
     cy.task('reset')
     cy.task('stubComponents')
     cy.task('stubSignIn')
-    cy.task('stubKeyworkerMembersAll')
-    cy.task('stubKeyworkerMembersQuery')
-    cy.task('stubKeyworkerMembersStatus')
-    cy.task('stubKeyworkerMembersNone')
     cy.task('stubEnabledPrison')
     cy.task('stubKeyworkerStatuses')
   })
 
   it('should handle invalid queries', () => {
+    getAllKeyworkers()
+
     navigateToTestPage()
 
-    cy.visit('/manage-key-workers?query=<script>alert%28%27inject%27%29<%2Fscript>', { failOnStatusCode: false })
+    cy.visit('/key-worker/manage-key-workers?query=<script>alert%28%27inject%27%29<%2Fscript>', {
+      failOnStatusCode: false,
+    })
     cy.get('#query').should('have.value', '')
     cy.get('.govuk-table__row').should('have.length', 7)
 
-    cy.visit('/manage-key-workers?status=<script>alert%28%27inject%27%29<%2Fscript>', {
+    cy.visit('/key-worker/manage-key-workers?status=<script>alert%28%27inject%27%29<%2Fscript>', {
       failOnStatusCode: false,
     })
     cy.get('#status').should('have.value', '')
@@ -26,6 +26,8 @@ context('Manage key workers', () => {
   })
 
   it('happy path', () => {
+    getAllKeyworkers()
+
     navigateToTestPage()
 
     cy.title().should('equal', 'Manage key workers - DPS')
@@ -110,6 +112,22 @@ context('Manage key workers', () => {
     cy.get('.govuk-table__row').eq(5).children().eq(2).should('contain.text', '1')
     cy.get('.govuk-table__row').eq(6).children().eq(2).should('contain.text', '0')
 
+    cy.task('stubSearchStaff', [
+      {
+        staffId: 488095,
+        firstName: 'AVAILABLE-ACTIVE',
+        lastName: 'KEY-WORKER',
+        status: {
+          code: 'ACT',
+          description: 'Active',
+        },
+        capacity: 28,
+        allocated: 32,
+        allowAutoAllocation: true,
+        numberOfSessions: 0,
+      },
+    ])
+
     cy.get('#status').select('ACTIVE')
     cy.get('#query').type('AVAILABLE-ACTIVE')
     cy.findByRole('button', { name: 'Apply filters' }).click()
@@ -120,9 +138,27 @@ context('Manage key workers', () => {
       .should('contain.text', 'result')
     cy.get('.govuk-table__row').eq(1).children().eq(1).should('contain.text', 'Active')
 
+    getAllKeyworkers()
+
     cy.findByRole('link', { name: 'Clear' }).click()
 
     cy.get('.govuk-table__row').should('have.length', 7)
+
+    cy.task('stubSearchStaff', [
+      {
+        staffId: 488099,
+        firstName: 'UNAVAILABLE-INACTIVE',
+        lastName: 'KEY-WORKER',
+        status: {
+          code: 'INA',
+          description: 'Inactive',
+        },
+        capacity: 11,
+        allocated: 0,
+        allowAutoAllocation: false,
+        numberOfSessions: 0,
+      },
+    ])
 
     cy.get('#query').should('have.text', '')
     cy.get('#status').select('INACTIVE')
@@ -137,15 +173,98 @@ context('Manage key workers', () => {
   })
 
   it('handles API errors', () => {
-    cy.task('stubKeyworkerMembersError')
+    cy.task('stubSearchStaffError')
 
     navigateToTestPage()
 
     cy.findByText('Sorry, there is a problem with the service').should('be.visible')
   })
 
+  const getAllKeyworkers = () => {
+    cy.task('stubSearchStaff', [
+      {
+        staffId: 488095,
+        firstName: 'AVAILABLE-ACTIVE',
+        lastName: 'KEY-WORKER',
+        status: {
+          code: 'ACT',
+          description: 'Active',
+        },
+        capacity: 28,
+        allocated: 32,
+        allowAutoAllocation: true,
+        numberOfSessions: 0,
+      },
+      {
+        staffId: 488096,
+        firstName: 'AVAILABLE-ACTIVE2',
+        lastName: 'KEY-WORKER',
+        status: {
+          code: 'ACT',
+          description: 'Active',
+        },
+        capacity: 28,
+        allocated: 32,
+        allowAutoAllocation: true,
+        numberOfSessions: 0,
+      },
+      {
+        staffId: 488096,
+        firstName: 'UNAVAILABLE-ANNUAL-LEAVE',
+        lastName: 'KEY-WORKER',
+        status: {
+          code: 'UAL',
+          description: 'Unavailable - annual leave',
+        },
+        capacity: 6,
+        allocated: 9,
+        allowAutoAllocation: true,
+        numberOfSessions: 0,
+      },
+      {
+        staffId: 488097,
+        firstName: 'UNAVAILABLE-LONG-TERM-ABSENCE',
+        lastName: 'KEY-WORKER',
+        status: {
+          code: 'ULT',
+          description: 'Unavailable - long term absence',
+        },
+        capacity: 4,
+        allocated: 1,
+        allowAutoAllocation: false,
+        numberOfSessions: 0,
+      },
+      {
+        staffId: 488098,
+        firstName: 'UNAVAILABLE-NO-PRISONER-CONTACT',
+        lastName: 'KEY-WORKER',
+        status: {
+          code: 'UNP',
+          description: 'Unavailable - no prisoner contact',
+        },
+        capacity: 12,
+        allocated: 0,
+        allowAutoAllocation: false,
+        numberOfSessions: 0,
+      },
+      {
+        staffId: 488099,
+        firstName: 'UNAVAILABLE-INACTIVE',
+        lastName: 'KEY-WORKER',
+        status: {
+          code: 'INA',
+          description: 'Inactive',
+        },
+        capacity: 11,
+        allocated: 0,
+        allowAutoAllocation: false,
+        numberOfSessions: 0,
+      },
+    ])
+  }
+
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/manage-key-workers', { failOnStatusCode: false })
+    cy.visit('/key-worker/manage-key-workers', { failOnStatusCode: false })
   }
 })
