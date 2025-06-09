@@ -14,6 +14,7 @@ import { dataAccess } from '../data'
 import { EstablishmentSettingsRoutes } from './establishment-settings/routes'
 import { KeyWorkersDataRoutes } from './key-workers-data/routes'
 import { RecommendKeyWorkersAutomaticallyRoutes } from './recommend-key-workers-automatically/routes'
+import { populatePolicy } from '../middleware/populatePolicy'
 
 export default function routes(services: Services): Router {
   const router = Router()
@@ -25,7 +26,7 @@ export default function routes(services: Services): Router {
   router.use(removeTrailingSlashMiddleware)
 
   router.use('/key-worker-statistics', KeyWorkerStatisticsRoutes(services))
-  router.use('/manage-key-workers', KeyWorkerMembersRoutes(services))
+  router.use('/:policy/manage-key-workers', populatePolicy, KeyWorkerMembersRoutes(services))
   router.use('/key-worker-profile/:staffId', KeyWorkerProfileRoutes(services))
   router.use('/allocate-key-workers', AllocateKeyWorkerRoutes(services))
   router.use('/prisoner-allocation-history', PrisonerAllocationHistoryRoutes(services))

@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import KeyworkerApiService from '../../../services/keyworkerApi/keyworkerApiService'
+import { components } from '../../../@types/keyWorker'
 
 export class AssignStaffRoleController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
@@ -9,8 +10,12 @@ export class AssignStaffRoleController {
 
     if (req.journeyData.assignStaffRole!.query && !req.journeyData.assignStaffRole!.searchResults) {
       try {
+        const searchOptions: components['schemas']['StaffSearchRequest'] = {
+          query: req.journeyData.assignStaffRole!.query,
+          status: 'ALL',
+        }
         req.journeyData.assignStaffRole!.searchResults = (
-          await this.keyworkerApiService.searchStaff(req as Request, res, req.journeyData.assignStaffRole.query)
+          await this.keyworkerApiService.searchStaff(req as Request, res, searchOptions)
         ).content.map(itm => ({
           staffId: itm.staffId,
           firstName: itm.firstName,
