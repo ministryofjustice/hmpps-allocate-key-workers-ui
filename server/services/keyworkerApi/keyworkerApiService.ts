@@ -108,4 +108,8 @@ export default class KeyworkerApiService {
       status: 'ALL',
     })
   }
+
+  allocationRecommendations(req: Request, prisonCode: string) {
+    return this.keyworkerApiClientBuilder(req).allocationRecommendations(prisonCode)
+  }
 }

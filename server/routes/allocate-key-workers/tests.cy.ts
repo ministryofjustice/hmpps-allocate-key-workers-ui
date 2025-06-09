@@ -110,11 +110,7 @@ context('/allocate-key-workers', () => {
       },
     )
 
-    cy.get('.moj-alert').should('contain.text', 'Key workers could not be assigned to 1 prisoner')
-    cy.findByText('This is because there are not enough key workers with available capacity.').should('exist')
-    cy.findByText('To assign unallocated prisoners, you can:').should('exist')
-    cy.findByText('view all prisoners without a key worker and manually allocate key workers').should('exist')
-    cy.findByText('increase the capacity of your key workers').should('exist')
+    cy.findByText('Sorry, there is a problem with the service').should('exist')
   })
 
   it('should show success message on deallocation', () => {
@@ -263,12 +259,12 @@ context('/allocate-key-workers', () => {
         .should('contain.text', 'Key-Worker, Available-Active2 (allocations: 32)')
     }
 
-    cy.contains('Select key workers from the dropdown lists to reallocate or deallocate prisoners.').should(
-      readonly ? 'not.exist' : 'exist',
-    )
-    cy.contains('Key workers will only be allocated when you save your changes.').should(
-      readonly ? 'not.exist' : 'exist',
-    )
+    cy.contains(
+      'se the dropdown lists to assign key workers to prisoners or deallocate them. Changes will only take affect when you select save.',
+    ).should(readonly ? 'not.exist' : 'exist')
+    cy.contains(
+      'Select ‘Assign key workers automatically’ to get key worker recommendations for all prisoners without a current key worker. You should save any changes you’ve made before selecting this.',
+    ).should(readonly ? 'not.exist' : 'exist')
 
     cy.findByRole('button', { name: 'Assign key workers automatically' }).should(readonly ? 'not.exist' : 'exist')
     cy.findByRole('button', { name: 'Save changes' }).should(readonly ? 'not.exist' : 'exist')

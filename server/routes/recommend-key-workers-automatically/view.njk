@@ -9,7 +9,7 @@
 {% from "partials/deallocateSuccessError/macro.njk" import deallocateSuccessError %}
 
 {% set fullWidth = true %}
-{% set pageTitle = "Allocate key workers to prisoners" %}
+{% set pageTitle = "Allocate key workers automatically" %}
 
 {% block pageHeader %}
   {{ deallocateSuccessError(apiError, count) }}
@@ -67,22 +67,13 @@
       </div>
     </div>
 
-    {% if user.permissions.allocate %}
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-three-quarters">
-          <p>Use the dropdown lists to assign key workers to prisoners or deallocate them.<br/>Changes will only take affect when you select save.</p>
-          <p>Select ‘Assign key workers automatically’ to get key worker recommendations for all prisoners without a current key worker. You should save any changes you’ve made before selecting this.</p>
-        </div>
-      </div>
-      <div class="govuk-grid-row">
-        {{ govukButton({
-          text: "Assign key workers automatically",
-          classes: "govuk-button--secondary float-right govuk-!-margin-bottom-2",
-          preventDoubleClick: true,
-          href: '/recommend-key-workers-automatically'
-        }) }}
-      </div>
-    {% endif %}
+    <p>Key workers have been recommended for the prisoners listed below without a current key worker.</p>
+    <p>These recommendations prioritise key workers who have:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>previously been assigned to a specific prisoner</li>
+      <li>the most available capacity</li>
+    </ul>
+    <p>You can change these by selecting alternative key workers from the dropdown menus. Key workers will only be allocated to prisoners when you select save.</p>
 
     <form method="post">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
@@ -110,11 +101,11 @@
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: keyworkers | excludeCurrentKeyworker(item.keyworker) | conditionallyAddDeallocate(item.keyworker.staffId) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select key worker')
+              items: keyworkers | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select key worker', true, '', false) | setSelectedValue(item.personIdentifier+ ':allocate:' + item.recommendation)
             })
           } if user.permissions.allocate else undefined,
           {
-            html: '<a class="govuk-link govuk-link--no-visited-state" href="/prisoner-allocation-history/' + item.personIdentifier + searchQuery + '">View allocation history</a>' if item.hasAllocationHistory else ''
+            html: '<a class="govuk-link govuk-link--no-visited-state" href="/prisoner-allocation-history/' + item.personIdentifier + '">View allocation history</a>' if item.hasAllocationHistory else ''
           }
         ] | removeUndefined), rows) %}
       {% endfor %}
@@ -161,12 +152,10 @@
 
       {{ mojPagination(records.length) }}
 
-      {% if user.permissions.allocate %}
-        {{ govukButton({
+      {{ govukButton({
           text: "Save changes",
           preventDoubleClick: true
-        }) }}
-      {% endif %}
+      }) }}
     </form>
   </div>
 {% endblock %}

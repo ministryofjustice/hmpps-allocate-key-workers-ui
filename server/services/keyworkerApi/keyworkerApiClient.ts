@@ -165,4 +165,10 @@ export default class KeyworkerApiClient {
       data: query,
     })
   }
+
+  async allocationRecommendations(prisonCode: string) {
+    return this.restClient.get<components['schemas']['RecommendedAllocations']>({
+      path: `/prisons/${prisonCode}/prisoners/allocation-recommendations`,
+    })
+  }
 }
