@@ -70,9 +70,9 @@ export default class KeyworkerApiClient {
     return response
   }
 
-  async getPrisonConfig(prisonCode: string): Promise<components['schemas']['PrisonKeyworkerConfiguration']> {
-    const response = await this.restClient.get<components['schemas']['PrisonKeyworkerConfiguration']>({
-      path: `/prisons/${prisonCode}/configuration/keyworker`,
+  async getPrisonConfig(prisonCode: string): Promise<components['schemas']['PrisonConfigResponse']> {
+    const response = await this.restClient.get<components['schemas']['PrisonConfigResponse']>({
+      path: `/prisons/${prisonCode}/configurations`,
     })
 
     return response

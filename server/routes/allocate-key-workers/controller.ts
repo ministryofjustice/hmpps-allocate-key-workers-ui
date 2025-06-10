@@ -52,6 +52,6 @@ export class AllocateKeyWorkerController extends ChangeKeyWorkerController {
       cellLocationPrefix: req.body.cellLocationPrefix || '',
       excludeActiveAllocations: req.body.excludeActiveAllocations || false,
     })
-    return res.redirect(`/allocate-key-workers?${params.toString()}`)
+    return res.redirect(`/${res.locals.policyPath}/allocate-key-workers?${params.toString()}`)
   }
 }

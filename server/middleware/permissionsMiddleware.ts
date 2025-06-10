@@ -31,10 +31,25 @@ export function populateUserPermissions(): RequestHandler {
         allocate: hasRole(res, AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KW_MIGRATION),
         admin: hasRole(res, AuthorisedRoles.KW_MIGRATION),
       }
+      req.middleware ??= {}
+      switch (req.params['policy']) {
+        case 'key-worker':
+          req.middleware.policy = 'KEY_WORKER'
+          res.locals.policyName = 'key worker'
+          res.locals.policyPath = 'key-worker'
+          break
+        case 'personal-officer':
+          req.middleware.policy = 'PERSONAL_OFFICER'
+          res.locals.policyName = 'personal officer'
+          res.locals.policyPath = 'personal-officer'
+          break
+        default:
+          return res.notFound()
+      }
 
-      res.locals.prisonConfiguration = await keyworkerApiService.getPrisonConfig(req, prisonCode)
+      req.middleware.prisonConfiguration = await keyworkerApiService.getPrisonConfig(req, prisonCode)
 
-      if (!res.locals.prisonConfiguration.isEnabled) {
+      if (!req.middleware.prisonConfiguration.isEnabled) {
         return res.render('pages/service-not-enabled')
       }
 

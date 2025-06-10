@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction, RequestHandler } from 'express'
+import { sentenceCase } from '../utils/formatUtils'
 
 export type Breadcrumb = { href: string } & ({ text: string } | { html: string })
 
@@ -12,8 +13,8 @@ export class Breadcrumbs {
         href: res.locals.digitalPrisonServicesUrl,
       },
       {
-        text: 'Key workers',
-        href: '/',
+        text: `${sentenceCase(res.locals.policyName!)}s`,
+        href: `/${res.locals.policyPath}`,
       },
     ]
   }

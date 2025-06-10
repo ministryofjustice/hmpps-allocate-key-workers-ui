@@ -12,7 +12,7 @@ context('Prisoner Allocation History', () => {
 
   it('redirects to "not found" page if user does not have the correct role', () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/prisoner-allocation-history/A9965EB?query=&location=&excludeActiveAllocations=true', {
+    cy.visit('/key-worker/prisoner-allocation-history/A9965EB?query=&location=&excludeActiveAllocations=true', {
       failOnStatusCode: false,
     })
 
@@ -21,21 +21,21 @@ context('Prisoner Allocation History', () => {
 
   it('adds back query params on the back link', () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/prisoner-allocation-history/A9965EA?query=&location=&excludeActiveAllocations=true', {
+    cy.visit('/key-worker/prisoner-allocation-history/A9965EA?query=&location=&excludeActiveAllocations=true', {
       failOnStatusCode: false,
     })
 
     cy.findByRole('link', { name: /back/i }).should(
       'have.attr',
       'href',
-      '/allocate-key-workers?query=&location=&excludeActiveAllocations=true',
+      '/key-worker/allocate-key-workers?query=&location=&excludeActiveAllocations=true',
     )
   })
 
   it('happy path', () => {
     navigateToTestPage()
 
-    cy.findByRole('link', { name: /back/i }).should('have.attr', 'href', '/allocate-key-workers')
+    cy.findByRole('link', { name: /back/i }).should('have.attr', 'href', '/key-worker/allocate-key-workers')
 
     cy.get('.govuk-link--no-visited-state').eq(0).should('have.text', 'Cat, Tabby')
     cy.findByText('A9965EA')
@@ -246,6 +246,6 @@ context('Prisoner Allocation History', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/prisoner-allocation-history/A9965EA', { failOnStatusCode: false })
+    cy.visit('/key-worker/prisoner-allocation-history/A9965EA', { failOnStatusCode: false })
   }
 })

@@ -94,7 +94,10 @@ context('/establishment-settings', () => {
     cy.findByRole('radio', { name: 'Yes' }).should('exist').and('be.checked')
     getCapacityInput().should('be.visible').and('have.value', '9')
     cy.findByRole('button', { name: 'Save' }).should('be.visible')
-    cy.findByRole('button', { name: 'Cancel' }).should('be.visible').and('have.attr', 'href').should('equal', '/')
+    cy.findByRole('button', { name: 'Cancel' })
+      .should('be.visible')
+      .and('have.attr', 'href')
+      .should('equal', '/key-worker')
   }
 
   const verifyValidationErrors = () => {
@@ -109,6 +112,6 @@ context('/establishment-settings', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/establishment-settings', { failOnStatusCode: false })
+    cy.visit('/key-worker/establishment-settings', { failOnStatusCode: false })
   }
 })

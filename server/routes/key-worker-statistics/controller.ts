@@ -109,8 +109,8 @@ export class KeyWorkerStatisticsController {
       data,
       hasCurrentStats,
       hasPreviousStats,
-      prisonerToKeyWorkerRatio: prison.capacityTier1,
-      weekFrequency: prison.kwSessionFrequencyInWeeks,
+      prisonerToKeyWorkerRatio: prison.capacity,
+      weekFrequency: prison.frequencyInWeeks,
       dateFrom: formatDateConcise(nowSpan.start),
       dateTo: formatDateConcise(nowSpan.end),
       comparisonDateFrom: formatDateConcise(previousSpan.start),
@@ -122,6 +122,6 @@ export class KeyWorkerStatisticsController {
   POST = async (req: Request<unknown, unknown, SchemaType>, res: Response): Promise<void> => {
     // Date entry is updated - reload this page with the latest data
     req.flash(FLASH_KEY__FORM_RESPONSES, JSON.stringify({ start: req.body.dateFrom, end: req.body.dateTo }))
-    return res.redirect('/key-worker-statistics')
+    return res.redirect('key-worker-statistics')
   }
 }

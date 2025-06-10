@@ -106,17 +106,17 @@ const stubKeyworkerPrisonConfig = (isEnabled: boolean, hasPrisonersWithHighCompl
   stubFor({
     request: {
       method: 'GET',
-      urlPathPattern: '/keyworker-api/prisons/LEI/configuration/keyworker',
+      urlPathPattern: '/keyworker-api/prisons/LEI/configurations',
     },
     response: {
       status: 200,
       jsonBody: {
         isEnabled,
         hasPrisonersWithHighComplexityNeeds,
-        allowAutoAllocate: true,
-        capacityTier1: 6,
-        capacityTier2: 9,
-        kwSessionFrequencyInWeeks: 1,
+        allowAutoAllocation: true,
+        capacity: 6,
+        maximumCapacity: 9,
+        frequencyInWeeks: 1,
       },
       headers: {
         'Content-Type': 'application/json',

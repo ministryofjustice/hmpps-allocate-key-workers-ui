@@ -6,6 +6,6 @@ declare namespace Cypress {
      */
     signIn(options?: { failOnStatusCode: boolean }): Chainable<string>
     verifyLastAPICall(matching: string | object, expected: object): Chainable<unknown>
-    injectJourneyDataAndReload<T>(uuid: string, json: T): void
+    injectJourneyDataAndReload<T>(uuid: string, json: T, policy?: string): void
   }
 }

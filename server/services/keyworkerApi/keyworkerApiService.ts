@@ -34,7 +34,7 @@ export default class KeyworkerApiService {
     maximumCapacity: number,
     frequencyInWeeks?: number,
   ) {
-    const config = res.locals.prisonConfiguration
+    const config = req.middleware!.prisonConfiguration!
 
     const requestBody = {
       isEnabled: config.isEnabled,
@@ -42,7 +42,7 @@ export default class KeyworkerApiService {
       allowAutoAllocation,
       maximumCapacity,
       capacity: maximumCapacity,
-      frequencyInWeeks: frequencyInWeeks ?? config.kwSessionFrequencyInWeeks,
+      frequencyInWeeks: frequencyInWeeks ?? config.frequencyInWeeks,
     }
 
     return this.keyworkerApiClientBuilder(req).updatePrisonConfig(res.locals.user.getActiveCaseloadId()!, requestBody)
