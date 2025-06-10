@@ -64,6 +64,13 @@ export const conditionallyAddDeallocate = (items: SelectOption[], currentKeywork
   ]
 }
 
-export const mergePrisonerKeyworkerIds = (items: SelectOption[], prisonerId: string): SelectOption[] => {
-  return items.map(o => ({ ...o, value: `${prisonerId}:${o.value}` }))
+export const mergePrisonerKeyworkerIds = (
+  items: SelectOption[],
+  prisonerId: string,
+  recommendedStaffId: string,
+): SelectOption[] => {
+  return items.map(o => ({
+    ...o,
+    value: `${prisonerId}:${o.value}${String(o.value).endsWith(recommendedStaffId) ? ':auto' : ''}`,
+  }))
 }

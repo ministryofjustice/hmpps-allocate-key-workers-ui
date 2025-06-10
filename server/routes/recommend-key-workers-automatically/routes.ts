@@ -10,7 +10,6 @@ export const RecommendKeyWorkersAutomaticallyRoutes = ({ keyworkerApiService }: 
   const controller = new RecommendKeyWorkersAutomaticallyController(keyworkerApiService)
 
   get('/', controller.GET)
-  post('/filter', controller.filter)
   post('/', requireAllocateRole, validate(selectKeyworkerSchema, true), controller.submitToApi, controller.POST)
 
   return router

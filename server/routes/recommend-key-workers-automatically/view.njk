@@ -20,61 +20,16 @@
 
   <div class="govuk-width-container">
     <div class="govuk-grid-row">
-
       <div class="govuk-grid-column-three-quarters">
-        <form method="post" action="/allocate-key-workers/filter" class="govuk-grid-row govuk-!-margin-bottom-7 govuk-!-padding-6 search-form">
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-          <h2 class="govuk-heading-m">Filter by</h2>
-          <div class="horizontal-form">
-            {{ govukInput({
-              id: "query",
-              name: "query",
-              value: query,
-              classes: "min-width-one-quarter ",
-              label: {
-                text: 'Name or prison number'
-              }
-            }) }}
-
-            {{ govukSelect({
-              id: "cellLocationPrefix",
-              name: "cellLocationPrefix",
-              label: {
-                text: "Residential location"
-              },
-              items: locations | addSelectValue('') | setSelectedValue(cellLocationPrefix)
-            }) }}
-
-            {{ govukButton({
-              text: "Apply filters",
-              preventDoubleClick: true
-            }) }}
-            <a class="govuk-link govuk-link--no-visited-state govuk-body no-label-form-clear-link" href="?clear=true">Clear</a>
-          </div>
-
-          {{ govukCheckboxes({
-              name: "excludeActiveAllocations",
-              classes: "govuk-checkboxes--small govuk-!-margin-top-2",
-              items: [
-                {
-                  value: "true",
-                  text: "Prisoners without a key worker",
-                  checked: excludeActiveAllocations
-                }
-              ]
-            }) }}
-        </form>
+        <p>Key workers have been recommended for the prisoners listed below without a current key worker.</p>
+        <p>These recommendations prioritise key workers who have:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>previously been assigned to a specific prisoner</li>
+          <li>the most available capacity</li>
+        </ul>
+        <p>You can change these by selecting alternative key workers from the dropdown menus. Key workers will only be allocated to prisoners when you select save.</p>
       </div>
     </div>
-
-    <p>Key workers have been recommended for the prisoners listed below without a current key worker.</p>
-    <p>These recommendations prioritise key workers who have:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>previously been assigned to a specific prisoner</li>
-      <li>the most available capacity</li>
-    </ul>
-    <p>You can change these by selecting alternative key workers from the dropdown menus. Key workers will only be allocated to prisoners when you select save.</p>
-
     <form method="post">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
       {% set rows = [] %}
@@ -101,7 +56,7 @@
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: keyworkers | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select key worker', true, '', false) | setSelectedValue(item.personIdentifier+ ':allocate:' + item.recommendation)
+              items: keyworkers | mergePrisonerKeyworkerIds(item.personIdentifier, item.recommendation) | addSelectValue('Select key worker', true, '', false) | setSelectedValue(item.personIdentifier+ ':allocate:' + item.recommendation + ':auto')
             })
           } if user.permissions.allocate else undefined,
           {

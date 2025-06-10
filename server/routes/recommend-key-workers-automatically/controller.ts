@@ -11,9 +11,6 @@ export class RecommendKeyWorkersAutomaticallyController extends ChangeKeyWorkerC
 
     const matchedPrisoners = records.map(o => {
       const match = recommendations.allocations.find(a => a.personIdentifier === o.personIdentifier)
-      // if (!match) {
-      //   debugger
-      // }
       return {
         ...o,
         recommendation: match?.staff.staffId,
@@ -21,9 +18,9 @@ export class RecommendKeyWorkersAutomaticallyController extends ChangeKeyWorkerC
     })
 
     res.render('recommend-key-workers-automatically/view', {
+      backUrl: 'allocate-key-workers',
       ...changeData,
       records: matchedPrisoners,
-      showBreadcrumbs: true,
     })
   }
 
