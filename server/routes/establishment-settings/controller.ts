@@ -7,19 +7,19 @@ export class EstablishmentSettingsController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
   GET = async (req: Request, res: Response) => {
-    const { allowAutoAllocate, capacityTier1, capacityTier2, kwSessionFrequencyInWeeks } =
-      res.locals.prisonConfiguration
+    const { allowAutoAllocation, capacity, maximumCapacity, frequencyInWeeks } = req.middleware!.prisonConfiguration!
 
     res.render('establishment-settings/view', {
+      showBreadcrumbs: true,
       prisonName: res.locals.user.activeCaseLoad!.description,
       allowAutoAllocation:
         res.locals.formResponses?.['allowAutoAllocation'] === undefined
-          ? allowAutoAllocate
+          ? allowAutoAllocation
           : res.locals.formResponses?.['allowAutoAllocation'] === 'TRUE',
-      maximumCapacity: res.locals.formResponses?.['maximumCapacity'] ?? capacityTier2 ?? capacityTier1,
+      maximumCapacity: res.locals.formResponses?.['maximumCapacity'] ?? maximumCapacity ?? capacity,
       frequencyInWeeks:
         res.locals.formResponses?.['frequencyInWeeks'] === undefined
-          ? kwSessionFrequencyInWeeks
+          ? frequencyInWeeks
           : parseFrequencyInWeeks(res.locals.formResponses?.['frequencyInWeeks']),
       isAdmin: res.locals.user.permissions.admin,
       successMessage: req.flash(FLASH_KEY__SUCCESS_MESSAGE)[0],

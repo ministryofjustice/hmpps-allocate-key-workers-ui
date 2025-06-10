@@ -94,7 +94,7 @@ context('/update-capacity-status/update-status-unavailable', () => {
     journeyId = uuidV4()
 
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/${journeyId}/start-update-key-worker/488095?proceedTo=update-capacity-status`, {
+    cy.visit(`/key-worker/${journeyId}/start-update-key-worker/488095?proceedTo=update-capacity-status`, {
       failOnStatusCode: false,
     })
 
@@ -108,6 +108,6 @@ context('/update-capacity-status/update-status-unavailable', () => {
       },
     })
 
-    cy.visit(`/${journeyId}/update-capacity-status/update-status-unavailable`)
+    cy.visit(`/key-worker/${journeyId}/update-capacity-status/update-status-unavailable`)
   }
 })

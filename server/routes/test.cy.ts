@@ -72,7 +72,7 @@ context('test / homepage', () => {
     cy.get('h2 > .card__link')
       .eq(0)
       .should('contain.text', 'Allocate key workers to prisoners')
-      .and('have.attr', 'href', '/allocate-key-workers')
+      .and('have.attr', 'href', '/key-worker/allocate-key-workers')
     cy.get('.card__description')
       .eq(0)
       .should(
@@ -92,7 +92,7 @@ context('test / homepage', () => {
     cy.get('h2 > .card__link')
       .eq(2)
       .should('contain.text', 'View key worker data')
-      .and('have.attr', 'href', '/key-workers-data')
+      .and('have.attr', 'href', '/key-worker/key-workers-data')
     cy.get('.card__description').eq(2).should('contain.text', 'View key worker data for your establishment.')
 
     if (!readonly) {
@@ -106,7 +106,7 @@ context('test / homepage', () => {
       cy.get('h2 > .card__link')
         .eq(4)
         .should('contain.text', 'Manage your establishment’s key worker settings')
-        .and('have.attr', 'href', '/establishment-settings')
+        .and('have.attr', 'href', '/key-worker/establishment-settings')
       cy.get('.card__description')
         .eq(4)
         .should(
@@ -127,6 +127,6 @@ context('test / homepage', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/', { failOnStatusCode: false })
+    cy.visit('/key-worker', { failOnStatusCode: false })
   }
 })

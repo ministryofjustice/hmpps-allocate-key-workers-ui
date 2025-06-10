@@ -322,7 +322,7 @@ context('Key workers data', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-workers-data', { failOnStatusCode: false })
+    cy.visit('/key-worker/key-workers-data', { failOnStatusCode: false })
   }
 })
 

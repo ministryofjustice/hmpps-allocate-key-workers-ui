@@ -14,11 +14,11 @@ context('/update-capacity-status/cancel', () => {
 
   it('should cancel to /update-capacity-status page', () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/${journeyId}/start-update-key-worker/488095?proceedTo=update-capacity-status`, {
+    cy.visit(`/key-worker/${journeyId}/start-update-key-worker/488095?proceedTo=update-capacity-status`, {
       failOnStatusCode: false,
     })
 
-    cy.visit(`/${journeyId}/update-capacity-status/cancel`)
+    cy.visit(`/key-worker/${journeyId}/update-capacity-status/cancel`)
 
     cy.url().should('match', /\/update-capacity-status$/)
   })

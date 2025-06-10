@@ -27,8 +27,6 @@ import sentryMiddleware from './middleware/sentryMiddleware'
 import routes from './routes'
 import type { Services } from './services'
 import populateClientToken from './middleware/populateSystemClientToken'
-import breadcrumbs from './middleware/breadcrumbs'
-import { populateUserPermissions } from './middleware/permissionsMiddleware'
 import populateValidationErrors from './middleware/populateValidationErrors'
 import PrisonerImageRoutes from './routes/prisonerImageRoutes'
 import { handleApiError } from './middleware/handleApiError'
@@ -75,7 +73,7 @@ export default function createApp(services: Services): express.Application {
     res.notFound = () => res.status(404).render('pages/not-found')
     next()
   })
-  app.use(breadcrumbs())
+
   app.use(dpsComponents.retrieveCaseLoadData({ logger }))
   app.use(populateValidationErrors())
 
@@ -84,8 +82,7 @@ export default function createApp(services: Services): express.Application {
     res.render('not-authorised', { showBreadcrumbs: true })
   })
 
-  app.use(populateUserPermissions())
-  app.use(routes(services))
+  app.use('/:policy', routes(services))
 
   if (config.sentry.dsn) Sentry.setupExpressErrorHandler(app)
 
