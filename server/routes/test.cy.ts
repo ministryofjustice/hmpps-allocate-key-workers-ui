@@ -72,7 +72,7 @@ context('test / homepage', () => {
     cy.get('h2 > .card__link')
       .eq(0)
       .should('contain.text', 'Allocate key workers to prisoners')
-      .and('have.attr', 'href', '/key-worker/allocate-key-workers')
+      .and('have.attr', 'href', '/key-worker/allocate-staff')
     cy.get('.card__description')
       .eq(0)
       .should(
@@ -82,7 +82,7 @@ context('test / homepage', () => {
     cy.get('h2 > .card__link')
       .eq(1)
       .should('contain.text', 'Manage key workers')
-      .and('have.attr', 'href', '/key-worker/manage-key-workers')
+      .and('have.attr', 'href', '/key-worker/manage-staff')
     cy.get('.card__description')
       .eq(1)
       .should(
@@ -92,7 +92,7 @@ context('test / homepage', () => {
     cy.get('h2 > .card__link')
       .eq(2)
       .should('contain.text', 'View key worker data')
-      .and('have.attr', 'href', '/key-worker/key-workers-data')
+      .and('have.attr', 'href', '/key-worker/staff-data')
     cy.get('.card__description').eq(2).should('contain.text', 'View key worker data for your establishment.')
 
     if (!readonly) {

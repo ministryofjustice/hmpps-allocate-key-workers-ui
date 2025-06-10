@@ -12,13 +12,13 @@ context('Manage key workers', () => {
 
     navigateToTestPage()
 
-    cy.visit('/key-worker/manage-key-workers?query=<script>alert%28%27inject%27%29<%2Fscript>', {
+    cy.visit('/key-worker/manage-staff?query=<script>alert%28%27inject%27%29<%2Fscript>', {
       failOnStatusCode: false,
     })
     cy.get('#query').should('have.value', '')
     cy.get('.govuk-table__row').should('have.length', 7)
 
-    cy.visit('/key-worker/manage-key-workers?status=<script>alert%28%27inject%27%29<%2Fscript>', {
+    cy.visit('/key-worker/manage-staff?status=<script>alert%28%27inject%27%29<%2Fscript>', {
       failOnStatusCode: false,
     })
     cy.get('#status').should('have.value', '')
@@ -265,6 +265,6 @@ context('Manage key workers', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-worker/manage-key-workers', { failOnStatusCode: false })
+    cy.visit('/key-worker/manage-staff', { failOnStatusCode: false })
   }
 })

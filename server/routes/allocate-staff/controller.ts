@@ -2,9 +2,9 @@ import { Request, Response } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import LocationsInsidePrisonApiService from '../../services/locationsInsidePrisonApi/locationsInsidePrisonApiService'
 import { sanitizeQueryName, sanitizeSelectValue } from '../../middleware/validationMiddleware'
-import { ChangeKeyWorkerController } from '../base/changeKeyWorkerController'
+import { ChangeStaffController } from '../base/changeStaffController'
 
-export class AllocateKeyWorkerController extends ChangeKeyWorkerController {
+export class AllocateStaffController extends ChangeStaffController {
   constructor(
     keyworkerApiService: KeyworkerApiService,
     private readonly locationsApiService: LocationsInsidePrisonApiService,
@@ -32,7 +32,7 @@ export class AllocateKeyWorkerController extends ChangeKeyWorkerController {
       excludeActiveAllocations: String(query.excludeActiveAllocations),
     }).toString()
 
-    res.render('allocate-key-workers/view', {
+    res.render('allocate-staff/view', {
       searchQuery: query.query || query.cellLocationPrefix || query.excludeActiveAllocations ? `?${searchParams}` : '',
       query: query.query,
       cellLocationPrefix: query.cellLocationPrefix,
@@ -52,6 +52,6 @@ export class AllocateKeyWorkerController extends ChangeKeyWorkerController {
       cellLocationPrefix: req.body.cellLocationPrefix || '',
       excludeActiveAllocations: req.body.excludeActiveAllocations || false,
     })
-    return res.redirect(`/${res.locals.policyPath}/allocate-key-workers?${params.toString()}`)
+    return res.redirect(`/${res.locals.policyPath}/allocate-staff?${params.toString()}`)
   }
 }

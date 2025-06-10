@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import KeyworkerApiService from '../../../services/keyworkerApi/keyworkerApiService'
 
-export class StartUpdateKeyWorkerController {
+export class StartUpdateStaffController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
   GET = async (req: Request<{ staffId: string }, unknown, unknown, { proceedTo: string }>, res: Response) => {

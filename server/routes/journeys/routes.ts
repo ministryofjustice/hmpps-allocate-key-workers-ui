@@ -2,7 +2,7 @@ import { Router } from 'express'
 import { DataAccess } from '../../data'
 import { Services } from '../../services'
 import setUpJourneyData from '../../middleware/journey/setUpJourneyData'
-import { StartUpdateKeyWorkerRoutes } from './start-update-key-worker/routes'
+import { StartUpdateStaffRoutes } from './start-update-staff/routes'
 import { UpdateCapacityAndStatusRoutes } from './update-capacity-status/routes'
 import { AssignStaffRoleRoutes } from './assign-staff-role/routes'
 
@@ -11,7 +11,7 @@ export default function JourneyRoutes(dataAccess: DataAccess, services: Services
 
   router.use(setUpJourneyData(dataAccess.tokenStore))
 
-  router.use('/start-update-key-worker/:staffId', StartUpdateKeyWorkerRoutes(services))
+  router.use('/start-update-staff/:staffId', StartUpdateStaffRoutes(services))
   router.use('/update-capacity-status', UpdateCapacityAndStatusRoutes(services))
 
   router.use('/assign-staff-role', AssignStaffRoleRoutes(services))

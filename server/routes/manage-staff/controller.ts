@@ -3,7 +3,7 @@ import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService
 import { sanitizeQueryName, sanitizeSelectValue } from '../../middleware/validationMiddleware'
 import { components } from '../../@types/keyWorker'
 
-export class ManageKeyWorkersController {
+export class ManageStaffController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -36,7 +36,7 @@ export class ManageKeyWorkersController {
 
     const data = await this.keyworkerApiService.searchStaff(req, res, searchOptions)
 
-    res.render('manage-key-workers/view', {
+    res.render('manage-staff/view', {
       params: query,
       showBreadcrumbs: true,
       records: data.content,
@@ -46,6 +46,6 @@ export class ManageKeyWorkersController {
 
   POST = async (req: Request, res: Response): Promise<void> => {
     const queryParams = new URLSearchParams({ query: req.body.query, status: req.body.status })
-    res.redirect(`manage-key-workers?${queryParams.toString()}`)
+    res.redirect(`manage-staff?${queryParams.toString()}`)
   }
 }

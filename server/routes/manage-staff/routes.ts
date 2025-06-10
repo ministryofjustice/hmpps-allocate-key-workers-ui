@@ -1,10 +1,10 @@
 import { Services } from '../../services'
 import { JourneyRouter } from '../base/routes'
-import { ManageKeyWorkersController } from './controller'
+import { ManageStaffController } from './controller'
 
-export const KeyWorkerMembersRoutes = ({ keyworkerApiService }: Services) => {
+export const StaffMembersRoutes = ({ keyworkerApiService }: Services) => {
   const { router, get, post } = JourneyRouter()
-  const controller = new ManageKeyWorkersController(keyworkerApiService)
+  const controller = new ManageStaffController(keyworkerApiService)
 
   get('/', controller.GET)
   post('/', controller.POST)
