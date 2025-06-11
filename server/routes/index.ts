@@ -1,40 +1,71 @@
 import type { Services } from '../services'
 import { HomePageController } from './controller'
-import { KeyWorkerStatisticsRoutes } from './key-worker-statistics/routes'
-import { KeyWorkerMembersRoutes } from './manage-key-workers/routes'
-import { KeyWorkerProfileRoutes } from './key-worker-profile/routes'
-import { AllocateKeyWorkerRoutes } from './allocate-key-workers/routes'
+import { StaffStatisticsRoutes } from './staff-statistics/routes'
+import { StaffMembersRoutes } from './manage-staff/routes'
+import { StaffProfileRoutes } from './staff-profile/routes'
+import { AllocateStaffRoutes } from './allocate-staff/routes'
 import { PrisonerAllocationHistoryRoutes } from './prisoner-allocation-history/routes'
 import removeTrailingSlashMiddleware from '../middleware/removeTrailingSlashMiddleware'
 import insertJourneyIdentifier from '../middleware/journey/insertJourneyIdentifier'
 import JourneyRoutes from './journeys/routes'
 import { dataAccess } from '../data'
 import { EstablishmentSettingsRoutes } from './establishment-settings/routes'
-import { KeyWorkersDataRoutes } from './key-workers-data/routes'
-import { RecommendKeyWorkersAutomaticallyRoutes } from './recommend-key-workers-automatically/routes'
-import { populateUserPermissions } from '../middleware/permissionsMiddleware'
+import { RecommendStaffAutomaticallyRoutes } from './recommend-staff-automatically/routes'
+import { StaffDataRoutes } from './staff-data/routes'
+import {
+  populateUserPermissionsAndPrisonConfig,
+  requirePermissionsAndConfig,
+} from '../middleware/permissionsMiddleware'
 import { JourneyRouter } from './base/routes'
 import breadcrumbs from '../middleware/breadcrumbs'
+import { UserPermissionLevel } from '../interfaces/hmppsUser'
 
 export default function routes(services: Services) {
   const { router, get } = JourneyRouter()
   const controller = new HomePageController()
 
-  router.use(populateUserPermissions())
+  router.use(populateUserPermissionsAndPrisonConfig())
   router.use(breadcrumbs())
 
-  get('/', controller.GET)
+  const adminOverridingPermission = requirePermissionsAndConfig(
+    {
+      requirePrisonEnabled: false,
+      minimumPermission: UserPermissionLevel.ADMIN,
+    },
+    {
+      requirePrisonEnabled: true,
+      minimumPermission: UserPermissionLevel.VIEW,
+    },
+  )
+
+  get('/', adminOverridingPermission, controller.GET)
 
   router.use(removeTrailingSlashMiddleware)
 
-  router.use('/key-worker-statistics', KeyWorkerStatisticsRoutes(services))
-  router.use('/key-worker-profile/:staffId', KeyWorkerProfileRoutes(services))
-  router.use('/allocate-key-workers', AllocateKeyWorkerRoutes(services))
+  router.use('/establishment-settings', adminOverridingPermission, EstablishmentSettingsRoutes(services))
+  router.use(
+    '/staff-profile/:staffId',
+    requirePermissionsAndConfig({
+      requirePrisonEnabled: false,
+      minimumPermission: UserPermissionLevel.VIEW,
+    }),
+    StaffProfileRoutes(services),
+  )
+
+  router.use(
+    requirePermissionsAndConfig({
+      requirePrisonEnabled: true,
+      minimumPermission: UserPermissionLevel.VIEW,
+    }),
+  )
+
+  router.use('/staff-statistics', StaffStatisticsRoutes(services))
+  router.use('/allocate-staff', AllocateStaffRoutes(services))
   router.use('/prisoner-allocation-history', PrisonerAllocationHistoryRoutes(services))
   router.use('/establishment-settings', EstablishmentSettingsRoutes(services))
-  router.use('/key-workers-data', KeyWorkersDataRoutes(services))
-  router.use('/recommend-key-workers-automatically', RecommendKeyWorkersAutomaticallyRoutes(services))
-  router.use('/manage-key-workers', KeyWorkerMembersRoutes(services))
+  router.use('/recommend-staff-automatically', RecommendStaffAutomaticallyRoutes(services))
+  router.use('/staff-data', StaffDataRoutes(services))
+  router.use('/manage-staff', StaffMembersRoutes(services))
 
   router.use(insertJourneyIdentifier())
   router.use('/:journeyId', JourneyRoutes(dataAccess(), services))

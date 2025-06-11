@@ -6,7 +6,7 @@ import { FLASH_KEY__FORM_RESPONSES } from '../../utils/constants'
 import { formatChange, formatNumber, formatValue } from '../../utils/statsUtils'
 import { SchemaType } from './schema'
 
-export class KeyWorkerStatisticsController {
+export class StaffStatisticsController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
   private getLastFullMonthAsIsoDateString = () => {
@@ -105,7 +105,7 @@ export class KeyWorkerStatisticsController {
 
     const data = this.createPayload(stats.current, stats.previous)
 
-    res.render('key-worker-statistics/view', {
+    res.render('staff-statistics/view', {
       data,
       hasCurrentStats,
       hasPreviousStats,
@@ -122,6 +122,6 @@ export class KeyWorkerStatisticsController {
   POST = async (req: Request<unknown, unknown, SchemaType>, res: Response): Promise<void> => {
     // Date entry is updated - reload this page with the latest data
     req.flash(FLASH_KEY__FORM_RESPONSES, JSON.stringify({ start: req.body.dateFrom, end: req.body.dateTo }))
-    return res.redirect('key-worker-statistics')
+    return res.redirect('staff-statistics')
   }
 }

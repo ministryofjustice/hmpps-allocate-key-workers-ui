@@ -1,13 +1,13 @@
 import { Services } from '../../services'
 import { JourneyRouter } from '../base/routes'
-import { RecommendKeyWorkersAutomaticallyController } from './controller'
+import { RecommendStaffAutomaticallyController } from './controller'
 import { validate } from '../../middleware/validationMiddleware'
 import { selectKeyworkerSchema } from '../base/selectKeyworkerSchema'
 import { requireAllocateRole } from '../../middleware/permissionsMiddleware'
 
-export const RecommendKeyWorkersAutomaticallyRoutes = ({ keyworkerApiService }: Services) => {
+export const RecommendStaffAutomaticallyRoutes = ({ keyworkerApiService }: Services) => {
   const { router, get, post } = JourneyRouter()
-  const controller = new RecommendKeyWorkersAutomaticallyController(keyworkerApiService)
+  const controller = new RecommendStaffAutomaticallyController(keyworkerApiService)
 
   get('/', controller.GET)
   post('/', requireAllocateRole, validate(selectKeyworkerSchema, true), controller.submitToApi, controller.POST)

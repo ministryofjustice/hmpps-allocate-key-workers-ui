@@ -24,7 +24,7 @@ export class UpdateCapacityAndStatusController {
         value: code,
         text: description,
       })),
-      backUrl: `/${res.locals.policyPath}/key-worker-profile/${req.journeyData.keyWorkerDetails!.keyworker.staffId}`,
+      backUrl: `/${res.locals.policyPath}/staff-profile/${req.journeyData.keyWorkerDetails!.keyworker.staffId}`,
       successMessage: req.flash(FLASH_KEY__SUCCESS_MESSAGE)[0],
     })
   }

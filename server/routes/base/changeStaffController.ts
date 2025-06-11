@@ -8,7 +8,7 @@ import { SelectKeyworkerSchemaType } from './selectKeyworkerSchema'
 export class ChangeStaffController {
   constructor(readonly keyworkerApiService: KeyworkerApiService) {}
 
-  getChangeStaffData = async (req: Request, res: Response) => {
+  getChangeKeyworkerData = async (req: Request, res: Response) => {
     const keyworkers = await this.keyworkerApiService.getKeyworkerMembers(req, res.locals.user.getActiveCaseloadId()!, {
       status: 'ACTIVE',
     })

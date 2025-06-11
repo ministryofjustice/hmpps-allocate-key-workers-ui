@@ -4,7 +4,7 @@ import { components } from '../../@types/keyWorker'
 import { FLASH_KEY__FORM_RESPONSES } from '../../utils/constants'
 import { formatDateConcise, getDateInReadableFormat } from '../../utils/datetimeUtils'
 
-export class KeyWorkersDataController {
+export class StaffDataController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
   private getDateAsIsoString = () => {
@@ -171,7 +171,7 @@ export class KeyWorkersDataController {
       prison.frequencyInWeeks,
     )
 
-    res.render('key-workers-data/view', {
+    res.render('staff-data/view', {
       showBreadcrumbs: true,
       data,
       dateFrom: formatDateConcise(nowSpan.start),
@@ -187,6 +187,6 @@ export class KeyWorkersDataController {
   POST = async (req: Request, res: Response) => {
     req.flash(FLASH_KEY__FORM_RESPONSES, JSON.stringify({ start: req.body.dateFrom, end: req.body.dateTo }))
 
-    res.redirect('key-workers-data')
+    res.redirect('staff-data')
   }
 }

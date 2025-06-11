@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
-import { ChangeKeyWorkerController } from '../base/changeKeyWorkerController'
+import { ChangeStaffController } from '../base/changeKeyWorkerController'
 
-export class RecommendKeyWorkersAutomaticallyController extends ChangeKeyWorkerController {
+export class RecommendStaffAutomaticallyController extends ChangeStaffController {
   GET = async (req: Request, res: Response): Promise<void> => {
     const prisonCode = res.locals.user.getActiveCaseloadId()!
 
     const records = await this.keyworkerApiService.searchPrisoners(req, prisonCode, { excludeActiveAllocations: true })
     const recommendations = await this.keyworkerApiService.allocationRecommendations(req, prisonCode)
-    const changeData = await this.getChangeKeyworkerData(req, res)
+    const changeData = await this.getChangeStaffData(req, res)
 
     const matchedPrisoners = records.map(o => {
       const match = recommendations.allocations.find(a => a.personIdentifier === o.personIdentifier)

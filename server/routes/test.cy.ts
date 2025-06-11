@@ -72,7 +72,7 @@ context('test / homepage', () => {
     cy.get('h2 > .card__link')
       .eq(0)
       .should('contain.text', 'Allocate key workers to prisoners')
-      .and('have.attr', 'href', '/key-worker/allocate-key-workers')
+      .and('have.attr', 'href', '/key-worker/allocate-staff')
     cy.get('.card__description')
       .eq(0)
       .should(
@@ -82,7 +82,7 @@ context('test / homepage', () => {
     cy.get('h2 > .card__link')
       .eq(1)
       .should('contain.text', 'Manage key workers')
-      .and('have.attr', 'href', '/key-worker/manage-key-workers')
+      .and('have.attr', 'href', '/key-worker/manage-staff')
     cy.get('.card__description')
       .eq(1)
       .should(
@@ -92,7 +92,7 @@ context('test / homepage', () => {
     cy.get('h2 > .card__link')
       .eq(2)
       .should('contain.text', 'View key worker data')
-      .and('have.attr', 'href', '/key-worker/key-workers-data')
+      .and('have.attr', 'href', '/key-worker/staff-data')
     cy.get('.card__description').eq(2).should('contain.text', 'View key worker data for your establishment.')
 
     if (!readonly) {
@@ -116,13 +116,30 @@ context('test / homepage', () => {
     }
   }
 
-  it('should show service unavailable if prison does not have service enabled', () => {
+  it('should show service unavailable to non-admin user if prison does not have service enabled', () => {
     cy.task('stubSignIn')
     cy.task('stubPrisonNotEnabled')
 
     navigateToTestPage()
 
-    cy.findByText('Service not enabled').should('be.visible')
+    cy.findByText('Key worker service not enabled').should('be.visible')
+  })
+
+  it('should show establishment config tile to admin user if prison does not have service enabled', () => {
+    cy.task('stubSignIn', {
+      roles: [AuthorisedRoles.KW_MIGRATION],
+    })
+    cy.task('stubKeyworkerApiStatusIsKeyworker')
+    cy.task('stubPrisonNotEnabled')
+
+    navigateToTestPage()
+
+    cy.get('h2 > .card__link').should('have.length', 1)
+    cy.findByRole('link', { name: 'Manage your establishment’s key worker settings' }).should(
+      'have.attr',
+      'href',
+      '/key-worker/establishment-settings',
+    )
   })
 
   const navigateToTestPage = () => {

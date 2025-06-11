@@ -270,6 +270,6 @@ context('Key worker statistics', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-worker/key-worker-statistics', { failOnStatusCode: false })
+    cy.visit('/key-worker/staff-statistics', { failOnStatusCode: false })
   }
 })

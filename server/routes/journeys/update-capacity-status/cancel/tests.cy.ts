@@ -14,7 +14,7 @@ context('/update-capacity-status/cancel', () => {
 
   it('should cancel to /update-capacity-status page', () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/key-worker/${journeyId}/start-update-key-worker/488095?proceedTo=update-capacity-status`, {
+    cy.visit(`/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status`, {
       failOnStatusCode: false,
     })
 

@@ -46,7 +46,7 @@ context('Profile Info', () => {
     cy.task('stubPutAllocationFail')
     navigateToTestPage()
 
-    cy.visit('/key-worker/key-worker-profile/488095', { failOnStatusCode: false })
+    cy.visit('/key-worker/staff-profile/488095', { failOnStatusCode: false })
 
     cy.get('.govuk-table__row').should('have.length', 3)
     cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
@@ -70,7 +70,7 @@ context('Profile Info', () => {
     cy.task('stubPutDeallocationSuccess')
     navigateToTestPage()
 
-    cy.visit('/key-worker/key-worker-profile/488095', { failOnStatusCode: false })
+    cy.visit('/key-worker/staff-profile/488095', { failOnStatusCode: false })
 
     cy.get('.govuk-table__row').should('have.length', 3)
     cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
@@ -98,7 +98,7 @@ context('Profile Info', () => {
     cy.task('stubPutDeallocationSuccess')
     navigateToTestPage()
 
-    cy.visit('/key-worker/key-worker-profile/488095', { failOnStatusCode: false })
+    cy.visit('/key-worker/staff-profile/488095', { failOnStatusCode: false })
 
     cy.get('.govuk-table__row').should('have.length', 3)
     cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
@@ -133,7 +133,7 @@ context('Profile Info', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-worker/key-worker-profile/488095', { failOnStatusCode: false })
+    cy.visit('/key-worker/staff-profile/488095', { failOnStatusCode: false })
   }
 
   const validatePageContents = (readonly = false) => {
@@ -141,9 +141,9 @@ context('Profile Info', () => {
     cy.get('.status-tag').eq(0).should('have.text', 'Active')
 
     if (readonly) {
-      cy.get('a[href*="/start-update-key-worker/488095?proceedTo=update-capacity-status"]').should('not.exist')
+      cy.get('a[href*="/start-update-staff/488095?proceedTo=update-capacity-status"]').should('not.exist')
     } else {
-      cy.get('a[href*="/start-update-key-worker/488095?proceedTo=update-capacity-status"]')
+      cy.get('a[href*="/start-update-staff/488095?proceedTo=update-capacity-status"]')
         .should('be.visible')
         .should('contain.text', 'Update capacity and status')
     }

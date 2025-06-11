@@ -23,6 +23,7 @@ import {
   setSelectedValue,
 } from './dropdownUtils'
 import { formatValue, getHighlightedStatChange, getStatChange } from './statsUtils'
+import { hasPermission } from '../middleware/permissionsMiddleware'
 
 export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
@@ -86,5 +87,6 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('customErrorOrderBuilder', customErrorOrderBuilder)
   njkEnv.addFilter('removeUndefined', arr => arr.filter((o: unknown) => o !== undefined))
   njkEnv.addFilter('getHighlightedStatChange', getHighlightedStatChange)
+  njkEnv.addFilter('hasPermission', hasPermission)
   njkEnv.addGlobal('yesterdayStringGBFormat', yesterdayStringGBFormat)
 }

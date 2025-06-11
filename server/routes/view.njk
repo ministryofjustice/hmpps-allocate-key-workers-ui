@@ -12,50 +12,53 @@
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full">
             <div class="card-group govuk-grid-row">
-
+            {% if prisonEnabled %}
               <div class="govuk-grid-column-one-third card-group__item">
                 <div class="card card--clickable">
                   <h2 class="govuk-heading-m card__heading">
-                    <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/allocate-key-workers">Allocate key workers to prisoners</a>
+                    <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/allocate-staff">Allocate {{ policyName }}s to prisoners</a>
                   </h2>
-                  <p class="govuk-body card__description">View all prisoners or filter by location or allocation status, search for individuals, and automatically assign key workers.</p>
+                  <p class="govuk-body card__description">View all prisoners or filter by location or allocation status, search for individuals, and automatically assign {{ policyName }}s.</p>
                 </div>
               </div>
 
               <div class="govuk-grid-column-one-third card-group__item">
                 <div class="card card--clickable">
                   <h2 class="govuk-heading-m card__heading">
-                    <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/manage-key-workers">Manage key workers</a>
+                    <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/manage-staff">Manage {{ policyName }}s</a>
                   </h2>
-                  <p class="govuk-body card__description">View key workers, change their status and capacity, and view and reassign their prisoners.</p>
+                  <p class="govuk-body card__description">View {{ policyName }}s, change their status and capacity, and view and reassign their prisoners.</p>
                 </div>
               </div>
 
               <div class="govuk-grid-column-one-third card-group__item">
                 <div class="card card--clickable">
                   <h2 class="govuk-heading-m card__heading">
-                    <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/key-workers-data">View key worker data</a>
+                    <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/staff-data">View {{ policyName }} data</a>
                   </h2>
-                  <p class="govuk-body card__description">View key worker data for your establishment.</p>
+                  <p class="govuk-body card__description">View {{ policyName }} data for your establishment.</p>
                 </div>
               </div>
 
-              {% if user.permissions.allocate %}
+              {% if user | hasPermission('allocate') %}
                 <div class="govuk-grid-column-one-third card-group__item">
                   <div class="card card--clickable">
                     <h2 class="govuk-heading-m card__heading">
-                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/assign-staff-role">Make someone a key worker</a>
+                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/assign-staff-role">Make someone a {{ policyName }}</a>
                     </h2>
-                    <p class="govuk-body card__description">Assign the key worker role to staff members in your establishment.</p>
+                    <p class="govuk-body card__description">Assign the {{ policyName }} role to staff members in your establishment.</p>
                   </div>
                 </div>
+              {% endif %}
+            {% endif %}
 
+              {% if user | hasPermission('allocate') %}
                 <div class="govuk-grid-column-one-third card-group__item">
                   <div class="card card--clickable">
                     <h2 class="govuk-heading-m card__heading">
-                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/establishment-settings">Manage your establishment’s key worker settings</a>
+                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/establishment-settings">Manage your establishment’s {{ policyName }} settings</a>
                     </h2>
-                    <p class="govuk-body card__description">Enable automatic assignment of key workers, set capacity and view session frequency settings.</p>
+                    <p class="govuk-body card__description">Enable automatic assignment of {{ policyName }}s, set capacity and view session frequency settings.</p>
                   </div>
                 </div>
               {% endif %}
