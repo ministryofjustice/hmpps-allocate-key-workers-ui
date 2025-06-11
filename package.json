@@ -94,14 +94,14 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.823.0",
+    "@aws-sdk/client-sqs": "^3.825.0",
     "@cypress/code-coverage": "^3.14.4",
     "@ministryofjustice/frontend": "^5.1.3",
     "@ministryofjustice/hmpps-auth-clients": "^0.0.1-alpha.4",
     "@ministryofjustice/hmpps-connect-dps-components": "^2.1.0",
     "@ministryofjustice/hmpps-monitoring": "^0.0.1-beta.2",
     "@ministryofjustice/hmpps-prison-permissions-lib": "^0.0.1-alpha.8",
-    "@sentry/node": "^9.26.0",
+    "@sentry/node": "^9.27.0",
     "@types/cypress__code-coverage": "^3.10.2",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^2.9.6",
@@ -126,7 +126,7 @@
     "redis": "^5.5.5",
     "superagent": "^10.2.1",
     "uuid": "^11.1.0",
-    "zod": "^3.25.51"
+    "zod": "^3.25.52"
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
@@ -145,7 +145,7 @@
     "@types/http-errors": "^2.0.4",
     "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^9.0.9",
-    "@types/node": "^22.15.29",
+    "@types/node": "^22.15.30",
     "@types/nunjucks": "^3.2.6",
     "@types/passport": "^1.0.17",
     "@types/passport-oauth2": "^1.4.17",
