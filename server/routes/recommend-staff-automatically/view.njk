@@ -58,7 +58,7 @@
               },
               items: keyworkers | mergePrisonerKeyworkerIds(item.personIdentifier, item.recommendation) | addSelectValue('Select key worker', true, '', false) | setSelectedValue(item.personIdentifier+ ':allocate:' + item.recommendation + ':auto')
             })
-          } if user.permissions.allocate else undefined,
+          },
           {
             html: '<a class="govuk-link govuk-link--no-visited-state" href="/prisoner-allocation-history/' + item.personIdentifier + '">View allocation history</a>' if item.hasAllocationHistory else ''
           }
@@ -97,7 +97,7 @@
             {
               text: "Change key worker",
               key: 'change'
-            } if user.permissions.allocate else undefined,
+            },
             {
               text: ""
             }

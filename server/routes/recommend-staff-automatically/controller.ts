@@ -5,7 +5,11 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
   GET = async (req: Request, res: Response): Promise<void> => {
     const prisonCode = res.locals.user.getActiveCaseloadId()!
 
-    const records = await this.keyworkerApiService.searchPrisoners(req, prisonCode, { excludeActiveAllocations: true })
+    const records = await this.keyworkerApiService.searchPrisoners(req, prisonCode, {
+      query: '',
+      cellLocationPrefix: '',
+      excludeActiveAllocations: true,
+    })
     const recommendations = await this.keyworkerApiService.allocationRecommendations(req, prisonCode)
     const changeData = await this.getChangeStaffData(req, res)
 
@@ -17,21 +21,12 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
       }
     })
 
-    res.render('recommend-key-workers-automatically/view', {
-      backUrl: 'allocate-key-workers',
+    res.render('recommend-staff-automatically/view', {
+      backUrl: 'allocate-staff',
       ...changeData,
       records: matchedPrisoners,
     })
   }
 
-  POST = async (req: Request, res: Response) => res.redirect(req.get('Referrer')!)
-
-  filter = async (req: Request, res: Response): Promise<void> => {
-    const params = new URLSearchParams({
-      query: req.body.query || '',
-      cellLocationPrefix: req.body.cellLocationPrefix || '',
-      excludeActiveAllocations: req.body.excludeActiveAllocations || false,
-    })
-    return res.redirect(`/allocate-key-workers?${params.toString()}`)
-  }
+  POST = async (_req: Request, res: Response) => res.redirect('recommend-staff-automatically')
 }

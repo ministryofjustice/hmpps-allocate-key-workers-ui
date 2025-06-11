@@ -78,6 +78,23 @@ const stubPutAllocationSuccess = () => {
   )
 }
 
+const stubPutAllocationRecommendationSuccess = () => {
+  return createHttpStub(
+    'PUT',
+    '/keyworker-api/prisons/LEI/prisoners/keyworkers',
+    undefined,
+    [
+      {
+        equalToJson: {
+          allocations: [{ personIdentifier: 'A2504EA', staffId: 488095, allocationReason: 'AUTO' }],
+          deallocations: [],
+        },
+      },
+    ],
+    204,
+  )
+}
+
 const stubPutAllocationFail = () => {
   return createHttpStub('PUT', '/keyworker-api/prisons/LEI/prisoners/keyworkers', undefined, undefined, 500, {
     content: [],
@@ -264,6 +281,26 @@ const stubPrisonerAllocations = () =>
 
 const stubUpdateKeyworkerProperties = () =>
   createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/keyworkers/.*', 200, {})
+
+const stubAllocationRecommendations = () =>
+  createBasicHttpStub(
+    'GET',
+    '/keyworker-api/prisons/.*/prisoners/allocation-recommendations',
+    200,
+    allocationRecommendations,
+  )
+
+const allocationRecommendations = {
+  allocations: [
+    {
+      personIdentifier: 'A2504EA',
+      location: 'COURT',
+      staff: {
+        staffId: 488095,
+      },
+    },
+  ],
+}
 
 const keyworkerManageResponse = {
   content: [
@@ -769,4 +806,6 @@ export default {
   stubUpdateKeyworkerProperties,
   stubPutPrisonConfiguration,
   stubSearchStaffError,
+  stubAllocationRecommendations,
+  stubPutAllocationRecommendationSuccess,
 }
