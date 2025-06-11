@@ -30,7 +30,7 @@ export class AssignStaffRoleController {
     }
 
     return res.render('assign-staff-role/view', {
-      backUrl: '/',
+      backUrl: `/${res.locals.policyPath}`,
       query: req.journeyData.assignStaffRole!.query,
       searchResults: req.journeyData.assignStaffRole!.searchResults,
     })

@@ -4,7 +4,6 @@ import { Services } from '../../services'
 import setUpJourneyData from '../../middleware/journey/setUpJourneyData'
 import { StartUpdateKeyWorkerRoutes } from './start-update-key-worker/routes'
 import { UpdateCapacityAndStatusRoutes } from './update-capacity-status/routes'
-import { populatePolicy } from '../../middleware/populatePolicy'
 import { AssignStaffRoleRoutes } from './assign-staff-role/routes'
 
 export default function JourneyRoutes(dataAccess: DataAccess, services: Services) {
@@ -15,7 +14,7 @@ export default function JourneyRoutes(dataAccess: DataAccess, services: Services
   router.use('/start-update-key-worker/:staffId', StartUpdateKeyWorkerRoutes(services))
   router.use('/update-capacity-status', UpdateCapacityAndStatusRoutes(services))
 
-  router.use('/:policy/assign-staff-role', populatePolicy, AssignStaffRoleRoutes(services))
+  router.use('/assign-staff-role', AssignStaffRoleRoutes(services))
 
   if (process.env.NODE_ENV === 'e2e-test') {
     /* eslint-disable no-param-reassign */

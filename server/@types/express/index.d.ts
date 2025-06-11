@@ -66,6 +66,7 @@ export declare global {
       middleware?: {
         prisonerData?: Prisoner
         policy?: 'KEY_WORKER' | 'PERSONAL_OFFICER'
+        prisonConfiguration?: components['schemas']['PrisonConfigResponse']
       }
     }
 
@@ -83,12 +84,12 @@ export declare global {
       breadcrumbs: Breadcrumbs
       prisoner?: PrisonerSummary
       policyName?: string
+      policyPath?: string
       buildNumber?: string
       asset_path: string
       applicationName: string
       environmentName: string
       environmentNameColour: string
-      prisonConfiguration: components['schemas']['PrisonKeyworkerConfiguration']
       feComponents?: {
         sharedData?: {
           activeCaseLoad: CaseLoad

@@ -49,7 +49,7 @@ context('/update-capacity-status/update-status-inactive', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/${journeyId}/start-update-key-worker/488095?proceedTo=update-capacity-status`, {
+    cy.visit(`/key-worker/${journeyId}/start-update-key-worker/488095?proceedTo=update-capacity-status`, {
       failOnStatusCode: false,
     })
 
@@ -63,6 +63,6 @@ context('/update-capacity-status/update-status-inactive', () => {
       },
     })
 
-    cy.visit(`/${journeyId}/update-capacity-status/update-status-inactive`)
+    cy.visit(`/key-worker/${journeyId}/update-capacity-status/update-status-inactive`)
   }
 })

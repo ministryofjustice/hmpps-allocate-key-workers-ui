@@ -63,7 +63,7 @@ context('/assign-staff-role', () => {
   const navigateToTestPage = () => {
     journeyId = uuidV4()
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/${journeyId}/key-worker/assign-staff-role`, {
+    cy.visit(`/key-worker/${journeyId}/assign-staff-role`, {
       failOnStatusCode: false,
     })
   }
