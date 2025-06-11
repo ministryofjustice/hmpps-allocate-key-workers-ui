@@ -11,7 +11,6 @@ import JourneyRoutes from './journeys/routes'
 import { dataAccess } from '../data'
 import { EstablishmentSettingsRoutes } from './establishment-settings/routes'
 import { KeyWorkersDataRoutes } from './key-workers-data/routes'
-import { RecommendKeyWorkersAutomaticallyRoutes } from './recommend-key-workers-automatically/routes'
 import { populateUserPermissions } from '../middleware/permissionsMiddleware'
 import { JourneyRouter } from './base/routes'
 import breadcrumbs from '../middleware/breadcrumbs'
@@ -33,7 +32,6 @@ export default function routes(services: Services) {
   router.use('/prisoner-allocation-history', PrisonerAllocationHistoryRoutes(services))
   router.use('/establishment-settings', EstablishmentSettingsRoutes(services))
   router.use('/key-workers-data', KeyWorkersDataRoutes(services))
-  router.use('/recommend-key-workers-automatically', RecommendKeyWorkersAutomaticallyRoutes(services))
   router.use('/manage-key-workers', KeyWorkerMembersRoutes(services))
 
   router.use(insertJourneyIdentifier())

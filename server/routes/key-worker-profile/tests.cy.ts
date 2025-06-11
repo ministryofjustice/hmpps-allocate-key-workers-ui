@@ -62,11 +62,7 @@ context('Profile Info', () => {
       },
     )
 
-    cy.get('.moj-alert').should('contain.text', 'Key workers could not be assigned to 1 prisoner')
-    cy.findByText('This is because there are not enough key workers with available capacity.').should('exist')
-    cy.findByText('To assign unallocated prisoners, you can:').should('exist')
-    cy.findByText('view all prisoners without a key worker and manually allocate key workers').should('exist')
-    cy.findByText('increase the capacity of your key workers').should('exist')
+    cy.findByText('Sorry, there is a problem with the service').should('exist')
   })
 
   it('should show success message on deallocation', () => {
