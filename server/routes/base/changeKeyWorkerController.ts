@@ -3,6 +3,7 @@ import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService
 import { lastNameCommaFirstName } from '../../utils/formatUtils'
 import { components } from '../../@types/keyWorker'
 import { FLASH_KEY__COUNT, FLASH_KEY__API_ERROR } from '../../utils/constants'
+import { SelectKeyworkerSchemaType } from './selectKeyworkerSchema'
 
 export class ChangeKeyWorkerController {
   constructor(readonly keyworkerApiService: KeyworkerApiService) {}
@@ -26,7 +27,11 @@ export class ChangeKeyWorkerController {
     }
   }
 
-  submitToApi = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  submitToApi = async (
+    req: Request<unknown, unknown, SelectKeyworkerSchemaType>,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
     const apiBody: components['schemas']['PersonStaffAllocations'] = {
       allocations: [],
       deallocations: [],
@@ -51,7 +56,12 @@ export class ChangeKeyWorkerController {
 
     req.flash(FLASH_KEY__COUNT, String(apiBody.allocations.length + apiBody.deallocations.length))
 
-    await this.keyworkerApiService.putAllocationDeallocations(req, res, res.locals.user.getActiveCaseloadId()!, apiBody)
+    await this.keyworkerApiService.putAllocationDeallocations(
+      req as Request,
+      res,
+      res.locals.user.getActiveCaseloadId()!,
+      apiBody,
+    )
 
     next()
   }
