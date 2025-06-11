@@ -29,7 +29,7 @@ export class AssignStaffRoleController {
       }
     }
 
-    return res.render('assign-staff-role/view', {
+    return res.render('manage-staff-roles/view', {
       backUrl: `/${res.locals.policyPath}`,
       query: req.journeyData.assignStaffRole!.query,
       searchResults: req.journeyData.assignStaffRole!.searchResults,
@@ -39,7 +39,7 @@ export class AssignStaffRoleController {
   POST = async (req: Request, res: Response) => {
     req.journeyData.assignStaffRole!.query = req.body.query
     delete req.journeyData.assignStaffRole!.searchResults
-    res.redirect('assign-staff-role')
+    res.redirect('manage-staff-roles')
   }
 
   selectStaff = async (req: Request<unknown, unknown, unknown, { staffId?: string }>, res: Response) => {
@@ -49,7 +49,7 @@ export class AssignStaffRoleController {
       req.journeyData.assignStaffRole!.staff = staff
       res.redirect('role')
     } else {
-      res.redirect('../assign-staff-role')
+      res.redirect('../manage-staff-roles')
     }
   }
 }

@@ -98,11 +98,14 @@ context('test / homepage', () => {
     if (!readonly) {
       cy.get('h2 > .card__link')
         .eq(3)
-        .should('contain.text', 'Make someone a key worker')
-        .and('have.attr', 'href', '/key-worker/assign-staff-role')
+        .should('contain.text', 'Manage key worker role')
+        .and('have.attr', 'href', '/key-worker/manage-staff-roles')
       cy.get('.card__description')
         .eq(3)
-        .should('contain.text', 'Assign the key worker role to staff members in your establishment.')
+        .should(
+          'contain.text',
+          'Assign or remove the key worker role for individual staff members in your establishment.',
+        )
       cy.get('h2 > .card__link')
         .eq(4)
         .should('contain.text', 'Manage your establishment’s key worker settings')
