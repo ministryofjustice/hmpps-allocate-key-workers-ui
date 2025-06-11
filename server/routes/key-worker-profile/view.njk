@@ -21,12 +21,14 @@
 
     <div class="govuk-grid-row govuk-!-margin-0">
       <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0">{{ keyworker | firstNameSpaceLastName }}</h1>
-      <p class="govuk-!-margin-left-2 govuk-!-display-inline-block govuk-!-margin-0 "> {{ statusTag({ text: status.description }) }} </p>
+      <p class="govuk-!-margin-left-2 govuk-!-display-inline-block govuk-!-margin-0 ">
+        {{ statusTag({ text: status.description }) }}
+      </p>
       {% if user.permissions.allocate %}
         <a class="govuk-!-margin-left-2 govuk-link govuk-link--no-visited-state govuk-!-display-inline-block " href="../start-update-key-worker/{{ keyworker.staffId }}?proceedTo=update-capacity-status">Update capacity and status</a>
       {% endif %}
     </div>
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-quarter left-aligned">
@@ -50,7 +52,7 @@
       </div>
     </div>
 
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
 
     <h2 class="govuk-body-l">
       <strong>Statistics for period:</strong>
@@ -74,7 +76,7 @@
       <p>Select key workers from the dropdown lists to reallocate or deallocate prisoners.</p>
       <p>Key workers will only be allocated when you save your changes.</p>
 
-      <br />
+      <br/>
     {% endif %}
 
     <h2 class="govuk-heading-m govuk-!-display-inline">Current allocations</h2>
@@ -170,15 +172,15 @@
 
         {{ mojPagination(allocations.length) }}
 
+        {% if user.permissions.allocate %}
+          {{ submitButton({
+            text: "Save changes",
+            preventDoubleClick: true
+          }) }}
+        {% endif %}
+
       {% else %}
         <p class="govuk-!-margin-bottom-6">There are no allocations for this keyworker.</p>
-      {% endif %}
-
-      {% if user.permissions.allocate %}
-        {{ submitButton({
-          text: "Save changes",
-          preventDoubleClick: true
-        }) }}
       {% endif %}
     </form>
   </div>

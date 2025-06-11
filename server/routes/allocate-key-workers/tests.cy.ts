@@ -261,12 +261,19 @@ context('/allocate-key-workers', () => {
         .should('contain.text', 'Key-Worker, Available-Active2 (allocations: 32)')
     }
 
+    cy.contains('Use the dropdown lists to assign key workers to prisoners or deallocate them.').should(
+      readonly ? 'not.exist' : 'exist',
+    )
+
+    cy.contains('Changes will only take affect when you select save').should(readonly ? 'not.exist' : 'exist')
+
     cy.contains(
-      'se the dropdown lists to assign key workers to prisoners or deallocate them. Changes will only take affect when you select save.',
+      'Select ‘Assign key workers automatically’ to get key worker recommendations for all prisoners without a current key worker.',
     ).should(readonly ? 'not.exist' : 'exist')
-    cy.contains(
-      'Select ‘Assign key workers automatically’ to get key worker recommendations for all prisoners without a current key worker. You should save any changes you’ve made before selecting this.',
-    ).should(readonly ? 'not.exist' : 'exist')
+
+    cy.contains('You should save any changes you’ve made before selecting this.').should(
+      readonly ? 'not.exist' : 'exist',
+    )
 
     cy.findByRole('button', { name: 'Assign key workers automatically' }).should(readonly ? 'not.exist' : 'exist')
     cy.findByRole('button', { name: 'Save changes' }).should(readonly ? 'not.exist' : 'exist')
