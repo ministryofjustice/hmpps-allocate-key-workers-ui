@@ -58,9 +58,15 @@ export interface AzureADUser extends BaseUser {
   authSource: 'azuread'
 }
 
+export enum UserPermissionLevel {
+  VIEW = 1,
+  ALLOCATE = 2,
+  ADMIN = 3,
+}
+
 export type HmppsUser = (PrisonUser | ProbationUser | ExternalUser | AzureADUser) & {
   caseLoads: CaseLoad[] | undefined
   activeCaseLoad?: CaseLoad | undefined
-  permissions: { view: boolean; allocate: boolean; admin: boolean }
+  permissions: UserPermissionLevel
   getActiveCaseloadId: () => string | undefined
 }

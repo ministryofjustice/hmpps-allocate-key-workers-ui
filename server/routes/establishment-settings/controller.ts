@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import { FLASH_KEY__SUCCESS_MESSAGE } from '../../utils/constants'
 import { SchemaType, parseFrequencyInWeeks } from './schema'
+import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 
 export class EstablishmentSettingsController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
@@ -21,7 +22,7 @@ export class EstablishmentSettingsController {
         res.locals.formResponses?.['frequencyInWeeks'] === undefined
           ? frequencyInWeeks
           : parseFrequencyInWeeks(res.locals.formResponses?.['frequencyInWeeks']),
-      isAdmin: res.locals.user.permissions.admin,
+      isAdmin: res.locals.user.permissions >= UserPermissionLevel.ADMIN,
       successMessage: req.flash(FLASH_KEY__SUCCESS_MESSAGE)[0],
     })
   }

@@ -2,62 +2,68 @@ import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { services } from '../services'
 import logger from '../../logger'
 import AuthorisedRoles from '../authentication/authorisedRoles'
+import { HmppsUser, UserPermissionLevel } from '../interfaces/hmppsUser'
 
 function hasRole(res: Response, ...roles: AuthorisedRoles[]): boolean {
   return roles.some(role => res.locals.user.userRoles.includes(role))
 }
 
 export const requireAllocateRole = (req: Request, res: Response, next: NextFunction) => {
-  if (res.locals.user.permissions.allocate) {
+  if (res.locals.user.permissions >= UserPermissionLevel.ALLOCATE) {
     return next()
   }
 
   return res.redirect(req.headers['referer'] || '/')
 }
 
-type PermissionCriteria = {
-  requirePrisonEnabled: boolean
-  hasAnyOfRoles: ('admin' | 'view' | 'allocate')[]
+export const hasPermission = (user: HmppsUser, permission: 'view' | 'allocate' | 'admin') => {
+  switch (permission) {
+    case 'admin':
+      return user.permissions >= UserPermissionLevel.ADMIN
+    case 'allocate':
+      return user.permissions >= UserPermissionLevel.ALLOCATE
+    case 'view':
+      return user.permissions >= UserPermissionLevel.VIEW
+    default:
+      return false
+  }
 }
 
-type PermissionResult = 'allow' | 'not-authorised' | 'service-not-enabled'
+type PermissionCriteria = {
+  requirePrisonEnabled: boolean
+  minimumPermission: UserPermissionLevel
+}
+
+enum PermissionResult {
+  ALLOW,
+  NOT_AUTHORISED,
+  SERVICE_NOT_ENABLED,
+}
 
 const checkPermission = (criteria: PermissionCriteria, req: Request, res: Response): PermissionResult => {
   if (criteria.requirePrisonEnabled && !req.middleware!.prisonConfiguration!.isEnabled) {
-    return 'service-not-enabled'
+    return PermissionResult.SERVICE_NOT_ENABLED
   }
-  for (const role of criteria.hasAnyOfRoles) {
-    switch (role) {
-      case 'admin':
-        if (res.locals.user.permissions.admin) return 'allow'
-        break
-      case 'allocate':
-        if (res.locals.user.permissions.allocate) return 'allow'
-        break
-      case 'view':
-        if (res.locals.user.permissions.view) return 'allow'
-        break
-      default:
-        break
-    }
+  if (res.locals.user.permissions >= criteria.minimumPermission) {
+    return PermissionResult.ALLOW
   }
-  return 'not-authorised'
+  return PermissionResult.NOT_AUTHORISED
 }
 
 export const requirePermissionsAndConfig =
   (...criteriaList: PermissionCriteria[]) =>
   (req: Request, res: Response, next: NextFunction) => {
-    let result: PermissionResult = 'service-not-enabled'
+    let result: PermissionResult = PermissionResult.NOT_AUTHORISED
     for (const criteria of criteriaList) {
       result = checkPermission(criteria, req, res)
-      if (result === 'allow') break
+      if (result === PermissionResult.ALLOW) break
     }
     switch (result) {
-      case 'allow':
+      case PermissionResult.ALLOW:
         return next()
-      case 'not-authorised':
+      case PermissionResult.NOT_AUTHORISED:
         return res.redirect('/not-authorised')
-      case 'service-not-enabled':
+      case PermissionResult.SERVICE_NOT_ENABLED:
       default:
         return res.render('pages/service-not-enabled')
     }
@@ -74,11 +80,14 @@ export function populateUserPermissionsAndPrisonConfig(): RequestHandler {
         res.locals.user.userRoles.includes(AuthorisedRoles.KEYWORKER_MONITOR) ||
         (await keyworkerApiService.isKeyworker(req, prisonCode, res.locals.user.username))
 
-      res.locals.user.permissions = {
-        view: userViewPermission || hasRole(res, AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KW_MIGRATION),
-        allocate: hasRole(res, AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KW_MIGRATION),
-        admin: hasRole(res, AuthorisedRoles.KW_MIGRATION),
+      if (hasRole(res, AuthorisedRoles.KW_MIGRATION)) {
+        res.locals.user.permissions = UserPermissionLevel.ADMIN
+      } else if (hasRole(res, AuthorisedRoles.OMIC_ADMIN)) {
+        res.locals.user.permissions = UserPermissionLevel.ALLOCATE
+      } else if (userViewPermission) {
+        res.locals.user.permissions = UserPermissionLevel.VIEW
       }
+
       req.middleware ??= {}
       switch (req.params['policy']) {
         case 'key-worker':

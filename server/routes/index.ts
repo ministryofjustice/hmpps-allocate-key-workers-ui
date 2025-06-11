@@ -17,6 +17,7 @@ import {
 } from '../middleware/permissionsMiddleware'
 import { JourneyRouter } from './base/routes'
 import breadcrumbs from '../middleware/breadcrumbs'
+import { UserPermissionLevel } from '../interfaces/hmppsUser'
 
 export default function routes(services: Services) {
   const { router, get } = JourneyRouter()
@@ -28,11 +29,11 @@ export default function routes(services: Services) {
   const adminOverridingPermission = requirePermissionsAndConfig(
     {
       requirePrisonEnabled: false,
-      hasAnyOfRoles: ['admin'],
+      minimumPermission: UserPermissionLevel.ADMIN,
     },
     {
       requirePrisonEnabled: true,
-      hasAnyOfRoles: ['allocate', 'view'],
+      minimumPermission: UserPermissionLevel.VIEW,
     },
   )
 
@@ -45,7 +46,7 @@ export default function routes(services: Services) {
     '/staff-profile/:staffId',
     requirePermissionsAndConfig({
       requirePrisonEnabled: false,
-      hasAnyOfRoles: ['allocate', 'view'],
+      minimumPermission: UserPermissionLevel.VIEW,
     }),
     StaffProfileRoutes(services),
   )
@@ -53,7 +54,7 @@ export default function routes(services: Services) {
   router.use(
     requirePermissionsAndConfig({
       requirePrisonEnabled: true,
-      hasAnyOfRoles: ['allocate', 'view'],
+      minimumPermission: UserPermissionLevel.VIEW,
     }),
   )
 

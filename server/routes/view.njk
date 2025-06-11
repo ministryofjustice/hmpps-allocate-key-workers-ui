@@ -40,7 +40,7 @@
                 </div>
               </div>
 
-              {% if user.permissions.allocate %}
+              {% if user | hasPermission('allocate') %}
                 <div class="govuk-grid-column-one-third card-group__item">
                   <div class="card card--clickable">
                     <h2 class="govuk-heading-m card__heading">
@@ -52,7 +52,7 @@
               {% endif %}
             {% endif %}
 
-              {% if user.permissions.allocate or user.permissions.admin %}
+              {% if user | hasPermission('allocate') %}
                 <div class="govuk-grid-column-one-third card-group__item">
                   <div class="card card--clickable">
                     <h2 class="govuk-heading-m card__heading">

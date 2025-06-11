@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { z } from 'zod'
 import { createSchema } from '../../middleware/validationMiddleware'
 import { validateNumberBetween } from '../../utils/validation/validateNumber'
+import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 
 export const parseFrequencyInWeeks = (val: string) => {
   switch (val) {
@@ -30,11 +31,12 @@ export const schemaFactory = async (_req: Request, res: Response) =>
       1,
       999,
     ),
-    frequencyInWeeks: res.locals.user.permissions.admin
-      ? z
-          .enum(['1WK', '2WK', '3WK', '4WK'], { message: 'Select how often sessions should take place' })
-          .transform(parseFrequencyInWeeks)
-      : z.number().optional(),
+    frequencyInWeeks:
+      res.locals.user.permissions >= UserPermissionLevel.ADMIN
+        ? z
+            .enum(['1WK', '2WK', '3WK', '4WK'], { message: 'Select how often sessions should take place' })
+            .transform(parseFrequencyInWeeks)
+        : z.number().optional(),
   })
 
 export type SchemaType = z.infer<Awaited<ReturnType<typeof schemaFactory>>>
