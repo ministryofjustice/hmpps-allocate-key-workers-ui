@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { EnhancedRestClientBuilder } from '../../data'
 import KeyworkerApiClient, { KeyworkerConfigRequest, ServiceConfigInfo } from './keyworkerApiClient'
 import { components } from '../../@types/keyWorker'
+import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 
 export default class KeyworkerApiService {
   constructor(private readonly keyworkerApiClientBuilder: EnhancedRestClientBuilder<KeyworkerApiClient>) {}
@@ -37,7 +38,7 @@ export default class KeyworkerApiService {
     const config = req.middleware!.prisonConfiguration!
 
     const requestBody = {
-      isEnabled: config.isEnabled,
+      isEnabled: res.locals.user.permissions >= UserPermissionLevel.ADMIN || config.isEnabled,
       hasPrisonersWithHighComplexityNeeds: config.hasPrisonersWithHighComplexityNeeds,
       allowAutoAllocation,
       maximumCapacity,

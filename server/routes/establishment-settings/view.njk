@@ -6,7 +6,7 @@
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 
 {% set fullWidth = true %}
-{% set pageTitle = "When will the key worker return from annual leave? - Key worker profile" %}
+{% set pageTitle = "Establishment settings for " + prisonName + " - " + policyName | sentenceCase %}
 
 {% block innerContent %}
   <div class="govuk-width-container govuk-body">
@@ -36,13 +36,13 @@
             errorMessage: validationErrors | findError('allowAutoAllocation'),
             fieldset: {
               legend: {
-                text: "Allow key workers to be recommended automatically",
+                text: "Allow " + policyName + "s to be recommended automatically",
                 isPageHeading: false,
                 classes: "govuk-fieldset__legend--m"
               }
             },
             hint: {
-              text: "This will enable you to use the ‘recommend key workers automatically’ option on the allocation page."
+              text: "This will enable you to use the ‘recommend " + policyName + "s automatically’ option on the allocation page."
             },
             items: [
               {
@@ -65,12 +65,12 @@
             errorMessage: validationErrors | findError('maximumCapacity'),
             classes: "govuk-input--width-2 govuk-!-margin-bottom-6",
             label: {
-              text: 'Maximum number of prisoners to be allocated to each key worker',
+              text: 'Maximum number of prisoners to be allocated to each ' + policyName,
               classes: "govuk-label--m",
               isPageHeading: false
             },
             hint: {
-              text: "The ‘recommend key workers automatically’ function will not recommend prisoners to key workers over this limit. You’ll still be able to manually allocate more prisoners than this to a key worker."
+              text: "The ‘recommend " + policyName + "s automatically’ function will not recommend prisoners to " + policyName + "s over this limit. You’ll still be able to manually allocate more prisoners than this to a " + policyName + "."
             }
           }) }}
 
@@ -81,7 +81,7 @@
               errorMessage: validationErrors | findError('frequencyInWeeks'),
               classes: "govuk-!-margin-bottom-6",
               label: {
-                text: "How often should key worker sessions take place?",
+                text: "How often should " + policyName + " sessions take place?",
                 classes: "govuk-label--m",
                 isPageHeading: false
               },
