@@ -105,4 +105,8 @@ export default class KeyworkerApiService {
   searchStaff(req: Request, res: Response, searchOptions: components['schemas']['StaffSearchRequest']) {
     return this.keyworkerApiClientBuilder(req, res).searchStaff(res.locals.user.getActiveCaseloadId()!, searchOptions)
   }
+
+  allocationRecommendations(req: Request, prisonCode: string) {
+    return this.keyworkerApiClientBuilder(req).allocationRecommendations(prisonCode)
+  }
 }

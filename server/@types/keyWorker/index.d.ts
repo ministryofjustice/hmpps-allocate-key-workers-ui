@@ -95,7 +95,11 @@ export interface paths {
       path?: never
       cookie?: never
     }
-    get?: never
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
+    get: operations['getPrisonConfiguration']
     /** @description
      *
      *     Requires one of the following roles:
@@ -459,7 +463,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/prisons/{prisonCode}/prisoners/keyworker-recommendations': {
+  '/prisons/{prisonCode}/prisoners/allocation-recommendations': {
     parameters: {
       query?: never
       header?: never
@@ -469,8 +473,8 @@ export interface paths {
     /** @description
      *
      *     Requires one of the following roles:
-     *     * ROLE_KEY_WORKER__RO */
-    get: operations['getKeyworkerRecommendations']
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
+    get: operations['getAllocationRecommendations']
     put?: never
     post?: never
     delete?: never
@@ -510,7 +514,7 @@ export interface paths {
      *
      *     Requires one of the following roles:
      *     * ROLE_KEY_WORKER__RO */
-    get: operations['getPrisonConfiguration']
+    get: operations['getPrisonKeyworkerConfiguration']
     put?: never
     post?: never
     delete?: never
@@ -758,9 +762,7 @@ export interface paths {
     trace?: never
   }
 }
-
 export type webhooks = Record<string, never>
-
 export interface components {
   schemas: {
     StaffJobClassificationRequest: {
@@ -811,8 +813,6 @@ export interface components {
       /** Format: int32 */
       capacity: number
       /** Format: int32 */
-      maximumCapacity: number
-      /** Format: int32 */
       frequencyInWeeks: number
       hasPrisonersWithHighComplexityNeeds?: boolean
     }
@@ -823,9 +823,8 @@ export interface components {
       /** Format: int32 */
       capacity: number
       /** Format: int32 */
-      maximumCapacity: number
-      /** Format: int32 */
       frequencyInWeeks: number
+      maximumCapacity: number
     }
     ErrorResponse: {
       /** Format: int32 */
@@ -1207,11 +1206,17 @@ export interface components {
     }
     RecommendedAllocation: {
       personIdentifier: string
-      keyworker: components['schemas']['Keyworker']
+      staff: components['schemas']['StaffSummary']
     }
     RecommendedAllocations: {
       allocations: components['schemas']['RecommendedAllocation'][]
-      noAvailableKeyworkersFor: string[]
+      noAvailableStaffFor: string[]
+    }
+    StaffSummary: {
+      /** Format: int64 */
+      staffId: number
+      firstName: string
+      lastName: string
     }
     KeyworkerDetails: {
       keyworker: components['schemas']['KeyworkerWithSchedule']
@@ -1715,9 +1720,7 @@ export interface components {
   headers: never
   pathItems: never
 }
-
 export type $defs = Record<string, never>
-
 export interface operations {
   modifyStaffJob: {
     parameters: {
@@ -1861,6 +1864,33 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+    }
+  }
+  getPrisonConfiguration: {
+    parameters: {
+      query?: never
+      header: {
+        /** @description
+         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
+         *          */
+        Policy: string
+      }
+      path: {
+        prisonCode: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['PrisonConfigResponse']
+        }
       }
     }
   }
@@ -2623,7 +2653,7 @@ export interface operations {
       }
     }
   }
-  getKeyworkerRecommendations: {
+  getAllocationRecommendations: {
     parameters: {
       query?: never
       header?: never
@@ -2704,7 +2734,7 @@ export interface operations {
       }
     }
   }
-  getPrisonConfiguration: {
+  getPrisonKeyworkerConfiguration: {
     parameters: {
       query?: never
       header?: never

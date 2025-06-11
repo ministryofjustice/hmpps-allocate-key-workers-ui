@@ -115,7 +115,7 @@ export class KeyWorkerStatisticsController {
       dateTo: formatDateConcise(nowSpan.end),
       comparisonDateFrom: formatDateConcise(previousSpan.start),
       comparisonDateTo: formatDateConcise(previousSpan.end),
-      backUrl: 'previous-page',
+      showBreadcrumbs: true,
     })
   }
 

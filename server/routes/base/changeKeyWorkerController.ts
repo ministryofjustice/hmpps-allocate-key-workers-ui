@@ -56,16 +56,12 @@ export class ChangeKeyWorkerController {
 
     req.flash(FLASH_KEY__COUNT, String(apiBody.allocations.length + apiBody.deallocations.length))
 
-    try {
-      await this.keyworkerApiService.putAllocationDeallocations(
-        req as Request,
-        res,
-        res.locals.user.getActiveCaseloadId()!,
-        apiBody,
-      )
-    } catch {
-      req.flash(FLASH_KEY__API_ERROR, 'ALLOCATE_FAILED')
-    }
+    await this.keyworkerApiService.putAllocationDeallocations(
+      req as Request,
+      res,
+      res.locals.user.getActiveCaseloadId()!,
+      apiBody,
+    )
 
     next()
   }
