@@ -41,7 +41,6 @@ export default class KeyworkerApiService {
       isEnabled: res.locals.user.permissions >= UserPermissionLevel.ADMIN || config.isEnabled,
       hasPrisonersWithHighComplexityNeeds: config.hasPrisonersWithHighComplexityNeeds,
       allowAutoAllocation,
-      maximumCapacity,
       capacity: maximumCapacity,
       frequencyInWeeks: frequencyInWeeks ?? config.frequencyInWeeks,
     }
