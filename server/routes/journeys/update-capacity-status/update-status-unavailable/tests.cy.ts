@@ -94,7 +94,7 @@ context('/update-capacity-status/update-status-unavailable', () => {
     journeyId = uuidV4()
 
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/key-worker/${journeyId}/start-update-key-worker/488095?proceedTo=update-capacity-status`, {
+    cy.visit(`/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status`, {
       failOnStatusCode: false,
     })
 

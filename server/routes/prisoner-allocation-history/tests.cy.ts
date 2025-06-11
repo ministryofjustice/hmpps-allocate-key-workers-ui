@@ -28,14 +28,14 @@ context('Prisoner Allocation History', () => {
     cy.findByRole('link', { name: /back/i }).should(
       'have.attr',
       'href',
-      '/key-worker/allocate-key-workers?query=&location=&excludeActiveAllocations=true',
+      '/key-worker/allocate-staff?query=&location=&excludeActiveAllocations=true',
     )
   })
 
   it('happy path', () => {
     navigateToTestPage()
 
-    cy.findByRole('link', { name: /back/i }).should('have.attr', 'href', '/key-worker/allocate-key-workers')
+    cy.findByRole('link', { name: /back/i }).should('have.attr', 'href', '/key-worker/allocate-staff')
 
     cy.get('.govuk-link--no-visited-state').eq(0).should('have.text', 'Cat, Tabby')
     cy.findByText('A9965EA')

@@ -5,7 +5,7 @@ import { components } from '../../@types/keyWorker'
 import { FLASH_KEY__COUNT, FLASH_KEY__API_ERROR } from '../../utils/constants'
 import { SelectKeyworkerSchemaType } from './selectKeyworkerSchema'
 
-export class ChangeKeyWorkerController {
+export class ChangeStaffController {
   constructor(readonly keyworkerApiService: KeyworkerApiService) {}
 
   getChangeKeyworkerData = async (req: Request, res: Response) => {
