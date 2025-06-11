@@ -116,13 +116,30 @@ context('test / homepage', () => {
     }
   }
 
-  it('should show service unavailable if prison does not have service enabled', () => {
+  it('should show service unavailable to non-admin user if prison does not have service enabled', () => {
     cy.task('stubSignIn')
     cy.task('stubPrisonNotEnabled')
 
     navigateToTestPage()
 
-    cy.findByText('Service not enabled').should('be.visible')
+    cy.findByText('Key worker service not enabled').should('be.visible')
+  })
+
+  it('should show establishment config tile to admin user if prison does not have service enabled', () => {
+    cy.task('stubSignIn', {
+      roles: [AuthorisedRoles.KW_MIGRATION],
+    })
+    cy.task('stubKeyworkerApiStatusIsKeyworker')
+    cy.task('stubPrisonNotEnabled')
+
+    navigateToTestPage()
+
+    cy.get('h2 > .card__link').should('have.length', 1)
+    cy.findByRole('link', { name: 'Manage your establishment’s key worker settings' }).should(
+      'have.attr',
+      'href',
+      '/key-worker/establishment-settings',
+    )
   })
 
   const navigateToTestPage = () => {

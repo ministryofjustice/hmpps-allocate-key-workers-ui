@@ -15,7 +15,55 @@ export const requireAllocateRole = (req: Request, res: Response, next: NextFunct
   return res.redirect(req.headers['referer'] || '/')
 }
 
-export function populateUserPermissions(): RequestHandler {
+type PermissionCriteria = {
+  requirePrisonEnabled: boolean
+  hasAnyOfRoles: ('admin' | 'view' | 'allocate')[]
+}
+
+type PermissionResult = 'allow' | 'not-authorised' | 'service-not-enabled'
+
+const checkPermission = (criteria: PermissionCriteria, req: Request, res: Response): PermissionResult => {
+  if (criteria.requirePrisonEnabled && !req.middleware!.prisonConfiguration!.isEnabled) {
+    return 'service-not-enabled'
+  }
+  for (const role of criteria.hasAnyOfRoles) {
+    switch (role) {
+      case 'admin':
+        if (res.locals.user.permissions.admin) return 'allow'
+        break
+      case 'allocate':
+        if (res.locals.user.permissions.allocate) return 'allow'
+        break
+      case 'view':
+        if (res.locals.user.permissions.view) return 'allow'
+        break
+      default:
+        break
+    }
+  }
+  return 'not-authorised'
+}
+
+export const requirePermissionsAndConfig =
+  (...criteriaList: PermissionCriteria[]) =>
+  (req: Request, res: Response, next: NextFunction) => {
+    let result: PermissionResult = 'service-not-enabled'
+    for (const criteria of criteriaList) {
+      result = checkPermission(criteria, req, res)
+      if (result === 'allow') break
+    }
+    switch (result) {
+      case 'allow':
+        return next()
+      case 'not-authorised':
+        return res.redirect('/not-authorised')
+      case 'service-not-enabled':
+      default:
+        return res.render('pages/service-not-enabled')
+    }
+  }
+
+export function populateUserPermissionsAndPrisonConfig(): RequestHandler {
   const { keyworkerApiService } = services()
 
   return async (req, res, next) => {
@@ -48,14 +96,6 @@ export function populateUserPermissions(): RequestHandler {
       }
 
       req.middleware.prisonConfiguration = await keyworkerApiService.getPrisonConfig(req, prisonCode)
-
-      if (!req.middleware.prisonConfiguration.isEnabled) {
-        return res.render('pages/service-not-enabled')
-      }
-
-      if (!res.locals.user.permissions.view && !res.locals.user.permissions.allocate) {
-        return res.redirect('/not-authorised')
-      }
 
       return next()
     } catch (e) {

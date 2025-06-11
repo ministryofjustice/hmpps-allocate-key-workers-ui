@@ -11,7 +11,10 @@ import JourneyRoutes from './journeys/routes'
 import { dataAccess } from '../data'
 import { EstablishmentSettingsRoutes } from './establishment-settings/routes'
 import { StaffDataRoutes } from './staff-data/routes'
-import { populateUserPermissions } from '../middleware/permissionsMiddleware'
+import {
+  populateUserPermissionsAndPrisonConfig,
+  requirePermissionsAndConfig,
+} from '../middleware/permissionsMiddleware'
 import { JourneyRouter } from './base/routes'
 import breadcrumbs from '../middleware/breadcrumbs'
 
@@ -19,18 +22,44 @@ export default function routes(services: Services) {
   const { router, get } = JourneyRouter()
   const controller = new HomePageController()
 
-  router.use(populateUserPermissions())
+  router.use(populateUserPermissionsAndPrisonConfig())
   router.use(breadcrumbs())
 
-  get('/', controller.GET)
+  const adminOverridingPermission = requirePermissionsAndConfig(
+    {
+      requirePrisonEnabled: false,
+      hasAnyOfRoles: ['admin'],
+    },
+    {
+      requirePrisonEnabled: true,
+      hasAnyOfRoles: ['allocate', 'view'],
+    },
+  )
+
+  get('/', adminOverridingPermission, controller.GET)
 
   router.use(removeTrailingSlashMiddleware)
 
+  router.use('/establishment-settings', adminOverridingPermission, EstablishmentSettingsRoutes(services))
+  router.use(
+    '/staff-profile/:staffId',
+    requirePermissionsAndConfig({
+      requirePrisonEnabled: false,
+      hasAnyOfRoles: ['allocate', 'view'],
+    }),
+    StaffProfileRoutes(services),
+  )
+
+  router.use(
+    requirePermissionsAndConfig({
+      requirePrisonEnabled: true,
+      hasAnyOfRoles: ['allocate', 'view'],
+    }),
+  )
+
   router.use('/staff-statistics', StaffStatisticsRoutes(services))
-  router.use('/staff-profile/:staffId', StaffProfileRoutes(services))
   router.use('/allocate-staff', AllocateStaffRoutes(services))
   router.use('/prisoner-allocation-history', PrisonerAllocationHistoryRoutes(services))
-  router.use('/establishment-settings', EstablishmentSettingsRoutes(services))
   router.use('/staff-data', StaffDataRoutes(services))
   router.use('/manage-staff', StaffMembersRoutes(services))
 
