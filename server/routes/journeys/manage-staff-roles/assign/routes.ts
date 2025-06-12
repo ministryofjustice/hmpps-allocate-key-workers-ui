@@ -1,9 +1,9 @@
-import { Services } from '../../../services'
-import { JourneyRouter } from '../../base/routes'
+import { Services } from '../../../../services'
+import { JourneyRouter } from '../../../base/routes'
 import { AssignStaffRoleController } from './controller'
 import { schema } from './schema'
-import { validate } from '../../../middleware/validationMiddleware'
-import redirectCheckAnswersMiddleware from '../../../middleware/journey/redirectCheckAnswersMiddleware'
+import { validate } from '../../../../middleware/validationMiddleware'
+import redirectCheckAnswersMiddleware from '../../../../middleware/journey/redirectCheckAnswersMiddleware'
 
 export const AssignStaffRoleRoutes = (services: Services) => {
   const { router, get, post } = JourneyRouter()
