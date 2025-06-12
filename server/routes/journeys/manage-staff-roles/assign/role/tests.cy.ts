@@ -39,7 +39,7 @@ context('/manage-staff-roles/assign/role', () => {
   })
 
   const verifyPageContent = () => {
-    cy.title().should('equal', 'Are they a prison officer - Key worker - DPS')
+    cy.title().should('equal', 'Are they a prison officer - Key workers - DPS')
 
     cy.findByRole('heading', {
       name: 'Is this individual a prison officer?',

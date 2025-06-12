@@ -42,6 +42,7 @@ context('/manage-staff-roles', () => {
   })
 
   const verifyPageContent = () => {
+    cy.title().should('equal', 'Add or remove key worker role - Key workers - DPS')
     cy.findByRole('heading', {
       name: 'Do you want to make someone a key worker or remove the role from someone?',
     }).should('be.visible')

@@ -15,7 +15,7 @@ context('/manage-staff-roles/assign/not-po', () => {
     navigateToTestPage()
     cy.url().should('match', /\/assign\/not-po$/)
 
-    cy.title().should('equal', 'Not a prison officer - Key worker - DPS')
+    cy.title().should('equal', 'Not a prison officer - Key workers - DPS')
 
     cy.findByRole('heading', {
       name: 'You cannot make this person a key worker',
