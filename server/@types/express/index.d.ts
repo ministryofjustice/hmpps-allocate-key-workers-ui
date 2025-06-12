@@ -46,6 +46,7 @@ export type AssignStaffRoleJourney = Partial<{
   searchResults: StaffSummary[]
   staff: StaffSummary
   isPrisonOfficer: boolean
+  workingHour: number
 }>
 
 export declare global {

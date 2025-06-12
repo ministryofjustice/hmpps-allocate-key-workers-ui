@@ -6,6 +6,7 @@ import { validate } from '../../../../middleware/validationMiddleware'
 import redirectCheckAnswersMiddleware from '../../../../middleware/journey/redirectCheckAnswersMiddleware'
 import { SelectPrisonOfficerRoleRoutes } from './role/routes'
 import { NotPrisonOfficerRoleRoutes } from './not-prison-officer/routes'
+import { WorkingPatternRoutes } from './working-pattern/routes'
 
 export const AssignStaffRoleRoutes = (services: Services) => {
   const { router, get, post } = JourneyRouter()
@@ -20,6 +21,7 @@ export const AssignStaffRoleRoutes = (services: Services) => {
 
   router.use('/role', SelectPrisonOfficerRoleRoutes())
   router.use('/not-prison-officer', NotPrisonOfficerRoleRoutes())
+  router.use('/working-pattern', WorkingPatternRoutes())
 
   return router
 }

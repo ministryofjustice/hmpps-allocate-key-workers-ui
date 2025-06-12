@@ -1,0 +1,41 @@
+{% extends "partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = "Working pattern" %}
+
+{% block innerContent %}
+  <div class="govuk-width-container govuk-body">
+    <form method="post">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      {{ govukRadios({
+        name: "workingPattern",
+        errorMessage: validationErrors | findError('workingPattern'),
+        fieldset: {
+          legend: {
+            text: "What is this individual’s working pattern?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--xl"
+          }
+        },
+        items: [
+          {
+            value: 'FULL_TIME',
+            text: "Full-time",
+            checked: workingHour === 35
+          },
+          {
+            value: 'PART_TIME',
+            text: "Part-time",
+            checked: workingHour === 6
+          }
+        ]
+      }) }}
+
+      {{ govukButton({
+        text: "Continue",
+        preventDoubleClick: true
+      }) }}
+    </form>
+  </div>
+{% endblock %}
