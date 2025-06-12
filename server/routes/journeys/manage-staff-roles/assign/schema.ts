@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { createSchema } from '../../../middleware/validationMiddleware'
+import { createSchema } from '../../../../middleware/validationMiddleware'
 
 const ERROR_MSG = 'Enter a name, work email address or username'
 
