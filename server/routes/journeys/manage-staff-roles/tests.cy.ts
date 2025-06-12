@@ -1,6 +1,6 @@
 import { v4 as uuidV4 } from 'uuid'
 
-context('/assign-staff-role', () => {
+context('/manage-staff-roles', () => {
   let journeyId = uuidV4()
 
   const getSearchInput = () => cy.findByRole('textbox', { name: 'Find a staff member' })
@@ -15,7 +15,7 @@ context('/assign-staff-role', () => {
 
   it('should search staff members', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/assign-staff-role$/)
+    cy.url().should('match', /\/manage-staff-roles$/)
 
     cy.title().should('equal', 'Make someone a key worker - Key worker - DPS')
     cy.findByRole('heading', { name: 'Make someone a key worker' }).should('be.visible')
@@ -44,14 +44,14 @@ context('/assign-staff-role', () => {
     cy.findByRole('link', { name: 'Doe, Joe' })
       .should('be.visible')
       .and('have.attr', 'href')
-      .should('match', /assign-staff-role\/select\?staffId=1001/)
+      .should('match', /manage-staff-roles\/select\?staffId=1001/)
     cy.contains('td', 'Doe, Joe').next().should('contain.text', 'joe.doe@email.com')
     cy.contains('td', 'Doe, Joe').next().next().should('contain.text', 'JOE_DOE')
   })
 
   it('should show no results when there is no match', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/assign-staff-role$/)
+    cy.url().should('match', /\/manage-staff-roles$/)
 
     cy.task('stubSearchStaff', [])
     getSearchInput().type('Joe')
@@ -63,7 +63,7 @@ context('/assign-staff-role', () => {
   const navigateToTestPage = () => {
     journeyId = uuidV4()
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/key-worker/${journeyId}/assign-staff-role`, {
+    cy.visit(`/key-worker/${journeyId}/manage-staff-roles`, {
       failOnStatusCode: false,
     })
   }
