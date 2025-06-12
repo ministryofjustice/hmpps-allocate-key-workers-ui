@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
-import KeyworkerApiService from '../../../services/keyworkerApi/keyworkerApiService'
-import { components } from '../../../@types/keyWorker'
+import KeyworkerApiService from '../../../../services/keyworkerApi/keyworkerApiService'
+import { components } from '../../../../@types/keyWorker'
 
 export class AssignStaffRoleController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
@@ -29,7 +29,7 @@ export class AssignStaffRoleController {
       }
     }
 
-    return res.render('manage-staff-roles/view', {
+    return res.render('manage-staff-roles/assign/view', {
       backUrl: `/${res.locals.policyPath}`,
       query: req.journeyData.assignStaffRole!.query,
       searchResults: req.journeyData.assignStaffRole!.searchResults,
@@ -39,7 +39,7 @@ export class AssignStaffRoleController {
   POST = async (req: Request, res: Response) => {
     req.journeyData.assignStaffRole!.query = req.body.query
     delete req.journeyData.assignStaffRole!.searchResults
-    res.redirect('manage-staff-roles')
+    res.redirect('assign')
   }
 
   selectStaff = async (req: Request<unknown, unknown, unknown, { staffId?: string }>, res: Response) => {
@@ -49,7 +49,7 @@ export class AssignStaffRoleController {
       req.journeyData.assignStaffRole!.staff = staff
       res.redirect('role')
     } else {
-      res.redirect('../manage-staff-roles')
+      res.redirect('../assign')
     }
   }
 }

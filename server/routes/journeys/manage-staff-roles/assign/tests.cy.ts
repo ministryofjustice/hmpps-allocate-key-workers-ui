@@ -15,7 +15,7 @@ context('/manage-staff-roles', () => {
 
   it('should search staff members', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/manage-staff-roles$/)
+    cy.url().should('match', /\/manage-staff-roles\/assign$/)
 
     cy.title().should('equal', 'Make someone a key worker - Key workers - DPS')
     cy.findByRole('heading', { name: 'Make someone a key worker' }).should('be.visible')
@@ -44,14 +44,14 @@ context('/manage-staff-roles', () => {
     cy.findByRole('link', { name: 'Doe, Joe' })
       .should('be.visible')
       .and('have.attr', 'href')
-      .should('match', /manage-staff-roles\/select\?staffId=1001/)
+      .should('match', /assign\/select\?staffId=1001/)
     cy.contains('td', 'Doe, Joe').next().should('contain.text', 'joe.doe@email.com')
     cy.contains('td', 'Doe, Joe').next().next().should('contain.text', 'JOE_DOE')
   })
 
   it('should show no results when there is no match', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/manage-staff-roles$/)
+    cy.url().should('match', /\/manage-staff-roles\/assign$/)
 
     cy.task('stubSearchStaff', [])
     getSearchInput().type('Joe')
@@ -63,7 +63,7 @@ context('/manage-staff-roles', () => {
   const navigateToTestPage = () => {
     journeyId = uuidV4()
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/key-worker/${journeyId}/manage-staff-roles`, {
+    cy.visit(`/key-worker/${journeyId}/manage-staff-roles/assign`, {
       failOnStatusCode: false,
     })
   }
