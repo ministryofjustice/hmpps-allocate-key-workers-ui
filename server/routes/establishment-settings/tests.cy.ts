@@ -143,6 +143,7 @@ context('/establishment-settings', () => {
   })
 
   const verifyPageCommonContent = () => {
+    cy.title().should('equal', 'Manage your establishment’s key worker settings - Key workers - DPS')
     cy.findByRole('heading', { name: 'Establishment settings for Leeds (HMP)' }).should('be.visible')
     cy.findByRole('radio', { name: 'Yes' }).should('exist').and('be.checked')
     getCapacityInput().should('be.visible').and('have.value', '9')

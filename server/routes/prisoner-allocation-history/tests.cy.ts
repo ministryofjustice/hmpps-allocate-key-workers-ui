@@ -34,7 +34,7 @@ context('Prisoner Allocation History', () => {
 
   it('happy path', () => {
     navigateToTestPage()
-
+    cy.title().should('equal', 'Prisoner key worker allocation history - Key workers - DPS')
     cy.findByRole('link', { name: /back/i }).should('have.attr', 'href', '/key-worker/allocate-staff')
 
     cy.get('.govuk-link--no-visited-state').eq(0).should('have.text', 'Cat, Tabby')

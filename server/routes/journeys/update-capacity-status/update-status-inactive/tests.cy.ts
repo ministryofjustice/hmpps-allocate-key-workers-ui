@@ -24,7 +24,7 @@ context('/update-capacity-status/update-status-inactive', () => {
   })
 
   const verifyPageContent = () => {
-    cy.title().should('equal', 'Change this key worker’s status to Inactive - Key worker profile - DPS')
+    cy.title().should('equal', 'Unavailable (inactive) - Key workers - DPS')
     cy.findByRole('heading', { name: 'Available-Active Key-Worker' }).should('be.visible')
     cy.get('.status-tag').eq(0).should('have.text', 'Active')
 

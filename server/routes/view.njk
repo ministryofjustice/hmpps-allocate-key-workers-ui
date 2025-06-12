@@ -1,10 +1,9 @@
 {% extends "partials/layout.njk" %}
 
-{% set pageTitle = policyName | sentenceCase %}
-{% set mainClasses = "app-container govuk-body" %}
+`{% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}
-  <h1 class="govuk-heading-l govuk-!-margin-bottom-6">{{ policyName | sentenceCase }}s</h1>
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-6">{{ (policyName or "NOT SET") | sentenceCase }}s</h1>
 
   <div class="homepage-content-container">
     <div class="homepage-content">

@@ -9,7 +9,7 @@
 {% from "partials/deallocateSuccessError/macro.njk" import deallocateSuccessError %}
 
 {% set fullWidth = true %}
-{% set pageTitle = "Allocate key workers to prisoners" %}
+{% set pageTitle = "Allocate [staffs] to prisoners" | policyAware(policyName) %}
 
 {% block pageHeader %}
   {{ deallocateSuccessError(apiError, count) }}
@@ -116,7 +116,7 @@
           {
             html: '<a class="govuk-link govuk-link--no-visited-state" href="/' + policyPath + '/prisoner-allocation-history/' + item.personIdentifier + searchQuery + '">View allocation history</a>' if item.hasAllocationHistory else ''
           }
-        ] | removeUndefined), rows) %}
+        ] | removeNullish), rows) %}
       {% endfor %}
 
       {{ mojPagination(records.length) }}
@@ -155,7 +155,7 @@
             {
               text: ""
             }
-          ] | removeUndefined,
+          ] | removeNullish,
           rows: rows
         }) }}
 

@@ -30,7 +30,7 @@ context('Manage key workers', () => {
 
     navigateToTestPage()
 
-    cy.title().should('equal', 'Manage key workers - DPS')
+    cy.title().should('equal', 'Manage key workers - Key workers - DPS')
 
     cy.get('.govuk-heading-l').should('contain.text', 'Manage key workers')
     cy.get('.govuk-heading-m').should('contain.text', 'Filter by')
