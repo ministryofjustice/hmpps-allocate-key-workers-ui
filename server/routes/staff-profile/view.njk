@@ -9,7 +9,7 @@
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
 
 {% set fullWidth = true %}
-{% set pageTitle = "Key Worker Profile" %}
+{% set pageTitle = "[staff] profile" | policyAware(policyName) %}
 
 {% block pageHeader %}
   {{ deallocateSuccessError(apiError, count) }}
@@ -114,7 +114,7 @@
               items: keyworkers | excludeCurrentKeyworker(keyworker) | conditionallyAddDeallocate(keyworker.staffId) | mergePrisonerKeyworkerIds(item.prisoner.prisonNumber) | addSelectValue('Select key worker')
             })
           } if user | hasPermission('allocate') else undefined
-        ] | removeUndefined), rows) %}
+        ] | removeNullish), rows) %}
     {% endfor %}
 
     <form method="post" >
@@ -166,7 +166,7 @@
             {
               text: "Change key worker"
             } if user | hasPermission('allocate') else undefined
-          ] | removeUndefined,
+          ] | removeNullish,
           rows: rows
         }) }}
 

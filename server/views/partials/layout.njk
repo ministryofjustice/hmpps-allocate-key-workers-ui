@@ -10,11 +10,14 @@
   {% endfor %}
 
   {% for css in feComponents.cssIncludes %}
-    <link href="{{ css }}" nonce="{{ cspNonce }}" rel="stylesheet" />
+    <link href="{{ css }}" nonce="{{ cspNonce }}" rel="stylesheet"/>
   {% endfor %}
 {% endblock %}
 
-{% block pageTitle %}{{pageTitle | default(applicationName)}} - DPS{% endblock %}
+{% block pageTitle %}
+  {% set policyNameAlias = (policyName | sentenceCase + 's') if policyName else undefined %}
+  {{[pageTitle, policyNameAlias, 'DPS'] | removeNullish | join(' - ')}}
+{% endblock %}
 
 {% block header %}
   {{ feComponents.header | safe }}
@@ -28,7 +31,7 @@
     }) }}
   {% endif %}
 
-  {% if showBreadcrumbs and breadcrumbs and (not backUrl) %}
+  {% if showBreadcrumbs and breadcrumbs and(not backUrl) %}
     <div class="csip-breadcrumbs govuk-!-display-none-print">
       <div class="csip-breadcrumbs__breadcrumbs">
         {{ govukBreadcrumbs({
@@ -51,8 +54,7 @@
   </div>
 {% endblock %}
 
-{% block bodyStart %}
-{% endblock %}
+{% block bodyStart %}{% endblock %}
 
 {% block footer %}
   {{ feComponents.footer | safe }}
@@ -61,7 +63,7 @@
 {% block bodyEnd %}
   {% if sentry and sentry.loaderScriptId %}
     <script nonce="{{ cspNonce }}">
-      window.sentryOnLoad = function() {
+      window.sentryOnLoad = function () {
         Sentry.init({
           release: "hmpps-alerts-ui@{{ version }}",
           environment: "{{ sentry.environment }}",
@@ -69,8 +71,10 @@
           replaysSessionSampleRate: {{ sentry.replaySampleRate }},
           replaysOnErrorSampleRate: {{ sentry.replayOnErrorSampleRate }},
           initialScope: {
-            user: { username: "{{ user.username }}" },
-          },
+            user: {
+              username: "{{ user.username }}"
+            }
+          }
         });
       };
     </script>

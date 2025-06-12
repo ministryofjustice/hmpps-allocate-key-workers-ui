@@ -183,6 +183,7 @@ context('/allocate-staff', () => {
   })
 
   const checkPageContentsNoFilter = (readonly = false) => {
+    cy.title().should('equal', 'Allocate key workers to prisoners - Key workers - DPS')
     cy.findByRole('heading', { name: /Allocate key workers to prisoners/i }).should('be.visible')
     cy.findByRole('heading', { name: /Filter by/i }).should('be.visible')
     cy.findByRole('button', { name: /Apply filters/i }).should('be.visible')

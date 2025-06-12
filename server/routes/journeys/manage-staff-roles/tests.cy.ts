@@ -17,7 +17,7 @@ context('/manage-staff-roles', () => {
     navigateToTestPage()
     cy.url().should('match', /\/manage-staff-roles$/)
 
-    cy.title().should('equal', 'Make someone a key worker - Key worker - DPS')
+    cy.title().should('equal', 'Make someone a key worker - Key workers - DPS')
     cy.findByRole('heading', { name: 'Make someone a key worker' }).should('be.visible')
     getSearchInput().should('be.visible')
     getSearchButton().should('be.visible')
