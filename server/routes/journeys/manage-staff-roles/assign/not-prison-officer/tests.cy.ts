@@ -1,7 +1,7 @@
 import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../../integration_tests/support/commands'
 
-context('/manage-staff-roles/assign/not-po', () => {
+context('/manage-staff-roles/assign/not-prison-officer', () => {
   const journeyId = uuidV4()
 
   beforeEach(() => {
@@ -13,7 +13,7 @@ context('/manage-staff-roles/assign/not-po', () => {
 
   it('should render error page', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/assign\/not-po$/)
+    cy.url().should('match', /\/assign\/not-prison-officer$/)
 
     cy.title().should('equal', 'Not a prison officer - Key workers - DPS')
 
@@ -46,6 +46,6 @@ context('/manage-staff-roles/assign/not-po', () => {
       },
     })
 
-    cy.visit(`/key-worker/${journeyId}/manage-staff-roles/assign/not-po`)
+    cy.visit(`/key-worker/${journeyId}/manage-staff-roles/assign/not-prison-officer`)
   }
 })

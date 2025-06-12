@@ -35,7 +35,7 @@ context('/manage-staff-roles/assign/role', () => {
     noRadio().click()
     continueButton().click()
 
-    cy.url().should('match', /\/assign\/not-po$/)
+    cy.url().should('match', /\/assign\/not-prison-officer$/)
   })
 
   const verifyPageContent = () => {
