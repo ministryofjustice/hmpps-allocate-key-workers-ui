@@ -1,33 +1,41 @@
 {% extends "partials/layout.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
-{% set pageTitle = "Add or remove [staff] role" | policyAware(policyName) %}
+{% set pageTitle = "Are they a prison officer" %}
 
 {% block innerContent %}
   <div class="govuk-width-container govuk-body">
     <form method="post">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
       {{ govukRadios({
-        name: "assignOrRemove",
-        errorMessage: validationErrors | findError('assignOrRemove'),
+        name: "isPrisonOfficer",
+        errorMessage: validationErrors | findError('isPrisonOfficer'),
         fieldset: {
           legend: {
-            text: "Do you want to make someone a " + policyName + " or remove the role from someone?",
+            text: "Is this individual a prison officer?",
             isPageHeading: true,
             classes: "govuk-fieldset__legend--xl"
           }
         },
         items: [
           {
-            value: 'ASSIGN',
-            text: "Make someone a " + policyName
+            value: 'YES',
+            text: "Yes",
+            checked: isPrisonOfficer === true
           },
           {
-            value: 'REMOVE',
-            text: "Remove the " + policyName + " role from someone"
+            value: 'NO',
+            text: "No",
+            checked: isPrisonOfficer === false
           }
         ]
+      }) }}
+
+      {{ govukWarningText({
+        text: "Only prison officers can be assigned the key worker role. If this individual is not a prison officer you cannot assign the role to them.",
+        iconFallbackText: "Warning"
       }) }}
 
       {{ govukButton({
