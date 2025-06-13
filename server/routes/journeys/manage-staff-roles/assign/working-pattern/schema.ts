@@ -1,19 +1,32 @@
 import { z } from 'zod'
 import { createSchema } from '../../../../../middleware/validationMiddleware'
+import { validateAndTransformReferenceData } from '../../../../../utils/validation/validateReferenceData'
 
 const ERROR_MSG = 'Select a working pattern'
 
+const refDataMap = new Map([
+  [
+    'FT',
+    {
+      code: 'FT',
+      description: 'Full-time',
+      hoursPerWeek: 35,
+    },
+  ],
+  [
+    'PT',
+    {
+      code: 'PT',
+      description: 'Part-time',
+      hoursPerWeek: 6,
+    },
+  ],
+])
+
 export const schema = createSchema({
-  workingPattern: z.enum(['FULL_TIME', 'PART_TIME'], { message: ERROR_MSG }).transform(val => {
-    switch (val) {
-      case 'FULL_TIME':
-        return 35
-      case 'PART_TIME':
-        return 6
-      default:
-        return 0
-    }
-  }),
+  scheduleType: z
+    .string({ required_error: ERROR_MSG })
+    .transform(validateAndTransformReferenceData(refDataMap, ERROR_MSG)),
 })
 
 export type SchemaType = z.infer<typeof schema>

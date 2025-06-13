@@ -29,7 +29,7 @@ context('/manage-staff-roles/assign/working-pattern', () => {
   })
 
   const verifyPageContent = () => {
-    cy.title().should('equal', 'Working Pattern - Key workers - DPS')
+    cy.title().should('equal', 'Working pattern - Key workers - DPS')
 
     cy.findByRole('heading', {
       name: 'What is this individual’s working pattern?',

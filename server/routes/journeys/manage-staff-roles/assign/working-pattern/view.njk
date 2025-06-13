@@ -9,8 +9,8 @@
     <form method="post">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
       {{ govukRadios({
-        name: "workingPattern",
-        errorMessage: validationErrors | findError('workingPattern'),
+        name: "scheduleType",
+        errorMessage: validationErrors | findError('scheduleType'),
         fieldset: {
           legend: {
             text: "What is this individual’s working pattern?",
@@ -20,14 +20,14 @@
         },
         items: [
           {
-            value: 'FULL_TIME',
+            value: 'FT',
             text: "Full-time",
-            checked: workingHour === 35
+            checked: scheduleType === 'FT'
           },
           {
-            value: 'PART_TIME',
+            value: 'PT',
             text: "Part-time",
-            checked: workingHour === 6
+            checked: scheduleType === 'PT'
           }
         ]
       }) }}

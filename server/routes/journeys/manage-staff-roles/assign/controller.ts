@@ -13,6 +13,7 @@ export class AssignStaffRoleController {
         const searchOptions: components['schemas']['StaffSearchRequest'] = {
           query: req.journeyData.assignStaffRole!.query,
           status: 'ALL',
+          hasPolicyStaffRole: false,
         }
         req.journeyData.assignStaffRole!.searchResults = (
           await this.keyworkerApiService.searchStaff(req as Request, res, searchOptions)
@@ -30,7 +31,7 @@ export class AssignStaffRoleController {
     }
 
     return res.render('manage-staff-roles/assign/view', {
-      backUrl: `/${res.locals.policyPath}`,
+      backUrl: req.journeyData.isCheckAnswers ? 'assign/check-answers' : `/${res.locals.policyPath}`,
       query: req.journeyData.assignStaffRole!.query,
       searchResults: req.journeyData.assignStaffRole!.searchResults,
     })

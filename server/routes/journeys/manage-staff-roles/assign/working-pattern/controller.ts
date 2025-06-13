@@ -4,13 +4,14 @@ import { SchemaType } from './schema'
 export class WorkingPatternController {
   GET = async (req: Request, res: Response) => {
     res.render('manage-staff-roles/assign/working-pattern/view', {
-      backUrl: '../assign',
-      workingHour: req.journeyData.assignStaffRole!.workingHour,
+      backUrl: 'role',
+      scheduleType: req.journeyData.assignStaffRole!.scheduleType?.code,
     })
   }
 
   POST = (req: Request<unknown, unknown, SchemaType>, res: Response) => {
-    req.journeyData.assignStaffRole!.workingHour = req.body.workingPattern
+    req.journeyData.assignStaffRole!.scheduleType = req.body.scheduleType
+    req.journeyData.assignStaffRole!.hoursPerWeek = req.body.scheduleType.hoursPerWeek
     res.redirect('check-answers')
   }
 }
