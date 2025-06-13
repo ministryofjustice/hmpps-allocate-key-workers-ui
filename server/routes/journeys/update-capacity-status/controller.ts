@@ -9,37 +9,40 @@ export class UpdateCapacityAndStatusController {
 
   GET = async (req: Request, res: Response) => {
     req.journeyData.updateCapacityStatus ??= {}
+    const staffDetails = req.journeyData.keyWorkerDetails!
 
     res.render('journeys/update-capacity-status/view', {
       ...req.journeyData.keyWorkerDetails!,
       capacity:
         res.locals.formResponses?.['capacity'] ??
         req.journeyData.updateCapacityStatus!.capacity ??
-        req.journeyData.keyWorkerDetails!.capacity,
+        staffDetails.capacity,
       statusCode:
         res.locals.formResponses?.['status'] ??
         req.journeyData.updateCapacityStatus!.status?.code ??
-        req.journeyData.keyWorkerDetails!.status?.code,
+        staffDetails.status?.code,
       statuses: (await this.keyworkerApiService.getReferenceData(req, 'staff-status')).map(({ code, description }) => ({
         value: code,
         text: description,
       })),
-      backUrl: `/${res.locals.policyPath}/staff-profile/${req.journeyData.keyWorkerDetails!.keyworker.staffId}`,
+      backUrl: `/${res.locals.policyPath}/staff-profile/${staffDetails.staffId}`,
       successMessage: req.flash(FLASH_KEY__SUCCESS_MESSAGE)[0],
     })
   }
 
   submitToApi = async (req: Request<unknown, unknown, SchemaType>, res: Response, next: NextFunction) => {
     const { capacity, status } = req.body
+    const staffDetails = req.journeyData.keyWorkerDetails!
+
     try {
       // special logic: save both capacity and status only if status=ACTIVE, otherwise, save capacity only
       await this.keyworkerApiService.updateKeyworkerProperties(
         req as Request,
         res,
         res.locals.user.getActiveCaseloadId()!,
-        req.journeyData.keyWorkerDetails!.keyworker.staffId,
+        staffDetails.staffId,
         {
-          status: status.code === 'ACTIVE' ? status.code : req.journeyData.keyWorkerDetails!.status.code,
+          status: status.code === 'ACTIVE' ? status.code : staffDetails.status.code,
           capacity,
           deactivateActiveAllocations: false,
           removeFromAutoAllocation: false,
@@ -49,7 +52,7 @@ export class UpdateCapacityAndStatusController {
       if (status.code === 'ACTIVE') {
         req.flash(
           FLASH_KEY__SUCCESS_MESSAGE,
-          getUpdateCapacityStatusSuccessMessage(status.code, capacity, req.journeyData.keyWorkerDetails!),
+          getUpdateCapacityStatusSuccessMessage(status.code, capacity, staffDetails),
         )
       }
 

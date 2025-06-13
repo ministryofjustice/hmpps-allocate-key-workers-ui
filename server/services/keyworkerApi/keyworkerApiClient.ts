@@ -97,15 +97,15 @@ export default class KeyworkerApiClient {
     return response.content
   }
 
-  async getKeyworkerDetails(
+  async getStaffDetails(
     prisonCode: string,
     staffId: string | number,
-  ): Promise<components['schemas']['KeyworkerDetails']> {
-    const response = await this.restClient.get<components['schemas']['KeyworkerDetails']>({
-      path: `/prisons/${prisonCode}/keyworkers/${staffId}`,
+  ): Promise<components['schemas']['StaffDetails'] & { keyworker: { firstName: string; lastName: string } }> {
+    const response = await this.restClient.get<components['schemas']['StaffDetails']>({
+      path: `/prisons/${prisonCode}/staff/${staffId}`,
     })
 
-    return response
+    return { ...response, keyworker: { firstName: response.firstName, lastName: response.lastName } }
   }
 
   async getReferenceData(

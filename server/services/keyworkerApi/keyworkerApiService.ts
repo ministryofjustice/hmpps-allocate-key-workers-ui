@@ -56,12 +56,12 @@ export default class KeyworkerApiService {
     return this.keyworkerApiClientBuilder(req).getKeyworkerMembers(prisonId, query)
   }
 
-  getKeyworkerDetails(
+  getStaffDetails(
     req: Request,
     prisonCode: string,
     staffId: string | number,
-  ): ReturnType<KeyworkerApiClient['getKeyworkerDetails']> {
-    return this.keyworkerApiClientBuilder(req).getKeyworkerDetails(prisonCode, staffId)
+  ): ReturnType<KeyworkerApiClient['getStaffDetails']> {
+    return this.keyworkerApiClientBuilder(req).getStaffDetails(prisonCode, staffId)
   }
 
   getReferenceData(

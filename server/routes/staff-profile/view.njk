@@ -9,7 +9,7 @@
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
 
 {% set fullWidth = true %}
-{% set pageTitle = "[staff] profile" | policyAware(policyName) %}
+{% set pageTitle = "[staff] profile" %}
 
 {% block pageHeader %}
   {{ deallocateSuccessError(apiError, count) }}
@@ -25,7 +25,7 @@
         {{ statusTag({ text: status.description }) }}
       </p>
       {% if user | hasPermission('allocate') %}
-        <a class="govuk-!-margin-left-2 govuk-link govuk-link--no-visited-state govuk-!-display-inline-block " href="../start-update-staff/{{ keyworker.staffId }}?proceedTo=update-capacity-status">Update capacity and status</a>
+        <a class="govuk-!-margin-left-2 govuk-link govuk-link--no-visited-state govuk-!-display-inline-block " href="../start-update-staff/{{ staffId }}?proceedTo=update-capacity-status">Update capacity and status</a>
       {% endif %}
     </div>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
@@ -38,7 +38,7 @@
 
       <div class="govuk-grid-column-one-quarter left-aligned">
         <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Schedule type</h2>
-        <p class="govuk-!-margin-bottom-2">{{ keyworker.scheduleType.description }}</p>
+        <p class="govuk-!-margin-bottom-2">{{ staffRole.scheduleType.description }}</p>
       </div>
 
       <div class="govuk-grid-column-one-quarter left-aligned">
@@ -111,7 +111,7 @@
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: keyworkers | excludeCurrentKeyworker(keyworker) | conditionallyAddDeallocate(keyworker.staffId) | mergePrisonerKeyworkerIds(item.prisoner.prisonNumber) | addSelectValue('Select key worker')
+              items: keyworkers | excludeCurrentKeyworker({staffId: staffId}) | conditionallyAddDeallocate(staffId) | mergePrisonerKeyworkerIds(item.prisoner.prisonNumber) | addSelectValue('Select key worker')
             })
           } if user | hasPermission('allocate') else undefined
         ] | removeNullish), rows) %}

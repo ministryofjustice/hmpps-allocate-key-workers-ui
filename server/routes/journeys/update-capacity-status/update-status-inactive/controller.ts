@@ -19,7 +19,7 @@ export class UpdateStatusInactiveController {
         req as Request,
         res,
         res.locals.user.getActiveCaseloadId()!,
-        req.journeyData.keyWorkerDetails!.keyworker.staffId,
+        req.journeyData.keyWorkerDetails!.staffId,
         {
           status: req.journeyData.updateCapacityStatus!.status!.code,
           capacity: req.journeyData.updateCapacityStatus!.capacity!,
