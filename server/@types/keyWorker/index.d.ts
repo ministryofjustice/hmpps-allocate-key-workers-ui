@@ -56,6 +56,26 @@ export interface paths {
      *
      *     Requires one of the following roles:
      *     * ROLE_KEY_WORKER__RW */
+    put: operations['manageKeyworkerAllocations']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/prisons/{prisonCode}/prisoners/allocations': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
     put: operations['manageAllocations']
     post?: never
     delete?: never
@@ -794,8 +814,6 @@ export interface components {
       /** Format: int64 */
       staffId: number
       allocationReason: string
-      /** Format: int64 */
-      recommendedAllocationStaffId?: number
     }
     PersonStaffAllocations: {
       allocations: components['schemas']['PersonStaffAllocation'][]
@@ -824,7 +842,6 @@ export interface components {
       capacity: number
       /** Format: int32 */
       frequencyInWeeks: number
-      maximumCapacity: number
     }
     ErrorResponse: {
       /** Format: int32 */
@@ -959,11 +976,6 @@ export interface components {
       activeDate?: string
     }
     OffenderKeyworkerDto: {
-      /**
-       * Format: int64
-       * @description Id of offender allocation.
-       */
-      offenderKeyworkerId: number
       /** @description The offender's unique offender number (aka NOMS Number in the UK). */
       offenderNo: string
       /**
@@ -1211,6 +1223,7 @@ export interface components {
     RecommendedAllocations: {
       allocations: components['schemas']['RecommendedAllocation'][]
       noAvailableStaffFor: string[]
+      staff: components['schemas']['StaffSummary'][]
     }
     StaffSummary: {
       /** Format: int64 */
@@ -1434,11 +1447,6 @@ export interface components {
       email?: string
     }
     LegacyKeyWorkerAllocation: {
-      /**
-       * Format: int64
-       * @description Id of offender allocation.
-       */
-      offenderKeyworkerId: number
       /**
        * Format: int64
        * @description The offender's Key worker staff Id.
@@ -1790,10 +1798,43 @@ export interface operations {
       }
     }
   }
-  manageAllocations: {
+  manageKeyworkerAllocations: {
     parameters: {
       query?: never
       header?: never
+      path: {
+        prisonCode: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PersonStaffAllocations']
+      }
+    }
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
+  manageAllocations: {
+    parameters: {
+      query?: never
+      header: {
+        /** @description
+         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
+         *          */
+        Policy: string
+        /** @description
+         *         Relevant caseload id for the client identity in context e.g. the active caseload id of the logged in user.
+         *          */
+        CaseloadId?: string
+      }
       path: {
         prisonCode: string
       }
@@ -2560,7 +2601,7 @@ export interface operations {
       header?: never
       path: {
         /** @description The reference data domain required. This is case insensitive. */
-        domain: 'allocation-reason' | 'deallocation-reason' | 'staff-position' | 'staff-schedule' | 'staff-status'
+        domain: 'allocation-reason' | 'deallocation-reason' | 'staff-position' | 'staff-schedule-type' | 'staff-status'
       }
       cookie?: never
     }

@@ -99,7 +99,7 @@ context('/establishment-settings', () => {
 
     cy.findByRole('heading', { name: 'Establishment settings for Leeds (HMP)' }).should('be.visible')
     cy.findByRole('radio', { name: 'Yes' }).should('exist').and('be.checked')
-    getCapacityInput('personal officer').should('be.visible').and('have.value', '9')
+    getCapacityInput('personal officer').should('be.visible').and('have.value', '6')
     cy.findByRole('button', { name: 'Save' }).should('be.visible')
     cy.findByRole('button', { name: 'Cancel' })
       .should('be.visible')
@@ -146,7 +146,7 @@ context('/establishment-settings', () => {
     cy.title().should('equal', 'Manage your establishment’s key worker settings - Key workers - DPS')
     cy.findByRole('heading', { name: 'Establishment settings for Leeds (HMP)' }).should('be.visible')
     cy.findByRole('radio', { name: 'Yes' }).should('exist').and('be.checked')
-    getCapacityInput().should('be.visible').and('have.value', '9')
+    getCapacityInput().should('be.visible').and('have.value', '6')
     cy.findByRole('button', { name: 'Save' }).should('be.visible')
     cy.findByRole('button', { name: 'Cancel' })
       .should('be.visible')

@@ -20,7 +20,7 @@
   <div class="govuk-width-container">
 
     <div class="govuk-grid-row govuk-!-margin-0">
-      <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0">{{ keyworker | firstNameSpaceLastName }}</h1>
+      <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0">{{ staff | firstNameSpaceLastName }}</h1>
       <p class="govuk-!-margin-left-2 govuk-!-display-inline-block govuk-!-margin-0 "> {{ statusTag({ text: status.description }) }}</p>
     </div>
 
@@ -34,7 +34,7 @@
         </div>
         <div class="grid-column-one-fifth">
           <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Schedule type</h2>
-          <p>{{ keyworker.scheduleType.description }}</p>
+          <p>{{ staffRole.scheduleType.description }}</p>
         </div>
         <div class="grid-column-one-fifth">
           <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Prisoners allocated</h2>

@@ -20,7 +20,7 @@ export type JourneyData = {
   instanceUnixEpoch: number
   isCheckAnswers?: boolean
   journeyCompleted?: boolean
-  keyWorkerDetails?: components['schemas']['KeyworkerDetails']
+  keyWorkerDetails?: components['schemas']['StaffDetails']
   updateCapacityStatus?: UpdateCapacityStatusJourney
   assignStaffRole?: AssignStaffRoleJourney
 }

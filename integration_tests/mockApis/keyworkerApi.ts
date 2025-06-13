@@ -117,7 +117,6 @@ const stubKeyworkerPrisonConfig = (isEnabled: boolean, hasPrisonersWithHighCompl
         hasPrisonersWithHighComplexityNeeds,
         allowAutoAllocation: true,
         capacity: 6,
-        maximumCapacity: 9,
         frequencyInWeeks: 1,
       },
       headers: {
@@ -226,8 +225,8 @@ const stubKeyworkerMembersStatusActive = () =>
     { content: keyworkerManageResponse.content.filter(o => o.status.code === 'ACT') },
   )
 
-const stubKeyworkerDetails = (details: Partial<components['schemas']['KeyworkerDetails']> = {}) =>
-  createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/keyworkers/488095', 200, {
+const stubKeyworkerDetails = (details: Partial<components['schemas']['StaffDetails']> = {}) =>
+  createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/staff/488095', 200, {
     ...keyworkerDetailsResponse,
     ...details,
   })
@@ -482,14 +481,21 @@ const keyworkerStatisticsResponse = {
 }
 
 const keyworkerDetailsResponse = {
-  keyworker: {
-    staffId: 488095,
-    firstName: 'AVAILABLE-ACTIVE',
-    lastName: 'KEY-WORKER',
+  staffId: 488095,
+  firstName: 'AVAILABLE-ACTIVE',
+  lastName: 'KEY-WORKER',
+  staffRole: {
+    position: {
+      code: 'PRO',
+      description: 'Prison Officer',
+    },
     scheduleType: {
       code: 'FT',
       description: 'Full Time',
     },
+    hoursPerWeek: 35,
+    fromDate: '2024-12-18',
+    toDate: null,
   },
   status: {
     code: 'ACTIVE',
@@ -501,6 +507,7 @@ const keyworkerDetailsResponse = {
   },
   capacity: 6,
   allocated: 1,
+  allowAutoAllocation: true,
   allocations: [
     {
       prisoner: {
@@ -511,7 +518,6 @@ const keyworkerDetailsResponse = {
         cellLocation: '1-1-035',
         releaseDate: '2025-02-01',
       },
-      location: 'Leeds',
       latestSession: {
         occurredAt: '2025-01-23',
       },
@@ -525,7 +531,6 @@ const keyworkerDetailsResponse = {
         cellLocation: '3-1-027',
         releaseDate: '2025-02-01',
       },
-      location: 'Leeds',
       latestSession: {
         occurredAt: '2025-01-23',
       },
@@ -549,7 +554,7 @@ const keyworkerDetailsResponse = {
       complianceRate: 0,
     },
   },
-}
+} as components['schemas']['StaffDetails']
 
 const keyworkerStatuses = [
   {

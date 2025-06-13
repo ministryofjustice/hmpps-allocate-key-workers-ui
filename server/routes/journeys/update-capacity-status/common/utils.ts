@@ -5,7 +5,7 @@ import KeyworkerApiService from '../../../../services/keyworkerApi/keyworkerApiS
 export const getUpdateCapacityStatusSuccessMessage = (
   statusCode: string,
   capacity: number,
-  keyworkerDetails: components['schemas']['KeyworkerDetails'],
+  keyworkerDetails: components['schemas']['StaffDetails'],
 ) => {
   const subjects: string[] = []
   if (keyworkerDetails.status.code !== statusCode) {
@@ -29,9 +29,9 @@ export const resetJourneyAndReloadKeyWorkerDetails = async (
 ) => {
   delete req.journeyData.updateCapacityStatus
   delete req.journeyData.isCheckAnswers
-  req.journeyData.keyWorkerDetails = await service.getKeyworkerDetails(
+  req.journeyData.keyWorkerDetails = await service.getStaffDetails(
     req as Request,
     res.locals.user.getActiveCaseloadId()!,
-    req.journeyData.keyWorkerDetails!.keyworker.staffId,
+    req.journeyData.keyWorkerDetails!.staffId,
   )
 }
