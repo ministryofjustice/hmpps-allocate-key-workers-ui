@@ -117,7 +117,6 @@ const stubKeyworkerPrisonConfig = (isEnabled: boolean, hasPrisonersWithHighCompl
         hasPrisonersWithHighComplexityNeeds,
         allowAutoAllocation: true,
         capacity: 6,
-        maximumCapacity: 9,
         frequencyInWeeks: 1,
       },
       headers: {
