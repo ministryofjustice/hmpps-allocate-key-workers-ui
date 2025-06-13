@@ -3,6 +3,7 @@ import { EnhancedRestClientBuilder } from '../../data'
 import KeyworkerApiClient, { KeyworkerConfigRequest, ServiceConfigInfo } from './keyworkerApiClient'
 import { components } from '../../@types/keyWorker'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
+import { todayString } from '../../utils/datetimeUtils'
 
 export default class KeyworkerApiService {
   constructor(private readonly keyworkerApiClientBuilder: EnhancedRestClientBuilder<KeyworkerApiClient>) {}
@@ -104,6 +105,22 @@ export default class KeyworkerApiService {
 
   searchStaff(req: Request, res: Response, searchOptions: components['schemas']['StaffSearchRequest']) {
     return this.keyworkerApiClientBuilder(req, res).searchStaff(res.locals.user.getActiveCaseloadId()!, searchOptions)
+  }
+
+  assignRoleToStaff(
+    req: Request,
+    res: Response,
+    staffId: number,
+    positionCode: string,
+    scheduleCode: string,
+    hoursPerWeek: number,
+  ) {
+    return this.keyworkerApiClientBuilder(req, res).assignRoleToStaff(res.locals.user.getActiveCaseloadId()!, staffId, {
+      position: positionCode,
+      scheduleType: scheduleCode,
+      hoursPerWeek,
+      fromDate: todayString(),
+    })
   }
 
   allocationRecommendations(req: Request, prisonCode: string) {
