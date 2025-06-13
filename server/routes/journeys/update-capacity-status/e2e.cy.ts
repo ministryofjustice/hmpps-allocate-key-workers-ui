@@ -10,7 +10,7 @@ context('/update-capacity-status/** journey', () => {
     cy.task('stubEnabledPrison')
     cy.task('stubKeyworkerDetails')
     cy.task('stubKeyworkerStatuses')
-    cy.task('stubUpdateKeyworkerProperties')
+    cy.task('stubUpdateStaffProperties')
   })
 
   it('should update active status and capacity', () => {
@@ -25,7 +25,7 @@ context('/update-capacity-status/** journey', () => {
       .and('contain.text', 'You have updated this key worker’s capacity.')
 
     cy.verifyLastAPICall(
-      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/keyworkers/488095' },
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095/configuration' },
       {
         status: 'ACTIVE',
         capacity: 8,
@@ -48,7 +48,7 @@ context('/update-capacity-status/** journey', () => {
       .and('contain.text', 'You have updated this key worker’s status and capacity.')
 
     cy.verifyLastAPICall(
-      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/keyworkers/488095' },
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095/configuration' },
       {
         status: 'INACTIVE',
         capacity: 8,
@@ -84,7 +84,7 @@ context('/update-capacity-status/** journey', () => {
       .and('contain.text', 'You have updated this key worker’s status and capacity.')
 
     cy.verifyLastAPICall(
-      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/keyworkers/488095' },
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095/configuration' },
       {
         status: 'UNAVAILABLE_LONG_TERM_ABSENCE',
         capacity: 8,
@@ -122,7 +122,7 @@ context('/update-capacity-status/** journey', () => {
       .and('contain.text', 'You have updated this key worker’s status and capacity.')
 
     cy.verifyLastAPICall(
-      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/keyworkers/488095' },
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095/configuration' },
       {
         status: 'UNAVAILABLE_ANNUAL_LEAVE',
         capacity: 8,

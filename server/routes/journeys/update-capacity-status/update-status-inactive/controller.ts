@@ -15,7 +15,7 @@ export class UpdateStatusInactiveController {
 
   submitToApi = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await this.keyworkerApiService.updateKeyworkerProperties(
+      await this.keyworkerApiService.updateStaffConfig(
         req as Request,
         res,
         res.locals.user.getActiveCaseloadId()!,

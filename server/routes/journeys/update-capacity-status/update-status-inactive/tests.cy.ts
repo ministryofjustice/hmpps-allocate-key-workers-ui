@@ -11,7 +11,7 @@ context('/update-capacity-status/update-status-inactive', () => {
     cy.task('stubEnabledPrison')
     cy.task('stubKeyworkerDetails')
     cy.task('stubKeyworkerStatuses')
-    cy.task('stubUpdateKeyworkerProperties')
+    cy.task('stubUpdateStaffProperties')
   })
 
   it('should try all cases', () => {

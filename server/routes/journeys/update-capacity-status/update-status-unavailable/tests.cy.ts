@@ -20,7 +20,7 @@ context('/update-capacity-status/update-status-unavailable', () => {
     cy.task('stubEnabledPrison')
     cy.task('stubKeyworkerDetails')
     cy.task('stubKeyworkerStatuses')
-    cy.task('stubUpdateKeyworkerProperties')
+    cy.task('stubUpdateStaffProperties')
   })
 
   it('should try non-annual-leave case', () => {

@@ -95,14 +95,14 @@ export default class KeyworkerApiService {
     return this.keyworkerApiClientBuilder(req, res).putAllocationDeallocations(prisonCode, data)
   }
 
-  updateKeyworkerProperties(
+  updateStaffConfig(
     req: Request,
     res: Response,
     prisonCode: string,
     staffId: string | number,
     requestBody: KeyworkerConfigRequest,
-  ): ReturnType<KeyworkerApiClient['updateKeyworkerProperties']> {
-    return this.keyworkerApiClientBuilder(req, res).updateKeyworkerProperties(prisonCode, staffId, requestBody)
+  ) {
+    return this.keyworkerApiClientBuilder(req, res).updateStaffConfig(prisonCode, staffId, requestBody)
   }
 
   searchStaff(req: Request, res: Response, searchOptions: components['schemas']['StaffSearchRequest']) {

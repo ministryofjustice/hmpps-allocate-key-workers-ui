@@ -22,13 +22,13 @@
             name: "allocation",
             fieldset: {
               legend: {
-                text: "This key worker’s status is changing to " + newStatus.description + ". Do you want to continue automatically assigning them to prisoners?",
+                text: "This " + policyName + "’s status is changing to " + newStatus.description + ". Do you want to continue automatically assigning them to prisoners?",
                 isPageHeading: true,
                 classes: "govuk-fieldset__legend--xl"
               }
             },
             hint: {
-              text: "If you choose to stop, this key worker will not be included when you select ‘assign key workers automatically’ when allocating prisoners."
+              text: "If you choose to stop, this " + policyName + " will not be included when you select ‘assign " + policyName + "s automatically’ when allocating prisoners."
             },
             items: [
               {

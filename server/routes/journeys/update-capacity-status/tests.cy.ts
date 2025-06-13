@@ -10,7 +10,7 @@ context('Update capacity and status', () => {
     cy.task('stubEnabledPrison')
     cy.task('stubKeyworkerDetails', { status: { code: 'INACTIVE', description: 'Inactive' } })
     cy.task('stubKeyworkerStatuses')
-    cy.task('stubUpdateKeyworkerProperties')
+    cy.task('stubUpdateStaffProperties')
   })
 
   it('should show initial data', () => {
