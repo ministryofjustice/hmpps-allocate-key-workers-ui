@@ -15,8 +15,13 @@
 {% endblock %}
 
 {% block pageTitle %}
-  {% set policyNameAlias = (policyName | sentenceCase + 's') if policyName else undefined %}
-  {{[pageTitle, policyNameAlias, 'DPS'] | removeNullish | join(' - ')}}
+  {% if policyName %}
+    {% set policyNameAlias = policyName | sentenceCase + 's' %}
+    {% set subject = (pageTitle | replace('[staff]', policyName) | replace('[staffs]', policyName + 's') | sentenceCase) if pageTitle else undefined  %}
+  {% else %}
+    {% set subject = pageTitle %}
+  {% endif %}
+  {{[subject, policyNameAlias, 'DPS'] | reject("undefined") | join(' - ')}}
 {% endblock %}
 
 {% block header %}

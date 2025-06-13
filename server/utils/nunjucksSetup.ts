@@ -89,7 +89,4 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('getHighlightedStatChange', getHighlightedStatChange)
   njkEnv.addFilter('hasPermission', hasPermission)
   njkEnv.addGlobal('yesterdayStringGBFormat', yesterdayStringGBFormat)
-  njkEnv.addFilter('policyAware', (text: string, policy: string) =>
-    sentenceCase(text.replaceAll('[staff]', policy).replaceAll('[staffs]', `${policy}s`)),
-  )
 }

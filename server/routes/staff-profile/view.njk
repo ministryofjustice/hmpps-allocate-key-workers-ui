@@ -9,7 +9,7 @@
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
 
 {% set fullWidth = true %}
-{% set pageTitle = "[staff] profile" | policyAware(policyName) %}
+{% set pageTitle = "[staff] profile" %}
 
 {% block pageHeader %}
   {{ deallocateSuccessError(apiError, count) }}

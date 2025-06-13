@@ -9,7 +9,7 @@
 {% from "partials/deallocateSuccessError/macro.njk" import deallocateSuccessError %}
 
 {% set fullWidth = true %}
-{% set pageTitle = "Allocate [staffs] to prisoners" | policyAware(policyName) %}
+{% set pageTitle = "Allocate [staffs] to prisoners" %}
 
 {% block pageHeader %}
   {{ deallocateSuccessError(apiError, count) }}
