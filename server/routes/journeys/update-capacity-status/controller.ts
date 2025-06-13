@@ -36,7 +36,7 @@ export class UpdateCapacityAndStatusController {
 
     try {
       // special logic: save both capacity and status only if status=ACTIVE, otherwise, save capacity only
-      await this.keyworkerApiService.updateKeyworkerProperties(
+      await this.keyworkerApiService.updateStaffConfig(
         req as Request,
         res,
         res.locals.user.getActiveCaseloadId()!,

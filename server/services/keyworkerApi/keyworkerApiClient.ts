@@ -147,9 +147,9 @@ export default class KeyworkerApiClient {
     return response
   }
 
-  async updateKeyworkerProperties(prisonCode: string, staffId: string | number, requestBody: KeyworkerConfigRequest) {
+  async updateStaffConfig(prisonCode: string, staffId: string | number, requestBody: KeyworkerConfigRequest) {
     await this.restClient.put<boolean>({
-      path: `/prisons/${prisonCode}/keyworkers/${staffId}`,
+      path: `/prisons/${prisonCode}/staff/${staffId}/configuration`,
       data: requestBody,
     })
   }
