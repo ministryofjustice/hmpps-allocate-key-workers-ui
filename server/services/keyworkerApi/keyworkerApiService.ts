@@ -57,12 +57,14 @@ export default class KeyworkerApiService {
     return this.keyworkerApiClientBuilder(req).getKeyworkerMembers(prisonId, query)
   }
 
-  getStaffDetails(
+  async getStaffDetails(
     req: Request,
     prisonCode: string,
     staffId: string | number,
-  ): ReturnType<KeyworkerApiClient['getStaffDetails']> {
-    return this.keyworkerApiClientBuilder(req).getStaffDetails(prisonCode, staffId)
+  ): Promise<components['schemas']['StaffDetails'] & { staff: { firstName: string; lastName: string } }> {
+    const response = await this.keyworkerApiClientBuilder(req).getStaffDetails(prisonCode, staffId)
+
+    return { ...response, staff: { firstName: response.firstName, lastName: response.lastName } }
   }
 
   getReferenceData(
