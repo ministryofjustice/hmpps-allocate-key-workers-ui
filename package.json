@@ -5,7 +5,7 @@
   "repository": "git@github.com:ministryofjustice/hmpps-allocate-key-workers-ui.git",
   "license": "MIT",
   "scripts": {
-    "prepare": "husky",
+    "prepare": "hmpps-precommit-hooks-prepare",
     "watch-ts": "tsc -w",
     "build": "node esbuild/esbuild.config.js --build",
     "start": "node $NODE_OPTIONS dist/server.js | bunyan -o short",
@@ -24,7 +24,10 @@
     "clean": "rm -rf dist node_modules",
     "rebuild": "npm run clean && npm i && npm run build",
     "swagger-keyworker": "npx openapi-typescript https://keyworker-api-dev.prison.service.justice.gov.uk/v3/api-docs > ./server/@types/keyWorker/index.d.ts",
-    "swagger-locations": "npx openapi-typescript https://locations-inside-prison-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/locationsInsidePrison/index.d.ts"
+    "swagger-locations": "npx openapi-typescript https://locations-inside-prison-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/locationsInsidePrison/index.d.ts",
+    "precommit:secrets": "gitleaks git --pre-commit --redact --staged --verbose --config .gitleaks/config.toml",
+    "precommit:lint": "node_modules/.bin/lint-staged",
+    "precommit:verify": "npm run typecheck && npm test"
   },
   "engines": {
     "node": "^22",
@@ -100,6 +103,7 @@
     "@ministryofjustice/hmpps-auth-clients": "^0.0.1-alpha.4",
     "@ministryofjustice/hmpps-connect-dps-components": "^2.1.0",
     "@ministryofjustice/hmpps-monitoring": "^0.0.1-beta.2",
+    "@ministryofjustice/hmpps-precommit-hooks": "^0.0.3",
     "@ministryofjustice/hmpps-prison-permissions-lib": "^0.0.1-alpha.8",
     "@sentry/node": "^9.27.0",
     "@types/cypress__code-coverage": "^3.10.2",
@@ -168,7 +172,6 @@
     "esbuild-plugin-manifest": "^1.0.5",
     "esbuild-sass-plugin": "^3.3.1",
     "glob": "^11.0.2",
-    "husky": "^9.1.7",
     "jest": "^29.7.0",
     "jest-fixed-jsdom": "^0.0.9",
     "jest-html-reporter": "^4.1.0",
