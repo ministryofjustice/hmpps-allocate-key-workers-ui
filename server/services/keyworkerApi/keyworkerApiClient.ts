@@ -171,7 +171,7 @@ export default class KeyworkerApiClient {
     staffId: number,
     query: components['schemas']['StaffJobClassificationRequest'],
   ) {
-    this.restClient.put({
+    return this.restClient.put({
       path: `/prisons/${prisonCode}/staff/${staffId}/job-classification`,
       data: query,
     })

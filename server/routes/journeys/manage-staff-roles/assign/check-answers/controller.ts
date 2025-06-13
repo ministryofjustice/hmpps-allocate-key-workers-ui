@@ -22,19 +22,9 @@ export class AssignRoleCheckAnswersController {
 
   submitToApi = async (req: Request, res: Response, next: NextFunction) => {
     const { staff, scheduleType, hoursPerWeek } = req.journeyData.assignStaffRole!
-    try {
-      await this.keyworkerApiService.assignRoleToStaff(
-        req,
-        res,
-        staff!.staffId,
-        'PRO',
-        scheduleType!.code,
-        hoursPerWeek!,
-      )
-      next()
-    } catch (e) {
-      next(e)
-    }
+
+    await this.keyworkerApiService.assignRoleToStaff(req, res, staff!.staffId, 'PRO', scheduleType!.code, hoursPerWeek!)
+    next()
   }
 
   POST = async (_req: Request, res: Response) => {
