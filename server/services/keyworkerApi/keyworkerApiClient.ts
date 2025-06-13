@@ -166,6 +166,17 @@ export default class KeyworkerApiClient {
     })
   }
 
+  async assignRoleToStaff(
+    prisonCode: string,
+    staffId: number,
+    query: components['schemas']['StaffJobClassificationRequest'],
+  ) {
+    return this.restClient.put({
+      path: `/prisons/${prisonCode}/staff/${staffId}/job-classification`,
+      data: query,
+    })
+  }
+
   async allocationRecommendations(prisonCode: string) {
     return this.restClient.get<components['schemas']['RecommendedAllocations']>({
       path: `/prisons/${prisonCode}/prisoners/allocation-recommendations`,

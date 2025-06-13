@@ -267,6 +267,9 @@ const stubPrisonerAllocations = () =>
 const stubUpdateKeyworkerProperties = () =>
   createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/keyworkers/.*', 200, {})
 
+const stubAssignRoleToStaff = () =>
+  createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/staff/.*/job-classification', 204, {})
+
 const keyworkerManageResponse = {
   content: [
     {
@@ -772,4 +775,5 @@ export default {
   stubUpdateKeyworkerProperties,
   stubPutPrisonConfiguration,
   stubSearchStaffError,
+  stubAssignRoleToStaff,
 }
