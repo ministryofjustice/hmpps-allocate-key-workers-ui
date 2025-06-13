@@ -43,7 +43,7 @@ context('Profile Info', () => {
   })
 
   it('should show error on de/allocation failure', () => {
-    cy.task('stubPutAllocationFail')
+    cy.task('stubPutAllocationFail500')
     navigateToTestPage()
 
     cy.visit('/key-worker/staff-profile/488095', { failOnStatusCode: false })

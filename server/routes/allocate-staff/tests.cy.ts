@@ -91,8 +91,24 @@ context('/allocate-staff', () => {
     cy.url().should('match', /\/key-worker\/allocate-staff\?excludeActiveAllocations=true#$/)
   })
 
-  it('should show error on de/allocation failure', () => {
-    cy.task('stubPutAllocationFail')
+  it('should show error on de/allocation failure (500)', () => {
+    cy.task('stubPutAllocationFail500')
+    navigateToTestPage()
+
+    cy.visit('/key-worker/allocate-staff?query=John', { failOnStatusCode: false })
+
+    cy.get('.govuk-table__row').should('have.length', 2)
+    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'John, Doe')
+
+    cy.get('#selectKeyworker').select('Deallocate')
+
+    cy.findByRole('button', { name: /Save changes/i }).click()
+
+    cy.findByText('Sorry, there is a problem with the service').should('exist')
+  })
+
+  it('should show error on de/allocation failure (400)', () => {
+    cy.task('stubPutAllocationFail400')
     navigateToTestPage()
 
     cy.visit('/key-worker/allocate-staff?query=John', { failOnStatusCode: false })
@@ -112,7 +128,8 @@ context('/allocate-staff', () => {
       },
     )
 
-    cy.findByText('Sorry, there is a problem with the service').should('exist')
+    cy.findByText('There is a problem').should('exist')
+    cy.get('.moj-alert').should('not.exist')
   })
 
   it('should show success message on deallocation', () => {

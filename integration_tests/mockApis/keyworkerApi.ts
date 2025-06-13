@@ -78,9 +78,11 @@ const stubPutAllocationSuccess = () => {
   )
 }
 
-const stubPutAllocationFail = () => {
-  return createHttpStub('PUT', '/keyworker-api/prisons/LEI/prisoners/keyworkers', undefined, undefined, 500, {
-    content: [],
+const stubPutAllocationFail = (code: number = 500, message?: string) => {
+  return createHttpStub('PUT', '/keyworker-api/prisons/LEI/prisoners/keyworkers', undefined, undefined, code, {
+    status: code,
+    userMessage: message,
+    developerMessage: message,
   })
 }
 
@@ -765,7 +767,8 @@ export default {
   stubKeyworkerMembersStatusActive,
   stubPutDeallocationSuccess,
   stubPutAllocationSuccess,
-  stubPutAllocationFail,
+  stubPutAllocationFail500: () => stubPutAllocationFail(500),
+  stubPutAllocationFail400: () => stubPutAllocationFail(400, 'Api error'),
   stubUpdateKeyworkerProperties,
   stubPutPrisonConfiguration,
   stubSearchStaffError,
