@@ -725,7 +725,7 @@ const keyworkerSearchPrisoners = [
     location: '1-1-035',
     hasHighComplexityOfNeeds: false,
     hasAllocationHistory: true,
-    keyworker: {
+    staffMember: {
       staffId: 488095,
       firstName: 'AVAILABLE-ACTIVE',
       lastName: 'KEY-WORKER',
