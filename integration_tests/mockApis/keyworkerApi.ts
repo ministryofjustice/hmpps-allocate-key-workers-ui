@@ -263,8 +263,8 @@ const stubKeyworkerStatuses = () =>
 const stubPrisonerAllocations = () =>
   createBasicHttpStub('GET', '/keyworker-api/prisoners/A9965EA/keyworkers', 200, prisonerAllocationResponse)
 
-const stubUpdateKeyworkerProperties = () =>
-  createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/keyworkers/.*', 200, {})
+const stubUpdateStaffProperties = () =>
+  createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/staff/.*/configuration', 200, {})
 
 const stubAssignRoleToStaff = () =>
   createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/staff/.*/job-classification', 204, {})
@@ -777,7 +777,7 @@ export default {
   stubPutAllocationSuccess,
   stubPutAllocationFail500: () => stubPutAllocationFail(500),
   stubPutAllocationFail400: () => stubPutAllocationFail(400, 'Api error'),
-  stubUpdateKeyworkerProperties,
+  stubUpdateStaffProperties,
   stubPutPrisonConfiguration,
   stubSearchStaffError,
   stubAssignRoleToStaff,

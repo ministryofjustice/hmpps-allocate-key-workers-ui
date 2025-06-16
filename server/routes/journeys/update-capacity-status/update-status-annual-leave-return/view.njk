@@ -21,11 +21,11 @@
           {{ validatedDateInput({
             id: "reactivateOn",
             title: {
-              text: "When will the key worker return from annual leave?",
+              text: "When will the " + policyName + " return from annual leave?",
               isPageHeading: true,
               classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6 main-heading"
             },
-            hintText: "For example, 27 3 2025. The key worker will automatically be set to Active from this date.",
+            hintText: "For example, 27 3 2025. The " + policyName + " will automatically be set to Active from this date.",
             validationErrors: validationErrors,
             day: day,
             month: month,
