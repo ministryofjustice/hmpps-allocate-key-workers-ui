@@ -20,7 +20,7 @@ context('/update-capacity-status/update-status-unavailable', () => {
     cy.task('stubEnabledPrison')
     cy.task('stubKeyworkerDetails')
     cy.task('stubKeyworkerStatuses')
-    cy.task('stubUpdateKeyworkerProperties')
+    cy.task('stubUpdateStaffProperties')
   })
 
   it('should try non-annual-leave case', () => {
@@ -50,7 +50,7 @@ context('/update-capacity-status/update-status-unavailable', () => {
   })
 
   const verifyPageContent = (statusDescription: string) => {
-    cy.title().should('equal', `Change this key worker’s status to ${statusDescription} - Key worker profile - DPS`)
+    cy.title().should('equal', `${statusDescription} - Key workers - DPS`)
     cy.findByRole('heading', { name: 'Available-Active Key-Worker' }).should('be.visible')
     cy.get('.status-tag').eq(0).should('have.text', 'Active')
 

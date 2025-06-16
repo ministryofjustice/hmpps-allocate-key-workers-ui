@@ -19,6 +19,7 @@ import {
 import { JourneyRouter } from './base/routes'
 import breadcrumbs from '../middleware/breadcrumbs'
 import { UserPermissionLevel } from '../interfaces/hmppsUser'
+import { ManageStaffRolesRoutes } from './manage-staff-roles/routes'
 
 export default function routes(services: Services) {
   const { router, get } = JourneyRouter()
@@ -66,6 +67,7 @@ export default function routes(services: Services) {
   router.use('/recommend-staff-automatically', RecommendStaffAutomaticallyRoutes(services))
   router.use('/staff-data', StaffDataRoutes(services))
   router.use('/manage-staff', StaffMembersRoutes(services))
+  router.use('/manage-staff-roles', ManageStaffRolesRoutes())
 
   router.use(insertJourneyIdentifier())
   router.use('/:journeyId', JourneyRoutes(dataAccess(), services))

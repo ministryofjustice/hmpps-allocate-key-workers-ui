@@ -95,9 +95,11 @@ const stubPutAllocationRecommendationSuccess = () => {
   )
 }
 
-const stubPutAllocationFail = () => {
-  return createHttpStub('PUT', '/keyworker-api/prisons/LEI/prisoners/keyworkers', undefined, undefined, 500, {
-    content: [],
+const stubPutAllocationFail = (code: number = 500, message?: string) => {
+  return createHttpStub('PUT', '/keyworker-api/prisons/LEI/prisoners/keyworkers', undefined, undefined, code, {
+    status: code,
+    userMessage: message,
+    developerMessage: message,
   })
 }
 
@@ -132,7 +134,6 @@ const stubKeyworkerPrisonConfig = (isEnabled: boolean, hasPrisonersWithHighCompl
         hasPrisonersWithHighComplexityNeeds,
         allowAutoAllocation: true,
         capacity: 6,
-        maximumCapacity: 9,
         frequencyInWeeks: 1,
       },
       headers: {
@@ -241,8 +242,8 @@ const stubKeyworkerMembersStatusActive = () =>
     { content: keyworkerManageResponse.content.filter(o => o.status.code === 'ACT') },
   )
 
-const stubKeyworkerDetails = (details: Partial<components['schemas']['KeyworkerDetails']> = {}) =>
-  createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/keyworkers/488095', 200, {
+const stubKeyworkerDetails = (details: Partial<components['schemas']['StaffDetails']> = {}) =>
+  createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/staff/488095', 200, {
     ...keyworkerDetailsResponse,
     ...details,
   })
@@ -279,8 +280,11 @@ const stubKeyworkerStatuses = () =>
 const stubPrisonerAllocations = () =>
   createBasicHttpStub('GET', '/keyworker-api/prisoners/A9965EA/keyworkers', 200, prisonerAllocationResponse)
 
-const stubUpdateKeyworkerProperties = () =>
-  createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/keyworkers/.*', 200, {})
+const stubUpdateStaffProperties = () =>
+  createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/staff/.*/configuration', 200, {})
+
+const stubAssignRoleToStaff = () =>
+  createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/staff/.*/job-classification', 204, {})
 
 const stubAllocationRecommendations = () =>
   createBasicHttpStub(
@@ -514,14 +518,21 @@ const keyworkerStatisticsResponse = {
 }
 
 const keyworkerDetailsResponse = {
-  keyworker: {
-    staffId: 488095,
-    firstName: 'AVAILABLE-ACTIVE',
-    lastName: 'KEY-WORKER',
+  staffId: 488095,
+  firstName: 'AVAILABLE-ACTIVE',
+  lastName: 'KEY-WORKER',
+  staffRole: {
+    position: {
+      code: 'PRO',
+      description: 'Prison Officer',
+    },
     scheduleType: {
       code: 'FT',
       description: 'Full Time',
     },
+    hoursPerWeek: 35,
+    fromDate: '2024-12-18',
+    toDate: null,
   },
   status: {
     code: 'ACTIVE',
@@ -533,6 +544,7 @@ const keyworkerDetailsResponse = {
   },
   capacity: 6,
   allocated: 1,
+  allowAutoAllocation: true,
   allocations: [
     {
       prisoner: {
@@ -543,7 +555,6 @@ const keyworkerDetailsResponse = {
         cellLocation: '1-1-035',
         releaseDate: '2025-02-01',
       },
-      location: 'Leeds',
       latestSession: {
         occurredAt: '2025-01-23',
       },
@@ -557,7 +568,6 @@ const keyworkerDetailsResponse = {
         cellLocation: '3-1-027',
         releaseDate: '2025-02-01',
       },
-      location: 'Leeds',
       latestSession: {
         occurredAt: '2025-01-23',
       },
@@ -581,7 +591,7 @@ const keyworkerDetailsResponse = {
       complianceRate: 0,
     },
   },
-}
+} as components['schemas']['StaffDetails']
 
 const keyworkerStatuses = [
   {
@@ -802,10 +812,12 @@ export default {
   stubKeyworkerMembersStatusActive,
   stubPutDeallocationSuccess,
   stubPutAllocationSuccess,
-  stubPutAllocationFail,
-  stubUpdateKeyworkerProperties,
+  stubPutAllocationFail500: () => stubPutAllocationFail(500),
+  stubPutAllocationFail400: () => stubPutAllocationFail(400, 'Api error'),
+  stubUpdateStaffProperties,
   stubPutPrisonConfiguration,
   stubSearchStaffError,
   stubAllocationRecommendations,
   stubPutAllocationRecommendationSuccess,
+  stubAssignRoleToStaff,
 }

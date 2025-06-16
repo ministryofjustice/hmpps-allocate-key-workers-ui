@@ -15,7 +15,7 @@ context('Key workers data', () => {
     cy.task('stubKeyworkerApiStats2024')
 
     navigateToTestPage()
-
+    cy.title().should('equal', 'View key worker data - Key workers - DPS')
     cy.findByRole('heading', { name: /^Key worker data for Leeds \(HMP\)$/i }).should('be.visible')
     cy.findByText('Select a date range to view')
 

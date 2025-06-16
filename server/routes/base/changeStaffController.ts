@@ -54,14 +54,14 @@ export class ChangeStaffController {
       }
     }
 
-    req.flash(FLASH_KEY__COUNT, String(apiBody.allocations.length + apiBody.deallocations.length))
-
     await this.keyworkerApiService.putAllocationDeallocations(
       req as Request,
       res,
       res.locals.user.getActiveCaseloadId()!,
       apiBody,
     )
+
+    req.flash(FLASH_KEY__COUNT, String(apiBody.allocations.length + apiBody.deallocations.length))
 
     next()
   }

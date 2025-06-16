@@ -4,7 +4,7 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {%- from "moj/components/pagination/macro.njk" import mojPagination -%}
 
-{% set pageTitle = "Make someone a " + policyName + " - " + policyName | sentenceCase %}
+{% set pageTitle = "Search for staff member" %}
 
 {% block innerContent %}
   <h1 class="govuk-heading-l govuk-!-margin-bottom-6">Make someone a {{ policyName }}</h1>
@@ -47,7 +47,7 @@
               attributes: {
                 "data-sort-value": item | lastNameCommaFirstName
               },
-              html: '<a class="govuk-link govuk-link--no-visited-state" href="assign-staff-role/select?staffId=' + item.staffId + '">' + (item | lastNameCommaFirstName) + '</a>'
+              html: '<a class="govuk-link govuk-link--no-visited-state" href="assign/select?staffId=' + item.staffId + '">' + (item | lastNameCommaFirstName) + '</a>'
             },
             {
               attributes: {

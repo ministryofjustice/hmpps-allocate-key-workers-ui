@@ -1,10 +1,9 @@
 {% extends "partials/layout.njk" %}
 
-{% set pageTitle = policyName | sentenceCase %}
-{% set mainClasses = "app-container govuk-body" %}
+`{% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}
-  <h1 class="govuk-heading-l govuk-!-margin-bottom-6">{{ policyName | sentenceCase }}s</h1>
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-6">{{ (policyName or "NOT SET") | sentenceCase }}s</h1>
 
   <div class="homepage-content-container">
     <div class="homepage-content">
@@ -44,9 +43,9 @@
                 <div class="govuk-grid-column-one-third card-group__item">
                   <div class="card card--clickable">
                     <h2 class="govuk-heading-m card__heading">
-                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/assign-staff-role">Make someone a {{ policyName }}</a>
+                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/manage-staff-roles">Manage {{ policyName }} roles</a>
                     </h2>
-                    <p class="govuk-body card__description">Assign the {{ policyName }} role to staff members in your establishment.</p>
+                    <p class="govuk-body card__description">Assign or remove the {{ policyName }} role for individual staff members in your establishment.</p>
                   </div>
                 </div>
               {% endif %}

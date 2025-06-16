@@ -29,11 +29,11 @@ export class UpdateStatusCheckAnswersController {
     const { status, capacity, deactivateActiveAllocations, removeFromAutoAllocation, reactivateOn } =
       req.journeyData.updateCapacityStatus!
     try {
-      await this.keyworkerApiService.updateKeyworkerProperties(
+      await this.keyworkerApiService.updateStaffConfig(
         req as Request,
         res,
         res.locals.user.getActiveCaseloadId()!,
-        req.journeyData.keyWorkerDetails!.keyworker.staffId,
+        req.journeyData.keyWorkerDetails!.staffId,
         {
           status: status!.code,
           capacity: capacity!,

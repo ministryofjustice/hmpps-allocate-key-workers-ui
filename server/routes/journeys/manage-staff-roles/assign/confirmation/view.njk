@@ -1,0 +1,20 @@
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
+{% extends "partials/layout.njk" %}
+
+{% set pageTitle = "Confirmation" %}
+
+{% block innerContent %}
+    {{ govukPanel({
+        titleText: policyName | sentenceCase  + " role assigned",
+        text: "You have successfully made " + staff | lastNameCommaFirstName  + " a " + policyName
+    }) }}
+
+  <p class="govuk-body">
+    You can now assign prisoners to this {{ policyName }} on the <a class="govuk-link govuk-link--no-visited-state" href="/{{ policyPath }}/allocate-staff">allocate prisoners to {{ policyName }}s</a> page.
+  </p>
+
+  <p class="govuk-body">
+    <a class="govuk-link govuk-link--no-visited-state" href="/{{ policyPath }}">Return to {{ policyName }}s homepage</a>
+  </p>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = "Add or remove [staff] role" %}
+
+{% block innerContent %}
+  <div class="govuk-width-container govuk-body">
+    <form method="post">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      {{ govukRadios({
+        name: "assignOrRemove",
+        errorMessage: validationErrors | findError('assignOrRemove'),
+        fieldset: {
+          legend: {
+            text: "Do you want to make someone a " + policyName + " or remove the role from someone?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--xl"
+          }
+        },
+        items: [
+          {
+            value: 'ASSIGN',
+            text: "Make someone a " + policyName
+          },
+          {
+            value: 'REMOVE',
+            text: "Remove the " + policyName + " role from someone"
+          }
+        ]
+      }) }}
+
+      {{ govukButton({
+        text: "Continue",
+        preventDoubleClick: true
+      }) }}
+    </form>
+  </div>
+{% endblock %}

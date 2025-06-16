@@ -20,7 +20,7 @@ export type JourneyData = {
   instanceUnixEpoch: number
   isCheckAnswers?: boolean
   journeyCompleted?: boolean
-  keyWorkerDetails?: components['schemas']['KeyworkerDetails']
+  keyWorkerDetails?: components['schemas']['StaffDetails']
   updateCapacityStatus?: UpdateCapacityStatusJourney
   assignStaffRole?: AssignStaffRoleJourney
 }
@@ -44,7 +44,10 @@ export type StaffSummary = {
 export type AssignStaffRoleJourney = Partial<{
   query: string
   searchResults: StaffSummary[]
-  staff: StaffSummary['StaffSummary']
+  staff: StaffSummary
+  isPrisonOfficer: boolean
+  scheduleType: ReferenceData
+  hoursPerWeek: number
 }>
 
 export declare global {

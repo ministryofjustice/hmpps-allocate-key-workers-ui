@@ -85,8 +85,11 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('conditionallyAddDeallocate', conditionallyAddDeallocate)
   njkEnv.addFilter('buildErrorSummaryList', buildErrorSummaryList)
   njkEnv.addFilter('customErrorOrderBuilder', customErrorOrderBuilder)
-  njkEnv.addFilter('removeUndefined', arr => arr.filter((o: unknown) => o !== undefined))
+  njkEnv.addFilter('removeNullish', arr => arr.filter((o: unknown) => o !== undefined && o !== null))
   njkEnv.addFilter('getHighlightedStatChange', getHighlightedStatChange)
   njkEnv.addFilter('hasPermission', hasPermission)
   njkEnv.addGlobal('yesterdayStringGBFormat', yesterdayStringGBFormat)
+  njkEnv.addFilter('policyAware', (text: string, policy: string) =>
+    sentenceCase(text.replaceAll('[staff]', policy).replaceAll('[staffs]', `${policy}s`)),
+  )
 }

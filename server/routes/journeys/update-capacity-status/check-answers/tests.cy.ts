@@ -11,7 +11,7 @@ context('/update-capacity-status/check-answers', () => {
     cy.task('stubEnabledPrison')
     cy.task('stubKeyworkerDetails')
     cy.task('stubKeyworkerStatuses')
-    cy.task('stubUpdateKeyworkerProperties')
+    cy.task('stubUpdateStaffProperties')
   })
 
   it('should try UNAVAILABLE_LONG_TERM_ABSENCE scenario', () => {
@@ -98,7 +98,7 @@ context('/update-capacity-status/check-answers', () => {
   })
 
   const verifyPageCommonContent = () => {
-    cy.title().should('equal', 'Check your answers - Key worker profile - DPS')
+    cy.title().should('equal', 'Check your answers - Key workers - DPS')
     cy.findByRole('heading', { name: 'Available-Active Key-Worker' }).should('be.visible')
     cy.get('.status-tag').eq(0).should('have.text', 'Active')
 

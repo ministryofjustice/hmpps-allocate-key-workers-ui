@@ -4,12 +4,12 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% set fullWidth = true %}
-{% set pageTitle = "Change this key worker’s status to " + newStatus.description + " - Key worker profile" %}
+{% set pageTitle = newStatus.description %}
 
 {% block innerContent %}
   <div class="govuk-width-container govuk-body">
     <div class="govuk-grid-row govuk-!-margin-0">
-      <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0">{{ keyworker | firstNameSpaceLastName }}</h1>
+      <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0">{{ staff | firstNameSpaceLastName }}</h1>
       <p class="govuk-!-margin-left-2 govuk-!-display-inline-block govuk-!-margin-0 "> {{ statusTag({ text: status.description }) }}</p>
     </div>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
@@ -22,13 +22,13 @@
             name: "allocation",
             fieldset: {
               legend: {
-                text: "This key worker’s status is changing to " + newStatus.description + ". Do you want to continue automatically assigning them to prisoners?",
+                text: "This " + policyName + "’s status is changing to " + newStatus.description + ". Do you want to continue automatically assigning them to prisoners?",
                 isPageHeading: true,
                 classes: "govuk-fieldset__legend--xl"
               }
             },
             hint: {
-              text: "If you choose to stop, this key worker will not be included when you select ‘assign key workers automatically’ when allocating prisoners."
+              text: "If you choose to stop, this " + policyName + " will not be included when you select ‘assign " + policyName + "s automatically’ when allocating prisoners."
             },
             items: [
               {

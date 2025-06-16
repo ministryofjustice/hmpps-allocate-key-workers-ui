@@ -13,6 +13,7 @@ context('test / homepage', () => {
       })
       cy.task('stubKeyworkerApiStatusFail')
       navigateToTestPage()
+      cy.title().should('equal', 'Sorry, there is a problem - DPS')
       cy.findByText('Sorry, there is a problem with the service').should('be.visible')
     })
 
@@ -24,6 +25,7 @@ context('test / homepage', () => {
       cy.task('stubEnabledPrison')
 
       navigateToTestPage()
+      cy.title().should('equal', 'Not authorised - DPS')
       cy.url().should('include', 'not-authorised')
       cy.findByText('You do not have permission to access this page').should('be.visible')
       cy.findByText('Contact the helpdesk').should('be.visible')
@@ -37,7 +39,7 @@ context('test / homepage', () => {
       cy.task('stubEnabledPrison')
 
       navigateToTestPage()
-
+      cy.title().should('equal', 'Key workers - DPS')
       validateTiles(true)
     })
 
@@ -49,7 +51,7 @@ context('test / homepage', () => {
       cy.task('stubEnabledPrison')
 
       navigateToTestPage()
-
+      cy.title().should('equal', 'Key workers - DPS')
       validateTiles(false)
     })
 
@@ -61,7 +63,7 @@ context('test / homepage', () => {
       cy.task('stubEnabledPrison')
 
       navigateToTestPage()
-
+      cy.title().should('equal', 'Key workers - DPS')
       validateTiles(false)
     })
   })
@@ -98,11 +100,14 @@ context('test / homepage', () => {
     if (!readonly) {
       cy.get('h2 > .card__link')
         .eq(3)
-        .should('contain.text', 'Make someone a key worker')
-        .and('have.attr', 'href', '/key-worker/assign-staff-role')
+        .should('contain.text', 'Manage key worker role')
+        .and('have.attr', 'href', '/key-worker/manage-staff-roles')
       cy.get('.card__description')
         .eq(3)
-        .should('contain.text', 'Assign the key worker role to staff members in your establishment.')
+        .should(
+          'contain.text',
+          'Assign or remove the key worker role for individual staff members in your establishment.',
+        )
       cy.get('h2 > .card__link')
         .eq(4)
         .should('contain.text', 'Manage your establishment’s key worker settings')
@@ -121,7 +126,7 @@ context('test / homepage', () => {
     cy.task('stubPrisonNotEnabled')
 
     navigateToTestPage()
-
+    cy.title().should('equal', 'Service not enabled - Key workers - DPS')
     cy.findByText('Key worker service not enabled').should('be.visible')
   })
 
@@ -133,7 +138,7 @@ context('test / homepage', () => {
     cy.task('stubPrisonNotEnabled')
 
     navigateToTestPage()
-
+    cy.title().should('equal', 'Key workers - DPS')
     cy.get('h2 > .card__link').should('have.length', 1)
     cy.findByRole('link', { name: 'Manage your establishment’s key worker settings' }).should(
       'have.attr',

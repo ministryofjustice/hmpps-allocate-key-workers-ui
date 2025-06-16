@@ -3,12 +3,12 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set fullWidth = true %}
-{% set pageTitle = "Change this key worker’s status to Inactive - Key worker profile" %}
+{% set pageTitle = "Unavailable (inactive)" %}
 
 {% block innerContent %}
   <div class="govuk-width-container govuk-body">
     <div class="govuk-grid-row govuk-!-margin-0">
-      <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0">{{ keyworker | firstNameSpaceLastName }}</h1>
+      <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0">{{ staff | firstNameSpaceLastName }}</h1>
       <p class="govuk-!-margin-left-2 govuk-!-display-inline-block govuk-!-margin-0 "> {{ statusTag({ text: status.description }) }}</p>
     </div>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
@@ -16,11 +16,11 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">
-          Are you sure you want to change this key worker’s status to Inactive?
+          Are you sure you want to change this {{ policyName }}’s status to Inactive?
         </h1>
 
         <p class="govuk-!-margin-bottom-6">
-          This will deallocate the key worker’s current prisoners. It will also remove the key worker from having prisoners auto-assigned to them.
+          This will deallocate the {{ policyName }}’s current prisoners. It will also remove the {{ policyName }} from having prisoners auto-assigned to them.
         </p>
 
         <form method="post">
@@ -33,7 +33,7 @@
             }) }}
 
             {{ govukButton({
-              text: "No, return to key worker profile",
+              text: "No, return to " + policyName + " profile",
               classes: "govuk-button--secondary",
               href: "cancel",
               preventDoubleClick: true

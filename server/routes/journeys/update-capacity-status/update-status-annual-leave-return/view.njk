@@ -4,12 +4,12 @@
 {% from "partials/validatedDateInput/macro.njk" import validatedDateInput %}
 
 {% set fullWidth = true %}
-{% set pageTitle = "When will the key worker return from annual leave? - Key worker profile" %}
+{% set pageTitle = "Return date" %}
 
 {% block innerContent %}
   <div class="govuk-width-container govuk-body">
     <div class="govuk-grid-row govuk-!-margin-0">
-      <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0">{{ keyworker | firstNameSpaceLastName }}</h1>
+      <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0">{{ staff | firstNameSpaceLastName }}</h1>
       <p class="govuk-!-margin-left-2 govuk-!-display-inline-block govuk-!-margin-0 "> {{ statusTag({ text: status.description }) }}</p>
     </div>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
@@ -21,11 +21,11 @@
           {{ validatedDateInput({
             id: "reactivateOn",
             title: {
-              text: "When will the key worker return from annual leave?",
+              text: "When will the " + policyName + " return from annual leave?",
               isPageHeading: true,
               classes: "govuk-fieldset__legend--l govuk-!-margin-bottom-6 main-heading"
             },
-            hintText: "For example, 27 3 2025. The key worker will automatically be set to Active from this date.",
+            hintText: "For example, 27 3 2025. The " + policyName + " will automatically be set to Active from this date.",
             validationErrors: validationErrors,
             day: day,
             month: month,
