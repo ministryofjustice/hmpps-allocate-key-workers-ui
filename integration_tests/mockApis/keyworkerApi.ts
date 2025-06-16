@@ -86,7 +86,10 @@ const stubPutAllocationRecommendationSuccess = () => {
     [
       {
         equalToJson: {
-          allocations: [{ personIdentifier: 'A2504EA', staffId: 488095, allocationReason: 'AUTO' }],
+          allocations: [
+            { personIdentifier: 'A2504EA', staffId: 488095, allocationReason: 'AUTO' },
+            { personIdentifier: 'G7189VT', staffId: 488096, allocationReason: 'MANUAL' },
+          ],
           deallocations: [],
         },
       },
@@ -301,7 +304,24 @@ const allocationRecommendations = {
       location: 'COURT',
       staff: {
         staffId: 488095,
+        firstName: 'UNAVAILABLE',
+        lastName: 'ANNUAL-LEAVE',
+        status: { code: 'UNA', description: 'Unavailable - annual leave' },
+        capacity: 1,
+        allocated: 1,
+        allowAutoAllocation: true,
       },
+    },
+  ],
+  staff: [
+    {
+      staffId: 488096,
+      firstName: 'AVAILABLE',
+      lastName: 'ACTIVE',
+      status: { code: 'ACT', description: 'Active' },
+      capacity: 1,
+      allocated: 0,
+      allowAutoAllocation: true,
     },
   ],
 }

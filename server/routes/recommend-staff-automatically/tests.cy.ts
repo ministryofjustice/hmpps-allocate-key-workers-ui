@@ -39,7 +39,7 @@ context('/recommend-staff-automatically', () => {
   })
 
   it('should show error on de/allocation failure', () => {
-    cy.task('stubPutAllocationFail')
+    cy.task('stubPutAllocationFail500')
     navigateToTestPage()
 
     cy.get('.govuk-table__row').should('have.length', 3)
@@ -62,18 +62,23 @@ context('/recommend-staff-automatically', () => {
     cy.task('stubPutAllocationRecommendationSuccess')
     navigateToTestPage()
 
+    cy.get('select').eq(1).select('Active, Available (allocations: 0)')
+
     cy.findByRole('button', { name: /Save changes/i }).click()
 
     cy.verifyLastAPICall(
       { method: 'PUT' },
       {
-        allocations: [{ personIdentifier: 'A2504EA', staffId: 488095, allocationReason: 'AUTO' }],
+        allocations: [
+          { personIdentifier: 'A2504EA', staffId: 488095, allocationReason: 'AUTO' },
+          { personIdentifier: 'G7189VT', staffId: 488096, allocationReason: 'MANUAL' },
+        ],
         deallocations: [],
       },
     )
 
     cy.get('.moj-alert').should('contain.text', 'Changes made successfully')
-    cy.findByText('You have successfully made changes to 1 prisoner.').should('exist')
+    cy.findByText('You have successfully made changes to 2 prisoners.').should('exist')
   })
 
   const checkPageContents = () => {
@@ -132,7 +137,14 @@ context('/recommend-staff-automatically', () => {
       .eq(1)
       .children()
       .eq(3)
-      .should('contain.text', 'Key-Worker, Available-Active (allocations: 32)')
+      .should('contain.text', 'Annual-Leave, Unavailable (allocations: 1)')
+
+    cy.get('select').eq(0).should('contain.text', 'Annual-Leave, Unavailable (allocations: 1)')
+    cy.get('select').eq(0).should('contain.text', 'Active, Available (allocations: 0)')
+
+    // Only the first prisoner should have the unavailable keyworker selectable as this is the recommendation
+    cy.get('select').eq(1).should('not.contain.text', 'Annual-Leave, Unavailable (allocations: 1)')
+    cy.get('select').eq(1).should('contain.text', 'Active, Available (allocations: 0)')
 
     cy.get('.govuk-select').should('have.value', 'A2504EA:allocate:488095:auto')
 

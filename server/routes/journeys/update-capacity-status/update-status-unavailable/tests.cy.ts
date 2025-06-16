@@ -24,10 +24,10 @@ context('/update-capacity-status/update-status-unavailable', () => {
   })
 
   it('should try non-annual-leave case', () => {
-    navigateToTestPage('UNAVAILABLE_LONG_TERM_ABSENCE', 'Unavailable (long-term absence)')
+    navigateToTestPage('UNAVAILABLE_LONG_TERM_ABSENCE', 'Unavailable - long-term absence')
     cy.url().should('match', /\/update-status-unavailable$/)
 
-    verifyPageContent('Unavailable (long-term absence)')
+    verifyPageContent('Unavailable - long-term absence', 'Unavailable (long-term absence)')
 
     verifyValidationErrors()
 
@@ -37,10 +37,10 @@ context('/update-capacity-status/update-status-unavailable', () => {
   })
 
   it('should try annual-leave case', () => {
-    navigateToTestPage('UNAVAILABLE_ANNUAL_LEAVE', 'Unavailable (annual leave)')
+    navigateToTestPage('UNAVAILABLE_ANNUAL_LEAVE', 'Unavailable - annual leave')
     cy.url().should('match', /\/update-status-unavailable$/)
 
-    verifyPageContent('Unavailable (annual leave)')
+    verifyPageContent('Unavailable - annual leave', 'Unavailable (annual leave)')
 
     verifyValidationErrors()
 
@@ -49,8 +49,8 @@ context('/update-capacity-status/update-status-unavailable', () => {
     verifyInputValuesArePersisted()
   })
 
-  const verifyPageContent = (statusDescription: string) => {
-    cy.title().should('equal', `${statusDescription} - Key workers - DPS`)
+  const verifyPageContent = (statusDescription: string, pageTitle: string) => {
+    cy.title().should('equal', `${pageTitle} - Key workers - DPS`)
     cy.findByRole('heading', { name: 'Available-Active Key-Worker' }).should('be.visible')
     cy.get('.status-tag').eq(0).should('have.text', 'Active')
 

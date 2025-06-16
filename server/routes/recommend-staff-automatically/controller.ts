@@ -1,5 +1,7 @@
 import { Request, Response } from 'express'
 import { ChangeStaffController } from '../base/changeKeyWorkerController'
+import { FLASH_KEY__API_ERROR, FLASH_KEY__COUNT } from '../../utils/constants'
+import { lastNameCommaFirstName } from '../../utils/formatUtils'
 
 export class RecommendStaffAutomaticallyController extends ChangeStaffController {
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -11,20 +13,34 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
       excludeActiveAllocations: true,
     })
     const recommendations = await this.keyworkerApiService.allocationRecommendations(req, prisonCode)
-    const changeData = await this.getChangeStaffData(req, res)
 
     const matchedPrisoners = records.map(o => {
       const match = recommendations.allocations.find(a => a.personIdentifier === o.personIdentifier)
+      const staff = [...recommendations.staff]
+
+      if (match && !recommendations.staff.find(s => s.staffId === match.staff.staffId)) {
+        staff.push(match.staff)
+      }
+
       return {
         ...o,
         recommendation: match?.staff.staffId,
+        kwDropdown: staff
+          .sort((a, b) => (a.allocated > b.allocated ? 1 : -1))
+          .map(s => {
+            return {
+              text: `${lastNameCommaFirstName(s)} (allocations: ${s.allocated})`,
+              value: `allocate:${s.staffId}`,
+            }
+          }),
       }
     })
 
     res.render('recommend-staff-automatically/view', {
       backUrl: 'allocate-staff',
-      ...changeData,
       records: matchedPrisoners,
+      count: req.flash(FLASH_KEY__COUNT)[0],
+      apiError: req.flash(FLASH_KEY__API_ERROR)[0],
     })
   }
 

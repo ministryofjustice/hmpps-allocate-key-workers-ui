@@ -187,7 +187,7 @@ export interface paths {
     /** @description
      *
      *     Requires one of the following roles:
-     *     * ROLE_KEY_WORKER__RO */
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
     post: operations['searchPeople']
     delete?: never
     options?: never
@@ -412,8 +412,7 @@ export interface paths {
     /** @description
      *
      *     Requires one of the following roles:
-     *     * ROLE_KEY_WORKER__RO
-     *     * ROLE_KEY_WORKER__RW */
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
     get: operations['findReferenceDataForDomain']
     put?: never
     post?: never
@@ -901,12 +900,6 @@ export interface components {
       cellLocationPrefix?: string
       excludeActiveAllocations: boolean
     }
-    Keyworker: {
-      /** Format: int64 */
-      staffId: number
-      firstName: string
-      lastName: string
-    }
     PersonSearchResponse: {
       content: components['schemas']['PrisonerSummary'][]
     }
@@ -917,7 +910,13 @@ export interface components {
       location?: string
       hasHighComplexityOfNeeds: boolean
       hasAllocationHistory: boolean
-      keyworker?: components['schemas']['Keyworker']
+      staffMember?: components['schemas']['StaffSummary']
+    }
+    StaffSummary: {
+      /** Format: int64 */
+      staffId: number
+      firstName: string
+      lastName: string
     }
     KeyworkerSearchRequest: {
       query?: string
@@ -1216,20 +1215,26 @@ export interface components {
       /** Format: date */
       latestSession?: string
     }
-    RecommendedAllocation: {
-      personIdentifier: string
-      staff: components['schemas']['StaffSummary']
-    }
-    RecommendedAllocations: {
-      allocations: components['schemas']['RecommendedAllocation'][]
-      noAvailableStaffFor: string[]
-      staff: components['schemas']['StaffSummary'][]
-    }
-    StaffSummary: {
+    AllocationStaff: {
       /** Format: int64 */
       staffId: number
       firstName: string
       lastName: string
+      status: components['schemas']['CodedDescription']
+      allowAutoAllocation: boolean
+      /** Format: int32 */
+      capacity: number
+      /** Format: int32 */
+      allocated: number
+    }
+    RecommendedAllocation: {
+      personIdentifier: string
+      staff: components['schemas']['AllocationStaff']
+    }
+    RecommendedAllocations: {
+      allocations: components['schemas']['RecommendedAllocation'][]
+      noAvailableStaffFor: string[]
+      staff: components['schemas']['AllocationStaff'][]
     }
     KeyworkerDetails: {
       keyworker: components['schemas']['KeyworkerWithSchedule']
@@ -1298,6 +1303,12 @@ export interface components {
       at: string
       by: string
       reason: components['schemas']['CodedDescription']
+    }
+    Keyworker: {
+      /** Format: int64 */
+      staffId: number
+      firstName: string
+      lastName: string
     }
     KeyworkerAllocation: {
       active: boolean
@@ -2051,7 +2062,12 @@ export interface operations {
   searchPeople: {
     parameters: {
       query?: never
-      header?: never
+      header: {
+        /** @description
+         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
+         *          */
+        Policy: string
+      }
       path: {
         prisonCode: string
       }

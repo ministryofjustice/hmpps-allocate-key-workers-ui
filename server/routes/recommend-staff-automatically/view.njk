@@ -45,7 +45,7 @@
             text: item.location
           },
           {
-            text: item.keyworker | lastNameCommaFirstName  | default('-', true)
+            text: item.staffMember | lastNameCommaFirstName  | default('-', true)
           },
           {
             text: "Select keyworker",
@@ -56,13 +56,13 @@
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: keyworkers | mergePrisonerKeyworkerIds(item.personIdentifier, item.recommendation) | addSelectValue('Select key worker', true, '', false) | setSelectedValue(item.personIdentifier+ ':allocate:' + item.recommendation + ':auto')
+              items: item.kwDropdown | mergePrisonerKeyworkerIds(item.personIdentifier, item.recommendation) | addSelectValue('Select key worker', true, '', false) | setSelectedValue(item.personIdentifier+ ':allocate:' + item.recommendation + ':auto')
             })
           },
           {
             html: '<a class="govuk-link govuk-link--no-visited-state" href="/prisoner-allocation-history/' + item.personIdentifier + '">View allocation history</a>' if item.hasAllocationHistory else ''
           }
-        ] | removeUndefined), rows) %}
+        ] | removeNullish), rows) %}
       {% endfor %}
 
       {{ mojPagination(records.length) }}
@@ -101,7 +101,7 @@
             {
               text: ""
             }
-          ] | removeUndefined,
+          ] | removeNullish,
           rows: rows
         }) }}
 
