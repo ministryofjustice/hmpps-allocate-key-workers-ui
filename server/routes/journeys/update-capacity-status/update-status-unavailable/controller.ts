@@ -3,9 +3,11 @@ import { SchemaType } from './schema'
 
 export class UpdateStatusUnavailableController {
   GET = async (req: Request, res: Response) => {
+    const statusReasonPageTitle = req.journeyData.updateCapacityStatus!.status!.description.replace(/- (.+)$/, '($1)')
     res.render('journeys/update-capacity-status/update-status-unavailable/view', {
       ...req.journeyData.keyWorkerDetails!,
       newStatus: req.journeyData.updateCapacityStatus!.status,
+      statusReasonPageTitle,
       deactivateActiveAllocations: req.journeyData.updateCapacityStatus!.deactivateActiveAllocations,
       removeFromAutoAllocation: req.journeyData.updateCapacityStatus!.removeFromAutoAllocation,
       backUrl: '../update-capacity-status',

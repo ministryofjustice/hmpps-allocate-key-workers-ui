@@ -38,7 +38,7 @@ export class ChangeStaffController {
     }
 
     for (const prisonerKeyworker of req.body.selectKeyworker.filter(Boolean)) {
-      const [prisonNumber, action, keyWorkerId] = prisonerKeyworker.split(':')
+      const [prisonNumber, action, keyWorkerId, isAuto] = prisonerKeyworker.split(':')
       if (action === 'deallocate') {
         apiBody.deallocations.push({
           personIdentifier: prisonNumber!,
@@ -49,7 +49,7 @@ export class ChangeStaffController {
         apiBody.allocations.push({
           personIdentifier: prisonNumber!,
           staffId: Number(keyWorkerId),
-          allocationReason: 'MANUAL',
+          allocationReason: isAuto ? 'AUTO' : 'MANUAL',
         })
       }
     }

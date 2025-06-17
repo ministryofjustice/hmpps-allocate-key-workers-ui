@@ -79,7 +79,7 @@
           text: "Assign key workers automatically",
           classes: "govuk-button--secondary float-right govuk-!-margin-bottom-2",
           preventDoubleClick: true,
-          href: '/recommend-key-workers-automatically'
+          href: '/' + policyPath + '/recommend-staff-automatically'
         }) }}
       </div>
     {% endif %}
@@ -99,7 +99,7 @@
             text: item.location
           },
           {
-            text: item.keyworker | lastNameCommaFirstName  | default('-', true)
+            text: item.staffMember | lastNameCommaFirstName  | default('-', true)
           },
           {
             text: "Select keyworker",
@@ -110,7 +110,7 @@
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: keyworkers | excludeCurrentKeyworker(item.keyworker) | conditionallyAddDeallocate(item.keyworker.staffId) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select key worker')
+              items: keyworkers | excludeCurrentKeyworker(item.staffMember) | conditionallyAddDeallocate(item.staffMember.staffId) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select key worker')
             })
           } if user | hasPermission('allocate') else undefined,
           {

@@ -78,6 +78,10 @@ const stubPutAllocationSuccess = () => {
   )
 }
 
+const stubPutAllocationRecommendationSuccess = () => {
+  return createHttpStub('PUT', '/keyworker-api/prisons/LEI/prisoners/keyworkers', undefined, [], 204)
+}
+
 const stubPutAllocationFail = (code: number = 500, message?: string) => {
   return createHttpStub('PUT', '/keyworker-api/prisons/LEI/prisoners/keyworkers', undefined, undefined, code, {
     status: code,
@@ -268,6 +272,14 @@ const stubUpdateStaffProperties = () =>
 
 const stubAssignRoleToStaff = () =>
   createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/staff/.*/job-classification', 204, {})
+
+const stubAllocationRecommendations = (allocationRecommendations: components['schemas']['RecommendedAllocations']) =>
+  createBasicHttpStub(
+    'GET',
+    '/keyworker-api/prisons/.*/prisoners/allocation-recommendations',
+    200,
+    allocationRecommendations,
+  )
 
 const keyworkerManageResponse = {
   content: [
@@ -668,7 +680,7 @@ const keyworkerSearchPrisoners = [
     location: '1-1-035',
     hasHighComplexityOfNeeds: false,
     hasAllocationHistory: true,
-    keyworker: {
+    staffMember: {
       staffId: 488095,
       firstName: 'AVAILABLE-ACTIVE',
       lastName: 'KEY-WORKER',
@@ -780,5 +792,7 @@ export default {
   stubUpdateStaffProperties,
   stubPutPrisonConfiguration,
   stubSearchStaffError,
+  stubAllocationRecommendations,
+  stubPutAllocationRecommendationSuccess,
   stubAssignRoleToStaff,
 }
