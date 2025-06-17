@@ -29,10 +29,7 @@ export const addSelectValue = (
 
 export const setSelectedValue = (items: SelectOption[] | null, selected: string | number): SelectOption[] | null => {
   if (!items) return null
-  return items.map(entry => ({
-    ...entry,
-    selected: entry && entry.value === selected,
-  }))
+  return items.map(entry => ({ ...entry, selected: entry && entry.value === selected }))
 }
 
 export const excludeCurrentKeyworker = (
@@ -51,19 +48,12 @@ export const conditionallyAddDeallocate = (items: SelectOption[], currentKeywork
   if (!currentKeyworkerStaffId) return items
 
   return [
-    {
-      text: 'Deallocate',
-      value: `deallocate:${currentKeyworkerStaffId}`,
-      selected: false,
-    },
+    { text: 'Deallocate', value: `deallocate:${currentKeyworkerStaffId}`, selected: false },
     ...items,
     { text: '', value: '', selected: false, attributes: { hidden: 'hidden' } },
   ]
 }
 
 export const mergePrisonerKeyworkerIds = (items: SelectOption[], prisonerId: string): SelectOption[] => {
-  return items.map(o => ({
-    ...o,
-    value: `${prisonerId}:${o.value}`,
-  }))
+  return items.map(o => ({ ...o, value: `${prisonerId}:${o.value}` }))
 }
