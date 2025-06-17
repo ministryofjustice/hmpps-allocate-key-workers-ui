@@ -88,8 +88,8 @@ export default class KeyworkerApiClient {
   async getStaffMembers(
     prisonId: string,
     query: components['schemas']['StaffSearchRequest'],
-  ): Promise<components['schemas']['StaffSearchResult'][]> {
-    const response = await this.restClient.post<{ content: components['schemas']['StaffSearchResponse']['content'] }>({
+  ): Promise<components['schemas']['StaffSearchResponse']['content']> {
+    const response = await this.restClient.post<components['schemas']['StaffSearchResponse']>({
       path: `/search/prisons/${prisonId}/staff-allocations`,
       data: query,
     })
