@@ -22,7 +22,7 @@
     <div class="govuk-grid-row">
 
       <div class="govuk-grid-column-three-quarters">
-        <form method="post" action="/{{ policyPath }}/allocate-staff/filter" class="govuk-grid-row govuk-!-margin-bottom-7 govuk-!-padding-6 search-form">
+        <form method="post" action="/{{ policyPath }}/allocate/filter" class="govuk-grid-row govuk-!-margin-bottom-7 govuk-!-padding-6 search-form">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
           <h2 class="govuk-heading-m">Filter by</h2>
           <div class="horizontal-form">
@@ -79,7 +79,7 @@
           text: "Assign key workers automatically",
           classes: "govuk-button--secondary float-right govuk-!-margin-bottom-2",
           preventDoubleClick: true,
-          href: '/' + policyPath + '/recommend-staff-automatically'
+          href: '/' + policyPath + '/recommend-allocations'
         }) }}
       </div>
     {% endif %}
@@ -110,7 +110,7 @@
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: keyworkers | excludeCurrentKeyworker(item.staffMember) | conditionallyAddDeallocate(item.staffMember.staffId) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select key worker')
+              items: staff | excludeCurrentKeyworker(item.staffMember) | conditionallyAddDeallocate(item.staffMember.staffId) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select key worker')
             })
           } if user | hasPermission('allocate') else undefined,
           {

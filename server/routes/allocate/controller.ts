@@ -32,14 +32,14 @@ export class AllocateStaffController extends ChangeStaffController {
       excludeActiveAllocations: String(query.excludeActiveAllocations),
     }).toString()
 
-    res.render('allocate-staff/view', {
+    res.render('allocate/view', {
       searchQuery: query.query || query.cellLocationPrefix || query.excludeActiveAllocations ? `?${searchParams}` : '',
       query: query.query,
       cellLocationPrefix: query.cellLocationPrefix,
       excludeActiveAllocations: query.excludeActiveAllocations,
       records,
       locations: locations.map(o => ({ text: o.localName || o.fullLocationPath, value: o.fullLocationPath })),
-      ...(await this.getChangeKeyworkerData(req, res)),
+      ...(await this.getChangeStaffData(req, res)),
       showBreadcrumbs: true,
     })
   }
@@ -52,6 +52,6 @@ export class AllocateStaffController extends ChangeStaffController {
       cellLocationPrefix: req.body.cellLocationPrefix || '',
       excludeActiveAllocations: req.body.excludeActiveAllocations || false,
     })
-    return res.redirect(`/${res.locals.policyPath}/allocate-staff?${params.toString()}`)
+    return res.redirect(`/${res.locals.policyPath}/allocate?${params.toString()}`)
   }
 }

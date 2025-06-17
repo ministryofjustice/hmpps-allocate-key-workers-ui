@@ -1,6 +1,6 @@
 import AuthorisedRoles from '../../authentication/authorisedRoles'
 
-context('/recommend-staff-automatically', () => {
+context('/recommend-allocations', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubComponents')
@@ -202,6 +202,6 @@ context('/recommend-staff-automatically', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-worker/recommend-staff-automatically', { failOnStatusCode: false })
+    cy.visit('/key-worker/recommend-allocations', { failOnStatusCode: false })
   }
 })

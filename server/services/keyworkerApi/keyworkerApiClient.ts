@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import RestClient from '../../data/restClient'
 import config from '../../config'
-import type { components } from '../../@types/keyWorker'
+import type { components, operations } from '../../@types/keyWorker'
 
 export interface ServiceConfigInfo {
   git: {
@@ -85,12 +85,12 @@ export default class KeyworkerApiClient {
     })
   }
 
-  async getKeyworkerMembers(
+  async getStaffMembers(
     prisonId: string,
-    query: components['schemas']['KeyworkerSearchRequest'],
-  ): Promise<components['schemas']['KeyworkerSummary'][]> {
-    const response = await this.restClient.post<{ content: components['schemas']['KeyworkerSummary'][] }>({
-      path: `/search/prisons/${prisonId}/keyworkers`,
+    query: components['schemas']['StaffSearchRequest'],
+  ): Promise<components['schemas']['StaffSearchResponse']['content']> {
+    const response = await this.restClient.post<components['schemas']['StaffSearchResponse']>({
+      path: `/search/prisons/${prisonId}/staff-allocations`,
       data: query,
     })
 
@@ -104,7 +104,7 @@ export default class KeyworkerApiClient {
   }
 
   async getReferenceData(
-    domain: 'staff-status' | 'allocation-reason' | 'deallocation-reason',
+    domain: operations['findReferenceDataForDomain']['parameters']['path']['domain'],
   ): Promise<components['schemas']['CodedDescription'][]> {
     const response = await this.restClient.get<components['schemas']['CodedDescription'][]>({
       path: `/reference-data/${domain}`,
@@ -119,17 +119,15 @@ export default class KeyworkerApiClient {
   ): Promise<components['schemas']['PersonSearchResponse']['content']> {
     const response = await this.restClient.post<components['schemas']['PersonSearchResponse']>({
       path: `/search/prisons/${prisonCode}/prisoners`,
-      data: {
-        ...body,
-      },
+      data: body,
     })
 
     return response.content
   }
 
-  async getKeyworkerAllocations(prisonerId: string): Promise<components['schemas']['PersonStaffAllocationHistory']> {
-    const response = await this.restClient.get<components['schemas']['PersonStaffAllocationHistory']>({
-      path: `/prisoners/${prisonerId}/keyworkers`,
+  async getStaffAllocations(prisonerId: string): Promise<components['schemas']['StaffAllocationHistory']> {
+    const response = await this.restClient.get<components['schemas']['StaffAllocationHistory']>({
+      path: `/prisoners/${prisonerId}/allocations`,
     })
 
     return response
@@ -138,9 +136,9 @@ export default class KeyworkerApiClient {
   async putAllocationDeallocations(
     prisonCode: string,
     data: components['schemas']['PersonStaffAllocations'],
-  ): Promise<components['schemas']['PersonStaffAllocationHistory']> {
-    const response = await this.restClient.put<components['schemas']['PersonStaffAllocationHistory']>({
-      path: `/prisons/${prisonCode}/prisoners/keyworkers`,
+  ): Promise<components['schemas']['StaffAllocationHistory']> {
+    const response = await this.restClient.put<components['schemas']['StaffAllocationHistory']>({
+      path: `/prisons/${prisonCode}/prisoners/allocations`,
       data,
     })
 

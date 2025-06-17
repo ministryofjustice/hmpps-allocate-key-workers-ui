@@ -175,6 +175,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/search/prisons/{prisonCode}/staff-allocations': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
+    post: operations['searchAllocatableStaff']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/search/prisons/{prisonCode}/prisoners': {
     parameters: {
       query?: never
@@ -562,6 +582,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/prisoners/{prisonNumber}/allocations': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
+    get: operations['getAllocations']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/key-worker/{staffId}/prison/{prisonId}/offenders': {
     parameters: {
       query?: never
@@ -894,6 +934,37 @@ export interface components {
       staffRole?: components['schemas']['StaffRoleInfo']
       username: string
       email?: string
+    }
+    AllocatableSearchRequest: {
+      query?: string
+      /** @enum {string} */
+      status:
+        | 'ALL'
+        | 'ACTIVE'
+        | 'UNAVAILABLE_ANNUAL_LEAVE'
+        | 'UNAVAILABLE_LONG_TERM_ABSENCE'
+        | 'UNAVAILABLE_NO_PRISONER_CONTACT'
+        | 'INACTIVE'
+    }
+    AllocatableSearchResponse: {
+      content: components['schemas']['AllocatableSummary'][]
+    }
+    AllocatableSummary: {
+      /** Format: int64 */
+      staffId: number
+      firstName: string
+      lastName: string
+      status: components['schemas']['CodedDescription']
+      /** Format: int32 */
+      capacity: number
+      /** Format: int32 */
+      allocated: number
+      allowAutoAllocation: boolean
+      /** Format: int32 */
+      numberOfSessions: number
+      /** Format: int32 */
+      numberOfEntries: number
+      staffRole: components['schemas']['StaffRoleInfo']
     }
     PersonSearchRequest: {
       query?: string
@@ -1317,9 +1388,20 @@ export interface components {
       allocated: components['schemas']['Actioned']
       deallocated?: components['schemas']['Actioned']
     }
-    PersonStaffAllocationHistory: {
+    KeyworkerAllocationHistory: {
       prisonNumber: string
       allocations: components['schemas']['KeyworkerAllocation'][]
+    }
+    StaffAllocation: {
+      active: boolean
+      staffMember: components['schemas']['StaffSummary']
+      prison: components['schemas']['CodedDescription']
+      allocated: components['schemas']['Actioned']
+      deallocated?: components['schemas']['Actioned']
+    }
+    StaffAllocationHistory: {
+      prisonNumber: string
+      allocations: components['schemas']['StaffAllocation'][]
     }
     KeyworkerDto: {
       /**
@@ -2059,6 +2141,37 @@ export interface operations {
       }
     }
   }
+  searchAllocatableStaff: {
+    parameters: {
+      query?: never
+      header: {
+        /** @description
+         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
+         *          */
+        Policy: string
+      }
+      path: {
+        prisonCode: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AllocatableSearchRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['AllocatableSearchResponse']
+        }
+      }
+    }
+  }
   searchPeople: {
     parameters: {
       query?: never
@@ -2713,7 +2826,12 @@ export interface operations {
   getAllocationRecommendations: {
     parameters: {
       query?: never
-      header?: never
+      header: {
+        /** @description
+         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
+         *          */
+        Policy: string
+      }
       path: {
         prisonCode: string
       }
@@ -2830,7 +2948,34 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          '*/*': components['schemas']['PersonStaffAllocationHistory']
+          '*/*': components['schemas']['KeyworkerAllocationHistory']
+        }
+      }
+    }
+  }
+  getAllocations: {
+    parameters: {
+      query?: never
+      header: {
+        /** @description
+         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
+         *          */
+        Policy: string
+      }
+      path: {
+        prisonNumber: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['StaffAllocationHistory']
         }
       }
     }

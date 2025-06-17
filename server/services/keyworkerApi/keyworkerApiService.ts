@@ -49,12 +49,12 @@ export default class KeyworkerApiService {
     return this.keyworkerApiClientBuilder(req).updatePrisonConfig(res.locals.user.getActiveCaseloadId()!, requestBody)
   }
 
-  getKeyworkerMembers(
+  getStaffMembers(
     req: Request,
     prisonId: string,
-    query: Parameters<KeyworkerApiClient['getKeyworkerMembers']>[1],
-  ): ReturnType<KeyworkerApiClient['getKeyworkerMembers']> {
-    return this.keyworkerApiClientBuilder(req).getKeyworkerMembers(prisonId, query)
+    query: Parameters<KeyworkerApiClient['getStaffMembers']>[1],
+  ): ReturnType<KeyworkerApiClient['getStaffMembers']> {
+    return this.keyworkerApiClientBuilder(req).getStaffMembers(prisonId, query)
   }
 
   async getStaffDetails(
@@ -82,8 +82,8 @@ export default class KeyworkerApiService {
     return this.keyworkerApiClientBuilder(req).searchPrisoners(prisonCode, body)
   }
 
-  getKeyworkerAllocations(req: Request, prisonerId: string): ReturnType<KeyworkerApiClient['getKeyworkerAllocations']> {
-    return this.keyworkerApiClientBuilder(req).getKeyworkerAllocations(prisonerId)
+  getStaffAllocations(req: Request, prisonerId: string): ReturnType<KeyworkerApiClient['getStaffAllocations']> {
+    return this.keyworkerApiClientBuilder(req).getStaffAllocations(prisonerId)
   }
 
   putAllocationDeallocations(

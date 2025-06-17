@@ -8,19 +8,19 @@ import { SelectKeyworkerSchemaType } from './selectKeyworkerSchema'
 export class ChangeStaffController {
   constructor(readonly keyworkerApiService: KeyworkerApiService) {}
 
-  getChangeKeyworkerData = async (req: Request, res: Response) => {
-    const keyworkers = await this.keyworkerApiService.getKeyworkerMembers(req, res.locals.user.getActiveCaseloadId()!, {
+  getChangeStaffData = async (req: Request, res: Response) => {
+    const staff = await this.keyworkerApiService.getStaffMembers(req, res.locals.user.getActiveCaseloadId()!, {
       status: 'ACTIVE',
     })
 
     return {
       count: req.flash(FLASH_KEY__COUNT)[0],
       apiError: req.flash(FLASH_KEY__API_ERROR)[0],
-      keyworkers: keyworkers
-        .sort((a, b) => (a.numberAllocated > b.numberAllocated ? 1 : -1))
+      staff: staff
+        .sort((a, b) => (a.allocated > b.allocated ? 1 : -1))
         .map(o => {
           return {
-            text: `${lastNameCommaFirstName(o)} (allocations: ${o.numberAllocated})`,
+            text: `${lastNameCommaFirstName(o)} (allocations: ${o.allocated})`,
             value: `allocate:${o.staffId}`,
           }
         }),
@@ -38,17 +38,17 @@ export class ChangeStaffController {
     }
 
     for (const prisonerKeyworker of req.body.selectKeyworker.filter(Boolean)) {
-      const [prisonNumber, action, keyWorkerId, isAuto] = prisonerKeyworker.split(':')
+      const [prisonNumber, action, staffId, isAuto] = prisonerKeyworker.split(':')
       if (action === 'deallocate') {
         apiBody.deallocations.push({
           personIdentifier: prisonNumber!,
-          staffId: Number(keyWorkerId),
+          staffId: Number(staffId),
           deallocationReason: 'MANUAL',
         })
       } else {
         apiBody.allocations.push({
           personIdentifier: prisonNumber!,
-          staffId: Number(keyWorkerId),
+          staffId: Number(staffId),
           allocationReason: isAuto ? 'AUTO' : 'MANUAL',
         })
       }
