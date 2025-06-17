@@ -265,7 +265,7 @@ const stubKeyworkerStatuses = () =>
   createBasicHttpStub('GET', '/keyworker-api/reference-data/staff-status', 200, keyworkerStatuses)
 
 const stubPrisonerAllocations = () =>
-  createBasicHttpStub('GET', '/keyworker-api/prisoners/A9965EA/keyworkers', 200, prisonerAllocationResponse)
+  createBasicHttpStub('GET', '/keyworker-api/prisoners/A9965EA/allocations', 200, prisonerAllocationResponse)
 
 const stubUpdateStaffProperties = () =>
   createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/staff/.*/configuration', 200, {})
@@ -708,7 +708,7 @@ const prisonerAllocationResponse = {
   allocations: [
     {
       active: true,
-      keyworker: {
+      staffMember: {
         staffId: 488021,
         firstName: 'Sample',
         lastName: 'Keyworker',
@@ -729,7 +729,7 @@ const prisonerAllocationResponse = {
     },
     {
       active: false,
-      keyworker: {
+      staffMember: {
         staffId: 488021,
         firstName: 'Smith',
         lastName: 'Last-Name',

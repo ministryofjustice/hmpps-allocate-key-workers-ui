@@ -36,9 +36,9 @@
   <div class="govuk-!-width-one-half">
     {% for allocation in allocationHistory %}
       {% if allocation.active %}
-        {% set cardTitle = "Current key worker: " + (allocation.keyworker | firstNameSpaceLastName) %}
+        {% set cardTitle = "Current key worker: " + (allocation.staffMember | firstNameSpaceLastName) %}
       {% else %}
-        {% set cardTitle = "Previous key worker: " + (allocation.keyworker | firstNameSpaceLastName) %}
+        {% set cardTitle = "Previous key worker: " + (allocation.staffMember | firstNameSpaceLastName) %}
       {% endif %}
 
       {% if allocation.deallocated %}

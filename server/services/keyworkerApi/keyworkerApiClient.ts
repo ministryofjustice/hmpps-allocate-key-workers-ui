@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import RestClient from '../../data/restClient'
 import config from '../../config'
-import type { components } from '../../@types/keyWorker'
+import type { components, operations } from '../../@types/keyWorker'
 
 export interface ServiceConfigInfo {
   git: {
@@ -104,7 +104,7 @@ export default class KeyworkerApiClient {
   }
 
   async getReferenceData(
-    domain: 'staff-status' | 'allocation-reason' | 'deallocation-reason',
+    domain: operations['findReferenceDataForDomain']['parameters']['path']['domain'],
   ): Promise<components['schemas']['CodedDescription'][]> {
     const response = await this.restClient.get<components['schemas']['CodedDescription'][]>({
       path: `/reference-data/${domain}`,
@@ -125,9 +125,9 @@ export default class KeyworkerApiClient {
     return response.content
   }
 
-  async getStaffAllocations(prisonerId: string): Promise<components['schemas']['PersonStaffAllocationHistory']> {
-    const response = await this.restClient.get<components['schemas']['PersonStaffAllocationHistory']>({
-      path: `/prisoners/${prisonerId}/keyworkers`,
+  async getStaffAllocations(prisonerId: string): Promise<components['schemas']['StaffAllocationHistory']> {
+    const response = await this.restClient.get<components['schemas']['StaffAllocationHistory']>({
+      path: `/prisoners/${prisonerId}/allocations`,
     })
 
     return response
@@ -136,8 +136,8 @@ export default class KeyworkerApiClient {
   async putAllocationDeallocations(
     prisonCode: string,
     data: components['schemas']['PersonStaffAllocations'],
-  ): Promise<components['schemas']['PersonStaffAllocationHistory']> {
-    const response = await this.restClient.put<components['schemas']['PersonStaffAllocationHistory']>({
+  ): Promise<components['schemas']['StaffAllocationHistory']> {
+    const response = await this.restClient.put<components['schemas']['StaffAllocationHistory']>({
       path: `/prisons/${prisonCode}/prisoners/allocations`,
       data,
     })
