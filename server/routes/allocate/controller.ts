@@ -39,7 +39,7 @@ export class AllocateStaffController extends ChangeStaffController {
       excludeActiveAllocations: query.excludeActiveAllocations,
       records,
       locations: locations.map(o => ({ text: o.localName || o.fullLocationPath, value: o.fullLocationPath })),
-      ...(await this.getChangeKeyworkerData(req, res)),
+      ...(await this.getChangeStaffData(req, res)),
       showBreadcrumbs: true,
     })
   }

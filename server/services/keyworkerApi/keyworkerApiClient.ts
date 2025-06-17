@@ -85,11 +85,11 @@ export default class KeyworkerApiClient {
     })
   }
 
-  async getKeyworkerMembers(
+  async getStaffMembers(
     prisonId: string,
-    query: components['schemas']['KeyworkerSearchRequest'],
-  ): Promise<components['schemas']['KeyworkerSummary'][]> {
-    const response = await this.restClient.post<{ content: components['schemas']['KeyworkerSummary'][] }>({
+    query: components['schemas']['StaffSearchRequest'],
+  ): Promise<components['schemas']['StaffSearchResult'][]> {
+    const response = await this.restClient.post<{ content: components['schemas']['StaffSearchResponse']['content'] }>({
       path: `/search/prisons/${prisonId}/staff-allocations`,
       data: query,
     })
@@ -125,7 +125,7 @@ export default class KeyworkerApiClient {
     return response.content
   }
 
-  async getKeyworkerAllocations(prisonerId: string): Promise<components['schemas']['PersonStaffAllocationHistory']> {
+  async getStaffAllocations(prisonerId: string): Promise<components['schemas']['PersonStaffAllocationHistory']> {
     const response = await this.restClient.get<components['schemas']['PersonStaffAllocationHistory']>({
       path: `/prisoners/${prisonerId}/keyworkers`,
     })
