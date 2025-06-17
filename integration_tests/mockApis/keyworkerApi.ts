@@ -79,23 +79,7 @@ const stubPutAllocationSuccess = () => {
 }
 
 const stubPutAllocationRecommendationSuccess = () => {
-  return createHttpStub(
-    'PUT',
-    '/keyworker-api/prisons/LEI/prisoners/keyworkers',
-    undefined,
-    [
-      {
-        equalToJson: {
-          allocations: [
-            { personIdentifier: 'A2504EA', staffId: 488095, allocationReason: 'AUTO' },
-            { personIdentifier: 'G7189VT', staffId: 488096, allocationReason: 'MANUAL' },
-          ],
-          deallocations: [],
-        },
-      },
-    ],
-    204,
-  )
+  return createHttpStub('PUT', '/keyworker-api/prisons/LEI/prisoners/keyworkers', undefined, [], 204)
 }
 
 const stubPutAllocationFail = (code: number = 500, message?: string) => {
@@ -289,42 +273,13 @@ const stubUpdateStaffProperties = () =>
 const stubAssignRoleToStaff = () =>
   createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/staff/.*/job-classification', 204, {})
 
-const stubAllocationRecommendations = () =>
+const stubAllocationRecommendations = (allocationRecommendations: components['schemas']['RecommendedAllocations']) =>
   createBasicHttpStub(
     'GET',
     '/keyworker-api/prisons/.*/prisoners/allocation-recommendations',
     200,
     allocationRecommendations,
   )
-
-const allocationRecommendations = {
-  allocations: [
-    {
-      personIdentifier: 'A2504EA',
-      location: 'COURT',
-      staff: {
-        staffId: 488095,
-        firstName: 'UNAVAILABLE',
-        lastName: 'ANNUAL-LEAVE',
-        status: { code: 'UNA', description: 'Unavailable - annual leave' },
-        capacity: 1,
-        allocated: 1,
-        allowAutoAllocation: true,
-      },
-    },
-  ],
-  staff: [
-    {
-      staffId: 488096,
-      firstName: 'AVAILABLE',
-      lastName: 'ACTIVE',
-      status: { code: 'ACT', description: 'Active' },
-      capacity: 1,
-      allocated: 0,
-      allowAutoAllocation: true,
-    },
-  ],
-}
 
 const keyworkerManageResponse = {
   content: [

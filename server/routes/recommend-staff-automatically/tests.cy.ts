@@ -13,9 +13,34 @@ context('/recommend-staff-automatically', () => {
     cy.task('stubKeyworkerMembersAll')
     cy.task('stubSearchPrisonersWithExcludeAllocations')
     cy.task('stubKeyworkerMembersStatusActive')
-    cy.task('stubPutAllocationSuccess')
-    cy.task('stubPutDeallocationSuccess')
-    cy.task('stubAllocationRecommendations')
+    cy.task('stubAllocationRecommendations', {
+      allocations: [
+        {
+          personIdentifier: 'A2504EA',
+          location: 'COURT',
+          staff: {
+            staffId: 488095,
+            firstName: 'UNAVAILABLE',
+            lastName: 'ANNUAL-LEAVE',
+            status: { code: 'UNA', description: 'Unavailable - annual leave' },
+            capacity: 1,
+            allocated: 1,
+            allowAutoAllocation: true,
+          },
+        },
+      ],
+      staff: [
+        {
+          staffId: 488096,
+          firstName: 'AVAILABLE',
+          lastName: 'ACTIVE',
+          status: { code: 'ACT', description: 'Active' },
+          capacity: 1,
+          allocated: 0,
+          allowAutoAllocation: true,
+        },
+      ],
+    })
   })
 
   it('should load page correctly', () => {

@@ -30,7 +30,7 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
           .map(s => {
             return {
               text: `${lastNameCommaFirstName(s)} (allocations: ${s.allocated})`,
-              value: `allocate:${s.staffId}`,
+              value: `allocate:${s.staffId}${s.staffId === match?.staff.staffId ? ':auto' : ''}`,
             }
           }),
       }
