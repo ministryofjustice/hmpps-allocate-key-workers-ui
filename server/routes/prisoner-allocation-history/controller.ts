@@ -13,7 +13,7 @@ export class PrisonerAllocationHistoryController {
     res.render('prisoner-allocation-history/view', {
       prisoner,
       allocationHistory: keyworkerAllocations.allocations,
-      backUrl: `/${res.locals.policyPath}/allocate-staff${searchParams.length > 0 ? `?${searchParams}` : ''}`,
+      backUrl: `/${res.locals.policyPath}/allocate${searchParams.length > 0 ? `?${searchParams}` : ''}`,
     })
   }
 }

@@ -74,7 +74,7 @@ context('test / homepage', () => {
     cy.get('h2 > .card__link')
       .eq(0)
       .should('contain.text', 'Allocate key workers to prisoners')
-      .and('have.attr', 'href', '/key-worker/allocate-staff')
+      .and('have.attr', 'href', '/key-worker/allocate')
     cy.get('.card__description')
       .eq(0)
       .should(

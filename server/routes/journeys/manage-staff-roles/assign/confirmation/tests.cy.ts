@@ -22,7 +22,7 @@ context('/manage-staff-roles/assign/confirmation', () => {
     cy.findByRole('link', { name: /allocate prisoners to key workers/ })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('match', /\/key-worker\/allocate-staff$/)
+      .and('match', /\/key-worker\/allocate$/)
 
     cy.findByRole('link', { name: /Return to key workers homepage/ })
       .should('be.visible')

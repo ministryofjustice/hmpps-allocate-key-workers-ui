@@ -29,7 +29,7 @@ const createHttpStub = (
 const stubPutDeallocationSuccess = () => {
   return createHttpStub(
     'PUT',
-    '/keyworker-api/prisons/LEI/prisoners/keyworkers',
+    '/keyworker-api/prisons/LEI/prisoners/allocations',
     undefined,
     [
       {
@@ -53,7 +53,7 @@ const stubPutDeallocationSuccess = () => {
 const stubPutAllocationSuccess = () => {
   return createHttpStub(
     'PUT',
-    '/keyworker-api/prisons/LEI/prisoners/keyworkers',
+    '/keyworker-api/prisons/LEI/prisoners/allocations',
     undefined,
     [
       {
@@ -79,11 +79,11 @@ const stubPutAllocationSuccess = () => {
 }
 
 const stubPutAllocationRecommendationSuccess = () => {
-  return createHttpStub('PUT', '/keyworker-api/prisons/LEI/prisoners/keyworkers', undefined, [], 204)
+  return createHttpStub('PUT', '/keyworker-api/prisons/LEI/prisoners/allocations', undefined, [], 204)
 }
 
 const stubPutAllocationFail = (code: number = 500, message?: string) => {
-  return createHttpStub('PUT', '/keyworker-api/prisons/LEI/prisoners/keyworkers', undefined, undefined, code, {
+  return createHttpStub('PUT', '/keyworker-api/prisons/LEI/prisoners/allocations', undefined, undefined, code, {
     status: code,
     userMessage: message,
     developerMessage: message,
@@ -145,7 +145,7 @@ const stubKeyworkerApiStatsNoData = () =>
 const stubKeyworkerMembersAll = () =>
   createHttpStub(
     'POST',
-    '/keyworker-api/search/prisons/LEI/keyworkers',
+    '/keyworker-api/search/prisons/LEI/staff-allocations',
     undefined,
     [
       {
@@ -160,12 +160,12 @@ const stubKeyworkerMembersAll = () =>
   )
 
 const stubKeyworkerMembersError = () =>
-  createHttpStub('POST', '/keyworker-api/search/prisons/LEI/keyworkers', undefined, undefined, 502, {})
+  createHttpStub('POST', '/keyworker-api/search/prisons/LEI/staff-allocations', undefined, undefined, 502, {})
 
 const stubKeyworkerMembersNone = () =>
   createHttpStub(
     'POST',
-    '/keyworker-api/search/prisons/LEI/keyworkers',
+    '/keyworker-api/search/prisons/LEI/staff-allocations',
     undefined,
     [
       {
@@ -182,7 +182,7 @@ const stubKeyworkerMembersNone = () =>
 const stubKeyworkerMembersQuery = () =>
   createHttpStub(
     'POST',
-    '/keyworker-api/search/prisons/LEI/keyworkers',
+    '/keyworker-api/search/prisons/LEI/staff-allocations',
     undefined,
     [
       {
@@ -199,7 +199,7 @@ const stubKeyworkerMembersQuery = () =>
 const stubKeyworkerMembersStatus = () =>
   createHttpStub(
     'POST',
-    '/keyworker-api/search/prisons/LEI/keyworkers',
+    '/keyworker-api/search/prisons/LEI/staff-allocations',
     undefined,
     [
       {
@@ -216,7 +216,7 @@ const stubKeyworkerMembersStatus = () =>
 const stubKeyworkerMembersStatusActive = () =>
   createHttpStub(
     'POST',
-    '/keyworker-api/search/prisons/LEI/keyworkers',
+    '/keyworker-api/search/prisons/LEI/staff-allocations',
     undefined,
     [
       {

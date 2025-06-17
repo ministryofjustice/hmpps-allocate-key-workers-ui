@@ -90,7 +90,7 @@ export default class KeyworkerApiClient {
     query: components['schemas']['KeyworkerSearchRequest'],
   ): Promise<components['schemas']['KeyworkerSummary'][]> {
     const response = await this.restClient.post<{ content: components['schemas']['KeyworkerSummary'][] }>({
-      path: `/search/prisons/${prisonId}/keyworkers`,
+      path: `/search/prisons/${prisonId}/staff-allocations`,
       data: query,
     })
 
@@ -119,9 +119,7 @@ export default class KeyworkerApiClient {
   ): Promise<components['schemas']['PersonSearchResponse']['content']> {
     const response = await this.restClient.post<components['schemas']['PersonSearchResponse']>({
       path: `/search/prisons/${prisonCode}/prisoners`,
-      data: {
-        ...body,
-      },
+      data: body,
     })
 
     return response.content
@@ -140,7 +138,7 @@ export default class KeyworkerApiClient {
     data: components['schemas']['PersonStaffAllocations'],
   ): Promise<components['schemas']['PersonStaffAllocationHistory']> {
     const response = await this.restClient.put<components['schemas']['PersonStaffAllocationHistory']>({
-      path: `/prisons/${prisonCode}/prisoners/keyworkers`,
+      path: `/prisons/${prisonCode}/prisoners/allocations`,
       data,
     })
 

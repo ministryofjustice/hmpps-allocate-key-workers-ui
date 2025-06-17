@@ -1,6 +1,6 @@
 import AuthorisedRoles from '../../authentication/authorisedRoles'
 
-context('/allocate-staff', () => {
+context('/allocate', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubComponents')
@@ -55,13 +55,13 @@ context('/allocate-staff', () => {
   it('should handle invalid queries', () => {
     navigateToTestPage()
 
-    cy.visit('/key-worker/allocate-staff?query=<script>alert%28%27inject%27%29<%2Fscript>', {
+    cy.visit('/key-worker/allocate?query=<script>alert%28%27inject%27%29<%2Fscript>', {
       failOnStatusCode: false,
     })
     cy.findByRole('textbox', { name: /Name or prison number/ }).should('have.value', '')
     cy.get('.govuk-table__row').should('have.length', 4)
 
-    cy.visit('/key-worker/allocate-staff?cellLocationPrefix=<script>alert%28%27inject%27%29<%2Fscript>', {
+    cy.visit('/key-worker/allocate?cellLocationPrefix=<script>alert%28%27inject%27%29<%2Fscript>', {
       failOnStatusCode: false,
     })
     cy.findByRole('combobox', { name: /Residential location/ }).should('have.value', '')
@@ -81,21 +81,21 @@ context('/allocate-staff', () => {
 
   it('should preserve queries on submit form validation error', () => {
     navigateToTestPage()
-    cy.visit('/key-worker/allocate-staff?excludeActiveAllocations=true', {
+    cy.visit('/key-worker/allocate?excludeActiveAllocations=true', {
       failOnStatusCode: false,
     })
 
     cy.findByRole('button', { name: /Save changes/i }).click()
     cy.findByRole('link', { name: /Select key workers from the dropdown lists/ }).should('be.visible')
 
-    cy.url().should('match', /\/key-worker\/allocate-staff\?excludeActiveAllocations=true#$/)
+    cy.url().should('match', /\/key-worker\/allocate\?excludeActiveAllocations=true#$/)
   })
 
   it('should show error on de/allocation failure (500)', () => {
     cy.task('stubPutAllocationFail500')
     navigateToTestPage()
 
-    cy.visit('/key-worker/allocate-staff?query=John', { failOnStatusCode: false })
+    cy.visit('/key-worker/allocate?query=John', { failOnStatusCode: false })
 
     cy.get('.govuk-table__row').should('have.length', 2)
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'John, Doe')
@@ -111,7 +111,7 @@ context('/allocate-staff', () => {
     cy.task('stubPutAllocationFail400')
     navigateToTestPage()
 
-    cy.visit('/key-worker/allocate-staff?query=John', { failOnStatusCode: false })
+    cy.visit('/key-worker/allocate?query=John', { failOnStatusCode: false })
 
     cy.get('.govuk-table__row').should('have.length', 2)
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'John, Doe')
@@ -137,7 +137,7 @@ context('/allocate-staff', () => {
     cy.task('stubPutDeallocationSuccess')
     navigateToTestPage()
 
-    cy.visit('/key-worker/allocate-staff?query=John', { failOnStatusCode: false })
+    cy.visit('/key-worker/allocate?query=John', { failOnStatusCode: false })
 
     cy.get('.govuk-table__row').should('have.length', 2)
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'John, Doe')
@@ -166,7 +166,7 @@ context('/allocate-staff', () => {
     cy.task('stubPutDeallocationSuccess')
     navigateToTestPage()
 
-    cy.visit('/key-worker/allocate-staff', { failOnStatusCode: false })
+    cy.visit('/key-worker/allocate', { failOnStatusCode: false })
 
     cy.get('.govuk-table__row').should('have.length', 4)
     cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
@@ -408,6 +408,6 @@ context('/allocate-staff', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-worker/allocate-staff', { failOnStatusCode: false })
+    cy.visit('/key-worker/allocate', { failOnStatusCode: false })
   }
 })

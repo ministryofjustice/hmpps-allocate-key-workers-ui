@@ -3,14 +3,14 @@ import { HomePageController } from './controller'
 import { StaffStatisticsRoutes } from './staff-statistics/routes'
 import { StaffMembersRoutes } from './manage-staff/routes'
 import { StaffProfileRoutes } from './staff-profile/routes'
-import { AllocateStaffRoutes } from './allocate-staff/routes'
+import { AllocateStaffRoutes } from './allocate/routes'
 import { PrisonerAllocationHistoryRoutes } from './prisoner-allocation-history/routes'
 import removeTrailingSlashMiddleware from '../middleware/removeTrailingSlashMiddleware'
 import insertJourneyIdentifier from '../middleware/journey/insertJourneyIdentifier'
 import JourneyRoutes from './journeys/routes'
 import { dataAccess } from '../data'
 import { EstablishmentSettingsRoutes } from './establishment-settings/routes'
-import { RecommendStaffAutomaticallyRoutes } from './recommend-staff-automatically/routes'
+import { RecommendStaffAutomaticallyRoutes } from './recommend-allocations/routes'
 import { StaffDataRoutes } from './staff-data/routes'
 import {
   populateUserPermissionsAndPrisonConfig,
@@ -61,10 +61,10 @@ export default function routes(services: Services) {
   )
 
   router.use('/staff-statistics', StaffStatisticsRoutes(services))
-  router.use('/allocate-staff', AllocateStaffRoutes(services))
+  router.use('/allocate', AllocateStaffRoutes(services))
   router.use('/prisoner-allocation-history', PrisonerAllocationHistoryRoutes(services))
   router.use('/establishment-settings', EstablishmentSettingsRoutes(services))
-  router.use('/recommend-staff-automatically', RecommendStaffAutomaticallyRoutes(services))
+  router.use('/recommend-allocations', RecommendStaffAutomaticallyRoutes(services))
   router.use('/staff-data', StaffDataRoutes(services))
   router.use('/manage-staff', StaffMembersRoutes(services))
   router.use('/manage-staff-roles', ManageStaffRolesRoutes())

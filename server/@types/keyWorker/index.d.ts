@@ -175,6 +175,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/search/prisons/{prisonCode}/staff-allocations': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
+    post: operations['searchAllocatableStaff']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/search/prisons/{prisonCode}/prisoners': {
     parameters: {
       query?: never
@@ -894,6 +914,37 @@ export interface components {
       staffRole?: components['schemas']['StaffRoleInfo']
       username: string
       email?: string
+    }
+    AllocatableSearchRequest: {
+      query?: string
+      /** @enum {string} */
+      status:
+        | 'ALL'
+        | 'ACTIVE'
+        | 'UNAVAILABLE_ANNUAL_LEAVE'
+        | 'UNAVAILABLE_LONG_TERM_ABSENCE'
+        | 'UNAVAILABLE_NO_PRISONER_CONTACT'
+        | 'INACTIVE'
+    }
+    AllocatableSearchResponse: {
+      content: components['schemas']['AllocatableSummary'][]
+    }
+    AllocatableSummary: {
+      /** Format: int64 */
+      staffId: number
+      firstName: string
+      lastName: string
+      status: components['schemas']['CodedDescription']
+      /** Format: int32 */
+      capacity: number
+      /** Format: int32 */
+      allocated: number
+      allowAutoAllocation: boolean
+      /** Format: int32 */
+      numberOfSessions: number
+      /** Format: int32 */
+      numberOfEntries: number
+      staffRole: components['schemas']['StaffRoleInfo']
     }
     PersonSearchRequest: {
       query?: string
@@ -2055,6 +2106,37 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['StaffSearchResponse']
+        }
+      }
+    }
+  }
+  searchAllocatableStaff: {
+    parameters: {
+      query?: never
+      header: {
+        /** @description
+         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
+         *          */
+        Policy: string
+      }
+      path: {
+        prisonCode: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AllocatableSearchRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['AllocatableSearchResponse']
         }
       }
     }

@@ -36,13 +36,13 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
       }
     })
 
-    res.render('recommend-staff-automatically/view', {
-      backUrl: 'allocate-staff',
+    res.render('recommend-allocations/view', {
+      backUrl: 'allocate',
       records: matchedPrisoners,
       count: req.flash(FLASH_KEY__COUNT)[0],
       apiError: req.flash(FLASH_KEY__API_ERROR)[0],
     })
   }
 
-  POST = async (_req: Request, res: Response) => res.redirect('recommend-staff-automatically')
+  POST = async (_req: Request, res: Response) => res.redirect('recommend-allocations')
 }
