@@ -28,7 +28,3 @@ export const initialiseName = (fullName: string | undefined | null): string | nu
   }
   return `${firstName[0]}. ${array.reverse()[0]}`
 }
-
-export function notNullish<T>(value: T | null | undefined): value is T {
-  return value != null
-}

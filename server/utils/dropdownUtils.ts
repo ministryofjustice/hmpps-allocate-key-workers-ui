@@ -29,9 +29,6 @@ export const addSelectValue = (
 
 export const setSelectedValue = (items: SelectOption[] | null, selected: string | number): SelectOption[] | null => {
   if (!items) return null
-  // if (!items.find(o => o.value === selected)) {
-  //   debugger
-  // }
   return items.map(entry => ({
     ...entry,
     selected: entry && entry.value === selected,

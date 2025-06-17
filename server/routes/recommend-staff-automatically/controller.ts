@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { ChangeStaffController } from '../base/changeKeyWorkerController'
+import { ChangeStaffController } from '../base/changeStaffController'
 import { FLASH_KEY__API_ERROR, FLASH_KEY__COUNT } from '../../utils/constants'
 import { lastNameCommaFirstName } from '../../utils/formatUtils'
 
