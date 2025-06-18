@@ -1,0 +1,35 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = "Remove role" %}
+
+{% block innerContent %}
+  <div class="govuk-width-container govuk-body">
+    <h1 class="govuk-heading-xl">
+      Are you sure you want to remove the {{ policyName }} role from {{ staff | lastNameCommaFirstName }}?
+    </h1>
+
+    <p class="govuk-!-margin-bottom-6">
+      They will no longer be a {{ policyName }} and their {{ staff.allocated }} allocated prisoners will be deallocated. You will need to make them a {{ policyName }} again to be able to assign prisoners to them in future.
+    </p>
+
+    <form method="post">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Yes, remove the role",
+          classes: "govuk-button--warning",
+          preventDoubleClick: true
+        }) }}
+
+        {{ govukButton({
+          text: "No, return to homepage ",
+          classes: "govuk-button--secondary",
+          href: "/" + policyPath,
+          preventDoubleClick: true
+        }) }}
+      </div>
+    </form>
+  </div>
+{% endblock %}

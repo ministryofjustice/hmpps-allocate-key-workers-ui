@@ -23,6 +23,7 @@ export type JourneyData = {
   keyWorkerDetails?: components['schemas']['StaffDetails']
   updateCapacityStatus?: UpdateCapacityStatusJourney
   assignStaffRole?: AssignStaffRoleJourney
+  removeStaffRole?: RemoveStaffRoleJourney
 }
 
 export type UpdateCapacityStatusJourney = Partial<{
@@ -41,6 +42,17 @@ export type StaffSummary = {
   email: string | undefined
 }
 
+export type StaffSummaryWithRole = StaffSummary & {
+  allocated: number
+  staffRole: {
+    position: ReferenceData
+    scheduleType: ReferenceData
+    hoursPerWeek: number
+    fromDate: string
+    toDate?: string
+  }
+}
+
 export type AssignStaffRoleJourney = Partial<{
   query: string
   searchResults: StaffSummary[]
@@ -48,6 +60,12 @@ export type AssignStaffRoleJourney = Partial<{
   isPrisonOfficer: boolean
   scheduleType: ReferenceData
   hoursPerWeek: number
+}>
+
+export type RemoveStaffRoleJourney = Partial<{
+  query: string
+  searchResults: StaffSummaryWithRole[]
+  staff: StaffSummaryWithRole
 }>
 
 export declare global {

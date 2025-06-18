@@ -1,0 +1,16 @@
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
+{% extends "partials/layout.njk" %}
+
+{% set pageTitle = "Confirmation" %}
+
+{% block innerContent %}
+    {{ govukPanel({
+        titleText: policyName | sentenceCase  + " role removed",
+        text: "You have successfully removed the " + policyName + " role from " + staff | lastNameCommaFirstName
+    }) }}
+
+  <p class="govuk-body">
+    <a class="govuk-link govuk-link--no-visited-state" href="/{{ policyPath }}">Return to {{ policyName }}s homepage</a>
+  </p>
+{% endblock %}
