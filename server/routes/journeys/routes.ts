@@ -5,6 +5,7 @@ import setUpJourneyData from '../../middleware/journey/setUpJourneyData'
 import { StartUpdateStaffRoutes } from './start-update-staff/routes'
 import { UpdateCapacityAndStatusRoutes } from './update-capacity-status/routes'
 import { AssignStaffRoleRoutes } from './manage-staff-roles/assign/routes'
+import { RemoveStaffRoleRoutes } from './manage-staff-roles/remove/routes'
 
 export default function JourneyRoutes(dataAccess: DataAccess, services: Services) {
   const router = Router({ mergeParams: true })
@@ -15,6 +16,7 @@ export default function JourneyRoutes(dataAccess: DataAccess, services: Services
   router.use('/update-capacity-status', UpdateCapacityAndStatusRoutes(services))
 
   router.use('/manage-staff-roles/assign', AssignStaffRoleRoutes(services))
+  router.use('/manage-staff-roles/remove', RemoveStaffRoleRoutes(services))
 
   if (process.env.NODE_ENV === 'e2e-test') {
     /* eslint-disable no-param-reassign */
