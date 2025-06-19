@@ -11,7 +11,11 @@
     </h1>
 
     <p class="govuk-!-margin-bottom-6">
-      They will no longer be a {{ policyName }} and their {{ staff.allocated }} allocated prisoners will be deallocated. You will need to make them a {{ policyName }} again to be able to assign prisoners to them in future.
+      {% if staff.allocated %}
+        They will no longer be a {{ policyName }} and their {{ staff.allocated }} allocated prisoners will be deallocated. You will need to make them a {{ policyName }} again to be able to assign prisoners to them in future.
+      {% else %}
+        They will no longer be a {{ policyName }}. You will need to make them a {{ policyName }} again to be able to assign prisoners to them in future.
+      {% endif %}
     </p>
 
     <form method="post">
