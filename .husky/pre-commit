@@ -1,5 +1,5 @@
 #!/bin/bash
-node .husky/policyAware.js
+node hardcodeCheck.js
 
 NODE_ENV=dev \
 npm run precommit:secrets \
