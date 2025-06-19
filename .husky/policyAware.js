@@ -39,7 +39,7 @@ try {
     matches.forEach(m => console.error(m))
     process.exit(1)
   } else {
-    console.log('✅ No hardcoded polcy names found.')
+    console.log('✅ No hardcoded policy names found.')
     process.exit(0)
   }
 } catch (err) {
