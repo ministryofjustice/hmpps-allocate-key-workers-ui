@@ -27,7 +27,8 @@
     "swagger-locations": "npx openapi-typescript https://locations-inside-prison-api-dev.hmpps.service.justice.gov.uk/v3/api-docs > ./server/@types/locationsInsidePrison/index.d.ts",
     "precommit:secrets": "gitleaks git --pre-commit --redact --staged --verbose --config .gitleaks/config.toml",
     "precommit:lint": "node_modules/.bin/lint-staged",
-    "precommit:verify": "npm run typecheck && npm test"
+    "precommit:verify": "npm run typecheck && npm test",
+    "precommit:hardcode": "node hardcodeCheck.js"
   },
   "engines": {
     "node": "^22",

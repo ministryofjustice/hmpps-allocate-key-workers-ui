@@ -1,9 +1,6 @@
 #!/bin/bash
-node hardcodeCheck.js
-
 NODE_ENV=dev \
 npm run precommit:secrets \
 && npm run precommit:lint \
 && npm run precommit:verify \
-
-
+&& npm run precommit:hardcode 
