@@ -38,21 +38,21 @@ export class StaffStatisticsController {
     if (!current) return []
 
     const items = {
-      activeKeyworkers: { heading: 'Total number of active key workers', type: 'number' },
+      activeKeyworkers: { heading: 'Total number of active [staffs]', type: 'number' },
       percentageWithKeyworker: {
-        heading: 'Percentage of prisoners with an allocated key worker',
+        heading: 'Percentage of prisoners with an allocated [staff]',
         type: 'percentage',
       },
       avgReceptionToAllocationDays: {
-        heading: 'Average time from reception to key worker allocation',
+        heading: 'Average time from reception to [staff] allocation',
         type: 'day',
       },
       avgReceptionToSessionDays: {
-        heading: 'Average time from reception to first key worker session',
+        heading: 'Average time from reception to first [staff] session',
         type: 'day',
       },
-      projectedSessions: { heading: 'Number of projected key worker sessions', type: 'number' },
-      keyworkerSessions: { heading: 'Number of recorded key worker sessions', type: 'number' },
+      projectedSessions: { heading: 'Number of projected [staff] sessions', type: 'number' },
+      keyworkerSessions: { heading: 'Number of recorded [staff] sessions', type: 'number' },
       compliance: { heading: 'Compliance rate', type: 'percentage' },
     }
 

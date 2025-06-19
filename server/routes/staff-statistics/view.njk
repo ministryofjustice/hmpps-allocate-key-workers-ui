@@ -65,7 +65,7 @@
       <div class="govuk-grid-row">
         {% for statistic in data %}
           <div class="govuk-grid-column-one-quarter">
-            <h2 class="govuk-heading-s">{{ statistic.heading }}</h2>
+            <h2 class="govuk-heading-s">{{ statistic.heading | policyAware(policyName) }}</h2>
             <p class="govuk-!-font-size-36">{{ statistic.value }}</p>
             {% if hasPreviousStats %}<p>{{ statistic.change.value }}</p>{% endif %}
           </div>
