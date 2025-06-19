@@ -3,7 +3,7 @@ import path from 'path'
 import nunjucks from 'nunjucks'
 import express from 'express'
 import fs from 'fs'
-import { initialiseName } from './utils'
+import { initialiseName, policyAware } from './utils'
 import config from '../config'
 import logger from '../../logger'
 import {
@@ -18,7 +18,7 @@ import { firstNameSpaceLastName, lastNameCommaFirstName, nameCase, sentenceCase 
 import {
   addSelectValue,
   conditionallyAddDeallocate,
-  excludeCurrentKeyworker,
+  excludeCurrentStaffMember,
   mergePrisonerKeyworkerIds,
   setSelectedValue,
 } from './dropdownUtils'
@@ -79,7 +79,7 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('getStatChange', getStatChange)
   njkEnv.addFilter('firstNameSpaceLastName', firstNameSpaceLastName)
   njkEnv.addFilter('formatDateConcise', formatDateConcise)
-  njkEnv.addFilter('excludeCurrentKeyworker', excludeCurrentKeyworker)
+  njkEnv.addFilter('excludeCurrentStaffMember', excludeCurrentStaffMember)
   njkEnv.addFilter('formatDateTime', formatDateTime)
   njkEnv.addFilter('mergePrisonerKeyworkerIds', mergePrisonerKeyworkerIds)
   njkEnv.addFilter('conditionallyAddDeallocate', conditionallyAddDeallocate)
@@ -89,7 +89,5 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('getHighlightedStatChange', getHighlightedStatChange)
   njkEnv.addFilter('hasPermission', hasPermission)
   njkEnv.addGlobal('yesterdayStringGBFormat', yesterdayStringGBFormat)
-  njkEnv.addFilter('policyAware', (text: string, policy: string) =>
-    sentenceCase(text.replaceAll('[staff]', policy).replaceAll('[staffs]', `${policy}s`)),
-  )
+  njkEnv.addFilter('policyAware', policyAware)
 }

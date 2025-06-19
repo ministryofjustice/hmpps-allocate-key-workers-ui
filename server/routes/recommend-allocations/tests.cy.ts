@@ -60,7 +60,7 @@ context('/recommend-allocations', () => {
     cy.findByText('There is a problem').should('be.visible')
     cy.findByRole('link', { name: /Select key workers from the dropdown lists/ })
       .should('be.visible')
-      .should('have.attr', 'href', '#selectKeyworker')
+      .should('have.attr', 'href', '#selectStaffMember')
   })
 
   it('should show error on de/allocation failure', () => {

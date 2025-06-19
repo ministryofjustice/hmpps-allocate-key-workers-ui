@@ -76,7 +76,7 @@ context('/allocate', () => {
     cy.findByText('There is a problem').should('be.visible')
     cy.findByRole('link', { name: /Select key workers from the dropdown lists/ })
       .should('be.visible')
-      .should('have.attr', 'href', '#selectKeyworker')
+      .should('have.attr', 'href', '#selectStaffMember')
   })
 
   it('should preserve queries on submit form validation error', () => {
@@ -100,7 +100,7 @@ context('/allocate', () => {
     cy.get('.govuk-table__row').should('have.length', 2)
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'John, Doe')
 
-    cy.get('#selectKeyworker').select('Deallocate')
+    cy.get('#selectStaffMember').select('Deallocate')
 
     cy.findByRole('button', { name: /Save changes/i }).click()
 
@@ -116,7 +116,7 @@ context('/allocate', () => {
     cy.get('.govuk-table__row').should('have.length', 2)
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'John, Doe')
 
-    cy.get('#selectKeyworker').select('Deallocate')
+    cy.get('#selectStaffMember').select('Deallocate')
 
     cy.findByRole('button', { name: /Save changes/i }).click()
 
@@ -142,10 +142,10 @@ context('/allocate', () => {
     cy.get('.govuk-table__row').should('have.length', 2)
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'John, Doe')
 
-    cy.get('#selectKeyworker').should('contain', 'Select key worker')
-    cy.get('#selectKeyworker').should('contain', 'Deallocate')
-    cy.get('#selectKeyworker').should('not.contain', 'Key-Worker, Available-Active (allocations: 32)')
-    cy.get('#selectKeyworker').select('Deallocate')
+    cy.get('#selectStaffMember').should('contain', 'Select key worker')
+    cy.get('#selectStaffMember').should('contain', 'Deallocate')
+    cy.get('#selectStaffMember').should('not.contain', 'Key-Worker, Available-Active (allocations: 32)')
+    cy.get('#selectStaffMember').select('Deallocate')
 
     cy.findByRole('button', { name: /Save changes/i }).click()
 

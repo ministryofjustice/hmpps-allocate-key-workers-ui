@@ -58,7 +58,7 @@
               items: [
                 {
                   value: "true",
-                  text: "Prisoners without a key worker",
+                  text: "Prisoners without a " + policyName,
                   checked: excludeActiveAllocations
                 }
               ]
@@ -70,13 +70,13 @@
     {% if user | hasPermission('allocate') %}
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-          <p>Use the dropdown lists to assign key workers to prisoners or deallocate them.<br/>Changes will only take affect when you select save.</p>
-          <p>Select ‘Assign key workers automatically’ to get key worker recommendations for all prisoners without a current key worker. You should save any changes you’ve made before selecting this.</p>
+          <p>Use the dropdown lists to assign {{ policyName }}s to prisoners or deallocate them.<br/>Changes will only take affect when you select save.</p>
+          <p>Select ‘Assign {{ policyName }}s automatically’ to get {{ policyName }} recommendations for all prisoners without a current {{ policyName }}. You should save any changes you’ve made before selecting this.</p>
         </div>
       </div>
       <div class="govuk-grid-row">
         {{ govukButton({
-          text: "Assign key workers automatically",
+          text: "Assign " + policyName + "s automatically",
           classes: "govuk-button--secondary float-right govuk-!-margin-bottom-2",
           preventDoubleClick: true,
           href: '/' + policyPath + '/recommend-allocations'
@@ -102,15 +102,15 @@
             text: item.staffMember | lastNameCommaFirstName  | default('-', true)
           },
           {
-            text: "Select keyworker",
+            text: "Select " + policyName,
             html: govukSelect({
-              id: "selectKeyworker",
-              name: "selectKeyworker",
-              text: 'Select key worker',
+              id: "selectStaffMember",
+              name: "selectStaffMember",
+              text: 'Select ' + policyName,
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: staff | excludeCurrentKeyworker(item.staffMember) | conditionallyAddDeallocate(item.staffMember.staffId) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select key worker')
+              items: staff | excludeCurrentStaffMember(item.staffMember) | conditionallyAddDeallocate(item.staffMember.staffId) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select ' + policyName)
             })
           } if user | hasPermission('allocate') else undefined,
           {
@@ -142,14 +142,14 @@
               }
             },
             {
-              text: "Key worker",
-              key: 'keyworker',
+              text: policyName | sentenceCase,
+              key: policyName,
               attributes: {
                 "aria-sort": "none"
               }
             },
             {
-              text: "Change key worker",
+              text: "Change " + policyName,
               key: 'change'
             } if user | hasPermission('allocate') else undefined,
             {

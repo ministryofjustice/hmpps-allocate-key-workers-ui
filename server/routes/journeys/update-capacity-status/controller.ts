@@ -52,7 +52,7 @@ export class UpdateCapacityAndStatusController {
       if (status.code === 'ACTIVE') {
         req.flash(
           FLASH_KEY__SUCCESS_MESSAGE,
-          getUpdateCapacityStatusSuccessMessage(status.code, capacity, staffDetails),
+          getUpdateCapacityStatusSuccessMessage(status.code, capacity, staffDetails, res.locals.policyName!),
         )
       }
 

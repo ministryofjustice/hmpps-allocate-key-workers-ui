@@ -664,10 +664,10 @@ const stubSearchPrisoner = () =>
   )
 
 const stubSearchStaff = (results: StaffSummary[] = []) =>
-  createBasicHttpStub('POST', '/keyworker-api/search/prisons/.*/staff', 200, { content: results })
+  createBasicHttpStub('POST', '/keyworker-api/search/prisons/.*/staff-allocations', 200, { content: results })
 
 const stubSearchStaffError = () =>
-  createHttpStub('POST', '/keyworker-api/search/prisons/.*/staff', undefined, undefined, 502, {})
+  createHttpStub('POST', '/keyworker-api/search/prisons/.*/staff-allocations', undefined, undefined, 502, {})
 
 const stubPutPrisonConfiguration = () =>
   createBasicHttpStub('PUT', '/keyworker-api/prisons/LEI/configurations', 200, {})

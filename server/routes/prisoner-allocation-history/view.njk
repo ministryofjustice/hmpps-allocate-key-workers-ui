@@ -28,7 +28,7 @@
   </div>
 
 
-  <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Prisoner key worker allocation history</h1>
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-0">Prisoner {{ policyName }} allocation history</h1>
   <hr />
 
   <h2 class="govuk-heading-s govuk-!-margin-top-4 govuk-!-margin-bottom-4">Current and previous allocations: {{ allocationHistory.length }}</h2>
@@ -36,9 +36,9 @@
   <div class="govuk-!-width-one-half">
     {% for allocation in allocationHistory %}
       {% if allocation.active %}
-        {% set cardTitle = "Current key worker: " + (allocation.staffMember | firstNameSpaceLastName) %}
+        {% set cardTitle = "Current " + policyName + ": " + (allocation.staffMember | firstNameSpaceLastName) %}
       {% else %}
-        {% set cardTitle = "Previous key worker: " + (allocation.staffMember | firstNameSpaceLastName) %}
+        {% set cardTitle = "Previous " + policyName + ": " + (allocation.staffMember | firstNameSpaceLastName) %}
       {% endif %}
 
       {% if allocation.deallocated %}

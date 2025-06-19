@@ -10,7 +10,7 @@
 {% set pageTitle = "Manage [staffs]" %}
 
 {% block innerContent %}
-  <h1 class="govuk-heading-l govuk-!-margin-bottom-6">Manage key workers</h1>
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-6">Manage {{ policyName }}s</h1>
 
   <div class="govuk-width-container">
     <div class="govuk-grid-row">
@@ -26,7 +26,7 @@
               value: params.query,
               classes: "min-width-two-quarters",
               label: {
-                text: 'Key worker name'
+                text: policyName | sentenceCase + ' name'
               }
             }) }}
 

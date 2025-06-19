@@ -49,14 +49,6 @@ export default class KeyworkerApiService {
     return this.keyworkerApiClientBuilder(req).updatePrisonConfig(res.locals.user.getActiveCaseloadId()!, requestBody)
   }
 
-  getStaffMembers(
-    req: Request,
-    prisonId: string,
-    query: Parameters<KeyworkerApiClient['getStaffMembers']>[1],
-  ): ReturnType<KeyworkerApiClient['getStaffMembers']> {
-    return this.keyworkerApiClientBuilder(req).getStaffMembers(prisonId, query)
-  }
-
   async getStaffDetails(
     req: Request,
     prisonCode: string,
