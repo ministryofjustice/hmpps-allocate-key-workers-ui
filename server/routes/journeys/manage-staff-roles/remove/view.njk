@@ -1,0 +1,120 @@
+{% extends "partials/layout.njk" %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "partials/submitButton/macro.njk" import submitButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
+
+{% set pageTitle = "Search for staff member" %}
+
+{% block innerContent %}
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-6">Remove the {{ policyName }} role from someone</h1>
+
+  <div class="govuk-width-container">
+    <form class="govuk-!-margin-bottom-6" method="post">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      <div class="horizontal-form">
+        {{ govukInput({
+          formGroup: {
+            classes: "govuk-!-width-three-quarters"
+          },
+          classes: "govuk-!-width-full",
+          label: {
+            text: "Find a staff member",
+            classes: "govuk-fieldset__legend--s",
+            isPageHeading: false
+          },
+          hint: {
+            text: "Search by name, work email address or username."
+          },
+          id: "query",
+          name: "query",
+          value: query,
+          errorMessage: validationErrors | findError('query')
+        }) }}
+        {{ submitButton({
+          text: "Search"
+        }) }}
+      </div>
+    </form>
+
+    {% if searchResults %}
+      {% if searchResults.length %}
+
+        {% set rows = [] %}
+        {% for item in searchResults %}
+          {% set rows = (rows.push([
+            {
+              attributes: {
+                "data-sort-value": item | lastNameCommaFirstName
+              },
+              html: '<a class="govuk-link govuk-link--no-visited-state" href="remove/select?staffId=' + item.staffId + '">' + (item | lastNameCommaFirstName) + '</a>'
+            },
+            {
+              attributes: {
+                "data-sort-value": item.email or ''
+              },
+              text: item.email or ''
+            },
+            {
+              attributes: {
+                "data-sort-value": item.username
+              },
+              text: item.username
+            }
+          ]), rows) %}
+        {% endfor %}
+
+        {{ mojPagination({
+          results: {
+            count: searchResults.length,
+            from: 1,
+            to: searchResults.length,
+            text: 'results'
+          }
+        }) }}
+
+        {{ govukTable({
+          attributes: {
+            'data-module': 'moj-sortable-table'
+          },
+          head: [
+            {
+              attributes: {
+                "aria-sort": "none"
+              },
+              text: "Name"
+            },
+            {
+              attributes: {
+                "aria-sort": "none"
+              },
+              text: "Email addres"
+            },
+            {
+              attributes: {
+                "aria-sort": "none"
+              },
+              text: "Username"
+            }
+          ],
+          rows: rows
+        }) }}
+
+        {{ mojPagination({
+          results: {
+            count: searchResults.length,
+            from: 1,
+            to: searchResults.length,
+            text: 'results'
+          }
+        }) }}
+      {% else %}
+        <p>
+          There are no results for this name or email address at {{ user.activeCaseLoad.description }}
+        </p>
+      {% endif %}
+    {% endif %}
+
+  </div>
+
+{% endblock %}

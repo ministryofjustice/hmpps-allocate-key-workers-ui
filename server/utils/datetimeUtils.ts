@@ -56,6 +56,12 @@ export const formatInputTime = (value?: string | null) => {
 
 export const todayString = () => new Date().toISOString().substring(0, 10)
 
+export const yesterdayString = () => {
+  const date = new Date()
+  date.setDate(date.getDate() - 1)
+  return date.toISOString().substring(0, 10)
+}
+
 export const todayStringGBFormat = () => DATE_FORMAT_GB.format(new Date())
 
 export const yesterdayStringGBFormat = () => {
