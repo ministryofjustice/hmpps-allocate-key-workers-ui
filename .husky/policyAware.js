@@ -4,7 +4,7 @@ const { execSync } = require('child_process')
 const fs = require('fs')
 const { sep } = require('path')
 
-const FORBIDDEN_PHRASE = /(key worker|personal officer)/i
+const HARDCODED_POLICIES = /(key worker|personal officer)/i
 const fileWhitelist = [/\.ts$/i, /\.njk$/i]
 const fileBlacklist = [/integration_tests/i, /\.cy\.ts$/i, /\.d\.ts$/i]
 
@@ -28,7 +28,7 @@ try {
     const content = fs.readFileSync(file, 'utf-8')
     const lines = content.split('\n')
     lines.forEach((line, i) => {
-      if (FORBIDDEN_PHRASE.test(line) && !shouldIgnore(file, line)) {
+      if (HARDCODED_POLICIES.test(line) && !shouldIgnore(file, line)) {
         matches.push(`${file}:${i + 1}: ${line.trim()}`)
       }
     })
