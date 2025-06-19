@@ -154,7 +154,7 @@ export default class KeyworkerApiClient {
 
   async searchStaff(prisonCode: string, query: components['schemas']['StaffSearchRequest']) {
     return this.restClient.post<components['schemas']['StaffSearchResponse']>({
-      path: `/search/prisons/${prisonCode}/staff`,
+      path: `/search/prisons/${prisonCode}/staff-allocations`,
       data: query,
     })
   }

@@ -1,10 +1,10 @@
 import { z } from 'zod'
 import { createSchema } from '../../middleware/validationMiddleware'
 
-const ERROR_MSG = 'Select key workers from the dropdown lists'
+const ERROR_MSG = 'Select [staffs] from the dropdown lists'
 
 export const selectKeyworkerSchema = createSchema({
-  selectKeyworker: z.union(
+  selectStaffMember: z.union(
     [
       z.string().transform((val, ctx) => {
         if (!val?.length) {

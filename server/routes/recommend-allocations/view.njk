@@ -9,7 +9,7 @@
 {% from "partials/deallocateSuccessError/macro.njk" import deallocateSuccessError %}
 
 {% set fullWidth = true %}
-{% set pageTitle = "Allocate key workers automatically" %}
+{% set pageTitle = "Allocate [staffs] automatically" | policyAware(policyName) %}
 
 {% block pageHeader %}
   {{ deallocateSuccessError(apiError, count) }}
@@ -21,13 +21,13 @@
   <div class="govuk-width-container">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-three-quarters">
-        <p>Key workers have been recommended for the prisoners listed below without a current key worker.</p>
-        <p>These recommendations prioritise key workers who have:</p>
+        <p>{{ policyName | sentenceCase }}s have been recommended for the prisoners listed below without a current {{ policyName }}.</p>
+        <p>These recommendations prioritise {{ policyName }}s who have:</p>
         <ul class="govuk-list govuk-list--bullet">
           <li>previously been assigned to a specific prisoner</li>
           <li>the most available capacity</li>
         </ul>
-        <p>You can change these by selecting alternative key workers from the dropdown menus. Key workers will only be allocated to prisoners when you select save.</p>
+        <p>You can change these by selecting alternative {{ policyName }}s from the dropdown menus. {{ policyName | sentenceCase }}s will only be allocated to prisoners when you select save.</p>
       </div>
     </div>
     <form method="post">
@@ -48,15 +48,14 @@
             text: item.staffMember | lastNameCommaFirstName  | default('-', true)
           },
           {
-            text: "Select keyworker",
             html: govukSelect({
-              id: "selectKeyworker",
-              name: "selectKeyworker",
-              text: 'Select key worker',
+              id: "selectStaffMember",
+              name: "selectStaffMember",
+              text: 'Select ' + policyName,
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: item.kwDropdown | mergePrisonerKeyworkerIds(item.personIdentifier, item.recommendation) | addSelectValue('Select key worker', true, '', false) | setSelectedValue(item.personIdentifier+ ':allocate:' + item.recommendation + ':auto')
+              items: item.kwDropdown | mergePrisonerKeyworkerIds(item.personIdentifier, item.recommendation) | addSelectValue('Select ' + policyName, true, '', false) | setSelectedValue(item.personIdentifier+ ':allocate:' + item.recommendation + ':auto')
             })
           },
           {
@@ -88,14 +87,14 @@
               }
             },
             {
-              text: "Key worker",
-              key: 'keyworker',
+              text: policyName | sentenceCase,
+              key: policyName,
               attributes: {
                 "aria-sort": "none"
               }
             },
             {
-              text: "Change key worker",
+              text: "Change " + policyName,
               key: 'change'
             },
             {

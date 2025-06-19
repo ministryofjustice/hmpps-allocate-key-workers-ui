@@ -67,20 +67,20 @@ export class StaffDataController {
 
     return {
       keyworkerSessions: {
-        heading: 'Number of recorded key worker sessions',
+        heading: 'Number of recorded [staff] sessions',
         type: 'number',
         currentValue: current?.keyworkerSessions,
         previousValue: previous?.keyworkerSessions,
         calculationMethod:
-          'This figure is calculated by taking the total number of key worker session case notes created in the selected date range.',
+          'This figure is calculated by taking the total number of [staff] session case notes created in the selected date range.',
       },
       keyworkerEntries: {
-        heading: 'Number of recorded key worker entries',
+        heading: 'Number of recorded [staff] entries',
         type: 'number',
         currentValue: current?.keyworkerEntries,
         previousValue: previous?.keyworkerEntries,
         calculationMethod:
-          'This figure is calculated by taking the total number of key worker entry case notes created in the selected date range.',
+          'This figure is calculated by taking the total number of [staff] entry case notes created in the selected date range.',
       },
       totalPrisoners: {
         heading: 'Total number of prisoners',
@@ -99,32 +99,32 @@ export class StaffDataController {
           'This figure displays the average number of high complexity prisoners in the establishment during the date range selected.',
       },
       percentageWithKeyworker: {
-        heading: 'Percentage of prisoners with an allocated key worker',
+        heading: 'Percentage of prisoners with an allocated [staff]',
         type: 'percentage',
         currentValue: current?.percentageWithKeyworker,
         previousValue: previous?.percentageWithKeyworker,
         calculationMethod:
-          'This figure is created by dividing the total number of prisoners in the establishment with the total number of prisoners who have been allocated a key worker.',
+          'This figure is created by dividing the total number of prisoners in the establishment with the total number of prisoners who have been allocated a [staff].',
       },
       activeKeyworkers: {
-        heading: 'Total number of active key workers',
+        heading: 'Total number of active [staffs]',
         type: 'number',
         currentValue: current?.activeKeyworkers,
         previousValue: previous?.activeKeyworkers,
         calculationMethod:
-          'This figure displays the average total number of active key workers in the establishment during the date range selected. This does not include key workers with an unavailable or inactive status.',
+          'This figure displays the average total number of active [staffs] in the establishment during the date range selected. This does not include [staffs] with an unavailable or inactive status.',
       },
       avgReceptionToSessionDays: {
-        heading: 'Average time from reception to first key worker session',
+        heading: 'Average time from reception to first [staff] session',
         type: 'day',
         currentValue: current?.avgReceptionToSessionDays,
         previousValue: previous?.avgReceptionToSessionDays,
         calculationMethod:
           'The reception date is calculated by taking the date from the latest instance of a transfer case note for the prisoner within the last 6 months. <br /> <br />' +
-          'The first key worker session is taken from the date of the first key worker session case note added in the prison in the last 6 months. ',
+          'The first [staff] session is taken from the date of the first [staff] session case note added in the prison in the last 6 months. ',
       },
       avgReceptionToAllocationDays: {
-        heading: 'Average time from reception to key worker allocation',
+        heading: 'Average time from reception to [staff] allocation',
         type: 'day',
         currentValue: current?.avgReceptionToAllocationDays,
         previousValue: previous?.avgReceptionToAllocationDays,
@@ -137,16 +137,16 @@ export class StaffDataController {
         currentValue: current?.compliance,
         previousValue: previous?.compliance,
         calculationMethod:
-          'This figure is calculated by comparing the number of recorded key worker sessions against the number of projected key worker sessions. <br /> <br />' +
-          'The number of projected key worker sessions is calculated by taking the total number of prisoners with an allocated key worker and comparing it to the expected frequency of key worker sessions in the establishment.',
+          'This figure is calculated by comparing the number of recorded [staff] sessions against the number of projected [staff] sessions. <br /> <br />' +
+          'The number of projected [staff] sessions is calculated by taking the total number of prisoners with an allocated [staff] and comparing it to the expected frequency of [staff] sessions in the establishment.',
       },
       projectedSessions: {
-        heading: 'Number of projected key worker sessions',
+        heading: 'Number of projected [staff] sessions',
         type: 'number',
         currentValue: current?.projectedSessions,
         previousValue: previous?.projectedSessions,
         calculationMethod:
-          'This figure is calculated by taking the total number of prisoners with an allocated key worker and comparing it to the expected frequency of key worker sessions in the establishment.',
+          'This figure is calculated by taking the total number of prisoners with an allocated [staff] and comparing it to the expected frequency of [staff] sessions in the establishment.',
       },
     }
   }

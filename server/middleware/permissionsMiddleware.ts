@@ -62,7 +62,7 @@ export const requirePermissionsAndConfig =
       case PermissionResult.ALLOW:
         return next()
       case PermissionResult.NOT_AUTHORISED:
-        return res.redirect('/not-authorised')
+        return res.redirect(`/${req.params['policy']}/not-authorised`)
       case PermissionResult.SERVICE_NOT_ENABLED:
       default:
         return res.render('pages/service-not-enabled')
@@ -75,18 +75,6 @@ export function populateUserPermissionsAndPrisonConfig(): RequestHandler {
   return async (req, res, next) => {
     try {
       const prisonCode = res.locals.user.getActiveCaseloadId()!
-
-      const userViewPermission =
-        res.locals.user.userRoles.includes(AuthorisedRoles.KEYWORKER_MONITOR) ||
-        (await keyworkerApiService.isKeyworker(req, prisonCode, res.locals.user.username))
-
-      if (hasRole(res, AuthorisedRoles.KW_MIGRATION)) {
-        res.locals.user.permissions = UserPermissionLevel.ADMIN
-      } else if (hasRole(res, AuthorisedRoles.OMIC_ADMIN)) {
-        res.locals.user.permissions = UserPermissionLevel.ALLOCATE
-      } else if (userViewPermission) {
-        res.locals.user.permissions = UserPermissionLevel.VIEW
-      }
 
       req.middleware ??= {}
       switch (req.params['policy']) {
@@ -102,6 +90,18 @@ export function populateUserPermissionsAndPrisonConfig(): RequestHandler {
           break
         default:
           return res.notFound()
+      }
+
+      const userViewPermission =
+        res.locals.user.userRoles.includes(AuthorisedRoles.KEYWORKER_MONITOR) ||
+        (await keyworkerApiService.isKeyworker(req, prisonCode, res.locals.user.username))
+
+      if (hasRole(res, AuthorisedRoles.KW_MIGRATION)) {
+        res.locals.user.permissions = UserPermissionLevel.ADMIN
+      } else if (hasRole(res, AuthorisedRoles.OMIC_ADMIN)) {
+        res.locals.user.permissions = UserPermissionLevel.ALLOCATE
+      } else if (userViewPermission) {
+        res.locals.user.permissions = UserPermissionLevel.VIEW
       }
 
       req.middleware.prisonConfiguration = await keyworkerApiService.getPrisonConfig(req, prisonCode)

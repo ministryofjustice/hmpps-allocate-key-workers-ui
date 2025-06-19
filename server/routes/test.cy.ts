@@ -7,13 +7,13 @@ context('test / homepage', () => {
   })
 
   describe('Role based access', () => {
-    it('should show an error screen if the has no roles and the call to the backend fails', () => {
+    it('should show an error screen if the user has no roles and the call to the backend fails', () => {
       cy.task('stubSignIn', {
         roles: [],
       })
       cy.task('stubKeyworkerApiStatusFail')
       navigateToTestPage()
-      cy.title().should('equal', 'Sorry, there is a problem - DPS')
+      cy.title().should('equal', 'Sorry, there is a problem - Key workers - DPS')
       cy.findByText('Sorry, there is a problem with the service').should('be.visible')
     })
 
@@ -25,7 +25,7 @@ context('test / homepage', () => {
       cy.task('stubEnabledPrison')
 
       navigateToTestPage()
-      cy.title().should('equal', 'Not authorised - DPS')
+      cy.title().should('equal', 'Not authorised - Key workers - DPS')
       cy.url().should('include', 'not-authorised')
       cy.findByText('You do not have permission to access this page').should('be.visible')
       cy.findByText('Contact the helpdesk').should('be.visible')

@@ -9,14 +9,12 @@ export class ChangeStaffController {
   constructor(readonly keyworkerApiService: KeyworkerApiService) {}
 
   getChangeStaffData = async (req: Request, res: Response) => {
-    const staff = await this.keyworkerApiService.getStaffMembers(req, res.locals.user.getActiveCaseloadId()!, {
-      status: 'ACTIVE',
-    })
+    const staff = await this.keyworkerApiService.searchStaff(req, res, { status: 'ACTIVE' })
 
     return {
       count: req.flash(FLASH_KEY__COUNT)[0],
       apiError: req.flash(FLASH_KEY__API_ERROR)[0],
-      staff: staff
+      staff: staff.content
         .sort((a, b) => (a.allocated > b.allocated ? 1 : -1))
         .map(o => {
           return {
@@ -37,7 +35,7 @@ export class ChangeStaffController {
       deallocations: [],
     }
 
-    for (const prisonerKeyworker of req.body.selectKeyworker.filter(Boolean)) {
+    for (const prisonerKeyworker of req.body.selectStaffMember.filter(Boolean)) {
       const [prisonNumber, action, staffId, isAuto] = prisonerKeyworker.split(':')
       if (action === 'deallocate') {
         apiBody.deallocations.push({

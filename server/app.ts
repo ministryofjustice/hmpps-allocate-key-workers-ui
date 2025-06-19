@@ -77,9 +77,9 @@ export default function createApp(services: Services): express.Application {
   app.use(dpsComponents.retrieveCaseLoadData({ logger }))
   app.use(populateValidationErrors())
 
-  app.get('/not-authorised', (_, res) => {
+  app.get('/:policy/not-authorised', (req, res) => {
     res.status(403)
-    res.render('not-authorised', { showBreadcrumbs: true })
+    res.render('not-authorised', { showBreadcrumbs: true, policyName: req.params['policy'].replace('-', ' ') })
   })
 
   app.use('/:policy', routes(services))

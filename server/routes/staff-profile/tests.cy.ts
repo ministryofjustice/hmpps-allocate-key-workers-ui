@@ -39,7 +39,7 @@ context('Profile Info', () => {
     cy.findByText('There is a problem').should('be.visible')
     cy.findByRole('link', { name: /Select key workers from the dropdown lists/ })
       .should('be.visible')
-      .should('have.attr', 'href', '#selectKeyworker')
+      .should('have.attr', 'href', '#selectStaffMember')
   })
 
   it('should show error on de/allocation failure', () => {
@@ -75,9 +75,9 @@ context('Profile Info', () => {
     cy.get('.govuk-table__row').should('have.length', 3)
     cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
 
-    cy.get('#selectKeyworker').should('contain', 'Select key worker')
-    cy.get('#selectKeyworker').should('contain', 'Deallocate')
-    cy.get('#selectKeyworker').should('not.contain', 'Key-Worker, Available-Active (allocations: 32)')
+    cy.get('#selectStaffMember').should('contain', 'Select key worker')
+    cy.get('#selectStaffMember').should('contain', 'Deallocate')
+    cy.get('#selectStaffMember').should('not.contain', 'Key-Worker, Available-Active (allocations: 32)')
     cy.findAllByRole('combobox').eq(1).select('Deallocate')
 
     cy.findByRole('button', { name: /Save changes/i }).click()
