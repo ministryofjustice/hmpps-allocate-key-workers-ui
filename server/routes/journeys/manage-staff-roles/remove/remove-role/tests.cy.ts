@@ -18,6 +18,9 @@ context('/manage-staff-roles/remove/remove-role', () => {
     cy.url().should('match', /\/remove-role$/)
 
     verifyPageContent()
+    cy.findByText(
+      'They will no longer be a key worker and their 12 allocated prisoners will be deallocated. You will need to make them a key worker again to be able to assign prisoners to them in future.',
+    ).should('be.visible')
 
     proceedToNextPage()
 
@@ -31,6 +34,17 @@ context('/manage-staff-roles/remove/remove-role', () => {
         toDate: yesterdayString(),
       },
     )
+  })
+
+  it('should skip content about deallocating prisoners if the staff has no assigned prisoner', () => {
+    navigateToTestPage('key-worker', 0)
+    cy.url().should('match', /\/remove-role$/)
+
+    verifyPageContent()
+
+    cy.findByText(
+      'They will no longer be a key worker. You will need to make them a key worker again to be able to assign prisoners to them in future.',
+    ).should('be.visible')
   })
 
   it('should use today string for personal officer end date', () => {
@@ -70,7 +84,7 @@ context('/manage-staff-roles/remove/remove-role', () => {
     cy.url().should('match', /\/confirmation$/)
   }
 
-  const navigateToTestPage = (policyPath: string = 'key-worker') => {
+  const navigateToTestPage = (policyPath: string = 'key-worker', allocated: number = 12) => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(`/${policyPath}/${journeyId}/manage-staff-roles/remove`, {
       failOnStatusCode: false,
@@ -83,7 +97,7 @@ context('/manage-staff-roles/remove/remove-role', () => {
           username: 'STAFFNAME',
           firstName: 'Joe',
           lastName: 'Doe',
-          allocated: 12,
+          allocated,
           staffRole: {
             position: { code: 'PRO', description: 'Prison officer' },
             scheduleType: { code: 'FT', description: 'Full-time' },
