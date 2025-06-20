@@ -3,7 +3,7 @@ import { EnhancedRestClientBuilder } from '../../data'
 import KeyworkerApiClient, { KeyworkerConfigRequest, ServiceConfigInfo } from './keyworkerApiClient'
 import { components } from '../../@types/keyWorker'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
-import { todayString, yesterdayString } from '../../utils/datetimeUtils'
+import { todayString } from '../../utils/datetimeUtils'
 import { StaffSummaryWithRole } from '../../@types/express'
 
 export default class KeyworkerApiService {
@@ -127,7 +127,7 @@ export default class KeyworkerApiService {
         scheduleType: staff.staffRole.scheduleType.code,
         hoursPerWeek: staff.staffRole.hoursPerWeek,
         fromDate: staff.staffRole.fromDate,
-        toDate: req.middleware?.policy === 'KEY_WORKER' ? yesterdayString() : todayString(),
+        toDate: todayString(),
       },
     )
   }
