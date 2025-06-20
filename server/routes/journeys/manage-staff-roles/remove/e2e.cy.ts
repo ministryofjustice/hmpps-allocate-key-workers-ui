@@ -1,5 +1,5 @@
 import { v4 as uuidV4 } from 'uuid'
-import { yesterdayString } from '../../../../utils/datetimeUtils'
+import { todayString } from '../../../../utils/datetimeUtils'
 
 context('/manage-staff-roles/remove/** journey', () => {
   const journeyId = uuidV4()
@@ -49,7 +49,7 @@ context('/manage-staff-roles/remove/** journey', () => {
         scheduleType: 'FT',
         hoursPerWeek: 35,
         fromDate: '2010-01-12',
-        toDate: yesterdayString(),
+        toDate: todayString(),
       },
     )
   })
