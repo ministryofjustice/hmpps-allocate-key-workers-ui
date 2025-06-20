@@ -102,8 +102,7 @@
             text: item.staffMember | lastNameCommaFirstName  | default('-', true)
           },
           {
-            text: "Select " + policyName,
-            html: govukSelect({
+            html: 'Not applicable - high complexity of need' if item.hasHighComplexityOfNeeds else govukSelect({
               id: "selectStaffMember",
               name: "selectStaffMember",
               text: 'Select ' + policyName,
@@ -111,7 +110,7 @@
                 classes: "govuk-!-margin-0"
               },
               items: staff | excludeCurrentStaffMember(item.staffMember) | conditionallyAddDeallocate(item.staffMember.staffId) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select ' + policyName)
-            })
+            }) 
           } if user | hasPermission('allocate') else undefined,
           {
             html: '<a class="govuk-link govuk-link--no-visited-state" href="/' + policyPath + '/prisoner-allocation-history/' + item.personIdentifier + searchQuery + '">View allocation history</a>' if item.hasAllocationHistory else ''

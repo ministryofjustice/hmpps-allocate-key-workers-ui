@@ -702,6 +702,14 @@ const keyworkerSearchPrisoners = [
     hasHighComplexityOfNeeds: false,
     hasAllocationHistory: false,
   },
+  {
+    personIdentifier: 'AAA1234',
+    firstName: 'HIGH',
+    lastName: 'COMPLEXITY-NEEDS',
+    location: '5-1-001',
+    hasHighComplexityOfNeeds: true,
+    hasAllocationHistory: false,
+  },
 ]
 
 const prisonerAllocationResponse = {
