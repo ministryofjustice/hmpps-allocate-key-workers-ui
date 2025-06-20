@@ -59,13 +59,13 @@ context('/allocate', () => {
       failOnStatusCode: false,
     })
     cy.findByRole('textbox', { name: /Name or prison number/ }).should('have.value', '')
-    cy.get('.govuk-table__row').should('have.length', 4)
+    cy.get('.govuk-table__row').should('have.length', 5)
 
     cy.visit('/key-worker/allocate?cellLocationPrefix=<script>alert%28%27inject%27%29<%2Fscript>', {
       failOnStatusCode: false,
     })
     cy.findByRole('combobox', { name: /Residential location/ }).should('have.value', '')
-    cy.get('.govuk-table__row').should('have.length', 4)
+    cy.get('.govuk-table__row').should('have.length', 5)
   })
 
   it('should show error when no allocations or deallocations are made', () => {
@@ -168,8 +168,8 @@ context('/allocate', () => {
 
     cy.visit('/key-worker/allocate', { failOnStatusCode: false })
 
-    cy.get('.govuk-table__row').should('have.length', 4)
-    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
+    cy.get('.govuk-table__row').should('have.length', 5)
+    cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'John, Doe')
 
     cy.get('select').eq(2).should('contain', 'Deallocate')
     cy.get('select').eq(2).should('not.contain', 'Key-Worker, Available-Active (allocations: 32)')
@@ -211,9 +211,9 @@ context('/allocate', () => {
 
     cy.findByRole('checkbox', { name: /Prisoners without a key worker/ }).should('exist')
 
-    cy.get('.moj-pagination').should('have.length', 2).eq(0).should('contain.text', 'Showing 1 to 3 of 3 results')
+    cy.get('.moj-pagination').should('have.length', 2).eq(0).should('contain.text', 'Showing 1 to 4 of 4 results')
 
-    cy.get('.govuk-table__row').should('have.length', 4)
+    cy.get('.govuk-table__row').should('have.length', 5)
     cy.get('.govuk-table__row')
       .eq(0)
       .children()
@@ -258,12 +258,12 @@ context('/allocate', () => {
       .children()
       .should('have.length', 0)
 
-    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
-    cy.get('.govuk-table__row').eq(2).children().eq(1).should('contain.text', '1-1-035')
-    cy.get('.govuk-table__row').eq(2).children().eq(2).should('contain.text', 'Key-Worker, Available-Active')
+    cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'John, Doe')
+    cy.get('.govuk-table__row').eq(3).children().eq(1).should('contain.text', '1-1-035')
+    cy.get('.govuk-table__row').eq(3).children().eq(2).should('contain.text', 'Key-Worker, Available-Active')
 
     cy.get('.govuk-table__row')
-      .eq(2)
+      .eq(3)
       .children()
       .eq(readonly ? 3 : 4)
       .should('contain.text', 'View allocation history')
@@ -273,7 +273,7 @@ context('/allocate', () => {
 
     if (!readonly) {
       cy.get('.govuk-table__row')
-        .eq(2)
+        .eq(3)
         .children()
         .eq(3)
         .should('contain.text', 'Key-Worker, Available-Active2 (allocations: 32)')
@@ -301,9 +301,9 @@ context('/allocate', () => {
     cy.findByRole('checkbox', { name: /Prisoners without a key worker/ }).check()
     cy.findByRole('button', { name: /Apply filters/i }).click()
 
-    cy.get('.moj-pagination').should('have.length', 2).eq(0).should('contain.text', 'Showing 1 to 2 of 2 results')
+    cy.get('.moj-pagination').should('have.length', 2).eq(0).should('contain.text', 'Showing 1 to 3 of 3 results')
 
-    cy.get('.govuk-table__row').should('have.length', 3)
+    cy.get('.govuk-table__row').should('have.length', 4)
     cy.get('.govuk-table__row')
       .eq(1)
       .children()
@@ -333,20 +333,20 @@ context('/allocate', () => {
         '/key-worker/prisoner-allocation-history/A2504EA?query=&cellLocationPrefix=&excludeActiveAllocations=true',
       )
 
-    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'Tester, Jane')
-    cy.get('.govuk-table__row').eq(2).children().eq(1).should('contain.text', '4-2-031')
-    cy.get('.govuk-table__row').eq(2).children().eq(2).should('contain.text', '-')
+    cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'Tester, Jane')
+    cy.get('.govuk-table__row').eq(3).children().eq(1).should('contain.text', '4-2-031')
+    cy.get('.govuk-table__row').eq(3).children().eq(2).should('contain.text', '-')
 
     if (!readonly) {
       cy.get('.govuk-table__row')
-        .eq(2)
+        .eq(3)
         .children()
         .eq(3)
         .should('contain.text', 'Key-Worker, Available-Active (allocations: 32)')
     }
 
     cy.get('.govuk-table__row')
-      .eq(2)
+      .eq(3)
       .children()
       .eq(readonly ? 3 : 4)
       .should('not.contain.text', 'View allocation history')
@@ -356,8 +356,9 @@ context('/allocate', () => {
     cy.get('.govuk-table__row').eq(0).children().eq(2).should('contain.text', 'Key worker').children().eq(0).click()
 
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Bar, Foo')
-    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'Tester, Jane')
-    cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'John, Doe')
+    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'Complexity-Needs, High')
+    cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'Tester, Jane')
+    cy.get('.govuk-table__row').eq(4).children().eq(0).should('contain.text', 'John, Doe')
   }
 
   const checkResidentialLocationFilter = (readonly = false) => {

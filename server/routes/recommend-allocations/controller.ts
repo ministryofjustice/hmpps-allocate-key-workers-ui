@@ -14,27 +14,29 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
     })
     const recommendations = await this.keyworkerApiService.allocationRecommendations(req, prisonCode)
 
-    const matchedPrisoners = records.map(o => {
-      const match = recommendations.allocations.find(a => a.personIdentifier === o.personIdentifier)
-      const staff = [...recommendations.staff]
+    const matchedPrisoners = records
+      .filter(o => !o.hasHighComplexityOfNeeds)
+      .map(o => {
+        const match = recommendations.allocations.find(a => a.personIdentifier === o.personIdentifier)
+        const staff = [...recommendations.staff]
 
-      if (match && !recommendations.staff.find(s => s.staffId === match.staff.staffId)) {
-        staff.push(match.staff)
-      }
+        if (match && !recommendations.staff.find(s => s.staffId === match.staff.staffId)) {
+          staff.push(match.staff)
+        }
 
-      return {
-        ...o,
-        recommendation: match?.staff.staffId,
-        kwDropdown: staff
-          .sort((a, b) => (a.allocated > b.allocated ? 1 : -1))
-          .map(s => {
-            return {
-              text: `${lastNameCommaFirstName(s)} (allocations: ${s.allocated})`,
-              value: `allocate:${s.staffId}${s.staffId === match?.staff.staffId ? ':auto' : ''}`,
-            }
-          }),
-      }
-    })
+        return {
+          ...o,
+          recommendation: match?.staff.staffId,
+          kwDropdown: staff
+            .sort((a, b) => (a.allocated > b.allocated ? 1 : -1))
+            .map(s => {
+              return {
+                text: `${lastNameCommaFirstName(s)} (allocations: ${s.allocated})`,
+                value: `allocate:${s.staffId}${s.staffId === match?.staff.staffId ? ':auto' : ''}`,
+              }
+            }),
+        }
+      })
 
     res.render('recommend-allocations/view', {
       backUrl: 'allocate',

@@ -111,6 +111,8 @@ context('/recommend-allocations', () => {
 
     cy.get('.moj-pagination').should('have.length', 2).eq(0).should('contain.text', 'Showing 1 to 2 of 2 results')
 
+    cy.should('not.contain.text', 'Complexity-Needs, High')
+
     cy.get('.govuk-table__row').should('have.length', 3)
     cy.get('.govuk-table__row')
       .eq(0)
