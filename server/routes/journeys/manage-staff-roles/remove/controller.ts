@@ -16,8 +16,12 @@ export class RemoveStaffRoleController {
           hasPolicyStaffRole: true,
         }
         req.journeyData.removeStaffRole!.searchResults = (
-          await this.keyworkerApiService.searchStaff(req as Request, res, searchOptions)
-        ).content.map(itm => ({
+          await this.keyworkerApiService.getStaffMembers(
+            req as Request,
+            res.locals.user.getActiveCaseloadId()!,
+            searchOptions,
+          )
+        ).map(itm => ({
           staffId: itm.staffId,
           firstName: itm.firstName,
           lastName: itm.lastName,

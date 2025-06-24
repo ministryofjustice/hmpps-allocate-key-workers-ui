@@ -112,7 +112,7 @@ context('Manage key workers', () => {
     cy.get('.govuk-table__row').eq(5).children().eq(2).should('contain.text', '1')
     cy.get('.govuk-table__row').eq(6).children().eq(2).should('contain.text', '0')
 
-    cy.task('stubSearchStaff', [
+    cy.task('stubSearchStaffAllocations', [
       {
         staffId: 488095,
         firstName: 'AVAILABLE-ACTIVE',
@@ -144,7 +144,7 @@ context('Manage key workers', () => {
 
     cy.get('.govuk-table__row').should('have.length', 7)
 
-    cy.task('stubSearchStaff', [
+    cy.task('stubSearchStaffAllocations', [
       {
         staffId: 488099,
         firstName: 'UNAVAILABLE-INACTIVE',
@@ -173,7 +173,7 @@ context('Manage key workers', () => {
   })
 
   it('handles API errors', () => {
-    cy.task('stubSearchStaffError')
+    cy.task('stubSearchStaffAllocationsError')
 
     navigateToTestPage()
 
@@ -181,7 +181,7 @@ context('Manage key workers', () => {
   })
 
   const getAllKeyworkers = () => {
-    cy.task('stubSearchStaff', [
+    cy.task('stubSearchStaffAllocations', [
       {
         staffId: 488095,
         firstName: 'AVAILABLE-ACTIVE',
