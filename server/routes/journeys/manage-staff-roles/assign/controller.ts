@@ -16,7 +16,7 @@ export class AssignStaffRoleController {
           hasPolicyStaffRole: false,
         }
         req.journeyData.assignStaffRole!.searchResults = (
-          await this.keyworkerApiService.getStaffMembers(
+          await this.keyworkerApiService.searchStaff(
             req as Request,
             res.locals.user.getActiveCaseloadId()!,
             searchOptions,

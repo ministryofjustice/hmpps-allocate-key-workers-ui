@@ -16,7 +16,7 @@ export class RemoveStaffRoleController {
           hasPolicyStaffRole: true,
         }
         req.journeyData.removeStaffRole!.searchResults = (
-          await this.keyworkerApiService.getStaffMembers(
+          await this.keyworkerApiService.searchStaff(
             req as Request,
             res.locals.user.getActiveCaseloadId()!,
             searchOptions,

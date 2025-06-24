@@ -98,8 +98,11 @@ export default class KeyworkerApiService {
     return this.keyworkerApiClientBuilder(req, res).updateStaffConfig(prisonCode, staffId, requestBody)
   }
 
-  searchStaff(req: Request, res: Response, searchOptions: components['schemas']['KeyworkerSearchRequest']) {
-    return this.keyworkerApiClientBuilder(req, res).searchStaff(res.locals.user.getActiveCaseloadId()!, searchOptions)
+  searchAllocatableStaff(req: Request, res: Response, searchOptions: components['schemas']['KeyworkerSearchRequest']) {
+    return this.keyworkerApiClientBuilder(req, res).searchAllocatableStaff(
+      res.locals.user.getActiveCaseloadId()!,
+      searchOptions,
+    )
   }
 
   assignRoleToStaff(
@@ -136,7 +139,7 @@ export default class KeyworkerApiService {
     return this.keyworkerApiClientBuilder(req).allocationRecommendations(prisonCode)
   }
 
-  getStaffMembers(req: Request, prisonCode: string, query: components['schemas']['StaffSearchRequest']) {
-    return this.keyworkerApiClientBuilder(req).getStaffMembers(prisonCode, query)
+  searchStaff(req: Request, prisonCode: string, query: components['schemas']['StaffSearchRequest']) {
+    return this.keyworkerApiClientBuilder(req).searchStaff(prisonCode, query)
   }
 }
