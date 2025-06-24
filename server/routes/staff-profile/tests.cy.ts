@@ -8,7 +8,7 @@ context('Profile Info', () => {
       roles: [AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.KW_MIGRATION],
     })
     cy.task('stubEnabledPrison')
-    cy.task('stubKeyworkerMembersStatusActive')
+    cy.task('stubSearchAllocatableStaffStatusActive')
     cy.task('stubPutAllocationSuccess')
     cy.task('stubPutDeallocationSuccess')
     cy.task('stubKeyworkerDetails')

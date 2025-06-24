@@ -142,7 +142,7 @@ const stubKeyworkerApiStatsNoData = () =>
     },
   })
 
-const stubKeyworkerMembersAll = () =>
+const stubSearchAllocatableStaffAll = () =>
   createHttpStub(
     'POST',
     '/keyworker-api/search/prisons/LEI/staff-allocations',
@@ -159,10 +159,7 @@ const stubKeyworkerMembersAll = () =>
     keyworkerManageResponse,
   )
 
-const stubKeyworkerMembersError = () =>
-  createHttpStub('POST', '/keyworker-api/search/prisons/LEI/staff-allocations', undefined, undefined, 502, {})
-
-const stubKeyworkerMembersNone = () =>
+const stubSearchAllocatableStaffNone = () =>
   createHttpStub(
     'POST',
     '/keyworker-api/search/prisons/LEI/staff-allocations',
@@ -179,7 +176,7 @@ const stubKeyworkerMembersNone = () =>
     { content: [] },
   )
 
-const stubKeyworkerMembersQuery = () =>
+const stubSearchAllocatableStaffQuery = () =>
   createHttpStub(
     'POST',
     '/keyworker-api/search/prisons/LEI/staff-allocations',
@@ -196,7 +193,7 @@ const stubKeyworkerMembersQuery = () =>
     { content: [keyworkerManageResponse.content[0]] },
   )
 
-const stubKeyworkerMembersStatus = () =>
+const stubSearchAllocatableStaffStatus = () =>
   createHttpStub(
     'POST',
     '/keyworker-api/search/prisons/LEI/staff-allocations',
@@ -213,7 +210,7 @@ const stubKeyworkerMembersStatus = () =>
     { content: keyworkerManageResponse.content.filter(o => o.status.code === 'INA') },
   )
 
-const stubKeyworkerMembersStatusActive = () =>
+const stubSearchAllocatableStaffStatusActive = () =>
   createHttpStub(
     'POST',
     '/keyworker-api/search/prisons/LEI/staff-allocations',
@@ -663,11 +660,17 @@ const stubSearchPrisoner = () =>
     { content: keyworkerSearchPrisoners },
   )
 
-const stubSearchStaff = (results: StaffSummary[] = []) =>
+const stubSearchAllocatableStaff = (results: StaffSummary[] = []) =>
   createBasicHttpStub('POST', '/keyworker-api/search/prisons/.*/staff-allocations', 200, { content: results })
 
-const stubSearchStaffError = () =>
+const stubSearchAllocatableStaffError = () =>
   createHttpStub('POST', '/keyworker-api/search/prisons/.*/staff-allocations', undefined, undefined, 502, {})
+
+const stubSearchStaff = (results: StaffSummary[] = []) =>
+  createBasicHttpStub('POST', '/keyworker-api/search/prisons/.*/staff', 200, { content: results })
+
+const stubSearchStaffError = () =>
+  createHttpStub('POST', '/keyworker-api/search/prisons/.*/staff', undefined, undefined, 502, {})
 
 const stubPutPrisonConfiguration = () =>
   createBasicHttpStub('PUT', '/keyworker-api/prisons/LEI/configurations', 200, {})
@@ -774,11 +777,11 @@ export default {
   stubKeyworkerApiStats2025,
   stubKeyworkerApiStats2024,
   stubKeyworkerApiStatsNoData,
-  stubKeyworkerMembersAll,
-  stubKeyworkerMembersQuery,
-  stubKeyworkerMembersStatus,
-  stubKeyworkerMembersNone,
-  stubKeyworkerMembersError,
+  stubSearchAllocatableStaffAll,
+  stubSearchAllocatableStaffQuery,
+  stubSearchAllocatableStaffStatus,
+  stubSearchAllocatableStaffNone,
+  stubSearchAllocatableStaffError,
   stubEnabledPrisonWithHighComplexityNeedsPrisoners: () => stubKeyworkerPrisonConfig(true, true),
   stubEnabledPrison: () => stubKeyworkerPrisonConfig(true, false),
   stubPrisonNotEnabled: () => stubKeyworkerPrisonConfig(false, false),
@@ -790,9 +793,10 @@ export default {
   stubSearchPrisonersWithLocation,
   stubSearchPrisoner,
   stubSearchStaff,
+  stubSearchAllocatableStaff,
   stubSearchPrisonersWithExcludeAllocations,
   stubPrisonerAllocations,
-  stubKeyworkerMembersStatusActive,
+  stubSearchAllocatableStaffStatusActive,
   stubPutDeallocationSuccess,
   stubPutAllocationSuccess,
   stubPutAllocationFail500: () => stubPutAllocationFail(500),
