@@ -10,9 +10,9 @@ context('/recommend-allocations', () => {
     cy.task('stubEnabledPrison')
     cy.task('stubResidentialHierarchy')
     cy.task('stubSearchPrisoner')
-    cy.task('stubKeyworkerMembersAll')
+    cy.task('stubSearchAllocatableStaffAll')
     cy.task('stubSearchPrisonersWithExcludeAllocations')
-    cy.task('stubKeyworkerMembersStatusActive')
+    cy.task('stubSearchAllocatableStaffStatusActive')
     cy.task('stubAllocationRecommendations', {
       allocations: [
         {
