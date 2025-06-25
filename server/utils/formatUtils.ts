@@ -1,3 +1,5 @@
+import { components } from '../@types/keyWorker'
+
 const uniformWhitespace = (word: string): string => (word ? word.trim().replace(/\s+/g, ' ') : '')
 
 const isLowerCase = (val: string): boolean => /^[a-z]*$/.test(val)
@@ -50,4 +52,16 @@ export const lastNameCommaFirstName = (person: { firstName: string; lastName: st
 export const firstNameSpaceLastName = (person: { firstName: string; lastName: string }): string => {
   if (!person) return ''
   return `${nameCase(person.firstName)} ${nameCase(person.lastName)}`.trim()
+}
+
+export const alertsSortValue = (o: components['schemas']['PrisonerSummary']) => {
+  const attributes = []
+
+  attributes.push(o.relevantAlertCodes.length === 2 ? '0' : '1')
+  attributes.push(o.relevantAlertCodes.includes('RNO121') ? '0' : '1')
+  attributes.push(o.relevantAlertCodes.includes('XRF') ? '0' : '1')
+  attributes.push((999 - o.remainingAlertCount).toString().padStart(3, '0'))
+  attributes.push(o.lastName)
+
+  return attributes.join('')
 }
