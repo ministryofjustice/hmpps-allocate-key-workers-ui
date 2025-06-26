@@ -51,6 +51,13 @@ context('/recommend-allocations', () => {
     checkSorting()
   })
 
+  it('should redirect to home page when the prison has auto allocation disabled', () => {
+    cy.task('stubKeyworkerPrisonConfigNoAutoAllocation')
+    navigateToTestPage()
+
+    cy.url().should('match', /\/key-worker$/)
+  })
+
   it('should show error when no allocations or deallocations are made', () => {
     navigateToTestPage()
 
