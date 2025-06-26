@@ -132,15 +132,22 @@ context('/recommend-allocations', () => {
       .eq(0)
       .children()
       .eq(2)
-      .should('contain.text', 'Key worker')
+      .should('contain.text', 'Relevant alerts')
       .children()
       .should('have.length', 1)
-    cy.get('.govuk-table__row').eq(0).children().should('have.length', 5)
-
     cy.get('.govuk-table__row')
       .eq(0)
       .children()
       .eq(3)
+      .should('contain.text', 'Key worker')
+      .children()
+      .should('have.length', 1)
+    cy.get('.govuk-table__row').eq(0).children().should('have.length', 6)
+
+    cy.get('.govuk-table__row')
+      .eq(0)
+      .children()
+      .eq(4)
       .should('contain.text', 'Change key worker')
       .children()
       .should('have.length', 0)
@@ -154,7 +161,7 @@ context('/recommend-allocations', () => {
     cy.get('.govuk-table__row')
       .eq(1)
       .children()
-      .eq(4)
+      .eq(5)
       .should('contain.text', 'View allocation history')
       .children()
       .eq(0)
@@ -163,7 +170,7 @@ context('/recommend-allocations', () => {
     cy.get('.govuk-table__row')
       .eq(1)
       .children()
-      .eq(3)
+      .eq(4)
       .should('contain.text', 'Annual-Leave, Unavailable (allocations: 1)')
 
     cy.get('select').eq(0).should('contain.text', 'Annual-Leave, Unavailable (allocations: 1)')
@@ -186,6 +193,16 @@ context('/recommend-allocations', () => {
     cy.contains('Key workers will only be allocated to prisoners when you select save.').should('exist')
 
     cy.findByRole('button', { name: 'Save changes' }).should('exist')
+
+    const getRelevantAlertColumnForRow = (rowIndex: number) =>
+      cy.get('.govuk-table__row').eq(rowIndex).children().eq(2).children().eq(0)
+
+    getRelevantAlertColumnForRow(1)
+      .invoke('text')
+      .should('match', /^\s+Risk to females\s+No one-to-one\s+\+1 active alert\s+$/gm)
+    getRelevantAlertColumnForRow(2)
+      .invoke('text')
+      .should('match', /^\s+Risk to females\s+No one-to-one\s+\+1 active alert\s+$/gm)
   }
 
   const checkSorting = () => {
