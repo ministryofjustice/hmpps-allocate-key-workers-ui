@@ -13,6 +13,10 @@
     margin-left: 25px;
   }
 
+  .govuk-checkboxes__label::before {
+    background: white !important;
+  }
+
   @include govuk-media-query($from: desktop) {
     display: flex;
     flex-flow: row wrap;
