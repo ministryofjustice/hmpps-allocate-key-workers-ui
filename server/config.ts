@@ -89,13 +89,13 @@ export default {
       systemClientSecret: get('CLIENT_CREDS_CLIENT_SECRET', 'clientsecret', requiredInProduction),
     },
     keyworkerApi: {
-      url: get('KEYWORKER_API_URL', 'http://localhost:8082', requiredInProduction),
+      url: get('ALLOCATIONS_API_URL', 'http://localhost:8082', requiredInProduction),
       healthPath: '/health/ping',
       timeout: {
-        response: Number(get('KEYWORKER_API_TIMEOUT_RESPONSE', 20000)),
-        deadline: Number(get('KEYWORKER_API_TIMEOUT_DEADLINE', 20000)),
+        response: Number(get('ALLOCATIONS_API_TIMEOUT_RESPONSE', 20000)),
+        deadline: Number(get('ALLOCATIONS_API_TIMEOUT_DEADLINE', 20000)),
       },
-      agent: new AgentConfig(Number(get('KEYWORKER_API_TIMEOUT_RESPONSE', 20000))),
+      agent: new AgentConfig(Number(get('ALLOCATIONS_API_TIMEOUT_RESPONSE', 20000))),
     },
     prisonerSearchApi: {
       url: get('PRISONER_SEARCH_API_URL', 'http://localhost:8082', requiredInProduction),

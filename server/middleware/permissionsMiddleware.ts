@@ -16,7 +16,7 @@ export const requireAllocateRole = (req: Request, res: Response, next: NextFunct
   return res.redirect(req.headers['referer'] || '/')
 }
 
-export const hasPermission = (user: HmppsUser, permission: 'view' | 'allocate' | 'admin') => {
+export const hasPermission = (user: HmppsUser, permission: 'self' | 'view' | 'allocate' | 'admin') => {
   switch (permission) {
     case 'admin':
       return user.permissions >= UserPermissionLevel.ADMIN
@@ -24,6 +24,8 @@ export const hasPermission = (user: HmppsUser, permission: 'view' | 'allocate' |
       return user.permissions >= UserPermissionLevel.ALLOCATE
     case 'view':
       return user.permissions >= UserPermissionLevel.VIEW
+    case 'self':
+      return user.permissions >= UserPermissionLevel.SELF_PROFILE_ONLY
     default:
       return false
   }
@@ -82,26 +84,39 @@ export function populateUserPermissionsAndPrisonConfig(): RequestHandler {
           req.middleware.policy = 'KEY_WORKER'
           res.locals.policyName = 'key worker'
           res.locals.policyPath = 'key-worker'
+          res.locals.user.hasJobResponsibility = !!res.locals.user.allocationJobResponsibilities?.includes('KEY_WORKER')
           break
         case 'personal-officer':
           req.middleware.policy = 'PERSONAL_OFFICER'
           res.locals.policyName = 'personal officer'
           res.locals.policyPath = 'personal-officer'
+          res.locals.user.hasJobResponsibility =
+            !!res.locals.user.allocationJobResponsibilities?.includes('PERSONAL_OFFICER')
           break
         default:
           return res.notFound()
       }
 
-      const userViewPermission =
-        res.locals.user.userRoles.includes(AuthorisedRoles.KEYWORKER_MONITOR) ||
-        (await keyworkerApiService.isKeyworker(req, prisonCode, res.locals.user.username))
-
-      if (hasRole(res, AuthorisedRoles.KW_MIGRATION)) {
-        res.locals.user.permissions = UserPermissionLevel.ADMIN
-      } else if (hasRole(res, AuthorisedRoles.OMIC_ADMIN)) {
-        res.locals.user.permissions = UserPermissionLevel.ALLOCATE
-      } else if (userViewPermission) {
-        res.locals.user.permissions = UserPermissionLevel.VIEW
+      if (req.params['policy'] === 'key-worker') {
+        if (hasRole(res, AuthorisedRoles.KW_MIGRATION)) {
+          res.locals.user.permissions = UserPermissionLevel.ADMIN
+        } else if (hasRole(res, AuthorisedRoles.OMIC_ADMIN)) {
+          res.locals.user.permissions = UserPermissionLevel.ALLOCATE
+        } else if (hasRole(res, AuthorisedRoles.KEYWORKER_MONITOR)) {
+          res.locals.user.permissions = UserPermissionLevel.VIEW
+        } else if (res.locals.user.hasJobResponsibility) {
+          res.locals.user.permissions = UserPermissionLevel.SELF_PROFILE_ONLY
+        }
+      } else if (req.params['policy'] === 'personal-officer') {
+        if (hasRole(res, AuthorisedRoles.PERSONAL_OFFICER_ADMIN)) {
+          res.locals.user.permissions = UserPermissionLevel.ADMIN
+        } else if (hasRole(res, AuthorisedRoles.PERSONAL_OFFICER_ALLOCATE)) {
+          res.locals.user.permissions = UserPermissionLevel.ALLOCATE
+        } else if (hasRole(res, AuthorisedRoles.PERSONAL_OFFICER_VIEW)) {
+          res.locals.user.permissions = UserPermissionLevel.VIEW
+        } else if (res.locals.user.hasJobResponsibility) {
+          res.locals.user.permissions = UserPermissionLevel.SELF_PROFILE_ONLY
+        }
       }
 
       req.middleware.prisonConfiguration = await keyworkerApiService.getPrisonConfig(req, prisonCode)

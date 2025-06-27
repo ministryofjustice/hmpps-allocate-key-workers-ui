@@ -1,0 +1,29 @@
+{% macro alertFlags(link, relevantAlerts, otherAlerts) %}
+  <div>
+    {% if relevantAlerts.length > 0 %}
+      <ul class="alerts-list">
+        {% if 'XRF' in relevantAlerts %}
+          <li class="alert-status alert-status--security">
+            Risk to females
+          </li>
+        {% endif %}
+
+        {% if 'RNO121' in relevantAlerts %}
+          <li class="alert-status alert-status--risk">
+            No one-to-one
+          </li>
+        {% endif %}
+      </ul>
+    {% endif %}
+
+    {% if otherAlerts > 0 %}
+      <p class="govuk-!-margin-bottom-0">
+        <a class="govuk-link--no-visited-state" target="_blank" href="{{link}}">
+          {{'' if relevantAlerts.length == 0 else '+'}}{{ otherAlerts }} active alert{{ 's' if otherAlerts !== 1 }}
+        </a>
+      </p>
+    {% elif relevantAlerts.length == 0 %}
+      None
+    {% endif %}
+  </div>
+{% endmacro %}

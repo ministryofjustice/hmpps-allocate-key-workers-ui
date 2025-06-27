@@ -107,7 +107,7 @@ context('/manage-staff-roles/assign/** journey', () => {
     cy.findByText('You have successfully made Smith, John a key worker').should('be.visible')
 
     cy.verifyLastAPICall(
-      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/1002/job-classification' },
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/1002/job-classifications' },
       {
         position: 'PRO',
         scheduleType: 'PT',
