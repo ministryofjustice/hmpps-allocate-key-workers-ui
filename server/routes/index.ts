@@ -47,7 +47,7 @@ export default function routes(services: Services) {
   router.use(
     '/staff-profile/:staffId',
     requirePermissionsAndConfig({
-      requirePrisonEnabled: false,
+      requirePrisonEnabled: true,
       minimumPermission: UserPermissionLevel.SELF_PROFILE_ONLY,
     }),
     StaffProfileRoutes(services),

@@ -7,7 +7,6 @@ context('/establishment-settings', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubComponents')
-    cy.task('stubKeyworkerApiStatusIsKeyworker')
     cy.task('stubPutPrisonConfiguration')
   })
 
@@ -91,7 +90,7 @@ context('/establishment-settings', () => {
   it('should allow admin to enable service in a prison', () => {
     cy.task('stubPrisonNotEnabled')
     cy.task('stubSignIn', {
-      roles: [AuthorisedRoles.KW_MIGRATION],
+      roles: [AuthorisedRoles.PERSONAL_OFFICER_ADMIN],
     })
 
     navigateToTestPage('personal-officer')

@@ -92,14 +92,6 @@ const stubPutAllocationFail = (code: number = 500, message?: string) => {
 
 const stubKeyworkerApiHealth = () => createBasicHttpStub('GET', '/keyworker-api/health/ping', 200, { status: 'UP' })
 
-const stubKeyworkerApiStatusIsKeyworker = (isKeyworker: boolean) =>
-  createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/staff/.*/job-classifications', 200, {
-    policies: isKeyworker ? ['KEY_WORKER'] : [],
-  })
-
-const stubKeyworkerApiStatusFail = () =>
-  createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/staff/.*/job-classifications', 500, {})
-
 const createKeyworkerStatsStub = (from: string, to: string, jsonBody = {}) => {
   return createHttpStub(
     'GET',
@@ -787,9 +779,6 @@ const prisonerAllocationResponse = {
 
 export default {
   stubKeyworkerApiHealth,
-  stubKeyworkerApiStatusIsKeyworker: () => stubKeyworkerApiStatusIsKeyworker(true),
-  stubKeyworkerApiStatusIsNotKeyworker: () => stubKeyworkerApiStatusIsKeyworker(false),
-  stubKeyworkerApiStatusFail: () => stubKeyworkerApiStatusFail(),
   stubKeyworkerApiStats2025,
   stubKeyworkerApiStats2024,
   stubKeyworkerApiStatsNoData,

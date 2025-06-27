@@ -8,6 +8,7 @@ import AuthorisedRoles from '../../server/authentication/authorisedRoles'
 interface UserToken {
   name?: string
   roles?: string[]
+  user_id?: string
 }
 
 const createToken = (userToken: UserToken) => {
@@ -21,6 +22,7 @@ const createToken = (userToken: UserToken) => {
     authorities,
     jti: '83b50a10-cca6-41db-985f-e87efb303ddb',
     client_id: 'clientid',
+    user_id: userToken.user_id,
   }
 
   return jwt.sign(payload, 'secret', { expiresIn: '1h' })
@@ -155,13 +157,34 @@ const stubGetCaseLoads = () => {
   })
 }
 
+const stubAllocationJobResponsibilities = (hasAllocationJobResponsibilities: boolean) => {
+  return stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/keyworker-api/prisons/.*/staff/.*/job-classifications',
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: {
+        policies: hasAllocationJobResponsibilities ? ['KEY_WORKER', 'PERSONAL_OFFICER'] : [],
+      },
+    },
+  })
+}
+
 export default {
   getSignInUrl,
   stubAuthPing: ping,
   stubAuthManageDetails: manageDetails,
   stubSignIn: (
-    userToken: UserToken = { roles: [AuthorisedRoles.KEYWORKER_MONITOR] },
-  ): Promise<[Response, Response, Response, Response, Response, Response]> =>
+    userToken: UserToken & { hasAllocationJobResponsibilities?: boolean } = {
+      roles: [AuthorisedRoles.KEYWORKER_MONITOR],
+      hasAllocationJobResponsibilities: true,
+    },
+  ): Promise<[Response, Response, Response, Response, Response, Response, Response]> =>
     Promise.all([
       favicon(),
       redirect(),
@@ -169,5 +192,6 @@ export default {
       token(userToken),
       tokenVerification.stubVerifyToken(),
       stubGetCaseLoads(),
+      stubAllocationJobResponsibilities(userToken.hasAllocationJobResponsibilities),
     ]),
 }

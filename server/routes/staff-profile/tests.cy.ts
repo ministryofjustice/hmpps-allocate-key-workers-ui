@@ -20,15 +20,29 @@ context('Profile Info', () => {
     validatePageContents()
   })
 
-  it('should show profile info (read only)', () => {
+  it('should show profile info (read self profile only)', () => {
     cy.task('stubSignIn', {
+      user_id: '488095',
       roles: [],
+      hasAllocationJobResponsibilities: true,
     })
-    cy.task('stubKeyworkerApiStatusIsKeyworker')
 
     navigateToTestPage()
 
     validatePageContents(true)
+  })
+
+  it('should deny access to profile of other users (read self profile only)', () => {
+    cy.task('stubSignIn', {
+      user_id: 'OTHER_USER',
+      roles: [],
+      hasAllocationJobResponsibilities: true,
+    })
+
+    navigateToTestPage()
+
+    cy.title().should('equal', 'Not authorised - Key workers - DPS')
+    cy.findByText('You do not have permission to access this page').should('be.visible')
   })
 
   it('should show error when no allocations or deallocations are made', () => {
