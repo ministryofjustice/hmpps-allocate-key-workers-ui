@@ -1,3 +1,5 @@
+import { sentenceCase } from './formatUtils'
+
 const properCase = (word: string): string =>
   word.length >= 1 && word[0] ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
 
@@ -27,4 +29,19 @@ export const initialiseName = (fullName: string | undefined | null): string | nu
     return null
   }
   return `${firstName[0]}. ${array.reverse()[0]}`
+}
+
+export const policyAware = (text: string | Record<string, string[]>, policy: string) => {
+  if (!text) return text
+
+  if (typeof text === 'string') {
+    return sentenceCase(text.replaceAll('[staff]', policy).replaceAll('[staffs]', `${policy}s`))
+  }
+
+  return Object.fromEntries(
+    Object.entries(text).map(([k, v]) => [
+      k,
+      v.map(o => sentenceCase(o.replaceAll('[staff]', policy).replaceAll('[staffs]', `${policy}s`))),
+    ]),
+  )
 }

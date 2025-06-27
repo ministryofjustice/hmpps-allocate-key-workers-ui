@@ -8,7 +8,6 @@ context('/manage-staff-roles', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubComponents')
-    cy.task('stubKeyworkerApiStatusIsKeyworker')
     cy.task('stubEnabledPrison')
     cy.task('stubSignIn', {
       roles: [AuthorisedRoles.KW_MIGRATION],

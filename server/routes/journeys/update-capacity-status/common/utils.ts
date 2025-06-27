@@ -6,6 +6,7 @@ export const getUpdateCapacityStatusSuccessMessage = (
   statusCode: string,
   capacity: number,
   keyworkerDetails: components['schemas']['StaffDetails'],
+  policyName: string,
 ) => {
   const subjects: string[] = []
   if (keyworkerDetails.status.code !== statusCode) {
@@ -19,7 +20,7 @@ export const getUpdateCapacityStatusSuccessMessage = (
     subjects.push('status')
   }
 
-  return `You have updated this key worker’s ${subjects.join(' and ')}.`
+  return `You have updated this ${policyName}’s ${subjects.join(' and ')}.`
 }
 
 export const resetJourneyAndReloadKeyWorkerDetails = async (

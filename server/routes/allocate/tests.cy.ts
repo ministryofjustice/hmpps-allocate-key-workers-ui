@@ -1,3 +1,4 @@
+import { components } from '../../@types/keyWorker'
 import AuthorisedRoles from '../../authentication/authorisedRoles'
 
 context('/allocate', () => {
@@ -12,9 +13,9 @@ context('/allocate', () => {
     cy.task('stubSearchPrisonersWithQuery')
     cy.task('stubSearchPrisonersWithLocation')
     cy.task('stubSearchPrisoner')
-    cy.task('stubKeyworkerMembersAll')
+    cy.task('stubSearchAllocatableStaffAll')
     cy.task('stubSearchPrisonersWithExcludeAllocations')
-    cy.task('stubKeyworkerMembersStatusActive')
+    cy.task('stubSearchAllocatableStaffStatusActive')
     cy.task('stubPutAllocationSuccess')
     cy.task('stubPutDeallocationSuccess')
   })
@@ -33,11 +34,104 @@ context('/allocate', () => {
     checkResidentialLocationFilter()
   })
 
+  it('should handle all sorting cases for alerts', () => {
+    const prisonerBase = {
+      personIdentifier: 'A2504EA',
+      firstName: 'FOO',
+      lastName: 'BAR',
+      location: '3-1-027',
+      hasHighComplexityOfNeeds: false,
+      hasAllocationHistory: true,
+      relevantAlertCodes: ['XRF', 'RNO121'],
+      remainingAlertCount: 1,
+    }
+
+    const prisonersWithAlertCodes = [
+      {
+        ...prisonerBase,
+      },
+      {
+        ...prisonerBase,
+        remainingAlertCount: 2,
+      },
+      {
+        ...prisonerBase,
+        remainingAlertCount: 0,
+      },
+      {
+        ...prisonerBase,
+        relevantAlertCodes: ['XRF'],
+        remainingAlertCount: 1,
+      },
+      {
+        ...prisonerBase,
+        relevantAlertCodes: ['RNO121'],
+        remainingAlertCount: 1,
+      },
+      {
+        ...prisonerBase,
+        relevantAlertCodes: [],
+        remainingAlertCount: 1,
+      },
+      {
+        ...prisonerBase,
+        lastName: 'ZSorted',
+        relevantAlertCodes: [],
+        remainingAlertCount: 0,
+      },
+      {
+        ...prisonerBase,
+        lastName: 'ASorted',
+        relevantAlertCodes: [],
+        remainingAlertCount: 0,
+      },
+    ]
+
+    cy.task('stubSearchPrisoner', prisonersWithAlertCodes as components['schemas']['PersonSearchResponse']['content'])
+    navigateToTestPage()
+
+    const getRelevantAlertColumnForRow = (rowIndex: number) =>
+      cy.get('.govuk-table__row').eq(rowIndex).children().eq(2).children().eq(0)
+
+    cy.get('.govuk-table__row')
+      .eq(0)
+      .children()
+      .eq(2)
+      .should('contain.text', 'Relevant alerts')
+      .children()
+      .eq(0)
+      .click()
+
+    getRelevantAlertColumnForRow(1)
+      .invoke('text')
+      .should('match', /^\s+Risk to females\s+No one-to-one\s+\+2 active alerts\s+$/gm)
+    getRelevantAlertColumnForRow(2)
+      .invoke('text')
+      .should('match', /^\s+Risk to females\s+No one-to-one\s+\+1 active alert\s+$/gm)
+    getRelevantAlertColumnForRow(3)
+      .invoke('text')
+      .should('match', /^\s+Risk to females\s+No one-to-one\s+$/gm)
+    getRelevantAlertColumnForRow(4)
+      .invoke('text')
+      .should('match', /^\s+No one-to-one\s+\+1 active alert\s+$/gm)
+    getRelevantAlertColumnForRow(5)
+      .invoke('text')
+      .should('match', /^\s+Risk to females\s+\+1 active alert\s+$/gm)
+    getRelevantAlertColumnForRow(6)
+      .invoke('text')
+      .should('match', /^\s+1 active alert\s+$/gm)
+    getRelevantAlertColumnForRow(7)
+      .invoke('text')
+      .should('match', /^\s+None\s+$/gm)
+    getRelevantAlertColumnForRow(8)
+      .invoke('text')
+      .should('match', /^\s+None\s+$/gm)
+  })
+
   it('should load read-only page correctly', () => {
     cy.task('stubSignIn', {
-      roles: [],
+      roles: [AuthorisedRoles.KEYWORKER_MONITOR],
     })
-    cy.task('stubKeyworkerApiStatusIsKeyworker')
 
     navigateToTestPage()
 
@@ -52,6 +146,22 @@ context('/allocate', () => {
     checkResidentialLocationFilter(true)
   })
 
+  it('should load page correctly when prison has auto allocation disabled', () => {
+    cy.task('stubKeyworkerPrisonConfigNoAutoAllocation')
+
+    navigateToTestPage()
+
+    checkPageContentsNoFilter(false, false)
+
+    checkSorting()
+
+    checkPrisonersExcludeActiveAllocationsFilter()
+
+    checkNameOrPrisonNumberFilter()
+
+    checkResidentialLocationFilter()
+  })
+
   it('should handle invalid queries', () => {
     navigateToTestPage()
 
@@ -59,13 +169,13 @@ context('/allocate', () => {
       failOnStatusCode: false,
     })
     cy.findByRole('textbox', { name: /Name or prison number/ }).should('have.value', '')
-    cy.get('.govuk-table__row').should('have.length', 4)
+    cy.get('.govuk-table__row').should('have.length', 5)
 
     cy.visit('/key-worker/allocate?cellLocationPrefix=<script>alert%28%27inject%27%29<%2Fscript>', {
       failOnStatusCode: false,
     })
     cy.findByRole('combobox', { name: /Residential location/ }).should('have.value', '')
-    cy.get('.govuk-table__row').should('have.length', 4)
+    cy.get('.govuk-table__row').should('have.length', 5)
   })
 
   it('should show error when no allocations or deallocations are made', () => {
@@ -76,7 +186,7 @@ context('/allocate', () => {
     cy.findByText('There is a problem').should('be.visible')
     cy.findByRole('link', { name: /Select key workers from the dropdown lists/ })
       .should('be.visible')
-      .should('have.attr', 'href', '#selectKeyworker')
+      .should('have.attr', 'href', '#selectStaffMember')
   })
 
   it('should preserve queries on submit form validation error', () => {
@@ -100,7 +210,7 @@ context('/allocate', () => {
     cy.get('.govuk-table__row').should('have.length', 2)
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'John, Doe')
 
-    cy.get('#selectKeyworker').select('Deallocate')
+    cy.get('#selectStaffMember').select('Deallocate')
 
     cy.findByRole('button', { name: /Save changes/i }).click()
 
@@ -116,7 +226,7 @@ context('/allocate', () => {
     cy.get('.govuk-table__row').should('have.length', 2)
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'John, Doe')
 
-    cy.get('#selectKeyworker').select('Deallocate')
+    cy.get('#selectStaffMember').select('Deallocate')
 
     cy.findByRole('button', { name: /Save changes/i }).click()
 
@@ -142,10 +252,10 @@ context('/allocate', () => {
     cy.get('.govuk-table__row').should('have.length', 2)
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'John, Doe')
 
-    cy.get('#selectKeyworker').should('contain', 'Select key worker')
-    cy.get('#selectKeyworker').should('contain', 'Deallocate')
-    cy.get('#selectKeyworker').should('not.contain', 'Key-Worker, Available-Active (allocations: 32)')
-    cy.get('#selectKeyworker').select('Deallocate')
+    cy.get('#selectStaffMember').should('contain', 'Select key worker')
+    cy.get('#selectStaffMember').should('contain', 'Deallocate')
+    cy.get('#selectStaffMember').should('not.contain', 'Key-Worker, Available-Active (allocations: 32)')
+    cy.get('#selectStaffMember').select('Deallocate')
 
     cy.findByRole('button', { name: /Save changes/i }).click()
 
@@ -168,8 +278,8 @@ context('/allocate', () => {
 
     cy.visit('/key-worker/allocate', { failOnStatusCode: false })
 
-    cy.get('.govuk-table__row').should('have.length', 4)
-    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
+    cy.get('.govuk-table__row').should('have.length', 5)
+    cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'John, Doe')
 
     cy.get('select').eq(2).should('contain', 'Deallocate')
     cy.get('select').eq(2).should('not.contain', 'Key-Worker, Available-Active (allocations: 32)')
@@ -199,7 +309,7 @@ context('/allocate', () => {
     cy.findByText('You have successfully made changes to 2 prisoners.').should('exist')
   })
 
-  const checkPageContentsNoFilter = (readonly = false) => {
+  const checkPageContentsNoFilter = (readonly = false, allowAutoAllocation = true) => {
     cy.title().should('equal', 'Allocate key workers to prisoners - Key workers - DPS')
     cy.findByRole('heading', { name: /Allocate key workers to prisoners/i }).should('be.visible')
     cy.findByRole('heading', { name: /Filter by/i }).should('be.visible')
@@ -211,9 +321,9 @@ context('/allocate', () => {
 
     cy.findByRole('checkbox', { name: /Prisoners without a key worker/ }).should('exist')
 
-    cy.get('.moj-pagination').should('have.length', 2).eq(0).should('contain.text', 'Showing 1 to 3 of 3 results')
+    cy.get('.moj-pagination').should('have.length', 2).eq(0).should('contain.text', 'Showing 1 to 4 of 4 results')
 
-    cy.get('.govuk-table__row').should('have.length', 4)
+    cy.get('.govuk-table__row').should('have.length', 5)
     cy.get('.govuk-table__row')
       .eq(0)
       .children()
@@ -232,19 +342,26 @@ context('/allocate', () => {
       .eq(0)
       .children()
       .eq(2)
+      .should('contain.text', 'Relevant alerts')
+      .children()
+      .should('have.length', 1)
+    cy.get('.govuk-table__row')
+      .eq(0)
+      .children()
+      .eq(3)
       .should('contain.text', 'Key worker')
       .children()
       .should('have.length', 1)
     cy.get('.govuk-table__row')
       .eq(0)
       .children()
-      .should('have.length', readonly ? 4 : 5)
+      .should('have.length', readonly ? 5 : 6)
 
     if (!readonly) {
       cy.get('.govuk-table__row')
         .eq(0)
         .children()
-        .eq(3)
+        .eq(4)
         .should('contain.text', 'Change key worker')
         .children()
         .should('have.length', 0)
@@ -253,19 +370,19 @@ context('/allocate', () => {
     cy.get('.govuk-table__row')
       .eq(0)
       .children()
-      .eq(readonly ? 3 : 4)
+      .eq(readonly ? 4 : 5)
       .should('contain.text', '')
       .children()
       .should('have.length', 0)
 
-    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
-    cy.get('.govuk-table__row').eq(2).children().eq(1).should('contain.text', '1-1-035')
-    cy.get('.govuk-table__row').eq(2).children().eq(2).should('contain.text', 'Key-Worker, Available-Active')
+    cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'John, Doe')
+    cy.get('.govuk-table__row').eq(3).children().eq(1).should('contain.text', '1-1-035')
+    cy.get('.govuk-table__row').eq(3).children().eq(3).should('contain.text', 'Key-Worker, Available-Active')
 
     cy.get('.govuk-table__row')
-      .eq(2)
+      .eq(3)
       .children()
-      .eq(readonly ? 3 : 4)
+      .eq(readonly ? 4 : 5)
       .should('contain.text', 'View allocation history')
       .children()
       .eq(0)
@@ -273,9 +390,9 @@ context('/allocate', () => {
 
     if (!readonly) {
       cy.get('.govuk-table__row')
-        .eq(2)
-        .children()
         .eq(3)
+        .children()
+        .eq(4)
         .should('contain.text', 'Key-Worker, Available-Active2 (allocations: 32)')
     }
 
@@ -287,13 +404,15 @@ context('/allocate', () => {
 
     cy.contains(
       'Select ‘Assign key workers automatically’ to get key worker recommendations for all prisoners without a current key worker.',
-    ).should(readonly ? 'not.exist' : 'exist')
+    ).should(readonly || !allowAutoAllocation ? 'not.exist' : 'exist')
 
     cy.contains('You should save any changes you’ve made before selecting this.').should(
-      readonly ? 'not.exist' : 'exist',
+      readonly || !allowAutoAllocation ? 'not.exist' : 'exist',
     )
 
-    cy.findByRole('button', { name: 'Assign key workers automatically' }).should(readonly ? 'not.exist' : 'exist')
+    cy.findByRole('button', { name: 'Assign key workers automatically' }).should(
+      readonly || !allowAutoAllocation ? 'not.exist' : 'exist',
+    )
     cy.findByRole('button', { name: 'Save changes' }).should(readonly ? 'not.exist' : 'exist')
   }
 
@@ -301,13 +420,13 @@ context('/allocate', () => {
     cy.findByRole('checkbox', { name: /Prisoners without a key worker/ }).check()
     cy.findByRole('button', { name: /Apply filters/i }).click()
 
-    cy.get('.moj-pagination').should('have.length', 2).eq(0).should('contain.text', 'Showing 1 to 2 of 2 results')
+    cy.get('.moj-pagination').should('have.length', 2).eq(0).should('contain.text', 'Showing 1 to 3 of 3 results')
 
-    cy.get('.govuk-table__row').should('have.length', 3)
+    cy.get('.govuk-table__row').should('have.length', 4)
     cy.get('.govuk-table__row')
       .eq(1)
       .children()
-      .should('have.length', readonly ? 4 : 5)
+      .should('have.length', readonly ? 5 : 6)
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Bar, Foo')
     cy.get('.govuk-table__row').eq(1).children().eq(1).should('contain.text', '3-1-027')
     cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', '-')
@@ -316,14 +435,14 @@ context('/allocate', () => {
       cy.get('.govuk-table__row')
         .eq(1)
         .children()
-        .eq(3)
+        .eq(4)
         .should('contain.text', 'Key-Worker, Available-Active (allocations: 32)')
     }
 
     cy.get('.govuk-table__row')
       .eq(1)
       .children()
-      .eq(readonly ? 3 : 4)
+      .eq(readonly ? 4 : 5)
       .should('contain.text', 'View allocation history')
       .children()
       .eq(0)
@@ -333,31 +452,32 @@ context('/allocate', () => {
         '/key-worker/prisoner-allocation-history/A2504EA?query=&cellLocationPrefix=&excludeActiveAllocations=true',
       )
 
-    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'Tester, Jane')
-    cy.get('.govuk-table__row').eq(2).children().eq(1).should('contain.text', '4-2-031')
-    cy.get('.govuk-table__row').eq(2).children().eq(2).should('contain.text', '-')
+    cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'Tester, Jane')
+    cy.get('.govuk-table__row').eq(3).children().eq(1).should('contain.text', '4-2-031')
+    cy.get('.govuk-table__row').eq(3).children().eq(3).should('contain.text', '-')
 
     if (!readonly) {
       cy.get('.govuk-table__row')
-        .eq(2)
-        .children()
         .eq(3)
+        .children()
+        .eq(4)
         .should('contain.text', 'Key-Worker, Available-Active (allocations: 32)')
     }
 
     cy.get('.govuk-table__row')
-      .eq(2)
+      .eq(3)
       .children()
-      .eq(readonly ? 3 : 4)
+      .eq(readonly ? 4 : 5)
       .should('not.contain.text', 'View allocation history')
   }
 
   const checkSorting = () => {
-    cy.get('.govuk-table__row').eq(0).children().eq(2).should('contain.text', 'Key worker').children().eq(0).click()
+    cy.get('.govuk-table__row').eq(0).children().eq(3).should('contain.text', 'Key worker').children().eq(0).click()
 
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Bar, Foo')
-    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'Tester, Jane')
-    cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'John, Doe')
+    cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'Complexity-Needs, High')
+    cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'Tester, Jane')
+    cy.get('.govuk-table__row').eq(4).children().eq(0).should('contain.text', 'John, Doe')
   }
 
   const checkResidentialLocationFilter = (readonly = false) => {
@@ -372,7 +492,7 @@ context('/allocate', () => {
     cy.get('.govuk-table__row')
       .eq(1)
       .children()
-      .eq(readonly ? 3 : 4)
+      .eq(readonly ? 4 : 5)
       .children()
       .eq(0)
       .should(
@@ -396,7 +516,7 @@ context('/allocate', () => {
     cy.get('.govuk-table__row')
       .eq(1)
       .children()
-      .eq(readonly ? 3 : 4)
+      .eq(readonly ? 4 : 5)
       .children()
       .eq(0)
       .should(

@@ -1,6 +1,6 @@
 import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../../integration_tests/support/commands'
-import { todayString, yesterdayString } from '../../../../../utils/datetimeUtils'
+import { todayString } from '../../../../../utils/datetimeUtils'
 
 context('/manage-staff-roles/remove/remove-role', () => {
   const journeyId = uuidV4()
@@ -25,13 +25,13 @@ context('/manage-staff-roles/remove/remove-role', () => {
     proceedToNextPage()
 
     cy.verifyLastAPICall(
-      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/1001/job-classification' },
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/1001/job-classifications' },
       {
         position: 'PRO',
         scheduleType: 'FT',
         hoursPerWeek: 35,
         fromDate: '2010-01-12',
-        toDate: yesterdayString(),
+        toDate: todayString(),
       },
     )
   })
@@ -45,24 +45,6 @@ context('/manage-staff-roles/remove/remove-role', () => {
     cy.findByText(
       'They will no longer be a key worker. You will need to make them a key worker again to be able to assign prisoners to them in future.',
     ).should('be.visible')
-  })
-
-  it('should use today string for personal officer end date', () => {
-    navigateToTestPage('personal-officer')
-    cy.url().should('match', /\/remove-role$/)
-
-    proceedToNextPage()
-
-    cy.verifyLastAPICall(
-      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/1001/job-classification' },
-      {
-        position: 'PRO',
-        scheduleType: 'FT',
-        hoursPerWeek: 35,
-        fromDate: '2010-01-12',
-        toDate: todayString(),
-      },
-    )
   })
 
   const verifyPageContent = () => {

@@ -8,7 +8,7 @@
 
 {% block innerContent %}
 
-  <h1 class="govuk-heading-l">Key worker data for {{ prisonName }}</h1>
+  <h1 class="govuk-heading-l">{{policyName | sentenceCase}} data for {{ prisonName }}</h1>
 
   <hr class="govuk-footer__section-break" />
 
@@ -61,7 +61,7 @@
         {% endif %}
 
         <div class="govuk-grid-column-one-half{{ isHiddenClass }}">
-          {{ statCard(statistic) }}
+          {{ statCard(statistic, policyName) }}
         </div>
       {% endfor %}
     </div>

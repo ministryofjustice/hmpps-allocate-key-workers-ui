@@ -3,15 +3,15 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set fullWidth = true %}
-{% set pageTitle = "Key worker statistics for " + user.activeCaseLoad.description %}
+{% set pageTitle = "[staff] statistics for " + user.activeCaseLoad.description %}
 
 {% block innerContent %}
-  <h1 class="govuk-heading-l govuk-!-margin-bottom-6">Key worker statistics
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-6">{{ policyName | sentenceCase }} statistics
     for {{ user.activeCaseLoad.description }}</h1>
 
   <div class="govuk-width-container">
     <p>These statistics do not include people with a high complexity of need level.</p>
-    <p>Prisoners in {{ user.activeCaseLoad.description }} have a key worker session
+    <p>Prisoners in {{ user.activeCaseLoad.description }} have a {{ policyName }} session
       every {{ weekFrequency }} {{ "week" if weekFrequency === 1 else "weeks" }}.</p>
 
     <hr>
@@ -50,7 +50,7 @@
         </form>
       </div>
       <div class="govuk-grid-column-one-third">
-        <h2 class="govuk-heading-s"> Prisoner to key worker ratio</h2>
+        <h2 class="govuk-heading-s"> Prisoner to {{ policyName }} ratio</h2>
         <p class="govuk-!-font-size-36">{{ prisonerToKeyWorkerRatio }}:1</p>
       </div>
     </div>
@@ -65,7 +65,7 @@
       <div class="govuk-grid-row">
         {% for statistic in data %}
           <div class="govuk-grid-column-one-quarter">
-            <h2 class="govuk-heading-s">{{ statistic.heading }}</h2>
+            <h2 class="govuk-heading-s">{{ statistic.heading | policyAware(policyName) }}</h2>
             <p class="govuk-!-font-size-36">{{ statistic.value }}</p>
             {% if hasPreviousStats %}<p>{{ statistic.change.value }}</p>{% endif %}
           </div>

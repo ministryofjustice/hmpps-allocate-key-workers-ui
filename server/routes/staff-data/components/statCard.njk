@@ -1,10 +1,10 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 
-{% macro statCard(stat) %}
-  {% set title = stat.heading %}
+{% macro statCard(stat, policyName) %}
+  {% set title = stat.heading | policyAware(policyName) %}
   {% set currentValue = stat.currentValue %}
   {% set previousValue = stat.previousValue %}
-  {% set calculationMethod = stat.calculationMethod %}
+  {% set calculationMethod = stat.calculationMethod | policyAware(policyName) %}
   {% set format = stat.type or 'number' %}
 
   <div class="key-worker-data-stat-card left-aligned govuk-!-margin-bottom-4 govuk-!-margin-top-4">

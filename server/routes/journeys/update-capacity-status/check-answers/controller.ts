@@ -49,6 +49,7 @@ export class UpdateStatusCheckAnswersController {
           req.journeyData.updateCapacityStatus!.status!.code,
           req.journeyData.updateCapacityStatus!.capacity!,
           req.journeyData.keyWorkerDetails!,
+          res.locals.policyName!,
         ),
       )
 

@@ -50,14 +50,6 @@ export default class KeyworkerApiClient {
     })
   }
 
-  async isKeyworker(prisonCode: string, username: string): Promise<boolean> {
-    const response = await this.restClient.get<components['schemas']['UsernameKeyworker']>({
-      path: `/prisons/${prisonCode}/key-workers/${username}/status`,
-    })
-
-    return response.isKeyworker
-  }
-
   async getPrisonStats(
     prisonId: string,
     fromDate: string,
@@ -85,12 +77,12 @@ export default class KeyworkerApiClient {
     })
   }
 
-  async getStaffMembers(
+  async searchStaff(
     prisonId: string,
     query: components['schemas']['StaffSearchRequest'],
   ): Promise<components['schemas']['StaffSearchResponse']['content']> {
     const response = await this.restClient.post<components['schemas']['StaffSearchResponse']>({
-      path: `/search/prisons/${prisonId}/staff-allocations`,
+      path: `/search/prisons/${prisonId}/staff`,
       data: query,
     })
 
@@ -152,9 +144,9 @@ export default class KeyworkerApiClient {
     })
   }
 
-  async searchStaff(prisonCode: string, query: components['schemas']['StaffSearchRequest']) {
-    return this.restClient.post<components['schemas']['StaffSearchResponse']>({
-      path: `/search/prisons/${prisonCode}/staff`,
+  async searchAllocatableStaff(prisonCode: string, query: components['schemas']['AllocatableSearchRequest']) {
+    return this.restClient.post<components['schemas']['AllocatableSearchResponse']>({
+      path: `/search/prisons/${prisonCode}/staff-allocations`,
       data: query,
     })
   }
@@ -165,7 +157,7 @@ export default class KeyworkerApiClient {
     query: components['schemas']['StaffJobClassificationRequest'],
   ) {
     return this.restClient.put({
-      path: `/prisons/${prisonCode}/staff/${staffId}/job-classification`,
+      path: `/prisons/${prisonCode}/staff/${staffId}/job-classifications`,
       data: query,
     })
   }

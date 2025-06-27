@@ -8,7 +8,7 @@ context('Profile Info', () => {
       roles: [AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.KW_MIGRATION],
     })
     cy.task('stubEnabledPrison')
-    cy.task('stubKeyworkerMembersStatusActive')
+    cy.task('stubSearchAllocatableStaffStatusActive')
     cy.task('stubPutAllocationSuccess')
     cy.task('stubPutDeallocationSuccess')
     cy.task('stubKeyworkerDetails')
@@ -20,15 +20,41 @@ context('Profile Info', () => {
     validatePageContents()
   })
 
-  it('should show profile info (read only)', () => {
+  it('should show profile info (VIEW permission only)', () => {
     cy.task('stubSignIn', {
-      roles: [],
+      user_id: '488095',
+      roles: [AuthorisedRoles.KEYWORKER_MONITOR],
+      hasAllocationJobResponsibilities: false,
     })
-    cy.task('stubKeyworkerApiStatusIsKeyworker')
 
     navigateToTestPage()
 
     validatePageContents(true)
+  })
+
+  it('should show profile info (read self profile only)', () => {
+    cy.task('stubSignIn', {
+      user_id: '488095',
+      roles: [],
+      hasAllocationJobResponsibilities: true,
+    })
+
+    navigateToTestPage()
+
+    validatePageContents(true)
+  })
+
+  it('should deny access to profile of other users (read self profile only)', () => {
+    cy.task('stubSignIn', {
+      user_id: 'OTHER_USER',
+      roles: [],
+      hasAllocationJobResponsibilities: true,
+    })
+
+    navigateToTestPage()
+
+    cy.title().should('equal', 'Not authorised - Key workers - DPS')
+    cy.findByText('You do not have permission to access this page').should('be.visible')
   })
 
   it('should show error when no allocations or deallocations are made', () => {
@@ -39,7 +65,7 @@ context('Profile Info', () => {
     cy.findByText('There is a problem').should('be.visible')
     cy.findByRole('link', { name: /Select key workers from the dropdown lists/ })
       .should('be.visible')
-      .should('have.attr', 'href', '#selectKeyworker')
+      .should('have.attr', 'href', '#selectStaffMember')
   })
 
   it('should show error on de/allocation failure', () => {
@@ -75,9 +101,9 @@ context('Profile Info', () => {
     cy.get('.govuk-table__row').should('have.length', 3)
     cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
 
-    cy.get('#selectKeyworker').should('contain', 'Select key worker')
-    cy.get('#selectKeyworker').should('contain', 'Deallocate')
-    cy.get('#selectKeyworker').should('not.contain', 'Key-Worker, Available-Active (allocations: 32)')
+    cy.get('#selectStaffMember').should('contain', 'Select key worker')
+    cy.get('#selectStaffMember').should('contain', 'Deallocate')
+    cy.get('#selectStaffMember').should('not.contain', 'Key-Worker, Available-Active (allocations: 32)')
     cy.findAllByRole('combobox').eq(1).select('Deallocate')
 
     cy.findByRole('button', { name: /Save changes/i }).click()

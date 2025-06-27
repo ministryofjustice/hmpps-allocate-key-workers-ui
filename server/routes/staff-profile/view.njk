@@ -73,8 +73,8 @@
     <hr class="govuk-section-break govuk-section-break--m"/>
 
     {% if user | hasPermission('allocate') %}
-      <p>Select key workers from the dropdown lists to reallocate or deallocate prisoners.</p>
-      <p>Key workers will only be allocated when you save your changes.</p>
+      <p>Select {{ policyName }}s from the dropdown lists to reallocate or deallocate prisoners.</p>
+      <p>{{ policyName | sentenceCase }}s will only be allocated when you save your changes.</p>
 
       <br/>
     {% endif %}
@@ -103,15 +103,14 @@
             text: item.latestSession.occurredAt | formatDateConcise | default('-', true) if item.latestSession else '-'
           },
           {
-            text: "Select keyworker",
             html: govukSelect({
-              id: "selectKeyworker",
-              name: "selectKeyworker",
-              text: 'Select key worker',
+              id: "selectStaffMember",
+              name: "selectStaffMember",
+              text: 'Select ' + policyName,
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: staff | excludeCurrentKeyworker({staffId: staffId}) | conditionallyAddDeallocate(staffId) | mergePrisonerKeyworkerIds(item.prisoner.prisonNumber) | addSelectValue('Select key worker')
+              items: staff | excludeCurrentStaffMember({staffId: staffId}) | conditionallyAddDeallocate(staffId) | mergePrisonerKeyworkerIds(item.prisoner.prisonNumber) | addSelectValue('Select ' + policyName)
             })
           } if user | hasPermission('allocate') else undefined
         ] | removeNullish), rows) %}
@@ -164,7 +163,7 @@
               }
             },
             {
-              text: "Change key worker"
+              text: "Change " + policyName
             } if user | hasPermission('allocate') else undefined
           ] | removeNullish,
           rows: rows

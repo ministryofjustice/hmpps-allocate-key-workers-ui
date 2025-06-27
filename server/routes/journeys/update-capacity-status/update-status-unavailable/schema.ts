@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { createSchema } from '../../../../middleware/validationMiddleware'
 
-const ERROR_MSG = 'Select whether you want to continue automatically assigning the key worker to prisoners'
+const ERROR_MSG = 'Select whether you want to continue automatically assigning the [staff] to prisoners'
 
 export const schema = createSchema({
   allocation: z.enum(['DEACTIVATE', 'DEACTIVATE_AND_REMOVE', 'NEITHER'], { message: ERROR_MSG }),

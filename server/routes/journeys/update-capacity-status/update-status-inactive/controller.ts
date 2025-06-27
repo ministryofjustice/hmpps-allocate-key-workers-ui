@@ -34,6 +34,7 @@ export class UpdateStatusInactiveController {
           req.journeyData.updateCapacityStatus!.status!.code,
           req.journeyData.updateCapacityStatus!.capacity!,
           req.journeyData.keyWorkerDetails!,
+          res.locals.policyName!,
         ),
       )
 

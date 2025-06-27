@@ -3,26 +3,15 @@
 {% macro deallocateSuccessError(failure, count) %}
   {% if count %}
     {% set prisoner = 'prisoner' if count == 1 else 'prisoners' %}
-    {% set warningTitle = 'Key workers could not be recommended for ' + count + ' ' + prisoner %}
     {% set successTitle = 'Changes made successfully' %}
     {% set successHtml %}
       <p>You have successfully made changes to {{ count }} {{ prisoner }}.</p>
     {% endset %}
-    {% set warningHtml %}
-      <p class="govuk-!-margin-bottom-6">This is because there are not enough key workers with available capacity.</p>
-      <p class="govuk-!-margin-bottom-6">
-        To assign prisoners without a key worker recommended, you can:
-        <ul class="govuk-list govuk-list--bullet">
-          <li>manually select key workers for these prisoners using the dropdown lists</li>
-          <li>increase the capacity of your key workers</li>
-        </ul>
-      </p>
-    {% endset %}
     {{ mojAlert({
-      variant: 'warning' if failure else 'success',
-      title: warningTitle if failure else successTitle,
+      variant: 'success',
+      title: successTitle,
       showTitleAsHeading: true,
-      html: warningHtml if failure else successHtml,
+      html: successHtml,
       classes: 'govuk-!-margin-bottom-0 govuk-!-margin-top-5'
     }) }}
   {% endif %}

@@ -3,7 +3,7 @@ import { EnhancedRestClientBuilder } from '../../data'
 import KeyworkerApiClient, { KeyworkerConfigRequest, ServiceConfigInfo } from './keyworkerApiClient'
 import { components } from '../../@types/keyWorker'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
-import { todayString, yesterdayString } from '../../utils/datetimeUtils'
+import { todayString } from '../../utils/datetimeUtils'
 import { StaffSummaryWithRole } from '../../@types/express'
 
 export default class KeyworkerApiService {
@@ -11,10 +11,6 @@ export default class KeyworkerApiService {
 
   getServiceConfigInfo(req: Request): Promise<ServiceConfigInfo> {
     return this.keyworkerApiClientBuilder(req).getServiceConfigInfo()
-  }
-
-  isKeyworker(req: Request, prisonCode: string, username: string): ReturnType<KeyworkerApiClient['isKeyworker']> {
-    return this.keyworkerApiClientBuilder(req).isKeyworker(prisonCode, username)
   }
 
   getPrisonStats(
@@ -48,14 +44,6 @@ export default class KeyworkerApiService {
     }
 
     return this.keyworkerApiClientBuilder(req).updatePrisonConfig(res.locals.user.getActiveCaseloadId()!, requestBody)
-  }
-
-  getStaffMembers(
-    req: Request,
-    prisonId: string,
-    query: Parameters<KeyworkerApiClient['getStaffMembers']>[1],
-  ): ReturnType<KeyworkerApiClient['getStaffMembers']> {
-    return this.keyworkerApiClientBuilder(req).getStaffMembers(prisonId, query)
   }
 
   async getStaffDetails(
@@ -106,8 +94,15 @@ export default class KeyworkerApiService {
     return this.keyworkerApiClientBuilder(req, res).updateStaffConfig(prisonCode, staffId, requestBody)
   }
 
-  searchStaff(req: Request, res: Response, searchOptions: components['schemas']['StaffSearchRequest']) {
-    return this.keyworkerApiClientBuilder(req, res).searchStaff(res.locals.user.getActiveCaseloadId()!, searchOptions)
+  searchAllocatableStaff(
+    req: Request,
+    res: Response,
+    searchOptions: components['schemas']['AllocatableSearchRequest'],
+  ) {
+    return this.keyworkerApiClientBuilder(req, res).searchAllocatableStaff(
+      res.locals.user.getActiveCaseloadId()!,
+      searchOptions,
+    )
   }
 
   assignRoleToStaff(
@@ -135,12 +130,16 @@ export default class KeyworkerApiService {
         scheduleType: staff.staffRole.scheduleType.code,
         hoursPerWeek: staff.staffRole.hoursPerWeek,
         fromDate: staff.staffRole.fromDate,
-        toDate: req.middleware?.policy === 'KEY_WORKER' ? yesterdayString() : todayString(),
+        toDate: todayString(),
       },
     )
   }
 
   allocationRecommendations(req: Request, prisonCode: string) {
     return this.keyworkerApiClientBuilder(req).allocationRecommendations(prisonCode)
+  }
+
+  searchStaff(req: Request, prisonCode: string, query: components['schemas']['StaffSearchRequest']) {
+    return this.keyworkerApiClientBuilder(req).searchStaff(prisonCode, query)
   }
 }
