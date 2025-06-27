@@ -75,6 +75,7 @@ export default function createApp(services: Services): express.Application {
   })
 
   app.use(dpsComponents.retrieveCaseLoadData({ logger }))
+  app.use(dpsComponents.retrieveAllocationJobResponsibilities({ logger }))
   app.use(populateValidationErrors())
 
   app.get('/:policy/not-authorised', (req, res) => {

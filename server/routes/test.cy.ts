@@ -10,8 +10,8 @@ context('test / homepage', () => {
     it('should show an error screen if the user has no roles and the call to the backend fails', () => {
       cy.task('stubSignIn', {
         roles: [],
+        hasAllocationJobResponsibilities: false,
       })
-      cy.task('stubKeyworkerApiStatusFail')
       navigateToTestPage()
       cy.title().should('equal', 'Sorry, there is a problem - Key workers - DPS')
       cy.findByText('Sorry, there is a problem with the service').should('be.visible')
@@ -20,8 +20,8 @@ context('test / homepage', () => {
     it('should redirect to not-authorised page if user has no permission', () => {
       cy.task('stubSignIn', {
         roles: [],
+        hasAllocationJobResponsibilities: false,
       })
-      cy.task('stubKeyworkerApiStatusIsNotKeyworker')
       cy.task('stubEnabledPrison')
 
       navigateToTestPage()
@@ -33,9 +33,8 @@ context('test / homepage', () => {
 
     it('should show correct services when user has only a view permission', () => {
       cy.task('stubSignIn', {
-        roles: [],
+        roles: [AuthorisedRoles.KEYWORKER_MONITOR],
       })
-      cy.task('stubKeyworkerApiStatusIsKeyworker')
       cy.task('stubEnabledPrison')
 
       navigateToTestPage()
@@ -46,8 +45,8 @@ context('test / homepage', () => {
     it('should show correct services when user has allocate permission', () => {
       cy.task('stubSignIn', {
         roles: [AuthorisedRoles.OMIC_ADMIN],
+        hasAllocationJobResponsibilities: false,
       })
-      cy.task('stubKeyworkerApiStatusIsNotKeyworker')
       cy.task('stubEnabledPrison')
 
       navigateToTestPage()
@@ -58,8 +57,8 @@ context('test / homepage', () => {
     it('should show correct services when user has admin permission', () => {
       cy.task('stubSignIn', {
         roles: [AuthorisedRoles.KW_MIGRATION],
+        hasAllocationJobResponsibilities: false,
       })
-      cy.task('stubKeyworkerApiStatusIsNotKeyworker')
       cy.task('stubEnabledPrison')
 
       navigateToTestPage()
@@ -134,7 +133,6 @@ context('test / homepage', () => {
     cy.task('stubSignIn', {
       roles: [AuthorisedRoles.KW_MIGRATION],
     })
-    cy.task('stubKeyworkerApiStatusIsKeyworker')
     cy.task('stubPrisonNotEnabled')
 
     navigateToTestPage()
@@ -144,6 +142,24 @@ context('test / homepage', () => {
       'have.attr',
       'href',
       '/key-worker/establishment-settings',
+    )
+  })
+
+  it('should show my allocations tile to user who has allocation job responsibility', () => {
+    cy.task('stubSignIn', {
+      roles: [],
+      hasAllocationJobResponsibilities: true,
+      user_id: 1234,
+    })
+    cy.task('stubEnabledPrison')
+
+    navigateToTestPage()
+    cy.title().should('equal', 'Key workers - DPS')
+    cy.get('h2 > .card__link').should('have.length', 1)
+    cy.findByRole('link', { name: 'My key worker allocations' }).should(
+      'have.attr',
+      'href',
+      '/key-worker/staff-profile/1234',
     )
   })
 

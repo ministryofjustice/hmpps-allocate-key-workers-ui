@@ -50,14 +50,6 @@ export default class KeyworkerApiClient {
     })
   }
 
-  async isKeyworker(prisonCode: string, username: string): Promise<boolean> {
-    const response = await this.restClient.get<components['schemas']['UsernameKeyworker']>({
-      path: `/prisons/${prisonCode}/key-workers/${username}/status`,
-    })
-
-    return response.isKeyworker
-  }
-
   async getPrisonStats(
     prisonId: string,
     fromDate: string,
@@ -165,7 +157,7 @@ export default class KeyworkerApiClient {
     query: components['schemas']['StaffJobClassificationRequest'],
   ) {
     return this.restClient.put({
-      path: `/prisons/${prisonCode}/staff/${staffId}/job-classification`,
+      path: `/prisons/${prisonCode}/staff/${staffId}/job-classifications`,
       data: query,
     })
   }

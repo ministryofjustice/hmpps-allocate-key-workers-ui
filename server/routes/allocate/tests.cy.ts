@@ -130,9 +130,8 @@ context('/allocate', () => {
 
   it('should load read-only page correctly', () => {
     cy.task('stubSignIn', {
-      roles: [],
+      roles: [AuthorisedRoles.KEYWORKER_MONITOR],
     })
-    cy.task('stubKeyworkerApiStatusIsKeyworker')
 
     navigateToTestPage()
 
