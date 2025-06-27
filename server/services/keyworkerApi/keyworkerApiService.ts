@@ -13,10 +13,6 @@ export default class KeyworkerApiService {
     return this.keyworkerApiClientBuilder(req).getServiceConfigInfo()
   }
 
-  isKeyworker(req: Request, prisonCode: string, username: string): ReturnType<KeyworkerApiClient['isKeyworker']> {
-    return this.keyworkerApiClientBuilder(req).isKeyworker(prisonCode, username)
-  }
-
   getPrisonStats(
     req: Request,
     prisonId: string,

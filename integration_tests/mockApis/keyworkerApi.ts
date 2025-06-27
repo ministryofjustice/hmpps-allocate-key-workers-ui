@@ -93,10 +93,12 @@ const stubPutAllocationFail = (code: number = 500, message?: string) => {
 const stubKeyworkerApiHealth = () => createBasicHttpStub('GET', '/keyworker-api/health/ping', 200, { status: 'UP' })
 
 const stubKeyworkerApiStatusIsKeyworker = (isKeyworker: boolean) =>
-  createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/key-workers/USER1/status', 200, { isKeyworker })
+  createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/staff/.*/job-classifications', 200, {
+    policies: isKeyworker ? ['KEY_WORKER'] : [],
+  })
 
 const stubKeyworkerApiStatusFail = () =>
-  createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/key-workers/USER1/status', 500, {})
+  createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/staff/.*/job-classifications', 500, {})
 
 const createKeyworkerStatsStub = (from: string, to: string, jsonBody = {}) => {
   return createHttpStub(
@@ -268,7 +270,7 @@ const stubUpdateStaffProperties = () =>
   createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/staff/.*/configuration', 200, {})
 
 const stubAssignRoleToStaff = () =>
-  createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/staff/.*/job-classification', 204, {})
+  createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/staff/.*/job-classifications', 204, {})
 
 const stubAllocationRecommendations = (allocationRecommendations: components['schemas']['RecommendedAllocations']) =>
   createBasicHttpStub(

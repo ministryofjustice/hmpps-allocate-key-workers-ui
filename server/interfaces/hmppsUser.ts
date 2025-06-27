@@ -59,14 +59,17 @@ export interface AzureADUser extends BaseUser {
 }
 
 export enum UserPermissionLevel {
-  VIEW = 1,
-  ALLOCATE = 2,
-  ADMIN = 3,
+  SELF_PROFILE_ONLY = 1,
+  VIEW = 2,
+  ALLOCATE = 3,
+  ADMIN = 4,
 }
 
 export type HmppsUser = (PrisonUser | ProbationUser | ExternalUser | AzureADUser) & {
   caseLoads: CaseLoad[] | undefined
   activeCaseLoad?: CaseLoad | undefined
+  allocationJobResponsibilities?: ('KEY_WORKER' | 'PERSONAL_OFFICER')[]
   permissions: UserPermissionLevel
   getActiveCaseloadId: () => string | undefined
+  hasJobResponsibility?: boolean
 }

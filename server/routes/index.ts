@@ -35,7 +35,7 @@ export default function routes(services: Services) {
     },
     {
       requirePrisonEnabled: true,
-      minimumPermission: UserPermissionLevel.VIEW,
+      minimumPermission: UserPermissionLevel.SELF_PROFILE_ONLY,
     },
   )
 
@@ -48,7 +48,7 @@ export default function routes(services: Services) {
     '/staff-profile/:staffId',
     requirePermissionsAndConfig({
       requirePrisonEnabled: false,
-      minimumPermission: UserPermissionLevel.VIEW,
+      minimumPermission: UserPermissionLevel.SELF_PROFILE_ONLY,
     }),
     StaffProfileRoutes(services),
   )

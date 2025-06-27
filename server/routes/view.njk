@@ -12,32 +12,43 @@
           <div class="govuk-grid-column-full">
             <div class="card-group govuk-grid-row">
             {% if prisonEnabled %}
-              <div class="govuk-grid-column-one-third card-group__item">
-                <div class="card card--clickable">
-                  <h2 class="govuk-heading-m card__heading">
-                    <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/allocate">Allocate {{ policyName }}s to prisoners</a>
-                  </h2>
-                  <p class="govuk-body card__description">View all prisoners or filter by location or allocation status, search for individuals, and automatically assign {{ policyName }}s.</p>
+              {% if user | hasPermission('view') %}
+                <div class="govuk-grid-column-one-third card-group__item">
+                  <div class="card card--clickable">
+                    <h2 class="govuk-heading-m card__heading">
+                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/allocate">Allocate {{ policyName }}s to prisoners</a>
+                    </h2>
+                    <p class="govuk-body card__description">View all prisoners or filter by location or allocation status, search for individuals, and automatically assign {{ policyName }}s.</p>
+                  </div>
                 </div>
-              </div>
 
-              <div class="govuk-grid-column-one-third card-group__item">
-                <div class="card card--clickable">
-                  <h2 class="govuk-heading-m card__heading">
-                    <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/manage-staff">Manage {{ policyName }}s</a>
-                  </h2>
-                  <p class="govuk-body card__description">View {{ policyName }}s, change their status and capacity, and view and reassign their prisoners.</p>
+                <div class="govuk-grid-column-one-third card-group__item">
+                  <div class="card card--clickable">
+                    <h2 class="govuk-heading-m card__heading">
+                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/manage-staff">Manage {{ policyName }}s</a>
+                    </h2>
+                    <p class="govuk-body card__description">View {{ policyName }}s, change their status and capacity, and view and reassign their prisoners.</p>
+                  </div>
                 </div>
-              </div>
 
-              <div class="govuk-grid-column-one-third card-group__item">
-                <div class="card card--clickable">
-                  <h2 class="govuk-heading-m card__heading">
-                    <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/staff-data">View {{ policyName }} data</a>
-                  </h2>
-                  <p class="govuk-body card__description">View {{ policyName }} data for your establishment.</p>
+                <div class="govuk-grid-column-one-third card-group__item">
+                  <div class="card card--clickable">
+                    <h2 class="govuk-heading-m card__heading">
+                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/staff-data">View {{ policyName }} data</a>
+                    </h2>
+                    <p class="govuk-body card__description">View {{ policyName }} data for your establishment.</p>
+                  </div>
                 </div>
-              </div>
+              {% else %}
+                <div class="govuk-grid-column-one-third card-group__item">
+                  <div class="card card--clickable">
+                    <h2 class="govuk-heading-m card__heading">
+                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/staff-profile/{{ user.userId }}">My {{ policyName }} allocations</a>
+                    </h2>
+                    <p class="govuk-body card__description">View your {{ policyName }} allocations and personal statistics.</p>
+                  </div>
+                </div>
+              {% endif %}
 
               {% if user | hasPermission('allocate') %}
                 <div class="govuk-grid-column-one-third card-group__item">
