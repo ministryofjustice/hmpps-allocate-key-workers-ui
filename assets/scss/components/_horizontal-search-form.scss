@@ -8,6 +8,11 @@
     width: 100%;
   }
 
+  .govuk-checkboxes__input {
+    width: auto;
+    margin-left: 25px;
+  }
+
   @include govuk-media-query($from: desktop) {
     display: flex;
     flex-flow: row wrap;
@@ -17,7 +22,7 @@
       margin-bottom: 0;
     }
 
-    > div {
+    >div {
       margin-right: govuk-spacing(3);
     }
 
@@ -43,11 +48,19 @@
       align-self: flex-end;
     }
 
+    .govuk-checkboxes.horizontal-checkbox {
+      margin-top: 28px;
+    }
+
+    .horizontal-checkbox .govuk-checkboxes__label {
+      max-width: none;
+      margin-top: 2px;
+    }
   }
 }
 
 .horizontal-links {
-  > a {
+  >a {
     margin-right: govuk-spacing(2);
   }
 
@@ -59,7 +72,7 @@
       margin-bottom: 0;
     }
 
-    > a {
+    >a {
       margin-right: govuk-spacing(3);
     }
   }

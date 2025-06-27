@@ -14,7 +14,7 @@ import {
   yesterdayStringGBFormat,
 } from './datetimeUtils'
 import { buildErrorSummaryList, customErrorOrderBuilder, findError } from '../middleware/validationMiddleware'
-import { firstNameSpaceLastName, lastNameCommaFirstName, nameCase, sentenceCase } from './formatUtils'
+import { alertsSortValue, firstNameSpaceLastName, lastNameCommaFirstName, nameCase, sentenceCase } from './formatUtils'
 import {
   addSelectValue,
   conditionallyAddDeallocate,
@@ -90,4 +90,5 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('hasPermission', hasPermission)
   njkEnv.addGlobal('yesterdayStringGBFormat', yesterdayStringGBFormat)
   njkEnv.addFilter('policyAware', policyAware)
+  njkEnv.addFilter('alertsSortValue', alertsSortValue)
 }
