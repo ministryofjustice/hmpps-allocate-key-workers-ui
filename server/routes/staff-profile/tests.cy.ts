@@ -20,6 +20,18 @@ context('Profile Info', () => {
     validatePageContents()
   })
 
+  it('should show profile info (VIEW permission only)', () => {
+    cy.task('stubSignIn', {
+      user_id: '488095',
+      roles: [AuthorisedRoles.KEYWORKER_MONITOR],
+      hasAllocationJobResponsibilities: false,
+    })
+
+    navigateToTestPage()
+
+    validatePageContents(true)
+  })
+
   it('should show profile info (read self profile only)', () => {
     cy.task('stubSignIn', {
       user_id: '488095',
