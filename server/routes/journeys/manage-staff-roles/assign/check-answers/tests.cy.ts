@@ -41,7 +41,7 @@ context('/manage-staff-roles/assign/check-answers', () => {
     proceedToNextPage()
 
     cy.verifyLastAPICall(
-      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/1001/job-classification' },
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/1001/job-classifications' },
       {
         position: 'PRO',
         scheduleType: 'FT',

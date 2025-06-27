@@ -13,10 +13,6 @@ export default class KeyworkerApiService {
     return this.keyworkerApiClientBuilder(req).getServiceConfigInfo()
   }
 
-  isKeyworker(req: Request, prisonCode: string, username: string): ReturnType<KeyworkerApiClient['isKeyworker']> {
-    return this.keyworkerApiClientBuilder(req).isKeyworker(prisonCode, username)
-  }
-
   getPrisonStats(
     req: Request,
     prisonId: string,
@@ -98,7 +94,11 @@ export default class KeyworkerApiService {
     return this.keyworkerApiClientBuilder(req, res).updateStaffConfig(prisonCode, staffId, requestBody)
   }
 
-  searchAllocatableStaff(req: Request, res: Response, searchOptions: components['schemas']['KeyworkerSearchRequest']) {
+  searchAllocatableStaff(
+    req: Request,
+    res: Response,
+    searchOptions: components['schemas']['AllocatableSearchRequest'],
+  ) {
     return this.keyworkerApiClientBuilder(req, res).searchAllocatableStaff(
       res.locals.user.getActiveCaseloadId()!,
       searchOptions,

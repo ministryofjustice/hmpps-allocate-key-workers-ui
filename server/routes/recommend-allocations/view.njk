@@ -7,6 +7,7 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "partials/mojPagination/macro.njk" import mojPagination %}
 {% from "partials/deallocateSuccessError/macro.njk" import deallocateSuccessError %}
+{% from "partials/alertFlags/macro.njk" import alertFlags %}
 
 {% set fullWidth = true %}
 {% set pageTitle = "Allocate [staffs] automatically" | policyAware(policyName) %}
@@ -45,6 +46,12 @@
             text: item.location
           },
           {
+            html: alertFlags(prisonerProfileUrl + '/prisoner/' + item.personIdentifier + '/alerts/active', item.relevantAlertCodes, item.remainingAlertCount),
+            attributes: {
+              "data-sort-value": item | alertsSortValue
+            }
+          },
+          {
             text: item.staffMember | lastNameCommaFirstName  | default('-', true)
           },
           {
@@ -59,7 +66,7 @@
             })
           },
           {
-            html: '<a class="govuk-link govuk-link--no-visited-state" href="/prisoner-allocation-history/' + item.personIdentifier + '">View allocation history</a>' if item.hasAllocationHistory else ''
+            html: '<a class="govuk-link govuk-link--no-visited-state" href="/' + policyPath + '/prisoner-allocation-history/' + item.personIdentifier + '">View allocation history</a>' if item.hasAllocationHistory else ''
           }
         ] | removeNullish), rows) %}
       {% endfor %}
@@ -82,6 +89,13 @@
             {
               text: "Residential location",
               key: 'location',
+              attributes: {
+                "aria-sort": "none"
+              }
+            },
+            {
+              text: "Relevant alerts",
+              key: 'alerts',
               attributes: {
                 "aria-sort": "none"
               }

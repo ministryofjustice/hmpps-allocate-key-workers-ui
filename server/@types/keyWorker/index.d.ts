@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-  '/prisons/{prisonCode}/staff/{staffId}/job-classification': {
+  '/prisons/{prisonCode}/staff/{staffId}/job-classifications': {
     parameters: {
       query?: never
       header?: never
@@ -17,6 +17,26 @@ export interface paths {
      *     Requires one of the following roles:
      *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
     put: operations['modifyStaffJob']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/prisons/{prisonCode}/staff/{staffId}/job-classification': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
+    put: operations['modifyStaffJob_1']
     post?: never
     delete?: never
     options?: never
@@ -44,26 +64,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/prisons/{prisonCode}/prisoners/keyworkers': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    /** @description
-     *
-     *     Requires one of the following roles:
-     *     * ROLE_KEY_WORKER__RW */
-    put: operations['manageKeyworkerAllocations']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/prisons/{prisonCode}/prisoners/allocations': {
     parameters: {
       query?: never
@@ -77,30 +77,6 @@ export interface paths {
      *     Requires one of the following roles:
      *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
     put: operations['manageAllocations']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/prisons/{prisonCode}/keyworkers/{staffId}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** @description
-     *
-     *     Requires one of the following roles:
-     *     * ROLE_KEY_WORKER__RO */
-    get: operations['getKeyworkerDetails']
-    /** @description
-     *
-     *     Requires one of the following roles:
-     *     * ROLE_KEY_WORKER__RW */
-    put: operations['modifyKeyworkerConfig']
     post?: never
     delete?: never
     options?: never
@@ -215,26 +191,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/search/prisons/{prisonCode}/keyworkers': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    /** @description
-     *
-     *     Requires one of the following roles:
-     *     * ROLE_KEY_WORKER__RO */
-    post: operations['searchKeyworkers']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/key-worker/{staffId}/prison/{prisonId}': {
     parameters: {
       query?: never
@@ -246,7 +202,7 @@ export interface paths {
      * getKeyworkerDetails
      * @description Key worker details.
      */
-    get: operations['getKeyworkerDetails_1']
+    get: operations['getKeyworkerDetails']
     put?: never
     /**
      * addOrUpdateKeyworker
@@ -542,46 +498,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/prisons/{prisonCode}/configuration/keyworker': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** @description
-     *
-     *     Requires one of the following roles:
-     *     * ROLE_KEY_WORKER__RO */
-    get: operations['getPrisonKeyworkerConfiguration']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/prisoners/{prisonNumber}/keyworkers': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** @description
-     *
-     *     Requires one of the following roles:
-     *     * ROLE_KEY_WORKER__RO */
-    get: operations['getKeyworkerAllocations']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/prisoners/{prisonNumber}/allocations': {
     parameters: {
       query?: never
@@ -714,7 +630,7 @@ export interface paths {
      * getAllocations
      * @description Allocations in specified prison.
      */
-    get: operations['getKeyworkerAllocations_1']
+    get: operations['getKeyworkerAllocations']
     put?: never
     post?: never
     delete?: never
@@ -982,40 +898,15 @@ export interface components {
       hasHighComplexityOfNeeds: boolean
       hasAllocationHistory: boolean
       staffMember?: components['schemas']['StaffSummary']
+      relevantAlertCodes: string[]
+      /** Format: int32 */
+      remainingAlertCount: number
     }
     StaffSummary: {
       /** Format: int64 */
       staffId: number
       firstName: string
       lastName: string
-    }
-    KeyworkerSearchRequest: {
-      query?: string
-      /** @enum {string} */
-      status:
-        | 'ALL'
-        | 'ACTIVE'
-        | 'UNAVAILABLE_ANNUAL_LEAVE'
-        | 'UNAVAILABLE_LONG_TERM_ABSENCE'
-        | 'UNAVAILABLE_NO_PRISONER_CONTACT'
-        | 'INACTIVE'
-    }
-    KeyworkerSearchResponse: {
-      content: components['schemas']['KeyworkerSummary'][]
-    }
-    KeyworkerSummary: {
-      /** Format: int64 */
-      staffId: number
-      firstName: string
-      lastName: string
-      status: components['schemas']['CodedDescription']
-      /** Format: int32 */
-      capacity: number
-      /** Format: int32 */
-      numberAllocated: number
-      autoAllocationAllowed: boolean
-      /** Format: int32 */
-      numberOfKeyworkerSessions: number
     }
     /** @description New keyworker details. */
     KeyworkerUpdateDto: {
@@ -1234,6 +1125,9 @@ export interface components {
       cellLocation?: string
       /** Format: date */
       releaseDate?: string
+      relevantAlertCodes: string[]
+      /** Format: int32 */
+      remainingAlertCount: number
     }
     StaffCountStats: {
       /** Format: date */
@@ -1307,90 +1201,15 @@ export interface components {
       noAvailableStaffFor: string[]
       staff: components['schemas']['AllocationStaff'][]
     }
-    KeyworkerDetails: {
-      keyworker: components['schemas']['KeyworkerWithSchedule']
-      status: components['schemas']['CodedDescription']
-      prison: components['schemas']['CodedDescription']
-      /** Format: int32 */
-      capacity: number
-      /** Format: int32 */
-      allocated: number
-      allocations: components['schemas']['KeyworkerPrisoner'][]
-      stats: components['schemas']['KeyworkerStats']
-      allowAutoAllocation: boolean
-      /** Format: date */
-      reactivateOn?: string
-    }
-    KeyworkerPrisoner: {
-      prisoner: components['schemas']['Prisoner']
-      latestSession?: components['schemas']['LatestKeyworkerSession']
-    }
-    KeyworkerSessionStats: {
-      /** Format: date */
-      from: string
-      /** Format: date */
-      to: string
-      /** Format: int32 */
-      projectedSessions: number
-      /** Format: int32 */
-      recordedSessions: number
-      /** Format: int32 */
-      recordedEntries: number
-      /** Format: double */
-      complianceRate: number
-    }
-    KeyworkerStats: {
-      current: components['schemas']['KeyworkerSessionStats']
-      previous: components['schemas']['KeyworkerSessionStats']
-    }
-    KeyworkerWithSchedule: {
-      /** Format: int64 */
-      staffId: number
-      firstName: string
-      lastName: string
-      scheduleType: components['schemas']['CodedDescription']
-    }
-    LatestKeyworkerSession: {
-      /** Format: date */
-      occurredAt: string
-    }
     UsernameKeyworker: {
       username: string
       isKeyworker: boolean
-    }
-    PrisonKeyworkerConfiguration: {
-      isEnabled: boolean
-      hasPrisonersWithHighComplexityNeeds: boolean
-      allowAutoAllocate: boolean
-      /** Format: int32 */
-      capacityTier1: number
-      /** Format: int32 */
-      capacityTier2?: number
-      /** Format: int32 */
-      kwSessionFrequencyInWeeks: number
     }
     Actioned: {
       /** Format: date-time */
       at: string
       by: string
       reason: components['schemas']['CodedDescription']
-    }
-    Keyworker: {
-      /** Format: int64 */
-      staffId: number
-      firstName: string
-      lastName: string
-    }
-    KeyworkerAllocation: {
-      active: boolean
-      keyworker: components['schemas']['Keyworker']
-      prison: components['schemas']['CodedDescription']
-      allocated: components['schemas']['Actioned']
-      deallocated?: components['schemas']['Actioned']
-    }
-    KeyworkerAllocationHistory: {
-      prisonNumber: string
-      allocations: components['schemas']['KeyworkerAllocation'][]
     }
     StaffAllocation: {
       active: boolean
@@ -1857,6 +1676,40 @@ export interface operations {
       }
     }
   }
+  modifyStaffJob_1: {
+    parameters: {
+      query?: never
+      header: {
+        /** @description
+         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
+         *          */
+        Policy: string
+        /** @description
+         *         Relevant caseload id for the client identity in context e.g. the active caseload id of the logged in user.
+         *          */
+        CaseloadId?: string
+      }
+      path: {
+        prisonCode: string
+        staffId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['StaffJobClassificationRequest']
+      }
+    }
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
   modifyStaffConfig: {
     parameters: {
       query?: never
@@ -1891,30 +1744,6 @@ export interface operations {
       }
     }
   }
-  manageKeyworkerAllocations: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        prisonCode: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['PersonStaffAllocations']
-      }
-    }
-    responses: {
-      /** @description No Content */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
   manageAllocations: {
     parameters: {
       query?: never
@@ -1936,59 +1765,6 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['PersonStaffAllocations']
-      }
-    }
-    responses: {
-      /** @description No Content */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  getKeyworkerDetails: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        prisonCode: string
-        staffId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['KeyworkerDetails']
-        }
-      }
-    }
-  }
-  modifyKeyworkerConfig: {
-    parameters: {
-      query?: never
-      header?: {
-        /** @description
-         *         Relevant caseload id for the client identity in context e.g. the active caseload id of the logged in user.
-         *          */
-        CaseloadId?: string
-      }
-      path: {
-        prisonCode: string
-        staffId: number
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['StaffConfigRequest']
       }
     }
     responses: {
@@ -2203,33 +1979,7 @@ export interface operations {
       }
     }
   }
-  searchKeyworkers: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        prisonCode: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['KeyworkerSearchRequest']
-      }
-    }
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['KeyworkerSearchResponse']
-        }
-      }
-    }
-  }
-  getKeyworkerDetails_1: {
+  getKeyworkerDetails: {
     parameters: {
       query?: never
       header?: never
@@ -2909,50 +2659,6 @@ export interface operations {
       }
     }
   }
-  getPrisonKeyworkerConfiguration: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        prisonCode: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['PrisonKeyworkerConfiguration']
-        }
-      }
-    }
-  }
-  getKeyworkerAllocations: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        prisonNumber: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['KeyworkerAllocationHistory']
-        }
-      }
-    }
-  }
   getAllocations: {
     parameters: {
       query?: never
@@ -3266,7 +2972,7 @@ export interface operations {
       }
     }
   }
-  getKeyworkerAllocations_1: {
+  getKeyworkerAllocations: {
     parameters: {
       query?: {
         /** @description Optional filter by type of allocation. A for auto allocations, M for manual allocations. */

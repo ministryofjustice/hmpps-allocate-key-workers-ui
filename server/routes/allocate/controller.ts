@@ -13,6 +13,7 @@ export class AllocateStaffController extends ChangeStaffController {
   }
 
   GET = async (req: Request, res: Response): Promise<void> => {
+    const { allowAutoAllocation } = req.middleware!.prisonConfiguration!
     const prisonCode = res.locals.user.getActiveCaseloadId()!
     const locations = await this.locationsApiService.getResidentialLocations(req, prisonCode)
 
@@ -41,6 +42,7 @@ export class AllocateStaffController extends ChangeStaffController {
       locations: locations.map(o => ({ text: o.localName || o.fullLocationPath, value: o.fullLocationPath })),
       ...(await this.getChangeStaffData(req, res)),
       showBreadcrumbs: true,
+      allowAutoAllocation,
     })
   }
 
