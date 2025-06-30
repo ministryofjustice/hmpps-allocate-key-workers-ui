@@ -118,7 +118,6 @@ export function populateUserPermissionsAndPrisonConfig(): RequestHandler {
           res.locals.user.permissions = UserPermissionLevel.SELF_PROFILE_ONLY
         }
       }
-
       req.middleware.prisonConfiguration = await keyworkerApiService.getPrisonConfig(req, prisonCode)
 
       return next()
