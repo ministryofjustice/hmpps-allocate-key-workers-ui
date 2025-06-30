@@ -562,7 +562,7 @@ const keyworkerDetailsResponse = {
     previous: {
       from: '2025-01-17',
       to: '2025-02-17',
-      projectedComplianceEvents: -3,
+      projectedComplianceEvents: 3,
       recordedComplianceEvents: 0,
       recordedEvents: [
         { type: 'ENTRY', count: 0 },
