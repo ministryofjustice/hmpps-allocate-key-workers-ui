@@ -197,7 +197,7 @@ context('Profile Info', () => {
     // Stats panel
     cy.get('.govuk-grid-column-one-quarter').eq(4).children().eq(0).should('have.text', 'Projected sessions')
     cy.get('.govuk-grid-column-one-quarter').eq(4).children().eq(1).should('have.text', '1')
-    cy.get('.govuk-grid-column-one-quarter').eq(4).children().eq(2).should('have.text', '+4 increase')
+    cy.get('.govuk-grid-column-one-quarter').eq(4).children().eq(2).should('have.text', '-2 decrease')
 
     cy.get('.govuk-grid-column-one-quarter').eq(5).children().eq(0).should('have.text', 'Recorded sessions')
     cy.get('.govuk-grid-column-one-quarter').eq(5).children().eq(1).should('have.text', '3')

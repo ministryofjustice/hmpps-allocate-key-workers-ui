@@ -86,6 +86,7 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('buildErrorSummaryList', buildErrorSummaryList)
   njkEnv.addFilter('customErrorOrderBuilder', customErrorOrderBuilder)
   njkEnv.addFilter('removeNullish', arr => arr.filter((o: unknown) => o !== undefined && o !== null))
+  njkEnv.addFilter('mapProperty', (arr: { [key: string]: object }[], property: string) => arr.map(itm => itm[property]))
   njkEnv.addFilter('getHighlightedStatChange', getHighlightedStatChange)
   njkEnv.addFilter('hasPermission', hasPermission)
   njkEnv.addGlobal('yesterdayStringGBFormat', yesterdayStringGBFormat)

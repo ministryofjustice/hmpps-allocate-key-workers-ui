@@ -524,6 +524,8 @@ const keyworkerDetailsResponse = {
         csra: 'Standard',
         cellLocation: '1-1-035',
         releaseDate: '2025-02-01',
+        relevantAlertCodes: [],
+        remainingAlertCount: 0,
       },
       latestSession: {
         occurredAt: '2025-01-23',
@@ -537,6 +539,8 @@ const keyworkerDetailsResponse = {
         csra: 'Standard',
         cellLocation: '3-1-027',
         releaseDate: '2025-02-01',
+        relevantAlertCodes: [],
+        remainingAlertCount: 0,
       },
       latestSession: {
         occurredAt: '2025-01-23',
@@ -547,17 +551,23 @@ const keyworkerDetailsResponse = {
     current: {
       from: '2025-02-17',
       to: '2025-03-17',
-      projectedSessions: 1,
-      recordedSessions: 3,
-      recordedEntries: 2,
+      projectedComplianceEvents: 1,
+      recordedComplianceEvents: 3,
+      recordedEvents: [
+        { type: 'ENTRY', count: 2 },
+        { type: 'SESSION', count: 3 },
+      ],
       complianceRate: 0,
     },
     previous: {
       from: '2025-01-17',
       to: '2025-02-17',
-      projectedSessions: -3,
-      recordedSessions: 0,
-      recordedEntries: 0,
+      projectedComplianceEvents: 3,
+      recordedComplianceEvents: 0,
+      recordedEvents: [
+        { type: 'ENTRY', count: 0 },
+        { type: 'SESSION', count: 0 },
+      ],
       complianceRate: 0,
     },
   },

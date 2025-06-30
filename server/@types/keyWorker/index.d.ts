@@ -24,26 +24,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/prisons/{prisonCode}/staff/{staffId}/job-classification': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    /** @description
-     *
-     *     Requires one of the following roles:
-     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
-    put: operations['modifyStaffJob_1']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/prisons/{prisonCode}/staff/{staffId}/configuration': {
     parameters: {
       query?: never
@@ -470,26 +450,6 @@ export interface paths {
      *     Requires one of the following roles:
      *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
     get: operations['getAllocationRecommendations']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/prisons/{prisonCode}/key-workers/{username}/status': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** @description To determine if a user is a keyworker
-     *
-     *     Requires one of the following roles:
-     *     * ROLE_KEY_WORKER__RO */
-    get: operations['userIsKeyworker']
     put?: never
     post?: never
     delete?: never
@@ -1129,17 +1089,22 @@ export interface components {
       /** Format: int32 */
       remainingAlertCount: number
     }
+    RecordedEventCount: {
+      /** @enum {string} */
+      type: 'SESSION' | 'ENTRY'
+      /** Format: int32 */
+      count: number
+    }
     StaffCountStats: {
       /** Format: date */
       from: string
       /** Format: date */
       to: string
       /** Format: int32 */
-      projectedSessions: number
+      projectedComplianceEvents: number
       /** Format: int32 */
-      recordedSessions: number
-      /** Format: int32 */
-      recordedEntries: number
+      recordedComplianceEvents: number
+      recordedEvents: components['schemas']['RecordedEventCount'][]
       /** Format: double */
       complianceRate: number
     }
@@ -1200,10 +1165,6 @@ export interface components {
       allocations: components['schemas']['RecommendedAllocation'][]
       noAvailableStaffFor: string[]
       staff: components['schemas']['AllocationStaff'][]
-    }
-    UsernameKeyworker: {
-      username: string
-      isKeyworker: boolean
     }
     Actioned: {
       /** Format: date-time */
@@ -1643,40 +1604,6 @@ export interface components {
 export type $defs = Record<string, never>
 export interface operations {
   modifyStaffJob: {
-    parameters: {
-      query?: never
-      header: {
-        /** @description
-         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
-         *          */
-        Policy: string
-        /** @description
-         *         Relevant caseload id for the client identity in context e.g. the active caseload id of the logged in user.
-         *          */
-        CaseloadId?: string
-      }
-      path: {
-        prisonCode: string
-        staffId: number
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['StaffJobClassificationRequest']
-      }
-    }
-    responses: {
-      /** @description No Content */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  modifyStaffJob_1: {
     parameters: {
       query?: never
       header: {
@@ -2524,7 +2451,10 @@ export interface operations {
   }
   getStaffDetails: {
     parameters: {
-      query?: never
+      query?: {
+        from?: string
+        to?: string
+      }
       header: {
         /** @description
          *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
@@ -2596,65 +2526,6 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['RecommendedAllocations']
-        }
-      }
-    }
-  }
-  userIsKeyworker: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        prisonCode: string
-        username: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK - staff recorded verified */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['UsernameKeyworker']
-        }
-      }
-      /** @description Bad request - username not valid */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Unauthorised */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Not found - staff not found */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
