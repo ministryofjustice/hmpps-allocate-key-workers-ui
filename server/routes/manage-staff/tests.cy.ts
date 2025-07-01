@@ -124,7 +124,7 @@ context('Manage key workers', () => {
         capacity: 28,
         allocated: 32,
         allowAutoAllocation: true,
-        numberOfSessions: 0,
+        stats: { recordedComplianceEvents: 0 },
       },
     ])
 
@@ -156,7 +156,7 @@ context('Manage key workers', () => {
         capacity: 11,
         allocated: 0,
         allowAutoAllocation: false,
-        numberOfSessions: 0,
+        stats: { recordedComplianceEvents: 0 },
       },
     ])
 
@@ -193,7 +193,7 @@ context('Manage key workers', () => {
         capacity: 28,
         allocated: 32,
         allowAutoAllocation: true,
-        numberOfSessions: 0,
+        stats: { recordedComplianceEvents: 0 },
       },
       {
         staffId: 488096,
@@ -206,7 +206,7 @@ context('Manage key workers', () => {
         capacity: 28,
         allocated: 32,
         allowAutoAllocation: true,
-        numberOfSessions: 0,
+        stats: { recordedComplianceEvents: 0 },
       },
       {
         staffId: 488096,
@@ -219,7 +219,7 @@ context('Manage key workers', () => {
         capacity: 6,
         allocated: 9,
         allowAutoAllocation: true,
-        numberOfSessions: 0,
+        stats: { recordedComplianceEvents: 0 },
       },
       {
         staffId: 488097,
@@ -232,7 +232,7 @@ context('Manage key workers', () => {
         capacity: 4,
         allocated: 1,
         allowAutoAllocation: false,
-        numberOfSessions: 0,
+        stats: { recordedComplianceEvents: 0 },
       },
       {
         staffId: 488098,
@@ -245,7 +245,7 @@ context('Manage key workers', () => {
         capacity: 12,
         allocated: 0,
         allowAutoAllocation: false,
-        numberOfSessions: 0,
+        stats: { recordedComplianceEvents: 0 },
       },
       {
         staffId: 488099,
@@ -258,7 +258,7 @@ context('Manage key workers', () => {
         capacity: 11,
         allocated: 0,
         allowAutoAllocation: false,
-        numberOfSessions: 0,
+        stats: { recordedComplianceEvents: 0 },
       },
     ])
   }

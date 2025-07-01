@@ -75,7 +75,7 @@
             text: "Yes" if item.allowAutoAllocation else "No"
           },
           {
-            text: item.numberOfSessions
+            text: item.stats.recordedComplianceEvents
           }
         ]), rows) %}
       {% endfor %}
