@@ -20,6 +20,7 @@ import { JourneyRouter } from './base/routes'
 import breadcrumbs from '../middleware/breadcrumbs'
 import { UserPermissionLevel } from '../interfaces/hmppsUser'
 import { ManageStaffRolesRoutes } from './manage-staff-roles/routes'
+import { sessionCleanupMiddleware } from '../middleware/sessionCleanupMiddleware'
 
 export default function routes(services: Services) {
   const { router, get } = JourneyRouter()
@@ -27,6 +28,7 @@ export default function routes(services: Services) {
 
   router.use(populateUserPermissionsAndPrisonConfig())
   router.use(breadcrumbs())
+  router.use(sessionCleanupMiddleware)
 
   const adminOverridingPermission = requirePermissionsAndConfig(
     {

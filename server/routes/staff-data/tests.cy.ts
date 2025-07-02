@@ -1,5 +1,4 @@
-import { formatDateConcise, getDateInReadableFormat } from '../../utils/datetimeUtils'
-import { getComparisonDates } from '../../utils/testUtils'
+import { getDateInReadableFormat } from '../../utils/datetimeUtils'
 
 context('Key workers data', () => {
   before(() => {
@@ -24,7 +23,7 @@ context('Key workers data', () => {
     cy.findByRole('button', { name: 'View' })
 
     cy.findByText(
-      `Displaying statistics from ${dateFrom} to ${dateTo}. Comparing against statistics from ${comparisonDateFrom} to ${comparisonDateTo}.`,
+      'Displaying statistics from 6 February 2025 to 28 February 2025. Comparing against statistics from 11 January 2025 to 11 January 2025.',
     )
 
     cy.findByText(`Date updated: ${getDateInReadableFormat(new Date().toISOString())}`)
@@ -304,10 +303,6 @@ context('Key workers data', () => {
       .eq(1)
       .find('span.stat-change--increase')
       .should('have.text', '+3684')
-
-    cy.findByText(
-      'Displaying statistics from 1 January 2024 to 31 January 2024. Comparing against statistics from 2 December 2023 to 31 December 2023.',
-    )
   }
 
   const verifyErrorMessages = () => {
@@ -325,21 +320,3 @@ context('Key workers data', () => {
     cy.visit('/key-worker/staff-data', { failOnStatusCode: false })
   }
 })
-
-const getDateAsIsoString = () => {
-  const lastDay = new Date()
-  lastDay.setDate(lastDay.getDate() - 1)
-
-  const daysInMonth = new Date(lastDay.getFullYear(), lastDay.getMonth() + 1, 0).getDate()
-  const firstDay = new Date(lastDay)
-  firstDay.setDate(lastDay.getDate() - daysInMonth)
-
-  return { start: firstDay.toISOString().substring(0, 10), end: lastDay.toISOString().substring(0, 10) }
-}
-
-const newSpan = getDateAsIsoString()
-const previousSpan = getComparisonDates(newSpan.start, newSpan.end)
-const dateFrom = getDateInReadableFormat(newSpan.start)!
-const dateTo = getDateInReadableFormat(newSpan.end)!
-export const comparisonDateFrom = getDateInReadableFormat(formatDateConcise(previousSpan.start)!)
-export const comparisonDateTo = getDateInReadableFormat(formatDateConcise(previousSpan.end)!)

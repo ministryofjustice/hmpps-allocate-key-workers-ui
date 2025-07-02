@@ -1,33 +1,18 @@
 import { Request, Response } from 'express'
+import { format, lastDayOfMonth, startOfMonth, subMonths, isLastDayOfMonth } from 'date-fns'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import { components } from '../../@types/keyWorker'
-import { FLASH_KEY__FORM_RESPONSES } from '../../utils/constants'
 import { formatDateConcise, getDateInReadableFormat } from '../../utils/datetimeUtils'
+import { SchemaType } from './schema'
 
 export class StaffDataController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
   private getDateAsIsoString = () => {
-    const lastDay = new Date()
-    lastDay.setDate(lastDay.getDate() - 1)
-
-    const daysInMonth = new Date(lastDay.getFullYear(), lastDay.getMonth() + 1, 0).getDate()
-    const firstDay = new Date(lastDay)
-    firstDay.setDate(lastDay.getDate() - daysInMonth)
-
-    return { start: firstDay.toISOString().substring(0, 10), end: lastDay.toISOString().substring(0, 10) }
-  }
-
-  private getComparisonDates = (fromDate: string, toDate: string) => {
-    const fromDateDate = new Date(fromDate)
-    const toDateDate = new Date(toDate)
-    const diff = Math.abs(toDateDate.getTime() - fromDateDate.getTime())
-    const diffAsDays = Math.floor(diff / (1000 * 3600 * 24))
-
-    const newFromDate = new Date(fromDateDate.getTime() - diffAsDays * 24 * 60 * 60 * 1000)
-    const newToDate = new Date(fromDateDate.getTime() - 24 * 60 * 60 * 1000)
-
-    return { start: newFromDate.toISOString().substring(0, 10), end: newToDate.toISOString().substring(0, 10) }
+    const today = new Date()
+    const lastDay = isLastDayOfMonth(today) ? today : lastDayOfMonth(subMonths(today, 1))
+    const firstDay = startOfMonth(lastDay)
+    return { start: format(firstDay, 'yyyy-MM-dd'), end: format(lastDay, 'yyyy-MM-dd') }
   }
 
   private createPayload = (
@@ -40,17 +25,18 @@ export class StaffDataController {
 
     const items = this.createStatsItems(current, previous, kwSessionFrequencyInWeeks)
 
-    return Object.entries(items).map(([key, val]) => {
-      return {
-        name: key,
-        heading: val.heading,
-        currentValue: val.currentValue,
-        previousValue: val.previousValue,
-        type: val.type || 'number',
-        calculationMethod: val.calculationMethod,
-        isHidden: key === 'highComplexityOfNeedPrisoners' && !hasHighComplexityPrisoners,
-      }
-    })
+    return Object.entries(items)
+      .filter(itm => hasHighComplexityPrisoners || itm[0] !== 'highComplexityOfNeedPrisoners')
+      .map(([key, val]) => {
+        return {
+          name: key,
+          heading: val.heading,
+          currentValue: val.currentValue,
+          previousValue: val.previousValue,
+          type: val.type || 'number',
+          calculationMethod: val.calculationMethod,
+        }
+      })
   }
 
   private createStatsItems(
@@ -152,11 +138,7 @@ export class StaffDataController {
   }
 
   GET = async (req: Request, res: Response) => {
-    const nowSpan =
-      res.locals.formResponses?.['start'] && res.locals.formResponses?.['end']
-        ? res.locals.formResponses
-        : this.getDateAsIsoString()
-    const previousSpan = this.getComparisonDates(nowSpan.start, nowSpan.end)
+    const nowSpan = req.session.reportingPeriod ?? this.getDateAsIsoString()
     const prisonCode = res.locals.user.getActiveCaseloadId()!
     const stats = await this.keyworkerApiService.getPrisonStats(req, prisonCode, nowSpan.start, nowSpan.end)
     const prison = req.middleware!.prisonConfiguration!
@@ -174,19 +156,21 @@ export class StaffDataController {
     res.render('staff-data/view', {
       showBreadcrumbs: true,
       data,
-      dateFrom: formatDateConcise(nowSpan.start),
-      dateTo: formatDateConcise(nowSpan.end),
-      comparisonDateFrom: formatDateConcise(previousSpan.start),
-      comparisonDateTo: formatDateConcise(previousSpan.end),
+      dateFrom: formatDateConcise(stats.current?.from),
+      dateTo: formatDateConcise(stats.current?.to),
+      comparisonDateFrom: formatDateConcise(stats.previous?.from),
+      comparisonDateTo: formatDateConcise(stats.previous?.to),
       dataUpdateDate,
       hasPreviousStats,
       prisonName,
     })
   }
 
-  POST = async (req: Request, res: Response) => {
-    req.flash(FLASH_KEY__FORM_RESPONSES, JSON.stringify({ start: req.body.dateFrom, end: req.body.dateTo }))
-
+  POST = async (req: Request<unknown, unknown, SchemaType>, res: Response) => {
+    req.session.reportingPeriod = {
+      start: req.body.dateFrom,
+      end: req.body.dateTo,
+    }
     res.redirect('staff-data')
   }
 }

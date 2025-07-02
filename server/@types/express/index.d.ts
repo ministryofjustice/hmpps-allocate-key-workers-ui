@@ -8,6 +8,10 @@ export declare module 'express-session' {
   interface SessionData {
     returnTo: string
     nowInMinutes: number
+    reportingPeriod?: {
+      start: string
+      end: string
+    }
   }
 }
 

@@ -54,13 +54,7 @@
 
     <div class="govuk-grid-row stat-card-grid">
       {% for statistic in data %}
-
-        {% set isHiddenClass = '' %}
-        {% if statistic.isHidden %}
-          {% set isHiddenClass = ' card-hidden' %}
-        {% endif %}
-
-        <div class="govuk-grid-column-one-half{{ isHiddenClass }}">
+        <div class="govuk-grid-column-one-half">
           {{ statCard(statistic, policyName) }}
         </div>
       {% endfor %}
