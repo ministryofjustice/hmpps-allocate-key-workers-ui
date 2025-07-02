@@ -8,7 +8,7 @@
 
 {% block innerContent %}
 
-  <h1 class="govuk-heading-l">{{policyName | sentenceCase}} data for {{ prisonName }}</h1>
+  <h1 class="govuk-heading-l">{{policyName | sentenceCase}} data for {{ user.activeCaseLoad.description }}</h1>
 
   <hr class="govuk-footer__section-break" />
 
@@ -47,10 +47,10 @@
 
   {% if data.length %}
 
-    <p>Displaying statistics from {{ dateFrom | dateString }} to {{ dateTo | dateString }}.
-      {% if hasPreviousStats %}Comparing against statistics from {{ comparisonDateFrom | dateString }} to {{ comparisonDateTo | dateString }}. {% endif %}</p>
+    <p>Displaying statistics from {{ stats.current.from | dateString }} to {{ stats.current.to | dateString }}.
+      {% if stats.previous %}Comparing against statistics from {{ stats.previous.from | dateString }} to {{ stats.previous.to | dateString }}. {% endif %}</p>
 
-    <p class="govuk-!-margin-top-6">Date updated: {{ dataUpdateDate }}</p>
+    <p class="govuk-!-margin-top-6">Date updated: {{ dateUpdated | dateString }}</p>
 
     <div class="govuk-grid-row stat-card-grid">
       {% for statistic in data %}

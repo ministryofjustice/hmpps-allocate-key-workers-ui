@@ -74,6 +74,23 @@ export const deduplicateFieldErrors = (error: ZodError) => {
   return Object.fromEntries(Object.entries(flattened).map(([key, value]) => [key, [...value]]))
 }
 
+export const validateOnGET =
+  (schema: z.ZodTypeAny, ...queryProps: string[]): RequestHandler =>
+  async (req, res, next) => {
+    if (queryProps.some(prop => prop === '*' || Object.hasOwn(req.query, prop))) {
+      const result = schema.safeParse(normaliseNewLines(req.query))
+      res.locals['query'] = {
+        ...req.query,
+      }
+      if (result.success) {
+        res.locals['query'].validated = result.data
+      } else {
+        res.locals['validationErrors'] = deduplicateFieldErrors(result.error)
+      }
+    }
+    next()
+  }
+
 export const validate = (schema: z.ZodTypeAny | SchemaFactory, retainQueryString: boolean = false): RequestHandler => {
   return async (req, res, next) => {
     if (!schema) {

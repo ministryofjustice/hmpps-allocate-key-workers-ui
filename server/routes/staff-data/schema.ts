@@ -11,4 +11,5 @@ export const schema = createSchema({
   dateTo: validateTransformPastDate('Enter a date', 'To date must be a real date', 'Date must be today or in the past'),
 })
 
-export type SchemaType = z.infer<typeof schema>
+type SchemaType = z.infer<typeof schema>
+export type ResQuerySchemaType = (SchemaType & { validated?: SchemaType }) | undefined

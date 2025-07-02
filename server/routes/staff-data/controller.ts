@@ -2,8 +2,8 @@ import { Request, Response } from 'express'
 import { format, lastDayOfMonth, startOfMonth, subMonths, isLastDayOfMonth } from 'date-fns'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import { components } from '../../@types/keyWorker'
-import { formatDateConcise, getDateInReadableFormat } from '../../utils/datetimeUtils'
-import { SchemaType } from './schema'
+import { formatDateConcise } from '../../utils/datetimeUtils'
+import { ResQuerySchemaType } from './schema'
 
 export class StaffDataController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
@@ -12,7 +12,7 @@ export class StaffDataController {
     const today = new Date()
     const lastDay = isLastDayOfMonth(today) ? today : lastDayOfMonth(subMonths(today, 1))
     const firstDay = startOfMonth(lastDay)
-    return { start: format(firstDay, 'yyyy-MM-dd'), end: format(lastDay, 'yyyy-MM-dd') }
+    return { dateFrom: format(firstDay, 'yyyy-MM-dd'), dateTo: format(lastDay, 'yyyy-MM-dd') }
   }
 
   private createPayload = (
@@ -138,13 +138,11 @@ export class StaffDataController {
   }
 
   GET = async (req: Request, res: Response) => {
-    const nowSpan = req.session.reportingPeriod ?? this.getDateAsIsoString()
+    const resQuery = res.locals['query'] as ResQuerySchemaType
+    const nowSpan = resQuery?.validated ?? this.getDateAsIsoString()
     const prisonCode = res.locals.user.getActiveCaseloadId()!
-    const stats = await this.keyworkerApiService.getPrisonStats(req, prisonCode, nowSpan.start, nowSpan.end)
+    const stats = await this.keyworkerApiService.getPrisonStats(req, prisonCode, nowSpan.dateFrom, nowSpan.dateTo)
     const prison = req.middleware!.prisonConfiguration!
-    const hasPreviousStats = stats.previous !== undefined && stats.previous !== null
-    const dataUpdateDate = getDateInReadableFormat(new Date().toISOString())
-    const prisonName = res.locals.user.caseLoads?.find(caseLoad => caseLoad.caseLoadId === prisonCode)?.description
 
     const data = this.createPayload(
       stats.current,
@@ -156,21 +154,14 @@ export class StaffDataController {
     res.render('staff-data/view', {
       showBreadcrumbs: true,
       data,
-      dateFrom: formatDateConcise(stats.current?.from),
-      dateTo: formatDateConcise(stats.current?.to),
-      comparisonDateFrom: formatDateConcise(stats.previous?.from),
-      comparisonDateTo: formatDateConcise(stats.previous?.to),
-      dataUpdateDate,
-      hasPreviousStats,
-      prisonName,
+      stats,
+      dateFrom: resQuery?.dateFrom ?? formatDateConcise(stats.current?.from),
+      dateTo: resQuery?.dateTo ?? formatDateConcise(stats.current?.to),
+      dateUpdated: new Date().toISOString(),
     })
   }
 
-  POST = async (req: Request<unknown, unknown, SchemaType>, res: Response) => {
-    req.session.reportingPeriod = {
-      start: req.body.dateFrom,
-      end: req.body.dateTo,
-    }
-    res.redirect('staff-data')
+  POST = async (req: Request, res: Response) => {
+    res.redirect(`staff-data?dateFrom=${req.body.dateFrom ?? ''}&dateTo=${req.body.dateTo ?? ''}`)
   }
 }
