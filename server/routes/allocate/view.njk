@@ -114,7 +114,7 @@
             }
           },
           {
-            text: item.staffMember | lastNameCommaFirstName  | default('-', true)
+            html: ('<a class="govuk-link--no-visited-state" href="staff-profile/' + item.staffMember.staffId + '">' + item.staffMember | firstNameSpaceLastName + "</a>") if item.staffMember else 'None'
           },
           {
             html: 'Not applicable - high complexity of need' if item.hasHighComplexityOfNeeds else govukSelect({
@@ -125,7 +125,7 @@
                 classes: "govuk-!-margin-0"
               },
               items: staff | excludeCurrentStaffMember(item.staffMember) | conditionallyAddDeallocate(item.staffMember.staffId) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select ' + policyName)
-            }) 
+            })
           } if user | hasPermission('allocate') else undefined,
           {
             html: '<a class="govuk-link govuk-link--no-visited-state" href="/' + policyPath + '/prisoner-allocation-history/' + item.personIdentifier + searchQuery + '">View allocation history</a>' if item.hasAllocationHistory else ''
