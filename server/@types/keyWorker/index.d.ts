@@ -836,11 +836,27 @@ export interface components {
       /** Format: int32 */
       allocated: number
       allowAutoAllocation: boolean
-      /** Format: int32 */
-      numberOfSessions: number
-      /** Format: int32 */
-      numberOfEntries: number
       staffRole: components['schemas']['StaffRoleInfo']
+      stats: components['schemas']['StaffCountStats']
+    }
+    RecordedEventCount: {
+      /** @enum {string} */
+      type: 'SESSION' | 'ENTRY'
+      /** Format: int32 */
+      count: number
+    }
+    StaffCountStats: {
+      /** Format: date */
+      from: string
+      /** Format: date */
+      to: string
+      /** Format: int32 */
+      projectedComplianceEvents: number
+      /** Format: int32 */
+      recordedComplianceEvents: number
+      recordedEvents: components['schemas']['RecordedEventCount'][]
+      /** Format: double */
+      complianceRate: number
     }
     PersonSearchRequest: {
       query?: string
@@ -1088,25 +1104,6 @@ export interface components {
       relevantAlertCodes: string[]
       /** Format: int32 */
       remainingAlertCount: number
-    }
-    RecordedEventCount: {
-      /** @enum {string} */
-      type: 'SESSION' | 'ENTRY'
-      /** Format: int32 */
-      count: number
-    }
-    StaffCountStats: {
-      /** Format: date */
-      from: string
-      /** Format: date */
-      to: string
-      /** Format: int32 */
-      projectedComplianceEvents: number
-      /** Format: int32 */
-      recordedComplianceEvents: number
-      recordedEvents: components['schemas']['RecordedEventCount'][]
-      /** Format: double */
-      complianceRate: number
     }
     StaffDetails: {
       /** Format: int64 */
