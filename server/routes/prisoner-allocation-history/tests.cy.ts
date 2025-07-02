@@ -1,3 +1,6 @@
+import { defaultPrisonerAllocation } from '../../../integration_tests/mockApis/keyworkerApi'
+import { createMock } from '../../testutils/mockObjects'
+
 context('Prisoner Allocation History', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -43,36 +46,108 @@ context('Prisoner Allocation History', () => {
     cy.findByText('Current and previous allocations: 2').should('be.visible')
 
     // Current key worker card
-    cy.get('.govuk-summary-card__title')
+    cy.get('.govuk-summary-card')
       .eq(0)
-      .invoke('text')
-      .then(text => {
-        expect(text.trim()).to.equal('Current key worker: Sample Keyworker')
+      .within(() => {
+        cy.get('.govuk-summary-card__title').eq(0).should('include.text', 'Current key worker: Sample Keyworker')
+
+        cy.contains('dt', 'Establishment').next().should('include.text', 'Moorland (HMP & YOI)')
+        cy.contains('dt', 'Allocated on').next().should('include.text', '17/04/2025 14:41')
+        cy.contains('dt', 'Allocated by').next().should('include.text', 'Test Keyworker')
+        cy.contains('dt', 'Deallocated on').next().should('include.text', '-')
+        cy.contains('dt', 'Deallocated by').next().should('include.text', '-')
+        cy.contains('dt', 'Deallocation reason').next().should('include.text', '-')
       })
 
-    cy.contains('dt', 'Establishment').next().should('include.text', 'Moorland (HMP & YOI)')
-
-    cy.contains('dt', 'Allocated on').next().should('include.text', '17/04/2025 14:41')
-    cy.contains('dt', 'Allocated by').next().should('include.text', 'Test Keyworker')
-    cy.contains('dt', 'Deallocated on').next().should('include.text', '-')
-    cy.contains('dt', 'Deallocated by').next().should('include.text', '-')
-    cy.contains('dt', 'Deallocation reason').next().should('include.text', '-')
-
     // Previous key worker card
-    cy.get('.govuk-summary-card__title').eq(1).should('include.text', 'Previous key worker: Smith Last-Name')
-    cy.get('.govuk-summary-list__key').eq(6).should('include.text', 'Establishment')
-    cy.get('.govuk-summary-list__value').eq(6).should('include.text', 'Moorland (HMP & YOI)')
+    cy.get('.govuk-summary-card')
+      .eq(1)
+      .within(() => {
+        cy.get('.govuk-summary-card__title').eq(0).should('include.text', 'Previous key worker: Smith Last-Name')
 
-    cy.get('.govuk-summary-list__key').eq(7).should('include.text', 'Allocated on')
-    cy.get('.govuk-summary-list__value').eq(7).should('include.text', '18/12/2024 10:56')
-    cy.get('.govuk-summary-list__key').eq(8).should('include.text', 'Allocated by')
-    cy.get('.govuk-summary-list__value').eq(8).should('include.text', 'Foo Baz')
-    cy.get('.govuk-summary-list__key').eq(9).should('include.text', 'Deallocated on')
-    cy.get('.govuk-summary-list__value').eq(9).should('include.text', '12/02/2025 15:57')
-    cy.get('.govuk-summary-list__key').eq(10).should('include.text', 'Deallocated by')
-    cy.get('.govuk-summary-list__value').eq(10).should('include.text', 'Fake Doe')
-    cy.get('.govuk-summary-list__key').eq(11).should('include.text', 'Deallocation reason')
-    cy.get('.govuk-summary-list__value').eq(11).should('include.text', 'Manual')
+        cy.contains('dt', 'Establishment').next().should('include.text', 'Moorland (HMP & YOI)')
+        cy.contains('dt', 'Allocated on').next().should('include.text', '18/12/2024 10:56')
+        cy.contains('dt', 'Allocated by').next().should('include.text', 'Foo Baz')
+        cy.contains('dt', 'Deallocated on').next().should('include.text', '12/02/2025 15:57')
+        cy.contains('dt', 'Deallocated by').next().should('include.text', 'Fake Doe')
+        cy.contains('dt', 'Deallocation reason').next().should('include.text', 'Manual')
+      })
+  })
+
+  it('correctly maps deallocation reasons', () => {
+    cy.task('stubPrisonerAllocations', [
+      createMock(defaultPrisonerAllocation, { deallocated: { reason: { code: 'OVERRIDE', description: 'Override' } } }),
+      createMock(defaultPrisonerAllocation, { deallocated: { reason: { code: 'MISSING', description: 'Missing' } } }),
+      createMock(defaultPrisonerAllocation, {
+        deallocated: { reason: { code: 'DUPLICATE', description: 'Duplicate' } },
+      }),
+      createMock(defaultPrisonerAllocation, { deallocated: { reason: { code: 'MERGED', description: 'Merged' } } }),
+      createMock(defaultPrisonerAllocation, { deallocated: { reason: { code: 'MANUAL', description: 'Manual' } } }),
+      createMock(defaultPrisonerAllocation, { deallocated: { reason: { code: 'RELEASED', description: 'Released' } } }),
+      createMock(defaultPrisonerAllocation, {
+        deallocated: { reason: { code: 'KEYWORKER_STATUS_CHANGE', description: 'Keyworker Status Changed' } },
+      }),
+      createMock(defaultPrisonerAllocation, { deallocated: { reason: { code: 'TRANSFER', description: 'Transfer' } } }),
+      createMock(defaultPrisonerAllocation, {
+        deallocated: { reason: { code: 'CHANGE_IN_COMPLEXITY_OF_NEED', description: 'Change in complexity of need' } },
+      }),
+    ])
+
+    navigateToTestPage()
+
+    cy.get('.govuk-summary-card')
+      .eq(0)
+      .within(() => {
+        cy.contains('dt', 'Deallocation reason').next().should('include.text', 'Manual')
+      })
+
+    cy.get('.govuk-summary-card')
+      .eq(1)
+      .within(() => {
+        cy.contains('dt', 'Deallocation reason').next().should('include.text', 'Automatic')
+      })
+
+    cy.get('.govuk-summary-card')
+      .eq(2)
+      .within(() => {
+        cy.contains('dt', 'Deallocation reason').next().should('include.text', 'Automatic')
+      })
+
+    cy.get('.govuk-summary-card')
+      .eq(3)
+      .within(() => {
+        cy.contains('dt', 'Deallocation reason').next().should('include.text', 'Automatic')
+      })
+
+    cy.get('.govuk-summary-card')
+      .eq(4)
+      .within(() => {
+        cy.contains('dt', 'Deallocation reason').next().should('include.text', 'Manual')
+      })
+
+    cy.get('.govuk-summary-card')
+      .eq(5)
+      .within(() => {
+        cy.contains('dt', 'Deallocation reason').next().should('include.text', 'Released')
+      })
+
+    cy.get('.govuk-summary-card')
+      .eq(6)
+      .within(() => {
+        cy.contains('dt', 'Deallocation reason').next().should('include.text', 'Keyworker Status Changed')
+      })
+
+    cy.get('.govuk-summary-card')
+      .eq(7)
+      .within(() => {
+        cy.contains('dt', 'Deallocation reason').next().should('include.text', 'Transfer')
+      })
+
+    cy.get('.govuk-summary-card')
+      .eq(8)
+      .within(() => {
+        cy.contains('dt', 'Deallocation reason').next().should('include.text', 'Change in complexity of need')
+      })
   })
 
   const navigateToTestPage = () => {
