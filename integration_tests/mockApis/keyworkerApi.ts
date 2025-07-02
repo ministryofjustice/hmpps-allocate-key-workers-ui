@@ -1,6 +1,7 @@
 import { stubFor } from './wiremock'
 import { components } from '../../server/@types/keyWorker'
 import { StaffSummary } from '../../server/@types/express'
+import { createMock } from '../../server/testutils/mockObjects'
 
 const createBasicHttpStub = (method: string, urlPattern: string, status: number, jsonBody: object = {}) => {
   return createHttpStub(method, urlPattern, undefined, undefined, status, jsonBody)
@@ -9,7 +10,7 @@ const createBasicHttpStub = (method: string, urlPattern: string, status: number,
 const createHttpStub = (
   method: string,
   urlPathPattern: string,
-  queryParameters: object,
+  queryParameters: object | undefined,
   bodyPatterns: Array<object> | undefined,
   status: number,
   jsonBody?: object | boolean,
@@ -259,8 +260,10 @@ const stubKeyWorkerStatsWithNullPreviousData = () =>
 const stubKeyworkerStatuses = () =>
   createBasicHttpStub('GET', '/keyworker-api/reference-data/staff-status', 200, keyworkerStatuses)
 
-const stubPrisonerAllocations = () =>
-  createBasicHttpStub('GET', '/keyworker-api/prisoners/A9965EA/allocations', 200, prisonerAllocationResponse)
+const stubPrisonerAllocations = (
+  prisonerAllocations: components['schemas']['StaffAllocationHistory']['allocations'] = defaultPrisonerAllocations,
+) =>
+  createBasicHttpStub('GET', '/keyworker-api/prisoners/A9965EA/allocations', 200, { allocations: prisonerAllocations })
 
 const stubUpdateStaffProperties = () =>
   createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/staff/.*/configuration', 200, {})
@@ -502,7 +505,7 @@ const keyworkerDetailsResponse = {
     },
     hoursPerWeek: 35,
     fromDate: '2024-12-18',
-    toDate: null,
+    toDate: '',
   },
   status: {
     code: 'ACTIVE',
@@ -733,59 +736,55 @@ const keyworkerSearchPrisoners = [
   },
 ] as components['schemas']['PersonSearchResponse']['content']
 
-const prisonerAllocationResponse = {
-  allocations: [
-    {
-      active: true,
-      staffMember: {
-        staffId: 488021,
-        firstName: 'Sample',
-        lastName: 'Keyworker',
-      },
-      prison: {
-        code: 'MDI',
-        description: 'Moorland (HMP & YOI)',
-      },
-      allocated: {
-        at: '2025-04-17T14:41:23.931574',
-        by: 'Test Keyworker',
-        reason: {
-          code: 'AUTO',
-          description: 'Automatic',
-        },
-      },
-      deallocated: null,
+export const defaultPrisonerAllocation = {
+  active: false,
+  allocated: {
+    at: '2024-12-18T10:56:37.073945',
+    by: 'Foo Baz',
+    reason: {
+      code: 'MANUAL',
+      description: 'Manual',
     },
-    {
-      active: false,
-      staffMember: {
-        staffId: 488021,
-        firstName: 'Smith',
-        lastName: 'Last-Name',
-      },
-      prison: {
-        code: 'MDI',
-        description: 'Moorland (HMP & YOI)',
-      },
-      allocated: {
-        at: '2024-12-18T10:56:37.073945',
-        by: 'Foo Baz',
-        reason: {
-          code: 'MANUAL',
-          description: 'Manual',
-        },
-      },
-      deallocated: {
-        at: '2025-02-12T15:57:56.862492',
-        by: 'Fake Doe',
-        reason: {
-          code: 'MANUAL',
-          description: 'Manual',
-        },
-      },
+  },
+  deallocated: {
+    at: '2025-02-12T15:57:56.862492',
+    by: 'Fake Doe',
+    reason: {
+      code: 'MANUAL',
+      description: 'Manual',
     },
-  ],
+  },
+  prison: {
+    code: 'MDI',
+    description: 'Moorland (HMP & YOI)',
+  },
+  staffMember: {
+    firstName: 'Smith',
+    lastName: 'Last-Name',
+    staffId: 488021,
+  },
 }
+
+const defaultPrisonerAllocations = [
+  createMock(defaultPrisonerAllocation, {
+    active: true,
+    staffMember: {
+      staffId: 488021,
+      firstName: 'Sample',
+      lastName: 'Keyworker',
+    },
+    allocated: {
+      at: '2025-04-17T14:41:23.931574',
+      by: 'Test Keyworker',
+      reason: {
+        code: 'AUTO',
+        description: 'Automatic',
+      },
+    },
+    deallocated: null,
+  }),
+  createMock(defaultPrisonerAllocation, { active: false }),
+]
 
 export default {
   stubKeyworkerApiHealth,
