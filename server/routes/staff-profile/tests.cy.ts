@@ -26,7 +26,7 @@ context('Profile Info', () => {
     cy.task('stubKeyworkerDetails', createMock(defaultKeyworkerDetails, { allocations: [] }))
     navigateToTestPage()
 
-    validatePageContents()
+    cy.findByText('There are no prisoners allocated to this key worker.').should('exist')
   })
 
   it('should show profile info (VIEW permission only)', () => {
