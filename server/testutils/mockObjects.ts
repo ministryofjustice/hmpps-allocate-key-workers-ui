@@ -5,16 +5,9 @@ type RecursivePartial<T> = {
 /** Create a mock object by providing a template and a set of partial overrides. */
 export function createMock<T>(defaults: T, partial: RecursivePartial<T>): T {
   function deepMerge<U>(target: U, source: U): U {
-    if (source === undefined) return target
-    if (source === null) return undefined as unknown as U
+    if (source === undefined || source === null) return undefined as unknown as U
 
-    if (
-      typeof target === 'object' &&
-      target !== null &&
-      typeof source === 'object' &&
-      source !== null &&
-      !Array.isArray(source)
-    ) {
+    if (typeof target === 'object' && target && typeof source === 'object' && source && !Array.isArray(source)) {
       const result: U = (Array.isArray(target) ? [...target] : { ...target }) as U
 
       for (const key of Object.keys(source)) {

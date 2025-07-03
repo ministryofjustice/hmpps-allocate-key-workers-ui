@@ -23,9 +23,7 @@ context('Profile Info', () => {
   })
 
   it('shows empty text when staff member has no allocations', () => {
-    const test = createMock(defaultKeyworkerDetails, { allocations: [] })
-    console.log(JSON.stringify(test, null, 2))
-    cy.task('stubKeyworkerDetails', test)
+    cy.task('stubKeyworkerDetails', createMock(defaultKeyworkerDetails, { allocations: [] }))
     navigateToTestPage()
 
     cy.findByText('There are no allocations for this key worker.').should('exist')
