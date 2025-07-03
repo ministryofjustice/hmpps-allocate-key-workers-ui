@@ -15,16 +15,15 @@ export class UpdateStatusInactiveController {
 
   submitToApi = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await this.keyworkerApiService.updateStaffConfig(
+      await this.keyworkerApiService.upsertStaffDetails(
         req as Request,
         res,
-        res.locals.user.getActiveCaseloadId()!,
         req.journeyData.keyWorkerDetails!.staffId,
         {
           status: req.journeyData.updateCapacityStatus!.status!.code,
           capacity: req.journeyData.updateCapacityStatus!.capacity!,
+          allowAutoAllocation: false,
           deactivateActiveAllocations: true,
-          removeFromAutoAllocation: true,
         },
       )
 

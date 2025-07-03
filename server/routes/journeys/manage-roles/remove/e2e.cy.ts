@@ -1,5 +1,4 @@
 import { v4 as uuidV4 } from 'uuid'
-import { todayString } from '../../../../utils/datetimeUtils'
 
 context('/manage-roles/remove/** journey', () => {
   const journeyId = uuidV4()
@@ -28,7 +27,7 @@ context('/manage-roles/remove/** journey', () => {
         },
       },
     ])
-    cy.task('stubAssignRoleToStaff')
+    cy.task('stubUpsertStaffDetails')
   })
 
   it('should remove role to staff member', () => {
@@ -43,13 +42,9 @@ context('/manage-roles/remove/** journey', () => {
     cy.findByText('You have successfully removed the key worker role from Doe, Joe').should('be.visible')
 
     cy.verifyLastAPICall(
-      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/1001/job-classifications' },
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/1001' },
       {
-        position: 'PRO',
-        scheduleType: 'FT',
-        hoursPerWeek: 35,
-        fromDate: '2010-01-12',
-        toDate: todayString(),
+        staffRole: null,
       },
     )
   })

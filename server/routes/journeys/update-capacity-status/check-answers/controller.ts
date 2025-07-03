@@ -29,16 +29,15 @@ export class UpdateStatusCheckAnswersController {
     const { status, capacity, deactivateActiveAllocations, removeFromAutoAllocation, reactivateOn } =
       req.journeyData.updateCapacityStatus!
     try {
-      await this.keyworkerApiService.updateStaffConfig(
+      await this.keyworkerApiService.upsertStaffDetails(
         req as Request,
         res,
-        res.locals.user.getActiveCaseloadId()!,
         req.journeyData.keyWorkerDetails!.staffId,
         {
           status: status!.code,
           capacity: capacity!,
           deactivateActiveAllocations: deactivateActiveAllocations!,
-          removeFromAutoAllocation: removeFromAutoAllocation!,
+          allowAutoAllocation: !removeFromAutoAllocation!,
           ...(status?.code === 'UNAVAILABLE_ANNUAL_LEAVE' ? { reactivateOn } : {}),
         },
       )

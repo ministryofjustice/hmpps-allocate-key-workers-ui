@@ -15,7 +15,7 @@ context('Update capacity and status', () => {
       createMock(defaultKeyworkerDetails, { status: { code: 'INACTIVE', description: 'Inactive' } }),
     )
     cy.task('stubKeyworkerStatuses')
-    cy.task('stubUpdateStaffProperties')
+    cy.task('stubUpsertStaffDetails')
   })
 
   it('should show initial data', () => {

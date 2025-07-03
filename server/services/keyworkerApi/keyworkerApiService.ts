@@ -1,10 +1,8 @@
 import { Request, Response } from 'express'
 import { EnhancedRestClientBuilder } from '../../data'
-import KeyworkerApiClient, { KeyworkerConfigRequest, ServiceConfigInfo } from './keyworkerApiClient'
+import KeyworkerApiClient, { ServiceConfigInfo, StaffDetailsRequest } from './keyworkerApiClient'
 import { components } from '../../@types/keyWorker'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
-import { todayString } from '../../utils/datetimeUtils'
-import { StaffSummaryWithRole } from '../../@types/express'
 
 export default class KeyworkerApiService {
   constructor(private readonly keyworkerApiClientBuilder: EnhancedRestClientBuilder<KeyworkerApiClient>) {}
@@ -84,16 +82,6 @@ export default class KeyworkerApiService {
     return this.keyworkerApiClientBuilder(req, res).putAllocationDeallocations(prisonCode, data)
   }
 
-  updateStaffConfig(
-    req: Request,
-    res: Response,
-    prisonCode: string,
-    staffId: string | number,
-    requestBody: KeyworkerConfigRequest,
-  ) {
-    return this.keyworkerApiClientBuilder(req, res).updateStaffConfig(prisonCode, staffId, requestBody)
-  }
-
   searchAllocatableStaff(
     req: Request,
     res: Response,
@@ -105,33 +93,11 @@ export default class KeyworkerApiService {
     )
   }
 
-  assignRoleToStaff(
-    req: Request,
-    res: Response,
-    staffId: number,
-    positionCode: string,
-    scheduleCode: string,
-    hoursPerWeek: number,
-  ) {
-    return this.keyworkerApiClientBuilder(req, res).assignRoleToStaff(res.locals.user.getActiveCaseloadId()!, staffId, {
-      position: positionCode,
-      scheduleType: scheduleCode,
-      hoursPerWeek,
-      fromDate: todayString(),
-    })
-  }
-
-  removeRoleFromStaff(req: Request, res: Response, staff: StaffSummaryWithRole) {
-    return this.keyworkerApiClientBuilder(req, res).assignRoleToStaff(
+  upsertStaffDetails(req: Request, res: Response, staffId: string | number, requestBody: StaffDetailsRequest) {
+    return this.keyworkerApiClientBuilder(req, res).upsertStaffDetails(
       res.locals.user.getActiveCaseloadId()!,
-      staff.staffId,
-      {
-        position: staff.staffRole.position.code,
-        scheduleType: staff.staffRole.scheduleType.code,
-        hoursPerWeek: staff.staffRole.hoursPerWeek,
-        fromDate: staff.staffRole.fromDate,
-        toDate: todayString(),
-      },
+      staffId,
+      requestBody,
     )
   }
 

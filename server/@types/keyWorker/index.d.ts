@@ -4,6 +4,30 @@
  */
 
 export interface paths {
+  '/prisons/{prisonCode}/staff/{staffId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
+    get: operations['getStaffDetails']
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
+    put: operations['modifyStaffDetails']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/prisons/{prisonCode}/staff/{staffId}/job-classifications': {
     parameters: {
       query?: never
@@ -398,26 +422,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/prisons/{prisonCode}/staff/{staffId}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** @description
-     *
-     *     Requires one of the following roles:
-     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
-    get: operations['getStaffDetails']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/prisons/{prisonCode}/prisoners/{prisonNumber}/keyworkers/current': {
     parameters: {
       query?: never
@@ -700,6 +704,25 @@ export interface paths {
 export type webhooks = Record<string, never>
 export interface components {
   schemas: {
+    /** @description Request to patch the configuration for a staff. */
+    StaffDetailsRequest: {
+      status?: string
+      /** Format: int32 */
+      capacity?: number
+      allowAutoAllocation?: boolean
+      /** @example 1980-01-01 */
+      reactivateOn?: string
+      staffRole?: components['schemas']['StaffRoleRequest']
+      deactivateActiveAllocations?: boolean
+    }
+    StaffRoleRequest: {
+      position?: string
+      scheduleType?: string
+      /** Format: int32 */
+      hoursPerWeek?: number
+      /** @example 1980-01-01 */
+      fromDate?: string
+    }
     StaffJobClassificationRequest: {
       position: string
       scheduleType: string
@@ -1087,6 +1110,7 @@ export interface components {
     }
     Allocation: {
       prisoner: components['schemas']['Prisoner']
+      stats: components['schemas']['StaffCountStats']
       latestSession?: components['schemas']['LatestSession']
     }
     LatestSession: {
@@ -1600,6 +1624,71 @@ export interface components {
 }
 export type $defs = Record<string, never>
 export interface operations {
+  getStaffDetails: {
+    parameters: {
+      query?: {
+        from?: string
+        to?: string
+      }
+      header: {
+        /** @description
+         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
+         *          */
+        Policy: string
+      }
+      path: {
+        prisonCode: string
+        staffId: number
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['StaffDetails']
+        }
+      }
+    }
+  }
+  modifyStaffDetails: {
+    parameters: {
+      query?: never
+      header: {
+        /** @description
+         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
+         *          */
+        Policy: string
+        /** @description
+         *         Relevant caseload id for the client identity in context e.g. the active caseload id of the logged in user.
+         *          */
+        CaseloadId?: string
+      }
+      path: {
+        prisonCode: string
+        staffId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['StaffDetailsRequest']
+      }
+    }
+    responses: {
+      /** @description No Content */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+    }
+  }
   modifyStaffJob: {
     parameters: {
       query?: never
@@ -2442,37 +2531,6 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['PrisonStats']
-        }
-      }
-    }
-  }
-  getStaffDetails: {
-    parameters: {
-      query?: {
-        from?: string
-        to?: string
-      }
-      header: {
-        /** @description
-         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
-         *          */
-        Policy: string
-      }
-      path: {
-        prisonCode: string
-        staffId: number
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['StaffDetails']
         }
       }
     }

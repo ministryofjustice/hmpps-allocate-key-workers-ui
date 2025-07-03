@@ -17,7 +17,7 @@ context('/update-capacity-status/update-status-unavailable', () => {
     cy.task('stubEnabledPrison')
     cy.task('stubKeyworkerDetails')
     cy.task('stubKeyworkerStatuses')
-    cy.task('stubUpdateStaffProperties')
+    cy.task('stubUpsertStaffDetails')
   })
 
   it('should try all cases', () => {
