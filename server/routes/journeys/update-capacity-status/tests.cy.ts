@@ -1,4 +1,6 @@
 import { v4 as uuidV4 } from 'uuid'
+import { createMock } from '../../../testutils/mockObjects'
+import { defaultKeyworkerDetails } from '../../../../integration_tests/mockApis/keyworkerApi'
 
 context('Update capacity and status', () => {
   const journeyId = uuidV4()
@@ -8,7 +10,10 @@ context('Update capacity and status', () => {
     cy.task('stubComponents')
     cy.task('stubSignIn')
     cy.task('stubEnabledPrison')
-    cy.task('stubKeyworkerDetails', { status: { code: 'INACTIVE', description: 'Inactive' } })
+    cy.task(
+      'stubKeyworkerDetails',
+      createMock(defaultKeyworkerDetails, { status: { code: 'INACTIVE', description: 'Inactive' } }),
+    )
     cy.task('stubKeyworkerStatuses')
     cy.task('stubUpdateStaffProperties')
   })

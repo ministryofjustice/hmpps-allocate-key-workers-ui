@@ -1,4 +1,6 @@
+import { defaultKeyworkerDetails } from '../../../integration_tests/mockApis/keyworkerApi'
 import AuthorisedRoles from '../../authentication/authorisedRoles'
+import { createMock } from '../../testutils/mockObjects'
 
 context('Profile Info', () => {
   beforeEach(() => {
@@ -18,6 +20,13 @@ context('Profile Info', () => {
     navigateToTestPage()
 
     validatePageContents()
+  })
+
+  it('shows empty text when staff member has no allocations', () => {
+    cy.task('stubKeyworkerDetails', createMock(defaultKeyworkerDetails, { allocations: [] }))
+    navigateToTestPage()
+
+    cy.findByText('There are no allocations for this key worker.').should('exist')
   })
 
   it('should show profile info (VIEW permission only)', () => {
