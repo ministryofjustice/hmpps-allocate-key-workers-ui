@@ -13,11 +13,11 @@ export class StaffProfileController extends ChangeStaffController {
       return
     }
     const prisonCode = res.locals.user.getActiveCaseloadId()!
-    const staffData = await this.keyworkerApiService.getStaffDetails(req, prisonCode, req.params.staffId)
+    const Data = await this.keyworkerApiService.getStaffDetails(req, prisonCode, req.params.staffId)
 
     res.render('staff-profile/view', {
-      ...{ ...staffData, staffMember: { firstName: staffData.firstName, lastName: staffData.lastName } },
-      ...(await this.getChangeStaffData(req, res)),
+      ...{ ...Data, staffMember: { firstName: Data.firstName, lastName: Data.lastName } },
+      ...(await this.getChangeData(req, res)),
       showBreadcrumbs: true,
     })
   }

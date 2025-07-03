@@ -1,7 +1,6 @@
 import type { Services } from '../services'
 import { HomePageController } from './controller'
-import { StaffStatisticsRoutes } from './staff-statistics/routes'
-import { StaffMembersRoutes } from './manage-staff/routes'
+import { StaffMembersRoutes } from './manage/routes'
 import { StaffProfileRoutes } from './staff-profile/routes'
 import { AllocateStaffRoutes } from './allocate/routes'
 import { PrisonerAllocationHistoryRoutes } from './prisoner-allocation-history/routes'
@@ -11,7 +10,7 @@ import JourneyRoutes from './journeys/routes'
 import { dataAccess } from '../data'
 import { EstablishmentSettingsRoutes } from './establishment-settings/routes'
 import { RecommendStaffAutomaticallyRoutes } from './recommend-allocations/routes'
-import { StaffDataRoutes } from './staff-data/routes'
+import { StaffDataRoutes } from './data/routes'
 import {
   populateUserPermissionsAndPrisonConfig,
   requirePermissionsAndConfig,
@@ -19,7 +18,7 @@ import {
 import { JourneyRouter } from './base/routes'
 import breadcrumbs from '../middleware/breadcrumbs'
 import { UserPermissionLevel } from '../interfaces/hmppsUser'
-import { ManageStaffRolesRoutes } from './manage-staff-roles/routes'
+import { ManageRolesRoutes } from './manage-roles/routes'
 
 export default function routes(services: Services) {
   const { router, get } = JourneyRouter()
@@ -60,14 +59,13 @@ export default function routes(services: Services) {
     }),
   )
 
-  router.use('/staff-statistics', StaffStatisticsRoutes(services))
   router.use('/allocate', AllocateStaffRoutes(services))
   router.use('/prisoner-allocation-history', PrisonerAllocationHistoryRoutes(services))
   router.use('/establishment-settings', EstablishmentSettingsRoutes(services))
   router.use('/recommend-allocations', RecommendStaffAutomaticallyRoutes(services))
-  router.use('/staff-data', StaffDataRoutes(services))
-  router.use('/manage-staff', StaffMembersRoutes(services))
-  router.use('/manage-staff-roles', ManageStaffRolesRoutes())
+  router.use('/data', StaffDataRoutes(services))
+  router.use('/manage', StaffMembersRoutes(services))
+  router.use('/manage-roles', ManageRolesRoutes())
 
   router.use(insertJourneyIdentifier())
   router.use('/:journeyId', JourneyRoutes(dataAccess(), services))
