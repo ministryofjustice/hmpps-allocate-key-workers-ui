@@ -1,12 +1,12 @@
 import { Services } from '../../services'
 import { JourneyRouter } from '../base/routes'
 import { validateOnGET } from '../../middleware/validationMiddleware'
-import { DataController } from './controller'
+import { StaffDataController } from './controller'
 import { schema } from './schema'
 
-export const DataRoutes = ({ keyworkerApiService }: Services) => {
+export const StaffDataRoutes = ({ keyworkerApiService }: Services) => {
   const { router, get, post } = JourneyRouter()
-  const controller = new DataController(keyworkerApiService)
+  const controller = new StaffDataController(keyworkerApiService)
 
   get('/', validateOnGET(schema, 'dateFrom', 'dateTo'), controller.GET)
   post('/', controller.POST)

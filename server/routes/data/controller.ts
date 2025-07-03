@@ -5,7 +5,7 @@ import { components } from '../../@types/keyWorker'
 import { formatDateConcise } from '../../utils/datetimeUtils'
 import { ResQuerySchemaType } from './schema'
 
-export class DataController {
+export class StaffDataController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
   private getDateAsIsoString = () => {

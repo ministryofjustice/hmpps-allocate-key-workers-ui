@@ -10,7 +10,7 @@ import JourneyRoutes from './journeys/routes'
 import { dataAccess } from '../data'
 import { EstablishmentSettingsRoutes } from './establishment-settings/routes'
 import { RecommendStaffAutomaticallyRoutes } from './recommend-allocations/routes'
-import { DataRoutes } from './data/routes'
+import { StaffDataRoutes } from './data/routes'
 import {
   populateUserPermissionsAndPrisonConfig,
   requirePermissionsAndConfig,
@@ -63,7 +63,7 @@ export default function routes(services: Services) {
   router.use('/prisoner-allocation-history', PrisonerAllocationHistoryRoutes(services))
   router.use('/establishment-settings', EstablishmentSettingsRoutes(services))
   router.use('/recommend-allocations', RecommendStaffAutomaticallyRoutes(services))
-  router.use('/data', DataRoutes(services))
+  router.use('/data', StaffDataRoutes(services))
   router.use('/manage', StaffMembersRoutes(services))
   router.use('/manage-roles', ManageRolesRoutes())
 
