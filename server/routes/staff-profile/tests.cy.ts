@@ -23,10 +23,12 @@ context('Profile Info', () => {
   })
 
   it('shows empty text when staff member has no allocations', () => {
-    cy.task('stubKeyworkerDetails', createMock(defaultKeyworkerDetails, { allocations: [] }))
+    const test = createMock(defaultKeyworkerDetails, { allocations: [] })
+    console.log(JSON.stringify(test, null, 2))
+    cy.task('stubKeyworkerDetails', test)
     navigateToTestPage()
 
-    cy.findByText('There are no prisoners allocated to this key worker.').should('exist')
+    cy.findByText('There are no allocations for this key worker.').should('exist')
   })
 
   it('should show profile info (VIEW permission only)', () => {
