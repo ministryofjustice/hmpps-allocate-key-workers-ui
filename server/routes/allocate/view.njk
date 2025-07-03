@@ -114,7 +114,7 @@
             }
           },
           {
-            html: ('<a class="govuk-link--no-visited-state" href="staff-profile/' + item.staffMember.staffId + '">' + item.staffMember | firstNameSpaceLastName + "</a>") if item.staffMember else 'None'
+            html: ('<a class="govuk-link--no-visited-state" href="staff-profile/' + item.staffMember.staffId + '">' + item.staffMember | lastNameCommaFirstName + "</a>") if item.staffMember else 'None'
           },
           {
             html: 'Not applicable - high complexity of need' if item.hasHighComplexityOfNeeds else govukSelect({
