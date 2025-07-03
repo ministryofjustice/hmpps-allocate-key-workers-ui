@@ -179,7 +179,7 @@
         {% endif %}
 
       {% else %}
-        <p class="govuk-!-margin-bottom-6">There are no allocations for this keyworker.</p>
+        <p class="govuk-!-margin-bottom-6">{{ 'There are no allocations for this [staff]' | policyAware(policyName) }}.</p>
       {% endif %}
     </form>
   </div>

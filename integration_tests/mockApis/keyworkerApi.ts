@@ -225,11 +225,8 @@ const stubSearchAllocatableStaffStatusActive = () =>
     { content: keyworkerManageResponse.content.filter(o => o.status.code === 'ACT') },
   )
 
-const stubKeyworkerDetails = (details: Partial<components['schemas']['StaffDetails']> = {}) =>
-  createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/staff/488095', 200, {
-    ...keyworkerDetailsResponse,
-    ...details,
-  })
+const stubKeyworkerDetails = (details: components['schemas']['StaffDetails'] = defaultKeyworkerDetails) =>
+  createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/staff/488095', 200, details)
 
 const stubKeyWorkerStatsWithNullPreviousValues = () =>
   createKeyworkerStatsStub('.+', '.+', {
@@ -490,7 +487,7 @@ const keyworkerStatisticsResponse = {
   averageCompliance: 0.01,
 }
 
-const keyworkerDetailsResponse = {
+export const defaultKeyworkerDetails = {
   staffId: 488095,
   firstName: 'AVAILABLE-ACTIVE',
   lastName: 'KEY-WORKER',
