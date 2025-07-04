@@ -11,7 +11,7 @@ context('/update-capacity-status/update-status-inactive', () => {
     cy.task('stubEnabledPrison')
     cy.task('stubKeyworkerDetails')
     cy.task('stubKeyworkerStatuses')
-    cy.task('stubUpdateStaffProperties')
+    cy.task('stubUpsertStaffDetails')
   })
 
   it('should try all cases', () => {
@@ -21,6 +21,16 @@ context('/update-capacity-status/update-status-inactive', () => {
     verifyPageContent()
 
     proceedToNextPage()
+
+    cy.verifyLastAPICall(
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
+      {
+        status: 'INACTIVE',
+        capacity: 999,
+        deactivateActiveAllocations: true,
+        allowAutoAllocation: false,
+      },
+    )
   })
 
   const verifyPageContent = () => {

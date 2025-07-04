@@ -15,7 +15,7 @@ context('Update capacity and status', () => {
       createMock(defaultKeyworkerDetails, { status: { code: 'INACTIVE', description: 'Inactive' } }),
     )
     cy.task('stubKeyworkerStatuses')
-    cy.task('stubUpdateStaffProperties')
+    cy.task('stubUpsertStaffDetails')
   })
 
   it('should show initial data', () => {
@@ -49,6 +49,15 @@ context('Update capacity and status', () => {
     cy.get('.govuk-notification-banner__heading')
       .should('be.visible')
       .and('contain.text', 'You have updated this key worker’s status and capacity.')
+
+    cy.verifyLastAPICall(
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
+      {
+        status: 'ACTIVE',
+        capacity: 8,
+        allowAutoAllocation: true,
+      },
+    )
   })
 
   it('should proceed to update-status-inactive', () => {

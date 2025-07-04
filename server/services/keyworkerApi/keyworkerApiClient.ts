@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import RestClient from '../../data/restClient'
 import config from '../../config'
 import type { components, operations } from '../../@types/keyWorker'
+import { MakeNullable } from '../../utils/utils'
 
 export interface ServiceConfigInfo {
   git: {
@@ -26,9 +27,10 @@ export interface ServiceConfigInfo {
   productId: string
 }
 
-export type KeyworkerConfigRequest = Omit<components['schemas']['StaffConfigRequest'], 'status'> & {
-  status: string
-}
+export type StaffDetailsRequest = MakeNullable<
+  components['schemas']['StaffDetailsRequest'],
+  'reactivateOn' | 'staffRole'
+>
 
 export default class KeyworkerApiClient {
   private readonly restClient: RestClient
@@ -137,13 +139,6 @@ export default class KeyworkerApiClient {
     return response
   }
 
-  async updateStaffConfig(prisonCode: string, staffId: string | number, requestBody: KeyworkerConfigRequest) {
-    await this.restClient.put<boolean>({
-      path: `/prisons/${prisonCode}/staff/${staffId}/configuration`,
-      data: requestBody,
-    })
-  }
-
   async searchAllocatableStaff(prisonCode: string, query: components['schemas']['AllocatableSearchRequest']) {
     return this.restClient.post<components['schemas']['AllocatableSearchResponse']>({
       path: `/search/prisons/${prisonCode}/staff-allocations`,
@@ -151,14 +146,10 @@ export default class KeyworkerApiClient {
     })
   }
 
-  async assignRoleToStaff(
-    prisonCode: string,
-    staffId: number,
-    query: components['schemas']['StaffJobClassificationRequest'],
-  ) {
-    return this.restClient.put({
-      path: `/prisons/${prisonCode}/staff/${staffId}/job-classifications`,
-      data: query,
+  async upsertStaffDetails(prisonCode: string, staffId: string | number, requestBody: StaffDetailsRequest) {
+    await this.restClient.put({
+      path: `/prisons/${prisonCode}/staff/${staffId}`,
+      data: requestBody,
     })
   }
 

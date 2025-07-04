@@ -10,7 +10,7 @@ context('/update-capacity-status/** journey', () => {
     cy.task('stubEnabledPrison')
     cy.task('stubKeyworkerDetails')
     cy.task('stubKeyworkerStatuses')
-    cy.task('stubUpdateStaffProperties')
+    cy.task('stubUpsertStaffDetails')
   })
 
   it('should update active status and capacity', () => {
@@ -25,12 +25,11 @@ context('/update-capacity-status/** journey', () => {
       .and('contain.text', 'You have updated this key worker’s capacity.')
 
     cy.verifyLastAPICall(
-      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095/configuration' },
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
       {
         status: 'ACTIVE',
         capacity: 8,
-        deactivateActiveAllocations: false,
-        removeFromAutoAllocation: false,
+        allowAutoAllocation: true,
       },
     )
   })
@@ -48,12 +47,12 @@ context('/update-capacity-status/** journey', () => {
       .and('contain.text', 'You have updated this key worker’s status and capacity.')
 
     cy.verifyLastAPICall(
-      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095/configuration' },
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
       {
         status: 'INACTIVE',
         capacity: 8,
         deactivateActiveAllocations: true,
-        removeFromAutoAllocation: true,
+        allowAutoAllocation: false,
       },
     )
   })
@@ -84,12 +83,12 @@ context('/update-capacity-status/** journey', () => {
       .and('contain.text', 'You have updated this key worker’s status and capacity.')
 
     cy.verifyLastAPICall(
-      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095/configuration' },
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
       {
         status: 'UNAVAILABLE_LONG_TERM_ABSENCE',
         capacity: 8,
         deactivateActiveAllocations: true,
-        removeFromAutoAllocation: false,
+        allowAutoAllocation: true,
       },
     )
   })
@@ -122,12 +121,12 @@ context('/update-capacity-status/** journey', () => {
       .and('contain.text', 'You have updated this key worker’s status and capacity.')
 
     cy.verifyLastAPICall(
-      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095/configuration' },
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
       {
         status: 'UNAVAILABLE_ANNUAL_LEAVE',
         capacity: 8,
         deactivateActiveAllocations: false,
-        removeFromAutoAllocation: false,
+        allowAutoAllocation: true,
         reactivateOn: '2071-09-09T00:00:00.000Z',
       },
     )

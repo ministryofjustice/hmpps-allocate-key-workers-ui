@@ -262,11 +262,7 @@ const stubPrisonerAllocations = (
 ) =>
   createBasicHttpStub('GET', '/keyworker-api/prisoners/A9965EA/allocations', 200, { allocations: prisonerAllocations })
 
-const stubUpdateStaffProperties = () =>
-  createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/staff/.*/configuration', 200, {})
-
-const stubAssignRoleToStaff = () =>
-  createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/staff/.*/job-classifications', 204, {})
+const stubUpsertStaffDetails = () => createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/staff/.*', 200, {})
 
 const stubAllocationRecommendations = (allocationRecommendations: components['schemas']['RecommendedAllocations']) =>
   createBasicHttpStub(
@@ -530,6 +526,17 @@ export const defaultKeyworkerDetails = {
       latestSession: {
         occurredAt: '2025-01-23',
       },
+      stats: {
+        from: '2025-01-17',
+        to: '2025-02-17',
+        projectedComplianceEvents: 0,
+        recordedComplianceEvents: 0,
+        recordedEvents: [
+          { type: 'ENTRY', count: 0 },
+          { type: 'SESSION', count: 0 },
+        ],
+        complianceRate: 0,
+      },
     },
     {
       prisoner: {
@@ -544,6 +551,17 @@ export const defaultKeyworkerDetails = {
       },
       latestSession: {
         occurredAt: '2025-01-23',
+      },
+      stats: {
+        from: '2025-01-17',
+        to: '2025-02-17',
+        projectedComplianceEvents: 0,
+        recordedComplianceEvents: 0,
+        recordedEvents: [
+          { type: 'ENTRY', count: 0 },
+          { type: 'SESSION', count: 0 },
+        ],
+        complianceRate: 0,
       },
     },
   ],
@@ -812,11 +830,10 @@ export default {
   stubPutAllocationSuccess,
   stubPutAllocationFail500: () => stubPutAllocationFail(500),
   stubPutAllocationFail400: () => stubPutAllocationFail(400, 'Api error'),
-  stubUpdateStaffProperties,
   stubPutPrisonConfiguration,
   stubSearchStaffError,
   stubAllocationRecommendations,
   stubPutAllocationRecommendationSuccess,
-  stubAssignRoleToStaff,
   stubKeyworkerPrisonConfigNoAutoAllocation: () => stubKeyworkerPrisonConfig(true, false, false),
+  stubUpsertStaffDetails,
 }
