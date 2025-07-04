@@ -1,9 +1,11 @@
 import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../../integration_tests/support/commands'
 
-context('/manage-roles/assign/role', () => {
-  const yesRadio = () => cy.findByRole('radio', { name: 'Yes' })
-  const noRadio = () => cy.findByRole('radio', { name: 'No' })
+context('/manage-roles/assign/capacity', () => {
+  const capacityInput = () =>
+    cy.findByRole('textbox', {
+      name: 'What is the maximum number of prisoners this prison officer should be assigned?',
+    })
   const continueButton = () => cy.findByRole('button', { name: 'Continue' })
 
   const journeyId = uuidV4()
@@ -15,9 +17,9 @@ context('/manage-roles/assign/role', () => {
     cy.task('stubEnabledPrison')
   })
 
-  it('should try all cases proceeding to next page', () => {
+  it('should try all cases', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/assign\/role$/)
+    cy.url().should('match', /\/assign\/capacity$/)
 
     verifyPageContent()
 
@@ -28,51 +30,40 @@ context('/manage-roles/assign/role', () => {
     verifyInputValuesArePersisted()
   })
 
-  it('should proceed to Not Prison Officer error page', () => {
-    navigateToTestPage()
-    cy.url().should('match', /\/assign\/role$/)
-
-    noRadio().click()
-    continueButton().click()
-
-    cy.url().should('match', /\/assign\/not-prison-officer$/)
-  })
-
   const verifyPageContent = () => {
-    cy.title().should('equal', 'Are they a prison officer - Key workers - DPS')
+    cy.title().should('equal', 'Set maximum capacity - Key workers - DPS')
 
     cy.findByRole('heading', {
-      name: 'Is this person a prison officer?',
+      name: 'What is the maximum number of prisoners this prison officer should be assigned?',
     }).should('be.visible')
 
-    yesRadio().should('exist')
-    noRadio().should('exist')
+    capacityInput().should('be.visible').and('have.value', 6)
     continueButton().should('be.visible')
 
     cy.findByRole('link', { name: 'Back' })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('match', /assign$/)
+      .and('match', /working-pattern$/)
   }
 
   const verifyValidationErrors = () => {
+    capacityInput().clear()
     continueButton().click()
-    cy.findByRole('link', { name: /Select if this individual is a prison officer$/i })
+    cy.findByRole('link', { name: /Enter a number for this prison officer’s capacity$/i })
       .should('be.visible')
       .click()
-    yesRadio().should('be.focused')
+    capacityInput().should('be.focused')
   }
 
   const proceedToNextPage = () => {
-    yesRadio().click()
+    capacityInput().type('9')
     continueButton().click()
-    cy.url().should('match', /\/working-pattern$/)
+    cy.url().should('match', /\/check-answers$/)
   }
 
   const verifyInputValuesArePersisted = () => {
     cy.go('back')
-    yesRadio().should('be.checked')
-    noRadio().should('not.be.checked')
+    capacityInput().should('have.value', '9')
   }
 
   const navigateToTestPage = () => {
@@ -89,9 +80,12 @@ context('/manage-roles/assign/role', () => {
           firstName: 'Joe',
           lastName: 'Doe',
         },
+        isPrisonOfficer: true,
+        scheduleType: { code: 'FT', description: 'Full-time' },
+        hoursPerWeek: 35,
       },
     })
 
-    cy.visit(`/key-worker/${journeyId}/manage-roles/assign/role`)
+    cy.visit(`/key-worker/${journeyId}/manage-roles/assign/capacity`)
   }
 })

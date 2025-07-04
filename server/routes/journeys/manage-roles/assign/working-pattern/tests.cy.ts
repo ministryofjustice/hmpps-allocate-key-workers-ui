@@ -32,7 +32,7 @@ context('/manage-roles/assign/working-pattern', () => {
     cy.title().should('equal', 'Working pattern - Key workers - DPS')
 
     cy.findByRole('heading', {
-      name: 'What is this individual’s working pattern?',
+      name: 'What is this prison officer’s working pattern?',
     }).should('be.visible')
 
     fullTimeRadio().should('exist')
@@ -53,7 +53,7 @@ context('/manage-roles/assign/working-pattern', () => {
   const proceedToNextPage = () => {
     fullTimeRadio().click()
     continueButton().click()
-    cy.url().should('match', /\/check-answers$/)
+    cy.url().should('match', /\/capacity$/)
   }
 
   const verifyInputValuesArePersisted = () => {
