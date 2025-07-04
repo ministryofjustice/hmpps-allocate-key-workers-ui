@@ -2,6 +2,6 @@
     {% if params.text == 'Active' %}
         <strong class="govuk-tag status-tag govuk-tag--green">Active</strong>
     {% else %}
-        <strong class="govuk-tag status-tag govuk-tag--red">{{ params.text if params.fullText else (params.text | shortenStatusLabel) }}</strong>
+        <strong class="govuk-tag status-tag govuk-tag--red">{{ params.text if params.fullText else (params.text | takeFirstWord) }}</strong>
     {% endif %}
 {% endmacro %}
