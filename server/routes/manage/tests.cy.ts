@@ -69,10 +69,10 @@ context('Manage key workers', () => {
 
     cy.get('.govuk-table__row').eq(1).children().eq(1).should('contain.text', 'Active')
     cy.get('.govuk-table__row').eq(2).children().eq(1).should('contain.text', 'Active')
-    cy.get('.govuk-table__row').eq(3).children().eq(1).should('contain.text', 'Unavailable - annual leave')
+    cy.get('.govuk-table__row').eq(3).children().eq(1).should('contain.text', 'Unavailable')
     cy.get('.govuk-table__row').eq(4).children().eq(1).should('contain.text', 'Inactive')
-    cy.get('.govuk-table__row').eq(5).children().eq(1).should('contain.text', 'Unavailable - long term absence')
-    cy.get('.govuk-table__row').eq(6).children().eq(1).should('contain.text', 'Unavailable - no prisoner contact')
+    cy.get('.govuk-table__row').eq(5).children().eq(1).should('contain.text', 'Unavailable')
+    cy.get('.govuk-table__row').eq(6).children().eq(1).should('contain.text', 'Unavailable')
 
     cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', '32')
     cy.get('.govuk-table__row').eq(2).children().eq(2).should('contain.text', '32')

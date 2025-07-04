@@ -6,7 +6,9 @@
 {% from "./components/statCard.njk" import statCard %}
 {% from "partials/mojPagination/macro.njk" import mojPagination %}
 {% from "partials/deallocateSuccessError/macro.njk" import deallocateSuccessError %}
+{% from "partials/alertFlags/macro.njk" import alertFlags %}
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
+
 
 {% set fullWidth = true %}
 {% set pageTitle = "[staff] profile" %}
@@ -25,7 +27,7 @@
         {{ statusTag({ text: status.description }) }}
       </p>
       {% if user | hasPermission('allocate') %}
-        <a class="govuk-!-margin-left-2 govuk-link govuk-link--no-visited-state govuk-!-display-inline-block " href="../start-update-staff/{{ staffId }}?proceedTo=update-capacity-status">Update capacity and status</a>
+        <a class="govuk-!-margin-left-2 govuk-link govuk-link--no-visited-state govuk-!-display-inline-block " href="../start-update-staff/{{ staffId }}?proceedTo=update-capacity-status">Update capacity, status or working pattern</a>
       {% endif %}
     </div>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
@@ -33,11 +35,11 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-quarter left-aligned">
         <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Establishment</h2>
-        <p class="govuk-!-margin-bottom-2">{{ prison.description }}</p>
+        <p class="govuk-!-margin-bottom-2">{{ user.activeCaseLoad.description }}</p>
       </div>
 
       <div class="govuk-grid-column-one-quarter left-aligned">
-        <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Schedule type</h2>
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Working pattern</h2>
         <p class="govuk-!-margin-bottom-2">{{ staffRole.scheduleType.description }}</p>
       </div>
 
@@ -56,17 +58,18 @@
 
     <h2 class="govuk-body-l">
       <strong>Statistics for period:</strong>
-      {{ stats.current.from | dateString }} to {{ stats.current.to | dateString }}
+      Displaying statistics from {{ stats.current.from | dateString }} to {{ stats.current.to | dateString }}. Comparing against statistics from {{ stats.previous.from | dateString }} to {{ stats.previous.to | dateString }}.
     </h2>
     <div class="govuk-grid-row">
       {{ statCard('Projected sessions', stats.current.projectedComplianceEvents, stats.previous.projectedComplianceEvents ) }}
 
-      {{ statCard('Recorded sessions', stats.current.recordedComplianceEvents, stats.previous.recordedComplianceEvents ) }}
+      {{ statCard('Recorded case note sessions', stats.current.recordedComplianceEvents, stats.previous.recordedComplianceEvents ) }}
 
       {{ statCard('Session compliance', stats.current.complianceRate, stats.previous.complianceRate, 'percentage') }}
 
-      {{ statCard('Case notes written', stats.current.recordedEvents | mapProperty('count') | sum, stats.previous.recordedEvents | mapProperty('count') | sum) }}
+      {{ statCard('Recorded case note entries', stats.current.recordedEvents | mapProperty('count') | sum, stats.previous.recordedEvents | mapProperty('count') | sum) }}
     </div>
+    <p class="govuk-!-margin-top-5">These figures are estimates based on the number of prisoners currently allocated to this {{ policyName }}. If their allocations have changed during the reporting period these figures may not be correct.</p>
 
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
 
@@ -94,13 +97,19 @@
             text: item.prisoner.cellLocation
           },
           {
-            text: item.prisoner.releaseDate | formatDateConcise | default('-', true)
-          },
-          {
-            text: item.prisoner.csra | default('-', true)
+            html: alertFlags(prisonerProfileUrl + '/prisoner/' + item.prisoner.prisonNumber + '/alerts/active', item.prisoner.relevantAlertCodes, item.prisoner.remainingAlertCount),
+            attributes: {
+            "data-sort-value": item.prisoner | alertsSortValue
+          }
           },
           {
             text: item.latestSession.occurredAt | formatDateConcise | default('-', true) if item.latestSession else '-'
+          },
+          {
+            text: item.stats.recordedComplianceEvents or 'None',
+            attributes: {
+            "data-sort-value": item.stats.recordedComplianceEvents
+          }
           },
           {
             html: govukSelect({
@@ -112,7 +121,10 @@
               },
               items: staff | excludeCurrentStaffMember({staffId: staffId}) | conditionallyAddDeallocate(staffId) | mergePrisonerKeyworkerIds(item.prisoner.prisonNumber) | addSelectValue('Select ' + policyName)
             })
-          } if user | hasPermission('allocate') else undefined
+          } if user | hasPermission('allocate') else undefined,
+          {
+            html: '<a class="govuk-link govuk-link--no-visited-state" href="/' + policyPath + '/prisoner-allocation-history/' + item.prisoner.prisonNumber + '">View allocation history</a>'
+          }
         ] | removeNullish), rows) %}
     {% endfor %}
 
@@ -142,18 +154,11 @@
               }
             },
             {
-              text: "Release date",
-              key: 'releaseDate',
+              text: "Relevant alerts",
+              key: 'alerts',
               attributes: {
-                "aria-sort": "none"
-              }
-            },
-            {
-              text: "CSRA",
-              key: 'csra',
-              attributes: {
-                "aria-sort": "none"
-              }
+              "aria-sort": "none"
+            }
             },
             {
               text: "Most recent session",
@@ -163,8 +168,18 @@
               }
             },
             {
+              text: "Sessions in last month",
+              key: 'sessionCount',
+              attributes: {
+              "aria-sort": "none"
+            }
+            },
+            {
               text: "Change " + policyName
-            } if user | hasPermission('allocate') else undefined
+            } if user | hasPermission('allocate') else undefined,
+            {
+              text: ''
+            }
           ] | removeNullish,
           rows: rows
         }) }}

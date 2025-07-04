@@ -181,7 +181,7 @@ context('Profile Info', () => {
     } else {
       cy.get('a[href*="/start-update-staff/488095?proceedTo=update-capacity-status"]')
         .should('be.visible')
-        .should('contain.text', 'Update capacity and status')
+        .should('contain.text', 'Update capacity, status or working pattern')
     }
 
     cy.contains('Select key workers from the dropdown lists to reallocate or deallocate prisoners.').should(
@@ -193,8 +193,8 @@ context('Profile Info', () => {
 
     // Details panel
     cy.get('.govuk-grid-column-one-quarter').eq(0).children().eq(0).should('have.text', 'Establishment')
-    cy.get('.govuk-grid-column-one-quarter').eq(0).children().eq(1).should('have.text', 'Leeds')
-    cy.get('.govuk-grid-column-one-quarter').eq(1).children().eq(0).should('have.text', 'Schedule type')
+    cy.get('.govuk-grid-column-one-quarter').eq(0).children().eq(1).should('have.text', 'Leeds (HMP)')
+    cy.get('.govuk-grid-column-one-quarter').eq(1).children().eq(0).should('have.text', 'Working pattern')
     cy.get('.govuk-grid-column-one-quarter').eq(1).children().eq(1).should('have.text', 'Full Time')
 
     cy.get('.govuk-grid-column-one-quarter').eq(2).children().eq(0).should('have.text', 'Prisoners allocated')
@@ -208,7 +208,7 @@ context('Profile Info', () => {
     cy.get('.govuk-grid-column-one-quarter').eq(4).children().eq(1).should('have.text', '1')
     cy.get('.govuk-grid-column-one-quarter').eq(4).children().eq(2).should('have.text', '-2 decrease')
 
-    cy.get('.govuk-grid-column-one-quarter').eq(5).children().eq(0).should('have.text', 'Recorded sessions')
+    cy.get('.govuk-grid-column-one-quarter').eq(5).children().eq(0).should('have.text', 'Recorded case note sessions')
     cy.get('.govuk-grid-column-one-quarter').eq(5).children().eq(1).should('have.text', '3')
     cy.get('.govuk-grid-column-one-quarter').eq(5).children().eq(2).should('have.text', '+3 increase')
 
@@ -216,21 +216,24 @@ context('Profile Info', () => {
     cy.get('.govuk-grid-column-one-quarter').eq(6).children().eq(1).should('have.text', '0 %')
     cy.get('.govuk-grid-column-one-quarter').eq(6).children().eq(2).should('have.text', 'No change')
 
-    cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(0).should('have.text', 'Case notes written')
+    cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(0).should('have.text', 'Recorded case note entries')
     cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(1).should('have.text', '5')
     cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(2).should('have.text', '+5 increase')
 
     // Allocations panel
     cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
     cy.get('.govuk-table__row').eq(2).children().eq(1).should('contain.text', '1-1-035')
-    cy.get('.govuk-table__row').eq(2).children().eq(2).should('contain.text', '1/2/2025')
-    cy.get('.govuk-table__row').eq(2).children().eq(3).should('contain.text', 'Standard')
-    cy.get('.govuk-table__row').eq(2).children().eq(4).should('contain.text', '23/1/2025')
+    cy.get('.govuk-table__row').eq(2).children().eq(3).should('contain.text', '23/1/2025')
+    cy.get('.govuk-table__row')
+      .eq(2)
+      .children()
+      .eq(readonly ? 5 : 6)
+      .should('contain.text', 'View allocation history')
 
     cy.get('.govuk-table__row')
       .eq(2)
       .children()
-      .should('have.length', readonly ? 5 : 6)
+      .should('have.length', readonly ? 6 : 7)
 
     if (readonly) {
       cy.get('.govuk-button').should('not.exist')
