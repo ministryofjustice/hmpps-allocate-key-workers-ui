@@ -21,6 +21,14 @@
     display: flex;
     flex-flow: row wrap;
 
+    .govuk-form-group.flex-grow {
+      flex-grow: 1;
+
+      .flex-grow {
+        width: 100%;
+      }
+    }
+
     * {
       width: auto;
       margin-bottom: 0;
