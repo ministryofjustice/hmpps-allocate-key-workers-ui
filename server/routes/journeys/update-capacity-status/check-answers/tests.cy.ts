@@ -11,7 +11,7 @@ context('/update-capacity-status/check-answers', () => {
     cy.task('stubEnabledPrison')
     cy.task('stubKeyworkerDetails')
     cy.task('stubKeyworkerStatuses')
-    cy.task('stubUpdateStaffProperties')
+    cy.task('stubUpsertStaffDetails')
   })
 
   it('should try UNAVAILABLE_LONG_TERM_ABSENCE scenario', () => {

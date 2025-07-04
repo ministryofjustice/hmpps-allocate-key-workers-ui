@@ -36,18 +36,10 @@ export class UpdateCapacityAndStatusController {
 
     try {
       // special logic: save both capacity and status only if status=ACTIVE, otherwise, save capacity only
-      await this.keyworkerApiService.updateStaffConfig(
-        req as Request,
-        res,
-        res.locals.user.getActiveCaseloadId()!,
-        staffDetails.staffId,
-        {
-          status: status.code === 'ACTIVE' ? status.code : staffDetails.status.code,
-          capacity,
-          deactivateActiveAllocations: false,
-          removeFromAutoAllocation: false,
-        },
-      )
+      await this.keyworkerApiService.upsertStaffDetails(req as Request, res, staffDetails.staffId, {
+        ...(status.code === 'ACTIVE' ? { status: status.code, allowAutoAllocation: true } : {}),
+        capacity,
+      })
 
       if (status.code === 'ACTIVE') {
         req.flash(

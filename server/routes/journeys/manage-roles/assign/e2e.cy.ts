@@ -1,5 +1,4 @@
 import { v4 as uuidV4 } from 'uuid'
-import { todayString } from '../../../../utils/datetimeUtils'
 
 context('/manage-roles/assign/** journey', () => {
   let journeyId = uuidV4()
@@ -33,7 +32,7 @@ context('/manage-roles/assign/** journey', () => {
         username: 'JOHN_SMITH',
       },
     ])
-    cy.task('stubAssignRoleToStaff')
+    cy.task('stubUpsertStaffDetails')
   })
 
   it('should end with error page if staff member is not a prison officer', () => {
@@ -107,12 +106,13 @@ context('/manage-roles/assign/** journey', () => {
     cy.findByText('You have successfully made Smith, John a key worker').should('be.visible')
 
     cy.verifyLastAPICall(
-      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/1002/job-classifications' },
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/1002' },
       {
-        position: 'PRO',
-        scheduleType: 'PT',
-        hoursPerWeek: 6,
-        fromDate: todayString(),
+        staffRole: {
+          position: 'PRO',
+          scheduleType: 'PT',
+          hoursPerWeek: 6,
+        },
       },
     )
   })

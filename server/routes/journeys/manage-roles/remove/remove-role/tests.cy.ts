@@ -1,6 +1,5 @@
 import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../../integration_tests/support/commands'
-import { todayString } from '../../../../../utils/datetimeUtils'
 
 context('/manage-roles/remove/remove-role', () => {
   const journeyId = uuidV4()
@@ -10,7 +9,7 @@ context('/manage-roles/remove/remove-role', () => {
     cy.task('stubComponents')
     cy.task('stubSignIn')
     cy.task('stubEnabledPrison')
-    cy.task('stubAssignRoleToStaff')
+    cy.task('stubUpsertStaffDetails')
   })
 
   it('should try all cases for key worker', () => {
@@ -25,13 +24,9 @@ context('/manage-roles/remove/remove-role', () => {
     proceedToNextPage()
 
     cy.verifyLastAPICall(
-      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/1001/job-classifications' },
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/1001' },
       {
-        position: 'PRO',
-        scheduleType: 'FT',
-        hoursPerWeek: 35,
-        fromDate: '2010-01-12',
-        toDate: todayString(),
+        staffRole: null,
       },
     )
   })

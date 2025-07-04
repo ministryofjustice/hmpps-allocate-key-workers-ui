@@ -12,7 +12,9 @@ export class ConfirmRemoveRoleController {
   }
 
   submitToApi = async (req: Request, res: Response, next: NextFunction) => {
-    await this.keyworkerApiService.removeRoleFromStaff(req, res, req.journeyData.removeStaffRole!.staff!)
+    await this.keyworkerApiService.upsertStaffDetails(req, res, req.journeyData.removeStaffRole!.staff!.staffId, {
+      staffRole: null,
+    })
     next()
   }
 
