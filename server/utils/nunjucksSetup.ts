@@ -92,4 +92,5 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addGlobal('yesterdayStringGBFormat', yesterdayStringGBFormat)
   njkEnv.addFilter('policyAware', policyAware)
   njkEnv.addFilter('alertsSortValue', alertsSortValue)
+  njkEnv.addFilter('shortenStatusLabel', (val: string) => val.split(' ')[0])
 }
