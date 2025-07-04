@@ -2,6 +2,7 @@ import { CsrfTokenGenerator } from 'csrf-sync'
 import { HmppsUser } from '../../interfaces/hmppsUser'
 import { components } from '../keyWorker'
 import Prisoner from '../../services/prisonerSearch/prisoner'
+import { Breadcrumbs } from '../../middleware/breadcrumbs'
 
 export declare module 'express-session' {
   // Declare that the session will potentially contain these additional fields
