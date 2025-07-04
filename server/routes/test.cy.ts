@@ -103,10 +103,7 @@ context('test / homepage', () => {
         .and('have.attr', 'href', '/key-worker/manage-roles')
       cy.get('.card__description')
         .eq(3)
-        .should(
-          'contain.text',
-          'Assign or remove the key worker role for individual staff members in your establishment.',
-        )
+        .should('contain.text', 'Assign or remove the key worker role for prison officers in your establishment.')
       cy.get('h2 > .card__link')
         .eq(4)
         .should('contain.text', 'Manage your establishment’s key worker settings')

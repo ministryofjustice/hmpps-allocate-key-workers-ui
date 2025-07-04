@@ -24,6 +24,11 @@ context('/manage-roles/assign/confirmation', () => {
       .and('have.attr', 'href')
       .and('match', /\/key-worker\/allocate$/)
 
+    cy.findByRole('link', { name: /View this individual’s key worker profile/ })
+      .should('be.visible')
+      .and('have.attr', 'href')
+      .and('match', /\/key-worker\/staff-profile\/1001$/)
+
     cy.findByRole('link', { name: /Return to key workers homepage/ })
       .should('be.visible')
       .and('have.attr', 'href')

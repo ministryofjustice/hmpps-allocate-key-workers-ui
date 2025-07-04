@@ -35,7 +35,7 @@ export class AssignStaffRoleController {
     }
 
     return res.render('manage-roles/assign/view', {
-      backUrl: req.journeyData.isCheckAnswers ? 'assign/check-answers' : `/${res.locals.policyPath}`,
+      showBreadcrumbs: true,
       query: req.journeyData.assignStaffRole!.query,
       searchResults: req.journeyData.assignStaffRole!.searchResults,
     })

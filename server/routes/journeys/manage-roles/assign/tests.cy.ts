@@ -19,6 +19,14 @@ context('/manage-roles/assign', () => {
 
     cy.title().should('equal', 'Search for staff member - Key workers - DPS')
     cy.findByRole('heading', { name: 'Make someone a key worker' }).should('be.visible')
+
+    cy.findByRole('link', { name: 'Digital Prison Services' })
+      .should('be.visible')
+      .and('have.attr', 'href', 'http://localhost:3001')
+    cy.findByRole('link', { name: /^Key workers$/ })
+      .should('be.visible')
+      .and('have.attr', 'href', '/key-worker')
+
     getSearchInput().should('be.visible')
     getSearchButton().should('be.visible')
 

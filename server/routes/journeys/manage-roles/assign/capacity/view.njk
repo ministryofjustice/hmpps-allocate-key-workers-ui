@@ -1,0 +1,32 @@
+{% extends "partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set pageTitle = "Set maximum capacity" %}
+
+{% block innerContent %}
+  <div class="govuk-width-container govuk-body">
+    <form method="post">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      {{ govukInput({
+        name: "capacity",
+        errorMessage: validationErrors | findError('capacity'),
+        classes: "govuk-input--width-2",
+        label: {
+          text: "What is the maximum number of prisoners this prison officer should be assigned?",
+          classes: "govuk-label--l",
+          isPageHeading: true
+        },
+        hint: {
+          text: "This is automatically set to your establishment’s capacity setting. You can change this if you want to give this person a different capacity."
+        },
+        value: capacity
+      }) }}
+
+      {{ govukButton({
+        text: "Continue",
+        preventDoubleClick: true
+      }) }}
+    </form>
+  </div>
+{% endblock %}

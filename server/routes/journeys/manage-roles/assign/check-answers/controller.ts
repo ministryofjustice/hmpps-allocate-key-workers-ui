@@ -11,23 +11,25 @@ export class AssignRoleCheckAnswersController {
 
     req.journeyData.isCheckAnswers = true
 
-    const { staff, scheduleType } = req.journeyData.assignStaffRole!
+    const { staff, scheduleType, capacity } = req.journeyData.assignStaffRole!
 
     return res.render('journeys/manage-roles/assign/check-answers/view', {
       staff,
       scheduleType,
+      capacity,
       backUrl: 'working-pattern',
     })
   }
 
   submitToApi = async (req: Request, res: Response, next: NextFunction) => {
-    const { staff, scheduleType, hoursPerWeek } = req.journeyData.assignStaffRole!
+    const { staff, scheduleType, hoursPerWeek, capacity } = req.journeyData.assignStaffRole!
 
     await this.keyworkerApiService.upsertStaffDetails(req, res, staff!.staffId, {
       staffRole: {
         position: 'PRO',
         scheduleType: scheduleType!.code,
         hoursPerWeek: hoursPerWeek!,
+        ...(capacity !== req.middleware!.prisonConfiguration!.capacity ? { capacity } : {}),
       },
     })
     next()
