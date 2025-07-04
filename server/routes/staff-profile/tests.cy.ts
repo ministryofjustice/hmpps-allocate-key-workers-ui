@@ -174,6 +174,11 @@ context('Profile Info', () => {
   const validatePageContents = (readonly = false) => {
     cy.title().should('equal', 'Key worker profile - Key workers - DPS')
     cy.findByRole('heading', { name: /^AVAILABLE-ACTIVE KEY-WORKER$/i }).should('be.visible')
+
+    cy.findByRole('link', { name: 'Manage key workers' })
+      .should('be.visible')
+      .and('have.attr', 'href', '/key-worker/manage')
+
     cy.get('.status-tag').eq(0).should('have.text', 'Active')
 
     if (readonly) {
