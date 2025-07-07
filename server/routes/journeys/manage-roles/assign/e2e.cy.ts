@@ -9,6 +9,10 @@ context('/manage-roles/assign/** journey', () => {
   const noRadio = () => cy.findByRole('radio', { name: 'No' })
   const fullTimeRadio = () => cy.findByRole('radio', { name: 'Full-time' })
   const partTimeRadio = () => cy.findByRole('radio', { name: 'Part-time' })
+  const capacityInput = () =>
+    cy.findByRole('textbox', {
+      name: 'What is the maximum number of prisoners this prison officer should be assigned?',
+    })
   const continueButton = () => cy.findByRole('button', { name: 'Continue' })
 
   beforeEach(() => {
@@ -65,6 +69,8 @@ context('/manage-roles/assign/** journey', () => {
     fullTimeRadio().click()
     continueButton().click()
 
+    continueButton().click()
+
     // change answer
     cy.findByRole('link', { name: /Change whether the staff member is a prison officer/i }).click()
     noRadio().click()
@@ -90,6 +96,8 @@ context('/manage-roles/assign/** journey', () => {
     fullTimeRadio().click()
     continueButton().click()
 
+    continueButton().click()
+
     // Can change answers
     cy.findByRole('link', { name: /Change the staff member$/i }).click()
     getSearchInput().clear().type('John')
@@ -98,6 +106,10 @@ context('/manage-roles/assign/** journey', () => {
 
     cy.findByRole('link', { name: /Change the staff member’s working pattern/i }).click()
     partTimeRadio().click()
+    continueButton().click()
+
+    cy.findByRole('link', { name: /Change the staff member’s maximum capacity/i }).click()
+    capacityInput().clear().type('9')
     continueButton().click()
 
     // Confirm and submit
@@ -112,6 +124,39 @@ context('/manage-roles/assign/** journey', () => {
           position: 'PRO',
           scheduleType: 'PT',
           hoursPerWeek: 6,
+          capacity: 9,
+        },
+      },
+    )
+  })
+
+  it('should not submit capacity if it is the same as default prison settings', () => {
+    beginJourney()
+
+    getSearchInput().type('Joe')
+    getSearchButton().click()
+    cy.findByRole('link', { name: 'Doe, Joe' }).click()
+
+    yesRadio().click()
+    continueButton().click()
+
+    fullTimeRadio().click()
+    continueButton().click()
+
+    continueButton().click()
+
+    // Confirm and submit
+    cy.findByRole('button', { name: 'Confirm and submit' }).click()
+
+    cy.findByText('You have successfully made Doe, Joe a key worker').should('be.visible')
+
+    cy.verifyLastAPICall(
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/1001' },
+      {
+        staffRole: {
+          position: 'PRO',
+          scheduleType: 'FT',
+          hoursPerWeek: 35,
         },
       },
     )
