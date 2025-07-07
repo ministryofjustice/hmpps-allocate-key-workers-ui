@@ -61,6 +61,7 @@ export type AssignStaffRoleJourney = Partial<{
   isPrisonOfficer: boolean
   scheduleType: ReferenceData
   hoursPerWeek: number
+  capacity: number
 }>
 
 export type RemoveStaffRoleJourney = Partial<{

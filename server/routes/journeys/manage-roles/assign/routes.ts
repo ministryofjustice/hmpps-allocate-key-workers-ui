@@ -9,6 +9,7 @@ import { NotPrisonOfficerRoleRoutes } from './not-prison-officer/routes'
 import { WorkingPatternRoutes } from './working-pattern/routes'
 import { AssignRoleCheckAnswersRoutes } from './check-answers/routes'
 import { AssignRoleConfirmationRoutes } from './confirmation/routes'
+import { AssignRoleCapacityRoutes } from './capacity/routes'
 
 export const AssignStaffRoleRoutes = (services: Services) => {
   const { router, get, post } = JourneyRouter()
@@ -24,6 +25,7 @@ export const AssignStaffRoleRoutes = (services: Services) => {
   router.use('/role', SelectPrisonOfficerRoleRoutes())
   router.use('/not-prison-officer', NotPrisonOfficerRoleRoutes())
   router.use('/working-pattern', WorkingPatternRoutes())
+  router.use('/capacity', AssignRoleCapacityRoutes())
   router.use('/check-answers', AssignRoleCheckAnswersRoutes(services))
   router.use('/confirmation', AssignRoleConfirmationRoutes())
 

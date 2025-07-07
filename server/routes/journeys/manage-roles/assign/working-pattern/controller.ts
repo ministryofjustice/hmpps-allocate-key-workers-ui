@@ -12,6 +12,6 @@ export class WorkingPatternController {
   POST = (req: Request<unknown, unknown, SchemaType>, res: Response) => {
     req.journeyData.assignStaffRole!.scheduleType = req.body.scheduleType
     req.journeyData.assignStaffRole!.hoursPerWeek = req.body.scheduleType.hoursPerWeek
-    res.redirect('check-answers')
+    res.redirect('capacity')
   }
 }

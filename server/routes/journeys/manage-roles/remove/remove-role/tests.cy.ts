@@ -18,7 +18,7 @@ context('/manage-roles/remove/remove-role', () => {
 
     verifyPageContent()
     cy.findByText(
-      'They will no longer be a key worker and their 12 allocated prisoners will be deallocated. You will need to make them a key worker again to be able to assign prisoners to them in future.',
+      'This prison officer will no longer be a key worker and their 12 allocated prisoners will be deallocated. You will need to make them a key worker again to be able to assign prisoners to them in future.',
     ).should('be.visible')
 
     proceedToNextPage()
@@ -38,7 +38,7 @@ context('/manage-roles/remove/remove-role', () => {
     verifyPageContent()
 
     cy.findByText(
-      'They will no longer be a key worker. You will need to make them a key worker again to be able to assign prisoners to them in future.',
+      'This prison officer will no longer be a key worker. You will need to make them a key worker again to be able to assign prisoners to them in future.',
     ).should('be.visible')
   })
 
