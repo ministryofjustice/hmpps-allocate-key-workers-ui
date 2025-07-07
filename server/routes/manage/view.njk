@@ -15,38 +15,41 @@
   <div class="govuk-width-container">
     <div class="govuk-grid-row">
 
-      <div class="govuk-grid-column-three-quarters">
-        <form method="post" class="govuk-grid-row govuk-!-margin-bottom-7 govuk-!-padding-6 search-form">
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-          <h2 class="govuk-heading-m">Filter by</h2>
-          <div class="horizontal-form">
-            {{ govukInput({
-              id: "query",
-              name: "query",
-              value: params.query,
-              classes: "min-width-two-quarters",
-              label: {
-                text: policyName | sentenceCase + ' name'
-              }
+      <form method="post" class="govuk-grid-row govuk-!-margin-right-0 govuk-!-margin-left-0 govuk-!-margin-bottom-7 govuk-!-padding-top-4 govuk-!-padding-bottom-2 govuk-!-padding-left-4 govuk-!-padding-right-4 search-form">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        <h2 class="govuk-heading-m">Filter by</h2>
+        <div class="horizontal-form">
+          {{ govukInput({
+            id: "query",
+            name: "query",
+            value: params.query,
+            classes: "flex-grow",
+            formGroup: {
+              classes: "flex-grow"
+            },
+            label: {
+              text: policyName | sentenceCase + ' name'
+            }
             }) }}
 
-            {{ govukSelect({
-              id: "status",
-              name: "status",
-              label: {
-                text: "Status"
-              },
-              items: status | addSelectValue('', true)
+          {{ govukSelect({
+            id: "status",
+            name: "status",
+            classes: "govuk-!-padding-right-4",
+            label: {
+              text: "Status"
+            },
+            items: status | addSelectValue('', true)
             }) }}
-
-            {{ govukButton({
+        </div>
+        <div class="govuk-button-group govuk-!-margin-top-3 govuk-!-margin-bottom-0">
+          {{ govukButton({
               text: "Apply filters",
               preventDoubleClick: true
-            }) }}
-            <a class="govuk-link govuk-link--no-visited-state govuk-body no-label-form-clear-link" href="?clear=true">Clear</a>
-          </div>
-        </form>
-      </div>
+          }) }}
+          <a class="govuk-link govuk-link--no-visited-state" href="?clear=true">Clear</a>
+        </div>
+      </form>
     </div>
     <div class="govuk-grid-row">
 
@@ -60,10 +63,13 @@
             }
           },
           {
-            html: statusTag({ text: item.status.description }),
+            html: statusTag({ text: item.status.description, short: true }),
             attributes: {
               "data-sort-value": item.status.description
             }
+          },
+          {
+            text: item.staffRole.scheduleType.code
           },
           {
             text: item.allocated
@@ -72,12 +78,15 @@
             text: item.capacity
           },
           {
-            text: "Yes" if item.allowAutoAllocation else "No"
+            text: item.stats.recordedComplianceEvents
           },
           {
-            text: item.stats.recordedComplianceEvents
-          }
-        ]), rows) %}
+            text: item.stats.complianceRate | round(1) + '%',
+            attributes: {
+              "data-sort-value": item.stats.complianceRate 
+            }
+          } if policyPath == 'key-worker' else undefined
+        ] | removeNullish), rows) %}
       {% endfor %}
 
       {% if records.length %}
@@ -104,6 +113,13 @@
                 }
               },
               {
+                text: "Working pattern",
+                key: 'workingPattern',
+                attributes: {
+                  "aria-sort": "none"
+                }
+              },
+              {
                 text: "Allocated prisoners",
                 key: 'numberAllocated',
                 attributes: {
@@ -118,19 +134,19 @@
                 }
               },
               {
-                text: "Auto-allocation",
-                key: 'autoAllocated',
-                attributes: {
-                  "aria-sort": "none"
-                }
-              },
-              {
                 text: "Sessions in last month",
                 key: 'numberOfKeyworkerSessions',
                 attributes: {
                   "aria-sort": "none"
                 }
-              }
+              },
+              {
+                text: "Delivery rate",
+                key: 'deliveryRate',
+                attributes: {
+                  "aria-sort": "none"
+                }
+              } if policyPath == 'key-worker' else undefined
             ],
             rows: rows
          }) }}

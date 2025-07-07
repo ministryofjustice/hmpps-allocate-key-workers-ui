@@ -74,26 +74,26 @@ context('Manage key workers', () => {
     cy.get('.govuk-table__row').eq(5).children().eq(1).should('contain.text', 'Unavailable')
     cy.get('.govuk-table__row').eq(6).children().eq(1).should('contain.text', 'Unavailable')
 
-    cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', '32')
-    cy.get('.govuk-table__row').eq(2).children().eq(2).should('contain.text', '32')
-    cy.get('.govuk-table__row').eq(3).children().eq(2).should('contain.text', '9')
-    cy.get('.govuk-table__row').eq(4).children().eq(2).should('contain.text', '0')
-    cy.get('.govuk-table__row').eq(5).children().eq(2).should('contain.text', '1')
-    cy.get('.govuk-table__row').eq(6).children().eq(2).should('contain.text', '0')
+    cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', 'FT')
+    cy.get('.govuk-table__row').eq(2).children().eq(2).should('contain.text', 'FT')
+    cy.get('.govuk-table__row').eq(3).children().eq(2).should('contain.text', 'FT')
+    cy.get('.govuk-table__row').eq(4).children().eq(2).should('contain.text', 'PT')
+    cy.get('.govuk-table__row').eq(5).children().eq(2).should('contain.text', 'PT')
+    cy.get('.govuk-table__row').eq(6).children().eq(2).should('contain.text', 'PT')
 
-    cy.get('.govuk-table__row').eq(1).children().eq(3).should('contain.text', '28')
-    cy.get('.govuk-table__row').eq(2).children().eq(3).should('contain.text', '28')
-    cy.get('.govuk-table__row').eq(3).children().eq(3).should('contain.text', '6')
-    cy.get('.govuk-table__row').eq(4).children().eq(3).should('contain.text', '11')
-    cy.get('.govuk-table__row').eq(5).children().eq(3).should('contain.text', '4')
-    cy.get('.govuk-table__row').eq(6).children().eq(3).should('contain.text', '12')
+    cy.get('.govuk-table__row').eq(1).children().eq(3).should('contain.text', '32')
+    cy.get('.govuk-table__row').eq(2).children().eq(3).should('contain.text', '32')
+    cy.get('.govuk-table__row').eq(3).children().eq(3).should('contain.text', '9')
+    cy.get('.govuk-table__row').eq(4).children().eq(3).should('contain.text', '0')
+    cy.get('.govuk-table__row').eq(5).children().eq(3).should('contain.text', '1')
+    cy.get('.govuk-table__row').eq(6).children().eq(3).should('contain.text', '0')
 
-    cy.get('.govuk-table__row').eq(1).children().eq(4).should('contain.text', 'Yes')
-    cy.get('.govuk-table__row').eq(2).children().eq(4).should('contain.text', 'Yes')
-    cy.get('.govuk-table__row').eq(3).children().eq(4).should('contain.text', 'Yes')
-    cy.get('.govuk-table__row').eq(4).children().eq(4).should('contain.text', 'No')
-    cy.get('.govuk-table__row').eq(5).children().eq(4).should('contain.text', 'No')
-    cy.get('.govuk-table__row').eq(6).children().eq(4).should('contain.text', 'No')
+    cy.get('.govuk-table__row').eq(1).children().eq(4).should('contain.text', '28')
+    cy.get('.govuk-table__row').eq(2).children().eq(4).should('contain.text', '28')
+    cy.get('.govuk-table__row').eq(3).children().eq(4).should('contain.text', '6')
+    cy.get('.govuk-table__row').eq(4).children().eq(4).should('contain.text', '11')
+    cy.get('.govuk-table__row').eq(5).children().eq(4).should('contain.text', '4')
+    cy.get('.govuk-table__row').eq(6).children().eq(4).should('contain.text', '12')
 
     cy.get('.govuk-table__row').eq(1).children().eq(5).should('contain.text', '0')
     cy.get('.govuk-table__row').eq(2).children().eq(5).should('contain.text', '0')
@@ -102,15 +102,22 @@ context('Manage key workers', () => {
     cy.get('.govuk-table__row').eq(5).children().eq(5).should('contain.text', '0')
     cy.get('.govuk-table__row').eq(6).children().eq(5).should('contain.text', '0')
 
+    cy.get('.govuk-table__row').eq(1).children().eq(6).should('contain.text', '1.2%')
+    cy.get('.govuk-table__row').eq(2).children().eq(6).should('contain.text', '2%')
+    cy.get('.govuk-table__row').eq(3).children().eq(6).should('contain.text', '69%')
+    cy.get('.govuk-table__row').eq(4).children().eq(6).should('contain.text', '100%')
+    cy.get('.govuk-table__row').eq(5).children().eq(6).should('contain.text', '33%')
+    cy.get('.govuk-table__row').eq(6).children().eq(6).should('contain.text', '66%')
+
     // Sort by allocated prisoners
     cy.get(':nth-child(2) > button').click()
 
-    cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', '32')
-    cy.get('.govuk-table__row').eq(2).children().eq(2).should('contain.text', '32')
-    cy.get('.govuk-table__row').eq(3).children().eq(2).should('contain.text', '0')
-    cy.get('.govuk-table__row').eq(4).children().eq(2).should('contain.text', '9')
-    cy.get('.govuk-table__row').eq(5).children().eq(2).should('contain.text', '1')
-    cy.get('.govuk-table__row').eq(6).children().eq(2).should('contain.text', '0')
+    cy.get('.govuk-table__row').eq(1).children().eq(3).should('contain.text', '32')
+    cy.get('.govuk-table__row').eq(2).children().eq(3).should('contain.text', '32')
+    cy.get('.govuk-table__row').eq(3).children().eq(3).should('contain.text', '0')
+    cy.get('.govuk-table__row').eq(4).children().eq(3).should('contain.text', '9')
+    cy.get('.govuk-table__row').eq(5).children().eq(3).should('contain.text', '1')
+    cy.get('.govuk-table__row').eq(6).children().eq(3).should('contain.text', '0')
 
     cy.task('stubSearchAllocatableStaff', [
       {
@@ -193,7 +200,13 @@ context('Manage key workers', () => {
         capacity: 28,
         allocated: 32,
         allowAutoAllocation: true,
-        stats: { recordedComplianceEvents: 0 },
+        stats: { recordedComplianceEvents: 0, complianceRate: 1.2345 },
+        staffRole: {
+          scheduleType: {
+            code: 'FT',
+            description: 'Full Time',
+          },
+        },
       },
       {
         staffId: 488096,
@@ -206,7 +219,13 @@ context('Manage key workers', () => {
         capacity: 28,
         allocated: 32,
         allowAutoAllocation: true,
-        stats: { recordedComplianceEvents: 0 },
+        stats: { recordedComplianceEvents: 0, complianceRate: 2 },
+        staffRole: {
+          scheduleType: {
+            code: 'FT',
+            description: 'Full Time',
+          },
+        },
       },
       {
         staffId: 488096,
@@ -219,7 +238,13 @@ context('Manage key workers', () => {
         capacity: 6,
         allocated: 9,
         allowAutoAllocation: true,
-        stats: { recordedComplianceEvents: 0 },
+        stats: { recordedComplianceEvents: 0, complianceRate: 69 },
+        staffRole: {
+          scheduleType: {
+            code: 'FT',
+            description: 'Full Time',
+          },
+        },
       },
       {
         staffId: 488097,
@@ -232,7 +257,13 @@ context('Manage key workers', () => {
         capacity: 4,
         allocated: 1,
         allowAutoAllocation: false,
-        stats: { recordedComplianceEvents: 0 },
+        stats: { recordedComplianceEvents: 0, complianceRate: 33 },
+        staffRole: {
+          scheduleType: {
+            code: 'PT',
+            description: 'Part Time',
+          },
+        },
       },
       {
         staffId: 488098,
@@ -245,7 +276,13 @@ context('Manage key workers', () => {
         capacity: 12,
         allocated: 0,
         allowAutoAllocation: false,
-        stats: { recordedComplianceEvents: 0 },
+        stats: { recordedComplianceEvents: 0, complianceRate: 66 },
+        staffRole: {
+          scheduleType: {
+            code: 'PT',
+            description: 'Part Time',
+          },
+        },
       },
       {
         staffId: 488099,
@@ -258,7 +295,13 @@ context('Manage key workers', () => {
         capacity: 11,
         allocated: 0,
         allowAutoAllocation: false,
-        stats: { recordedComplianceEvents: 0 },
+        stats: { recordedComplianceEvents: 0, complianceRate: 100 },
+        staffRole: {
+          scheduleType: {
+            code: 'PT',
+            description: 'Part Time',
+          },
+        },
       },
     ])
   }
