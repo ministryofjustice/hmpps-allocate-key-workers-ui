@@ -37,7 +37,7 @@ export class RemoveStaffRoleController {
     }
 
     return res.render('manage-roles/remove/view', {
-      backUrl: `/${res.locals.policyPath}`,
+      showBreadcrumbs: true,
       query: req.journeyData.removeStaffRole!.query,
       searchResults: req.journeyData.removeStaffRole!.searchResults,
     })

@@ -21,6 +21,7 @@ context('/manage-roles/assign/check-answers', () => {
     cy.contains('dt', 'Name').next().should('include.text', 'Doe, Joe')
     cy.contains('dt', 'Role').next().should('include.text', 'Prison officer')
     cy.contains('dt', 'Working pattern').next().should('include.text', 'Full-time')
+    cy.contains('dt', 'Maximum capacity').next().should('include.text', '9')
 
     cy.findByRole('link', { name: /Change the staff member$/i })
       .should('be.visible')
@@ -37,6 +38,11 @@ context('/manage-roles/assign/check-answers', () => {
       .and('have.attr', 'href')
       .and('to.match', /working-pattern$/)
 
+    cy.findByRole('link', { name: /Change the staff member’s maximum capacity/i })
+      .should('be.visible')
+      .and('have.attr', 'href')
+      .and('to.match', /capacity$/)
+
     proceedToNextPage()
 
     cy.verifyLastAPICall(
@@ -46,6 +52,7 @@ context('/manage-roles/assign/check-answers', () => {
           position: 'PRO',
           scheduleType: 'FT',
           hoursPerWeek: 35,
+          capacity: 9,
         },
       },
     )
@@ -79,6 +86,7 @@ context('/manage-roles/assign/check-answers', () => {
         isPrisonOfficer: true,
         scheduleType: { code: 'FT', description: 'Full-time' },
         hoursPerWeek: 35,
+        capacity: 9,
       },
     })
 
