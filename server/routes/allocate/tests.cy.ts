@@ -20,6 +20,47 @@ context('/allocate', () => {
     cy.task('stubPutDeallocationSuccess')
   })
 
+  describe('Role based access', () => {
+    it('should deny access to a view only user POSTing to the page', () => {
+      cy.task('stubSignIn', {
+        roles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
+      })
+
+      navigateToTestPage()
+
+      cy.verifyRedirectNotAuthorised({ body: { selectStaffMember: 'G1618UI:allocate:486018' } })
+    })
+
+    it('should load read-only page correctly', () => {
+      cy.task('stubSignIn', {
+        roles: [AuthorisedRoles.KEYWORKER_MONITOR],
+      })
+
+      navigateToTestPage()
+
+      checkPageContentsNoFilter(true)
+
+      checkSorting()
+
+      checkPrisonersExcludeActiveAllocationsFilter(true)
+
+      checkNameOrPrisonNumberFilter(true)
+
+      checkResidentialLocationFilter(true)
+    })
+
+    it('should deny access to a user with only policy job access', () => {
+      cy.task('stubSignIn', {
+        roles: [],
+        hasAllocationJobResponsibilities: true,
+      })
+
+      navigateToTestPage()
+
+      cy.url().should('to.match', /\/key-worker\/not-authorised/)
+    })
+  })
+
   it('should load page correctly', () => {
     navigateToTestPage()
 
@@ -126,24 +167,6 @@ context('/allocate', () => {
     getRelevantAlertColumnForRow(8)
       .invoke('text')
       .should('match', /^\s+None\s+$/gm)
-  })
-
-  it('should load read-only page correctly', () => {
-    cy.task('stubSignIn', {
-      roles: [AuthorisedRoles.KEYWORKER_MONITOR],
-    })
-
-    navigateToTestPage()
-
-    checkPageContentsNoFilter(true)
-
-    checkSorting()
-
-    checkPrisonersExcludeActiveAllocationsFilter(true)
-
-    checkNameOrPrisonNumberFilter(true)
-
-    checkResidentialLocationFilter(true)
   })
 
   it('should load page correctly when prison has auto allocation disabled', () => {

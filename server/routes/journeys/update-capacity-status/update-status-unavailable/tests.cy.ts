@@ -1,5 +1,6 @@
 import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../integration_tests/support/commands'
+import AuthorisedRoles from '../../../../authentication/authorisedRoles'
 
 context('/update-capacity-status/update-status-unavailable', () => {
   const radioContinue = () => cy.findByRole('radio', { name: 'Continue automatically assigning them to prisoners' })
@@ -20,6 +21,29 @@ context('/update-capacity-status/update-status-unavailable', () => {
     cy.task('stubEnabledPrison')
     cy.task('stubKeyworkerDetails')
     cy.task('stubKeyworkerStatuses')
+  })
+
+  describe('Role based access', () => {
+    it('should deny access to a user with only policy job access', () => {
+      cy.task('stubSignIn', {
+        roles: [],
+        hasAllocationJobResponsibilities: true,
+      })
+
+      navigateToTestPage('UNAVAILABLE_LONG_TERM_ABSENCE', 'Unavailable - long-term absence')
+
+      cy.url().should('to.match', /\/key-worker\/not-authorised/)
+    })
+
+    it('should deny access to a user with view only access', () => {
+      cy.task('stubSignIn', {
+        roles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
+      })
+
+      navigateToTestPage('UNAVAILABLE_LONG_TERM_ABSENCE', 'Unavailable - long-term absence')
+
+      cy.url().should('to.match', /\/key-worker\/not-authorised/)
+    })
   })
 
   it('should try non-annual-leave case', () => {

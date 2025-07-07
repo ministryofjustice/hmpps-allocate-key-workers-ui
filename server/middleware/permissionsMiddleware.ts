@@ -8,12 +8,8 @@ function hasRole(res: Response, ...roles: AuthorisedRoles[]): boolean {
   return roles.some(role => res.locals.user.userRoles.includes(role))
 }
 
-export const requireAllocateRole = (req: Request, res: Response, next: NextFunction) => {
-  if (res.locals.user.permissions >= UserPermissionLevel.ALLOCATE) {
-    return next()
-  }
-
-  return res.redirect(req.headers['referer'] || '/')
+export const requireRole = (minimumRole: UserPermissionLevel) => {
+  return requirePermissionsAndConfig({ requirePrisonEnabled: true, minimumPermission: minimumRole })
 }
 
 export const hasPermission = (user: HmppsUser, permission: 'self' | 'view' | 'allocate' | 'admin') => {

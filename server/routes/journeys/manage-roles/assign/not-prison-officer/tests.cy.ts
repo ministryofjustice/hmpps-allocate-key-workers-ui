@@ -1,5 +1,6 @@
 import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../../integration_tests/support/commands'
+import AuthorisedRoles from '../../../../../authentication/authorisedRoles'
 
 context('/manage-roles/assign/not-prison-officer', () => {
   const journeyId = uuidV4()
@@ -9,6 +10,29 @@ context('/manage-roles/assign/not-prison-officer', () => {
     cy.task('stubComponents')
     cy.task('stubSignIn')
     cy.task('stubEnabledPrison')
+  })
+
+  describe('Role based access', () => {
+    it('should deny access to a user with only policy job access', () => {
+      cy.task('stubSignIn', {
+        roles: [],
+        hasAllocationJobResponsibilities: true,
+      })
+
+      navigateToTestPage()
+
+      cy.url().should('to.match', /\/key-worker\/not-authorised/)
+    })
+
+    it('should deny access to a user with view only access', () => {
+      cy.task('stubSignIn', {
+        roles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
+      })
+
+      navigateToTestPage()
+
+      cy.url().should('to.match', /\/key-worker\/not-authorised/)
+    })
   })
 
   it('should render error page', () => {

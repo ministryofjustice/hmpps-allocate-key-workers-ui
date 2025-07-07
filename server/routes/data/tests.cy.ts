@@ -8,6 +8,19 @@ context('Key workers data', () => {
     cy.task('stubEnabledPrison')
   })
 
+  describe('Role based access', () => {
+    it('should deny access to a user with only policy job access', () => {
+      cy.task('stubSignIn', {
+        roles: [],
+        hasAllocationJobResponsibilities: true,
+      })
+
+      navigateToTestPage()
+
+      cy.url().should('to.match', /\/key-worker\/not-authorised/)
+    })
+  })
+
   it('shows stats', () => {
     cy.task('stubEnabledPrisonWithHighComplexityNeedsPrisoners')
     cy.task('stubKeyworkerApiStats2025')

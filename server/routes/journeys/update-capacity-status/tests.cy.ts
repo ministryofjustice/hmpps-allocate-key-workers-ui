@@ -1,6 +1,7 @@
 import { v4 as uuidV4 } from 'uuid'
 import { createMock } from '../../../testutils/mockObjects'
 import { defaultKeyworkerDetails } from '../../../../integration_tests/mockApis/keyworkerApi'
+import AuthorisedRoles from '../../../authentication/authorisedRoles'
 
 context('Update capacity and status', () => {
   const journeyId = uuidV4()
@@ -16,6 +17,29 @@ context('Update capacity and status', () => {
     )
     cy.task('stubKeyworkerStatuses')
     cy.task('stubUpsertStaffDetails')
+  })
+
+  describe('Role based access', () => {
+    it('should deny access to a user with only policy job access', () => {
+      cy.task('stubSignIn', {
+        roles: [],
+        hasAllocationJobResponsibilities: true,
+      })
+
+      navigateToTestPage()
+
+      cy.url().should('to.match', /\/key-worker\/not-authorised/)
+    })
+
+    it('should deny access to a user with view only access', () => {
+      cy.task('stubSignIn', {
+        roles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
+      })
+
+      navigateToTestPage()
+
+      cy.url().should('to.match', /\/key-worker\/not-authorised/)
+    })
   })
 
   it('should show initial data', () => {

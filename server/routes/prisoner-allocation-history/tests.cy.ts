@@ -13,13 +13,17 @@ context('Prisoner Allocation History', () => {
     cy.task('stubPrisonerAllocations')
   })
 
-  it('redirects to "not found" page if user does not have the correct role', () => {
-    cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-worker/prisoner-allocation-history/A9965EB?query=&location=&excludeActiveAllocations=true', {
-      failOnStatusCode: false,
-    })
+  describe('Role based access', () => {
+    it('should deny access to a user with only policy job access', () => {
+      cy.task('stubSignIn', {
+        roles: [],
+        hasAllocationJobResponsibilities: true,
+      })
 
-    cy.findByText('Page not found')
+      navigateToTestPage()
+
+      cy.url().should('to.match', /\/key-worker\/not-authorised/)
+    })
   })
 
   it('adds back query params on the back link', () => {

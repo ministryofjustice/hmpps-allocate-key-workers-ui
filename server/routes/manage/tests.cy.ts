@@ -7,6 +7,19 @@ context('Manage key workers', () => {
     cy.task('stubKeyworkerStatuses')
   })
 
+  describe('Role based access', () => {
+    it('should deny access to a user with only policy job access', () => {
+      cy.task('stubSignIn', {
+        roles: [],
+        hasAllocationJobResponsibilities: true,
+      })
+
+      navigateToTestPage()
+
+      cy.url().should('to.match', /\/key-worker\/not-authorised/)
+    })
+  })
+
   it('should handle invalid queries', () => {
     getAllKeyworkers()
 
