@@ -226,8 +226,14 @@ context('Profile Info', () => {
     cy.get('.govuk-grid-column-one-quarter').eq(7).children().eq(2).should('have.text', '+5 increase')
 
     // Allocations panel
+    cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Bar, Foo')
+    cy.get('.govuk-table__row').eq(1).children().eq(1).should('contain.text', '3-1-027')
+    cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', 'None')
+    cy.get('.govuk-table__row').eq(1).children().eq(3).should('contain.text', 'None')
+
     cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
     cy.get('.govuk-table__row').eq(2).children().eq(1).should('contain.text', '1-1-035')
+    cy.get('.govuk-table__row').eq(2).children().eq(2).should('contain.text', 'None')
     cy.get('.govuk-table__row').eq(2).children().eq(3).should('contain.text', '23/1/2025')
     cy.get('.govuk-table__row')
       .eq(2)

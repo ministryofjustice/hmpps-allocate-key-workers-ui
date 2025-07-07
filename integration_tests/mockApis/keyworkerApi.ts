@@ -549,9 +549,6 @@ export const defaultKeyworkerDetails = {
         relevantAlertCodes: [],
         remainingAlertCount: 0,
       },
-      latestSession: {
-        occurredAt: '2025-01-23',
-      },
       stats: {
         from: '2025-01-17',
         to: '2025-02-17',
