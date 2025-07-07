@@ -163,7 +163,7 @@ context('/recommend-allocations', () => {
 
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Bar, Foo')
     cy.get('.govuk-table__row').eq(1).children().eq(1).should('contain.text', '3-1-027')
-    cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', '-')
+    cy.get('.govuk-table__row').eq(1).children().eq(3).should('contain.text', 'None')
 
     cy.get('.govuk-table__row')
       .eq(1)
