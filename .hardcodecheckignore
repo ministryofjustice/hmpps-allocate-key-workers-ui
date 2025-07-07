@@ -2,4 +2,3 @@
 
 'HMPPS Allocate Key Workers Ui'
 res.locals.policyName = 
-if policyName == 'key worker' else undefined

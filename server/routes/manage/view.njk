@@ -85,7 +85,7 @@
             attributes: {
               "data-sort-value": item.stats.complianceRate 
             }
-          } if policyName == 'key worker' else undefined
+          } if policyPath == 'key-worker' else undefined
         ] | removeNullish), rows) %}
       {% endfor %}
 
@@ -146,7 +146,7 @@
                 attributes: {
                   "aria-sort": "none"
                 }
-              } if policyName == 'key worker' else undefined
+              } if policyPath == 'key-worker' else undefined
             ],
             rows: rows
          }) }}
