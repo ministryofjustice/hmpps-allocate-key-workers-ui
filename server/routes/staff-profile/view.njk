@@ -24,7 +24,7 @@
     <div class="govuk-grid-row govuk-!-margin-0">
       <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0">{{ staffMember | firstNameSpaceLastName }}</h1>
       <p class="govuk-!-margin-left-2 govuk-!-display-inline-block govuk-!-margin-0 ">
-        {{ statusTag({ text: status.description }) }}
+        {{ statusTag({ text: status.description, fullText: true }) }}
       </p>
       {% if user | hasPermission('allocate') %}
         <a class="govuk-!-margin-left-2 govuk-link govuk-link--no-visited-state govuk-!-display-inline-block " href="../start-update-staff/{{ staffId }}?proceedTo=update-capacity-status">Update capacity, status or working pattern</a>
