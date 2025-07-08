@@ -4,6 +4,7 @@ import AuthorisedRoles from '../../../../authentication/authorisedRoles'
 
 context('/update-capacity-status/check-answers', () => {
   let journeyId = uuidV4()
+  const PAGE_URL = `/key-worker/${journeyId}/update-capacity-status/check-answers`
 
   beforeEach(() => {
     cy.task('reset')
@@ -17,24 +18,14 @@ context('/update-capacity-status/check-answers', () => {
 
   describe('Role based access', () => {
     it('should deny access to a user with only policy job access', () => {
-      cy.task('stubSignIn', {
-        roles: [],
-        hasAllocationJobResponsibilities: true,
-      })
-
-      navigateToTestPage({})
-
-      cy.url().should('to.match', /\/key-worker\/not-authorised/)
+      cy.verifyRoleBasedAccess({ userRoles: [], hasJobResponsibility: true, url: PAGE_URL })
     })
 
     it('should deny access to a user with view only access', () => {
-      cy.task('stubSignIn', {
-        roles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
+      cy.verifyRoleBasedAccess({
+        userRoles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
+        url: PAGE_URL,
       })
-
-      navigateToTestPage({})
-
-      cy.url().should('to.match', /\/key-worker\/not-authorised/)
     })
   })
 
@@ -148,6 +139,6 @@ context('/update-capacity-status/check-answers', () => {
 
     cy.injectJourneyDataAndReload<PartialJourneyData>(journeyId, journeyData)
 
-    cy.visit(`/key-worker/${journeyId}/update-capacity-status/check-answers`)
+    cy.visit(PAGE_URL)
   }
 })

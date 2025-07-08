@@ -42,7 +42,20 @@ export default function routes(services: Services) {
 
   router.use(removeTrailingSlashMiddleware)
 
-  router.use('/establishment-settings', adminOverridingPermission, EstablishmentSettingsRoutes(services))
+  router.use(
+    '/establishment-settings',
+    requirePermissionsAndConfig(
+      {
+        requirePrisonEnabled: false,
+        minimumPermission: UserPermissionLevel.ADMIN,
+      },
+      {
+        requirePrisonEnabled: true,
+        minimumPermission: UserPermissionLevel.ALLOCATE,
+      },
+    ),
+    EstablishmentSettingsRoutes(services),
+  )
 
   router.use(
     requirePermissionsAndConfig({
@@ -57,8 +70,6 @@ export default function routes(services: Services) {
 
   router.use('/allocate', AllocateStaffRoutes(services))
   router.use('/prisoner-allocation-history', PrisonerAllocationHistoryRoutes(services))
-  router.use('/establishment-settings', EstablishmentSettingsRoutes(services))
-  router.use('/recommend-allocations', RecommendStaffAutomaticallyRoutes(services))
   router.use('/data', StaffDataRoutes(services))
   router.use('/manage', StaffMembersRoutes(services))
 
@@ -66,6 +77,7 @@ export default function routes(services: Services) {
     requirePermissionsAndConfig({ requirePrisonEnabled: true, minimumPermission: UserPermissionLevel.ALLOCATE }),
   )
   router.use('/manage-roles', ManageRolesRoutes())
+  router.use('/recommend-allocations', RecommendStaffAutomaticallyRoutes(services))
 
   router.use(insertJourneyIdentifier())
   router.use('/:journeyId', JourneyRoutes(dataAccess(), services))

@@ -3,6 +3,7 @@ import AuthorisedRoles from '../../../../authentication/authorisedRoles'
 
 context('/manage-roles/assign', () => {
   let journeyId = uuidV4()
+  const PAGE_URL = `/key-worker/${journeyId}/manage-roles/assign`
 
   const getSearchInput = () => cy.findByRole('textbox', { name: 'Find a staff member' })
   const getSearchButton = () => cy.findByRole('button', { name: 'Search' })
@@ -16,24 +17,14 @@ context('/manage-roles/assign', () => {
 
   describe('Role based access', () => {
     it('should deny access to a user with only policy job access', () => {
-      cy.task('stubSignIn', {
-        roles: [],
-        hasAllocationJobResponsibilities: true,
-      })
-
-      navigateToTestPage()
-
-      cy.url().should('to.match', /\/key-worker\/not-authorised/)
+      cy.verifyRoleBasedAccess({ userRoles: [], hasJobResponsibility: true, url: PAGE_URL })
     })
 
     it('should deny access to a user with view only access', () => {
-      cy.task('stubSignIn', {
-        roles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
+      cy.verifyRoleBasedAccess({
+        userRoles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
+        url: PAGE_URL,
       })
-
-      navigateToTestPage()
-
-      cy.url().should('to.match', /\/key-worker\/not-authorised/)
     })
   })
 

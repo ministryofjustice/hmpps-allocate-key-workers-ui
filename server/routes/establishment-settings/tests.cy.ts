@@ -12,24 +12,16 @@ context('/establishment-settings', () => {
 
   describe('Role based access', () => {
     it('should deny access to a user with only policy job access', () => {
-      cy.task('stubSignIn', {
-        roles: [],
-        hasAllocationJobResponsibilities: true,
-      })
-
-      navigateToTestPage()
-
-      cy.url().should('to.match', /\/key-worker\/not-authorised/)
+      cy.task('stubEnabledPrison')
+      cy.verifyRoleBasedAccess({ userRoles: [], hasJobResponsibility: true, url: `/key-worker/establishment-settings` })
     })
 
     it('should deny access to a user with view only access', () => {
-      cy.task('stubSignIn', {
-        roles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
+      cy.task('stubEnabledPrison')
+      cy.verifyRoleBasedAccess({
+        userRoles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
+        url: `/key-worker/establishment-settings`,
       })
-
-      navigateToTestPage()
-
-      cy.url().should('to.match', /\/key-worker\/not-authorised/)
     })
   })
 

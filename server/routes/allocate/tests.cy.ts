@@ -28,7 +28,7 @@ context('/allocate', () => {
 
       navigateToTestPage()
 
-      cy.verifyRedirectNotAuthorised({ body: { selectStaffMember: 'G1618UI:allocate:486018' } })
+      cy.verifyPostRedirectsToNotAuthorised({ body: { selectStaffMember: 'G1618UI:allocate:486018' } })
     })
 
     it('should load read-only page correctly', () => {

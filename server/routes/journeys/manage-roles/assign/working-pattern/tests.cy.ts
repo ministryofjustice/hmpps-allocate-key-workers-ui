@@ -8,6 +8,7 @@ context('/manage-roles/assign/working-pattern', () => {
   const continueButton = () => cy.findByRole('button', { name: 'Continue' })
 
   const journeyId = uuidV4()
+  const PAGE_URL = `/key-worker/${journeyId}/manage-roles/assign/working-pattern`
 
   beforeEach(() => {
     cy.task('reset')
@@ -18,24 +19,14 @@ context('/manage-roles/assign/working-pattern', () => {
 
   describe('Role based access', () => {
     it('should deny access to a user with only policy job access', () => {
-      cy.task('stubSignIn', {
-        roles: [],
-        hasAllocationJobResponsibilities: true,
-      })
-
-      navigateToTestPage()
-
-      cy.url().should('to.match', /\/key-worker\/not-authorised/)
+      cy.verifyRoleBasedAccess({ userRoles: [], hasJobResponsibility: true, url: PAGE_URL })
     })
 
     it('should deny access to a user with view only access', () => {
-      cy.task('stubSignIn', {
-        roles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
+      cy.verifyRoleBasedAccess({
+        userRoles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
+        url: PAGE_URL,
       })
-
-      navigateToTestPage()
-
-      cy.url().should('to.match', /\/key-worker\/not-authorised/)
     })
   })
 
@@ -104,6 +95,6 @@ context('/manage-roles/assign/working-pattern', () => {
       },
     })
 
-    cy.visit(`/key-worker/${journeyId}/manage-roles/assign/working-pattern`)
+    cy.visit(PAGE_URL)
   }
 })

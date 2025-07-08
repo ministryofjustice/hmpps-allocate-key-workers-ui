@@ -5,6 +5,7 @@ import AuthorisedRoles from '../../../../authentication/authorisedRoles'
 
 context('/update-capacity-status/cancel', () => {
   const journeyId = uuidV4()
+  const PAGE_URL = `/key-worker/${journeyId}/update-capacity-status/cancel`
 
   beforeEach(() => {
     cy.task('reset')
@@ -20,37 +21,20 @@ context('/update-capacity-status/cancel', () => {
 
   describe('Role based access', () => {
     it('should deny access to a user with only policy job access', () => {
-      cy.task('stubSignIn', {
-        roles: [],
-        hasAllocationJobResponsibilities: true,
-      })
-
-      navigateToTestPage()
-
-      cy.url().should('to.match', /\/key-worker\/not-authorised/)
+      cy.verifyRoleBasedAccess({ userRoles: [], hasJobResponsibility: true, url: PAGE_URL })
     })
 
     it('should deny access to a user with view only access', () => {
-      cy.task('stubSignIn', {
-        roles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
+      cy.verifyRoleBasedAccess({
+        userRoles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
+        url: PAGE_URL,
       })
-
-      navigateToTestPage()
-
-      cy.url().should('to.match', /\/key-worker\/not-authorised/)
     })
   })
 
   it('should cancel to /update-capacity-status page', () => {
-    cy.visit(`/key-worker/${journeyId}/update-capacity-status/cancel`)
+    cy.visit(PAGE_URL)
 
     cy.url().should('match', /\/update-capacity-status$/)
   })
-
-  const navigateToTestPage = () => {
-    cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status`, {
-      failOnStatusCode: false,
-    })
-  }
 })

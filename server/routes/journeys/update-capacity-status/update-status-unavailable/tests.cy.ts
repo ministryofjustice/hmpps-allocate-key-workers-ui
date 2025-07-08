@@ -13,6 +13,7 @@ context('/update-capacity-status/update-status-unavailable', () => {
   const cancelButton = () => cy.findByRole('button', { name: 'Cancel' })
 
   let journeyId = uuidV4()
+  const PAGE_URL = `/key-worker/${journeyId}/update-capacity-status/update-status-unavailable`
 
   beforeEach(() => {
     cy.task('reset')
@@ -25,24 +26,14 @@ context('/update-capacity-status/update-status-unavailable', () => {
 
   describe('Role based access', () => {
     it('should deny access to a user with only policy job access', () => {
-      cy.task('stubSignIn', {
-        roles: [],
-        hasAllocationJobResponsibilities: true,
-      })
-
-      navigateToTestPage('UNAVAILABLE_LONG_TERM_ABSENCE', 'Unavailable - long-term absence')
-
-      cy.url().should('to.match', /\/key-worker\/not-authorised/)
+      cy.verifyRoleBasedAccess({ userRoles: [], hasJobResponsibility: true, url: PAGE_URL })
     })
 
     it('should deny access to a user with view only access', () => {
-      cy.task('stubSignIn', {
-        roles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
+      cy.verifyRoleBasedAccess({
+        userRoles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
+        url: PAGE_URL,
       })
-
-      navigateToTestPage('UNAVAILABLE_LONG_TERM_ABSENCE', 'Unavailable - long-term absence')
-
-      cy.url().should('to.match', /\/key-worker\/not-authorised/)
     })
   })
 

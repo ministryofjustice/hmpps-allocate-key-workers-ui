@@ -45,11 +45,23 @@ Cypress.Commands.add('postWithCsrf', ({ url, body }) => {
     })
 })
 
-Cypress.Commands.add('verifyRedirectNotAuthorised', ({ body, url }) => {
+Cypress.Commands.add('verifyPostRedirectsToNotAuthorised', ({ body, url }) => {
   cy.url().then(currentUrl => {
     cy.postWithCsrf({ url: url || currentUrl, body }).then(response => {
       expect(response.status).to.equal(403)
       expect(response.redirects![0]).to.contain('/not-authorised')
     })
   })
+})
+
+Cypress.Commands.add('verifyRoleBasedAccess', ({ userRoles, hasJobResponsibility, url }) => {
+  cy.task('stubSignIn', {
+    roles: userRoles,
+    hasAllocationJobResponsibilities: hasJobResponsibility,
+  })
+
+  cy.signIn({ failOnStatusCode: false })
+  cy.visit(url, { failOnStatusCode: false })
+
+  cy.url().should('to.match', /\/key-worker\/not-authorised/)
 })
