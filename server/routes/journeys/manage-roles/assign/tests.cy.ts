@@ -2,7 +2,7 @@ import { v4 as uuidV4 } from 'uuid'
 import AuthorisedRoles from '../../../../authentication/authorisedRoles'
 
 context('/manage-roles/assign', () => {
-  let journeyId = uuidV4()
+  const journeyId = uuidV4()
   const PAGE_URL = `/key-worker/${journeyId}/manage-roles/assign`
 
   const getSearchInput = () => cy.findByRole('textbox', { name: 'Find a staff member' })
@@ -84,7 +84,6 @@ context('/manage-roles/assign', () => {
   })
 
   const navigateToTestPage = () => {
-    journeyId = uuidV4()
     cy.signIn({ failOnStatusCode: false })
     cy.visit(`/key-worker/${journeyId}/manage-roles/assign`, {
       failOnStatusCode: false,

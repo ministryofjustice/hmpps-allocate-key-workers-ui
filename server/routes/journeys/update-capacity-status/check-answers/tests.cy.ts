@@ -3,7 +3,7 @@ import { PartialJourneyData } from '../../../../../integration_tests/support/com
 import AuthorisedRoles from '../../../../authentication/authorisedRoles'
 
 context('/update-capacity-status/check-answers', () => {
-  let journeyId = uuidV4()
+  const journeyId = uuidV4()
   const PAGE_URL = `/key-worker/${journeyId}/update-capacity-status/check-answers`
 
   beforeEach(() => {
@@ -130,8 +130,6 @@ context('/update-capacity-status/check-answers', () => {
   }
 
   const navigateToTestPage = (journeyData: PartialJourneyData) => {
-    journeyId = uuidV4()
-
     cy.signIn({ failOnStatusCode: false })
     cy.visit(`/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status`, {
       failOnStatusCode: false,

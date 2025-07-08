@@ -33,7 +33,12 @@ context('/update-capacity-status/cancel', () => {
   })
 
   it('should cancel to /update-capacity-status page', () => {
-    cy.visit(PAGE_URL)
+    cy.signIn({ failOnStatusCode: false })
+    cy.visit(`/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status`, {
+      failOnStatusCode: false,
+    })
+
+    cy.visit(`/key-worker/${journeyId}/update-capacity-status/cancel`)
 
     cy.url().should('match', /\/update-capacity-status$/)
   })
