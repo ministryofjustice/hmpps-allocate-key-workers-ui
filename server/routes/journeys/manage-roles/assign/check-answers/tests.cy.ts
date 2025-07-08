@@ -1,10 +1,8 @@
 import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../../integration_tests/support/commands'
-import AuthorisedRoles from '../../../../../authentication/authorisedRoles'
 
 context('/manage-roles/assign/check-answers', () => {
   const journeyId = uuidV4()
-  const PAGE_URL = `/key-worker/${journeyId}/manage-roles/assign/check-answers`
 
   beforeEach(() => {
     cy.task('reset')
@@ -12,19 +10,6 @@ context('/manage-roles/assign/check-answers', () => {
     cy.task('stubSignIn')
     cy.task('stubEnabledPrison')
     cy.task('stubUpsertStaffDetails')
-  })
-
-  describe('Role based access', () => {
-    it('should deny access to a user with only policy job access', () => {
-      cy.verifyRoleBasedAccess({ userRoles: [], hasJobResponsibility: true, url: PAGE_URL })
-    })
-
-    it('should deny access to a user with view only access', () => {
-      cy.verifyRoleBasedAccess({
-        userRoles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
-        url: PAGE_URL,
-      })
-    })
   })
 
   it('should try all cases', () => {
@@ -105,6 +90,6 @@ context('/manage-roles/assign/check-answers', () => {
       },
     })
 
-    cy.visit(PAGE_URL)
+    cy.visit(`/key-worker/${journeyId}/manage-roles/assign/check-answers`, { failOnStatusCode: false })
   }
 })

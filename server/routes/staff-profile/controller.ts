@@ -8,9 +8,7 @@ export class StaffProfileController extends ChangeStaffController {
       res.locals.user.permissions === UserPermissionLevel.SELF_PROFILE_ONLY &&
       req.params.staffId !== String(res.locals.user.userId)
     ) {
-      res.status(403)
-      res.render('not-authorised', { showBreadcrumbs: true })
-      return
+      return res.redirect(`/${res.locals.policyPath}/not-authorised`)
     }
     const prisonCode = res.locals.user.getActiveCaseloadId()!
     const Data = await this.keyworkerApiService.getStaffDetails(req, prisonCode, req.params.staffId)
@@ -20,7 +18,7 @@ export class StaffProfileController extends ChangeStaffController {
       href: `/${res.locals.policyPath}/manage`,
     })
 
-    res.render('staff-profile/view', {
+    return res.render('staff-profile/view', {
       ...{ ...Data, staffMember: { firstName: Data.firstName, lastName: Data.lastName } },
       ...(await this.getChangeData(req, res)),
       showBreadcrumbs: true,

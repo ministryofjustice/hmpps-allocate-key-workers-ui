@@ -27,58 +27,32 @@ export default function routes(services: Services) {
   router.use(populateUserPermissionsAndPrisonConfig())
   router.use(breadcrumbs())
 
-  const adminOverridingPermission = requirePermissionsAndConfig(
-    {
-      requirePrisonEnabled: false,
-      minimumPermission: UserPermissionLevel.ADMIN,
-    },
-    {
-      requirePrisonEnabled: true,
-      minimumPermission: UserPermissionLevel.SELF_PROFILE_ONLY,
-    },
-  )
+  const permissionAdmin = { requirePrisonEnabled: false, minimumPermission: UserPermissionLevel.ADMIN }
+  const permissionAllocate = { requirePrisonEnabled: true, minimumPermission: UserPermissionLevel.ALLOCATE }
+  const permissionSelf = { requirePrisonEnabled: true, minimumPermission: UserPermissionLevel.SELF_PROFILE_ONLY }
 
-  get('/', adminOverridingPermission, controller.GET)
+  get('/', requirePermissionsAndConfig(permissionAdmin, permissionSelf), controller.GET)
 
   router.use(removeTrailingSlashMiddleware)
 
   router.use(
     '/establishment-settings',
-    requirePermissionsAndConfig(
-      {
-        requirePrisonEnabled: false,
-        minimumPermission: UserPermissionLevel.ADMIN,
-      },
-      {
-        requirePrisonEnabled: true,
-        minimumPermission: UserPermissionLevel.ALLOCATE,
-      },
-    ),
+    requirePermissionsAndConfig(permissionAdmin, permissionAllocate),
     EstablishmentSettingsRoutes(services),
   )
 
-  router.use(
-    requirePermissionsAndConfig({
-      requirePrisonEnabled: true,
-      minimumPermission: UserPermissionLevel.SELF_PROFILE_ONLY,
-    }),
-  )
-
+  router.use(requirePermissionsAndConfig(permissionSelf))
   router.use('/staff-profile/:staffId', StaffProfileRoutes(services))
 
   router.use(requirePermissionsAndConfig({ requirePrisonEnabled: true, minimumPermission: UserPermissionLevel.VIEW }))
-
   router.use('/allocate', AllocateStaffRoutes(services))
   router.use('/prisoner-allocation-history', PrisonerAllocationHistoryRoutes(services))
   router.use('/data', StaffDataRoutes(services))
   router.use('/manage', StaffMembersRoutes(services))
 
-  router.use(
-    requirePermissionsAndConfig({ requirePrisonEnabled: true, minimumPermission: UserPermissionLevel.ALLOCATE }),
-  )
+  router.use(requirePermissionsAndConfig(permissionAllocate))
   router.use('/manage-roles', ManageRolesRoutes())
   router.use('/recommend-allocations', RecommendStaffAutomaticallyRoutes(services))
-
   router.use(insertJourneyIdentifier())
   router.use('/:journeyId', JourneyRoutes(dataAccess(), services))
 

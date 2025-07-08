@@ -1,4 +1,6 @@
+import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
 import AuthorisedRoles from '../../authentication/authorisedRoles'
+import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 
 context('/recommend-allocations', () => {
   beforeEach(() => {
@@ -44,26 +46,7 @@ context('/recommend-allocations', () => {
   })
 
   describe('Role based access', () => {
-    it('should deny access to a user with only policy job access', () => {
-      cy.task('stubSignIn', {
-        roles: [],
-        hasAllocationJobResponsibilities: true,
-      })
-
-      navigateToTestPage()
-
-      cy.url().should('to.match', /\/key-worker\/not-authorised/)
-    })
-
-    it('should deny access to a user with view only access', () => {
-      cy.task('stubSignIn', {
-        roles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
-      })
-
-      navigateToTestPage()
-
-      cy.url().should('to.match', /\/key-worker\/not-authorised/)
-    })
+    verifyRoleBasedAccess('/key-worker/recommend-allocations', UserPermissionLevel.ALLOCATE)
   })
 
   it('should load page correctly', () => {

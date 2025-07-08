@@ -1,5 +1,6 @@
 import { v4 as uuidV4 } from 'uuid'
-import AuthorisedRoles from '../../../../authentication/authorisedRoles'
+import { verifyRoleBasedAccess } from '../../../../../integration_tests/support/roleBasedAccess'
+import { UserPermissionLevel } from '../../../../interfaces/hmppsUser'
 
 context('/manage-roles/assign', () => {
   const journeyId = uuidV4()
@@ -16,16 +17,7 @@ context('/manage-roles/assign', () => {
   })
 
   describe('Role based access', () => {
-    it('should deny access to a user with only policy job access', () => {
-      cy.verifyRoleBasedAccess({ userRoles: [], hasJobResponsibility: true, url: PAGE_URL })
-    })
-
-    it('should deny access to a user with view only access', () => {
-      cy.verifyRoleBasedAccess({
-        userRoles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
-        url: PAGE_URL,
-      })
-    })
+    verifyRoleBasedAccess(PAGE_URL, UserPermissionLevel.ALLOCATE)
   })
 
   it('should search staff members', () => {

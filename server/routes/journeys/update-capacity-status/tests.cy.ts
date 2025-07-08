@@ -1,7 +1,8 @@
 import { v4 as uuidV4 } from 'uuid'
 import { createMock } from '../../../testutils/mockObjects'
 import { defaultKeyworkerDetails } from '../../../../integration_tests/mockApis/keyworkerApi'
-import AuthorisedRoles from '../../../authentication/authorisedRoles'
+import { verifyRoleBasedAccess } from '../../../../integration_tests/support/roleBasedAccess'
+import { UserPermissionLevel } from '../../../interfaces/hmppsUser'
 
 context('Update capacity and status', () => {
   const journeyId = uuidV4()
@@ -21,16 +22,7 @@ context('Update capacity and status', () => {
   })
 
   describe('Role based access', () => {
-    it('should deny access to a user with only policy job access', () => {
-      cy.verifyRoleBasedAccess({ userRoles: [], hasJobResponsibility: true, url: PAGE_URL })
-    })
-
-    it('should deny access to a user with view only access', () => {
-      cy.verifyRoleBasedAccess({
-        userRoles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
-        url: PAGE_URL,
-      })
-    })
+    verifyRoleBasedAccess(PAGE_URL, UserPermissionLevel.ALLOCATE)
   })
 
   it('should show initial data', () => {

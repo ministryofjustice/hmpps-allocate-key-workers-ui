@@ -1,4 +1,6 @@
 import { defaultPrisonerAllocation } from '../../../integration_tests/mockApis/keyworkerApi'
+import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
+import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import { createMock } from '../../testutils/mockObjects'
 
 context('Prisoner Allocation History', () => {
@@ -14,16 +16,7 @@ context('Prisoner Allocation History', () => {
   })
 
   describe('Role based access', () => {
-    it('should deny access to a user with only policy job access', () => {
-      cy.task('stubSignIn', {
-        roles: [],
-        hasAllocationJobResponsibilities: true,
-      })
-
-      navigateToTestPage()
-
-      cy.url().should('to.match', /\/key-worker\/not-authorised/)
-    })
+    verifyRoleBasedAccess('/key-worker/prisoner-allocation-history/A9965EA', UserPermissionLevel.VIEW)
   })
 
   it('adds back query params on the back link', () => {

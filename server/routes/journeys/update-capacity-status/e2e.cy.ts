@@ -1,4 +1,6 @@
 import { v4 as uuidV4 } from 'uuid'
+import { verifyRoleBasedAccess } from '../../../../integration_tests/support/roleBasedAccess'
+import { UserPermissionLevel } from '../../../interfaces/hmppsUser'
 
 context('/update-capacity-status/** journey', () => {
   let journeyId = uuidV4()
@@ -11,6 +13,13 @@ context('/update-capacity-status/** journey', () => {
     cy.task('stubKeyworkerDetails')
     cy.task('stubKeyworkerStatuses')
     cy.task('stubUpsertStaffDetails')
+  })
+
+  describe('Role based access', () => {
+    verifyRoleBasedAccess(
+      `/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status`,
+      UserPermissionLevel.ALLOCATE,
+    )
   })
 
   it('should update active status and capacity', () => {

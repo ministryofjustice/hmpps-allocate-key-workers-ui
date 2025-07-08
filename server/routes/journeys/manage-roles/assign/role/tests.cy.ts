@@ -1,6 +1,5 @@
 import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../../integration_tests/support/commands'
-import AuthorisedRoles from '../../../../../authentication/authorisedRoles'
 
 context('/manage-roles/assign/role', () => {
   const yesRadio = () => cy.findByRole('radio', { name: 'Yes' })
@@ -8,26 +7,12 @@ context('/manage-roles/assign/role', () => {
   const continueButton = () => cy.findByRole('button', { name: 'Continue' })
 
   const journeyId = uuidV4()
-  const PAGE_URL = `/key-worker/${journeyId}/manage-roles/assign/role`
 
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubComponents')
     cy.task('stubSignIn')
     cy.task('stubEnabledPrison')
-  })
-
-  describe('Role based access', () => {
-    it('should deny access to a user with only policy job access', () => {
-      cy.verifyRoleBasedAccess({ userRoles: [], hasJobResponsibility: true, url: PAGE_URL })
-    })
-
-    it('should deny access to a user with view only access', () => {
-      cy.verifyRoleBasedAccess({
-        userRoles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
-        url: PAGE_URL,
-      })
-    })
   })
 
   it('should try all cases proceeding to next page', () => {
@@ -107,6 +92,6 @@ context('/manage-roles/assign/role', () => {
       },
     })
 
-    cy.visit(PAGE_URL)
+    cy.visit(`/key-worker/${journeyId}/manage-roles/assign/role`)
   }
 })

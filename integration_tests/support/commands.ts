@@ -53,15 +53,3 @@ Cypress.Commands.add('verifyPostRedirectsToNotAuthorised', ({ body, url }) => {
     })
   })
 })
-
-Cypress.Commands.add('verifyRoleBasedAccess', ({ userRoles, hasJobResponsibility, url }) => {
-  cy.task('stubSignIn', {
-    roles: userRoles,
-    hasAllocationJobResponsibilities: hasJobResponsibility,
-  })
-
-  cy.signIn({ failOnStatusCode: false })
-  cy.visit(url, { failOnStatusCode: false })
-
-  cy.url().should('to.match', /\/key-worker\/not-authorised/)
-})

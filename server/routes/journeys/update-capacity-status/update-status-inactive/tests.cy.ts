@@ -1,10 +1,8 @@
 import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../integration_tests/support/commands'
-import AuthorisedRoles from '../../../../authentication/authorisedRoles'
 
 context('/update-capacity-status/update-status-inactive', () => {
   const journeyId = uuidV4()
-  const PAGE_URL = `/key-worker/${journeyId}/update-capacity-status/update-status-inactive`
 
   beforeEach(() => {
     cy.task('reset')
@@ -14,19 +12,6 @@ context('/update-capacity-status/update-status-inactive', () => {
     cy.task('stubKeyworkerDetails')
     cy.task('stubKeyworkerStatuses')
     cy.task('stubUpsertStaffDetails')
-  })
-
-  describe('Role based access', () => {
-    it('should deny access to a user with only policy job access', () => {
-      cy.verifyRoleBasedAccess({ userRoles: [], hasJobResponsibility: true, url: PAGE_URL })
-    })
-
-    it('should deny access to a user with view only access', () => {
-      cy.verifyRoleBasedAccess({
-        userRoles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
-        url: PAGE_URL,
-      })
-    })
   })
 
   it('should try all cases', () => {
@@ -88,6 +73,6 @@ context('/update-capacity-status/update-status-inactive', () => {
       },
     })
 
-    cy.visit(PAGE_URL)
+    cy.visit(`/key-worker/${journeyId}/update-capacity-status/update-status-inactive`)
   }
 })

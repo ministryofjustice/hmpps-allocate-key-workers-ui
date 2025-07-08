@@ -1,13 +1,13 @@
 import { components } from '../../@types/keyWorker'
 import AuthorisedRoles from '../../authentication/authorisedRoles'
+import { UserPermissionLevel } from '../../interfaces/hmppsUser'
+import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
 
 context('/allocate', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubComponents')
-    cy.task('stubSignIn', {
-      roles: [AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.KW_MIGRATION],
-    })
+    cy.task('stubSignIn')
     cy.task('stubEnabledPrison')
     cy.task('stubResidentialHierarchy')
     cy.task('stubSearchPrisonersWithQuery')
@@ -31,34 +31,7 @@ context('/allocate', () => {
       cy.verifyPostRedirectsToNotAuthorised({ body: { selectStaffMember: 'G1618UI:allocate:486018' } })
     })
 
-    it('should load read-only page correctly', () => {
-      cy.task('stubSignIn', {
-        roles: [AuthorisedRoles.KEYWORKER_MONITOR],
-      })
-
-      navigateToTestPage()
-
-      checkPageContentsNoFilter(true)
-
-      checkSorting()
-
-      checkPrisonersExcludeActiveAllocationsFilter(true)
-
-      checkNameOrPrisonNumberFilter(true)
-
-      checkResidentialLocationFilter(true)
-    })
-
-    it('should deny access to a user with only policy job access', () => {
-      cy.task('stubSignIn', {
-        roles: [],
-        hasAllocationJobResponsibilities: true,
-      })
-
-      navigateToTestPage()
-
-      cy.url().should('to.match', /\/key-worker\/not-authorised/)
-    })
+    verifyRoleBasedAccess('/key-worker/allocate', UserPermissionLevel.VIEW)
   })
 
   it('should load page correctly', () => {
@@ -73,6 +46,24 @@ context('/allocate', () => {
     checkNameOrPrisonNumberFilter()
 
     checkResidentialLocationFilter()
+  })
+
+  it('should load read-only page correctly', () => {
+    cy.task('stubSignIn', {
+      roles: [AuthorisedRoles.KEYWORKER_MONITOR],
+    })
+
+    navigateToTestPage()
+
+    checkPageContentsNoFilter(true)
+
+    checkSorting()
+
+    checkPrisonersExcludeActiveAllocationsFilter(true)
+
+    checkNameOrPrisonNumberFilter(true)
+
+    checkResidentialLocationFilter(true)
   })
 
   it('should handle all sorting cases for alerts', () => {
