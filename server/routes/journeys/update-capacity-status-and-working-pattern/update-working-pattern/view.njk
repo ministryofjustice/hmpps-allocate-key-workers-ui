@@ -1,0 +1,50 @@
+{% extends "partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = "Update [staff] working pattern" %}
+
+{% block innerContent %}
+  <div class="govuk-width-container govuk-body">
+    <form method="post">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      {{ govukRadios({
+        name: "scheduleType",
+        errorMessage: validationErrors | findError('scheduleType'),
+        fieldset: {
+          legend: {
+            text: "What is " + staff | firstNameSpaceLastName | possessiveComma + " working pattern?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--xl"
+          }
+        },
+        items: [
+          {
+            value: 'FT',
+            text: "Full-time",
+            checked: scheduleType === 'FT'
+          },
+          {
+            value: 'PT',
+            text: "Part-time",
+            checked: scheduleType === 'PT'
+          }
+        ]
+      }) }}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Confirm and save",
+          preventDoubleClick: true
+        }) }}
+
+        {{ govukButton({
+          text: "Cancel",
+          classes: "govuk-button--secondary",
+          href: "/" + policyPath + "/staff-profile/" + staffId,
+          preventDoubleClick: true
+        }) }}
+      </div>
+    </form>
+  </div>
+{% endblock %}

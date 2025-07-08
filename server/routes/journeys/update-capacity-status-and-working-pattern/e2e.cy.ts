@@ -1,0 +1,156 @@
+import { v4 as uuidV4 } from 'uuid'
+import { createMock } from '../../../testutils/mockObjects'
+import { defaultKeyworkerDetails } from '../../../../integration_tests/mockApis/keyworkerApi'
+
+context('/update-capacity-status-and-working-pattern/** journey', () => {
+  let journeyId = uuidV4()
+
+  beforeEach(() => {
+    cy.task('reset')
+    cy.task('stubComponents')
+    cy.task('stubSignIn')
+    cy.task('stubEnabledPrison')
+    cy.task(
+      'stubKeyworkerDetails',
+      createMock(defaultKeyworkerDetails, { status: { code: 'UNAVAILABLE', description: 'Unavailable' } }),
+    )
+    cy.task('stubKeyworkerStatuses')
+    cy.task('stubUpsertStaffDetails')
+  })
+
+  it('should update active status', () => {
+    beginJourney()
+
+    cy.findByRole('link', { name: 'Update status' }).click()
+
+    cy.findByRole('radio', { name: 'Active' }).click()
+    cy.findByRole('button', { name: 'Continue' }).click()
+
+    cy.findByRole('button', { name: 'Confirm and submit' }).click()
+
+    cy.get('.govuk-notification-banner__heading')
+      .should('be.visible')
+      .and('contain.text', 'You have updated this key worker’s status to Active.')
+
+    cy.verifyLastAPICall(
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
+      {
+        status: 'ACTIVE',
+        allowAutoAllocation: true,
+      },
+    )
+  })
+
+  it('should update inactive status and capacity', () => {
+    beginJourney()
+
+    cy.findByRole('link', { name: 'Update status' }).click()
+
+    cy.findByRole('radio', { name: 'Inactive' }).click()
+    cy.findByRole('button', { name: 'Continue' }).click()
+
+    cy.findByRole('button', { name: 'Yes, save this change' }).click()
+
+    cy.get('.govuk-notification-banner__heading')
+      .should('be.visible')
+      .and('contain.text', 'You have updated this key worker’s status to Inactive.')
+
+    cy.verifyLastAPICall(
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
+      {
+        status: 'INACTIVE',
+        deactivateActiveAllocations: true,
+        allowAutoAllocation: false,
+      },
+    )
+  })
+
+  it('should update unavailable (non annual leave) status and capacity', () => {
+    beginJourney()
+
+    cy.findByRole('link', { name: 'Update status' }).click()
+
+    cy.findByRole('radio', { name: 'Unavailable - no prisoner contact' }).click()
+    cy.findByRole('button', { name: 'Continue' }).click()
+
+    cy.findByRole('radio', { name: 'Deallocate their current prisoners' }).click()
+    cy.findByRole('button', { name: 'Continue' }).click()
+
+    // Can change answers
+    cy.findByRole('link', { name: /Change the new status/i }).click()
+    cy.findByRole('radio', { name: 'Unavailable - long term absence' }).click()
+    cy.findByRole('button', { name: 'Continue' }).click()
+
+    cy.findByRole('link', { name: /Change whether to deallocate current prisoners/i }).click()
+    cy.findByRole('radio', { name: 'Do not deallocate their current prisoners' }).click()
+    cy.findByRole('button', { name: 'Continue' }).click()
+
+    // Confirm and submit
+    cy.findByRole('button', { name: 'Confirm and submit' }).click()
+
+    cy.get('.govuk-notification-banner__heading')
+      .should('be.visible')
+      .and('contain.text', 'You have updated this key worker’s status to Unavailable - long term absence.')
+
+    cy.verifyLastAPICall(
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
+      {
+        status: 'UNAVAILABLE_LONG_TERM_ABSENCE',
+        deactivateActiveAllocations: false,
+        allowAutoAllocation: false,
+      },
+    )
+  })
+
+  it('should update unavailable (annual leave) status and capacity', () => {
+    beginJourney()
+
+    cy.findByRole('link', { name: 'Update status' }).click()
+
+    cy.findByRole('radio', { name: 'Unavailable - annual leave' }).click()
+    cy.findByRole('button', { name: 'Continue' }).click()
+
+    cy.findByRole('radio', { name: 'Deallocate their current prisoners' }).click()
+    cy.findByRole('button', { name: 'Continue' }).click()
+
+    cy.findByRole('textbox', { name: 'Day' }).clear().type('1')
+    cy.findByRole('textbox', { name: 'Month' }).clear().type('1')
+    cy.findByRole('textbox', { name: 'Year' }).clear().type('2070')
+    cy.findByRole('button', { name: 'Continue' }).click()
+
+    // Can change answers
+    cy.findByRole('link', { name: /Change the return date/i }).click()
+    cy.findByRole('textbox', { name: 'Day' }).clear().type('9')
+    cy.findByRole('textbox', { name: 'Month' }).clear().type('9')
+    cy.findByRole('textbox', { name: 'Year' }).clear().type('2071')
+    cy.findByRole('button', { name: 'Continue' }).click()
+
+    // Confirm and submit
+    cy.findByRole('button', { name: 'Confirm and submit' }).click()
+
+    cy.get('.govuk-notification-banner__heading')
+      .should('be.visible')
+      .and('contain.text', 'You have updated this key worker’s status to Unavailable - annual leave.')
+
+    cy.verifyLastAPICall(
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
+      {
+        status: 'UNAVAILABLE_ANNUAL_LEAVE',
+        deactivateActiveAllocations: true,
+        allowAutoAllocation: false,
+        reactivateOn: '2071-09-09T00:00:00.000Z',
+      },
+    )
+  })
+
+  const beginJourney = () => {
+    journeyId = uuidV4()
+    cy.signIn({ failOnStatusCode: false })
+    cy.visit(
+      `/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern`,
+      {
+        failOnStatusCode: false,
+      },
+    )
+  }
+})
