@@ -1,6 +1,8 @@
 import { v4 as uuidV4 } from 'uuid'
 import { createMock } from '../../../testutils/mockObjects'
 import { defaultKeyworkerDetails } from '../../../../integration_tests/mockApis/keyworkerApi'
+import { verifyRoleBasedAccess } from '../../../../integration_tests/support/roleBasedAccess'
+import { UserPermissionLevel } from '../../../interfaces/hmppsUser'
 
 context('Update capacity, status and working pattern', () => {
   const journeyId = uuidV4()
@@ -13,6 +15,13 @@ context('Update capacity, status and working pattern', () => {
     cy.task(
       'stubKeyworkerDetails',
       createMock(defaultKeyworkerDetails, { status: { code: 'INACTIVE', description: 'Inactive' } }),
+    )
+  })
+
+  describe('Role based access', () => {
+    verifyRoleBasedAccess(
+      `/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern`,
+      UserPermissionLevel.ALLOCATE,
     )
   })
 
