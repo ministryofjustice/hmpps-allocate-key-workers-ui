@@ -106,7 +106,7 @@
             text: item.latestSession.occurredAt | formatDateConcise | default('None', true) if item.latestSession else 'None'
           },
           {
-            text: item.stats.recordedComplianceEvents or 'None',
+            text: item.stats.recordedComplianceEvents or '0',
             attributes: {
             "data-sort-value": item.stats.recordedComplianceEvents
           }
