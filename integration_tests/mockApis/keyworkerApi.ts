@@ -530,7 +530,7 @@ export const defaultKeyworkerDetails = {
         from: '2025-01-17',
         to: '2025-02-17',
         projectedComplianceEvents: 0,
-        recordedComplianceEvents: 0,
+        recordedComplianceEvents: 1,
         recordedEvents: [
           { type: 'ENTRY', count: 0 },
           { type: 'SESSION', count: 0 },
