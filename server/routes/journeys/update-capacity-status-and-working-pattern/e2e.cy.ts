@@ -45,7 +45,6 @@ context('/update-capacity-status-and-working-pattern/** journey', () => {
       { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
       {
         status: 'ACTIVE',
-        allowAutoAllocation: true,
       },
     )
   })
@@ -69,7 +68,6 @@ context('/update-capacity-status-and-working-pattern/** journey', () => {
       {
         status: 'INACTIVE',
         deactivateActiveAllocations: true,
-        allowAutoAllocation: false,
       },
     )
   })
@@ -106,7 +104,6 @@ context('/update-capacity-status-and-working-pattern/** journey', () => {
       {
         status: 'UNAVAILABLE_LONG_TERM_ABSENCE',
         deactivateActiveAllocations: false,
-        allowAutoAllocation: false,
       },
     )
   })
@@ -146,7 +143,6 @@ context('/update-capacity-status-and-working-pattern/** journey', () => {
       {
         status: 'UNAVAILABLE_ANNUAL_LEAVE',
         deactivateActiveAllocations: true,
-        allowAutoAllocation: false,
         reactivateOn: '2071-09-09T00:00:00.000Z',
       },
     )

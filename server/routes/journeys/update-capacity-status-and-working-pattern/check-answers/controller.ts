@@ -26,13 +26,11 @@ export class UpdateStatusCheckAnswersController {
       if (status!.code === 'ACTIVE') {
         await this.keyworkerApiService.upsertStaffDetails(req as Request, res, req.journeyData.staffDetails!.staffId, {
           status: status!.code,
-          allowAutoAllocation: true,
         })
       } else {
         await this.keyworkerApiService.upsertStaffDetails(req as Request, res, req.journeyData.staffDetails!.staffId, {
           status: status!.code,
           deactivateActiveAllocations: deactivateActiveAllocations!,
-          allowAutoAllocation: false,
           ...(status?.code === 'UNAVAILABLE_ANNUAL_LEAVE' ? { reactivateOn } : {}),
         })
       }

@@ -27,7 +27,6 @@ context('/update-capacity-status-and-working-pattern/update-status-inactive', ()
       {
         status: 'INACTIVE',
         deactivateActiveAllocations: true,
-        allowAutoAllocation: false,
       },
     )
   })
