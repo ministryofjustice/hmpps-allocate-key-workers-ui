@@ -93,4 +93,5 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('policyAware', policyAware)
   njkEnv.addFilter('alertsSortValue', alertsSortValue)
   njkEnv.addFilter('takeFirstWord', (val: string) => val.split(' ')[0])
+  njkEnv.addFilter('possessiveComma', (name: string) => (name.endsWith('s') ? `${name}’` : `${name}’s`))
 }

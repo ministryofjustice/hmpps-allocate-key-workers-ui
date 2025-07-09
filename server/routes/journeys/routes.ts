@@ -3,7 +3,7 @@ import { DataAccess } from '../../data'
 import { Services } from '../../services'
 import setUpJourneyData from '../../middleware/journey/setUpJourneyData'
 import { StartUpdateStaffRoutes } from './start-update-staff/routes'
-import { UpdateCapacityAndStatusRoutes } from './update-capacity-status/routes'
+import { UpdateCapacityAndStatusRoutes } from './update-capacity-status-and-working-pattern/routes'
 import { AssignStaffRoleRoutes } from './manage-roles/assign/routes'
 import { RemoveStaffRoleRoutes } from './manage-roles/remove/routes'
 
@@ -13,7 +13,7 @@ export default function JourneyRoutes(dataAccess: DataAccess, services: Services
   router.use(setUpJourneyData(dataAccess.tokenStore))
 
   router.use('/start-update-staff/:staffId', StartUpdateStaffRoutes(services))
-  router.use('/update-capacity-status', UpdateCapacityAndStatusRoutes(services))
+  router.use('/update-capacity-status-and-working-pattern', UpdateCapacityAndStatusRoutes(services))
 
   router.use('/manage-roles/assign', AssignStaffRoleRoutes(services))
   router.use('/manage-roles/remove', RemoveStaffRoleRoutes(services))

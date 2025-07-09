@@ -1,0 +1,35 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = "Unavailable (inactive)" %}
+
+{% block innerContent %}
+  <div class="govuk-width-container govuk-body">
+        <h1 class="govuk-heading-xl">
+          Are you sure you want to change {{ staff | firstNameSpaceLastName | possessiveComma }} status to Inactive?
+        </h1>
+
+        <p class="govuk-!-margin-bottom-6">
+          This will deallocate their current prisoners. It will also mean prisoners are not auto-assigned to them.
+        </p>
+
+        <form method="post">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+          <div class="govuk-button-group">
+            {{ govukButton({
+              text: "Yes, save this change",
+              classes: "govuk-button--warning",
+              preventDoubleClick: true
+            }) }}
+
+            {{ govukButton({
+              text: "No, return to " + policyName + " profile",
+              classes: "govuk-button--secondary",
+              href: "cancel",
+              preventDoubleClick: true
+            }) }}
+          </div>
+        </form>
+  </div>
+{% endblock %}
