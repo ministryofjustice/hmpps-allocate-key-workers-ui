@@ -44,7 +44,6 @@ context('/update-capacity-status-and-working-pattern/check-answers', () => {
           code: 'UNAVAILABLE_LONG_TERM_ABSENCE',
           description: 'Unavailable (long-term absence)',
         },
-        capacity: 999,
         deactivateActiveAllocations: false,
       },
     })
@@ -75,7 +74,6 @@ context('/update-capacity-status-and-working-pattern/check-answers', () => {
           code: 'UNAVAILABLE_ANNUAL_LEAVE',
           description: 'Unavailable (annual leave)',
         },
-        capacity: 999,
         deactivateActiveAllocations: true,
         reactivateOn: '2070-09-05T00:00:00.000Z',
       },

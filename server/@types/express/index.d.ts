@@ -28,7 +28,6 @@ export type JourneyData = {
 }
 
 export type UpdateStaffDetailsJourney = Partial<{
-  capacity: number
   status: ReferenceData
   deactivateActiveAllocations: boolean
   reactivateOn: string
