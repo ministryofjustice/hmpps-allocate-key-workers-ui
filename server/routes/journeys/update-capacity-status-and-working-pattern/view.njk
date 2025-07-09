@@ -1,0 +1,90 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set fullWidth = true %}
+{% set pageTitle = "Update capacity, status or working pattern" %}
+
+{% block innerContent %}
+
+  {% if successMessage %}
+    {{ govukNotificationBanner({
+      text: successMessage,
+      type: "success"
+    }) }}
+  {% endif %}
+
+  <div class="govuk-width-container">
+
+    <div class="govuk-grid-row govuk-!-margin-0">
+      <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0 govuk-grid-column-two-thirds">{{ staff | firstNameSpaceLastName }} – update capacity, status or working pattern</h1>
+    </div>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        {{ govukSummaryList({
+          classes: "govuk-!-margin-bottom-7",
+          rows: [
+            {
+              key: {
+              text: "Status"
+            },
+              value: {
+              html: statusTag({ text: status.description, fullText: true })
+            },
+              actions: {
+              classes: "remove-width-limit",
+              items: [
+                {
+                  href: "update-capacity-status-and-working-pattern/update-status",
+                  text: "Update status",
+                  classes: "govuk-link--no-visited-state"
+                }
+              ]
+            }
+            },
+            {
+              key: {
+              text: "Maximum capacity"
+            },
+              value: {
+              text: capacity
+            },
+              actions: {
+              classes: "remove-width-limit",
+              items: [
+                {
+                  href: "update-capacity-status-and-working-pattern/update-capacity",
+                  text: "Update maximum capacity",
+                  classes: "govuk-link--no-visited-state"
+                }
+              ]
+            }
+            },
+            {
+              key: {
+              text: "Working pattern"
+            },
+              value: {
+              text: staffRole.scheduleType.description
+            },
+              actions: {
+              classes: "remove-width-limit",
+              items: [
+                {
+                  href: "update-capacity-status-and-working-pattern/update-working-pattern",
+                  text: "Update working pattern",
+                  classes: "govuk-link--no-visited-state"
+                }
+              ]
+            }
+            }
+          ]
+        }) }}
+      </div>
+    </div>
+  </div>
+{% endblock %}

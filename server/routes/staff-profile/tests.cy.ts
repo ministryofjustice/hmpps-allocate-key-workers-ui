@@ -183,9 +183,11 @@ context('Profile Info', () => {
     cy.get('.status-tag').eq(0).should('have.text', 'Active')
 
     if (readonly) {
-      cy.get('a[href*="/start-update-staff/488095?proceedTo=update-capacity-status"]').should('not.exist')
+      cy.get('a[href*="/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern"]').should(
+        'not.exist',
+      )
     } else {
-      cy.get('a[href*="/start-update-staff/488095?proceedTo=update-capacity-status"]')
+      cy.get('a[href*="/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern"]')
         .should('be.visible')
         .should('contain.text', 'Update capacity, status or working pattern')
     }

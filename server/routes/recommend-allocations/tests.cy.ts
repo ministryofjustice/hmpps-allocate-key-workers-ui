@@ -196,7 +196,7 @@ context('/recommend-allocations', () => {
     cy.get('.govuk-select').should('have.value', 'A2504EA:allocate:488095:auto')
 
     cy.contains(
-      'Key workers have been recommended for the prisoners listed below without a current key worker.',
+      'Key workers have been recommended for the prisoners listed below without a current key worker. Only key workers with an active status have been recommended.',
     ).should('exist')
 
     cy.contains('These recommendations prioritise key workers who have:').should('exist')

@@ -1,0 +1,51 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% set pageTitle = 'Deallocate prisoners' %}
+
+{% block innerContent %}
+  <div class="govuk-width-container govuk-body">
+    <form method="post">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      {{ govukRadios({
+        name: "deactivateActiveAllocations",
+        errorMessage: validationErrors | findError('deactivateActiveAllocations'),
+        fieldset: {
+          legend: {
+            text: staff | firstNameSpaceLastName + " will now no longer be automatically assigned prisoners. Do you also want to deallocate prisoners currently allocated to them?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--xl"
+          }
+        },
+        items: [
+          {
+            value: 'DO_NOT_REMOVE',
+            text: "Do not deallocate their current prisoners",
+            checked: deactivateActiveAllocations === false
+          },
+          {
+            value: 'REMOVE',
+            text: "Deallocate their current prisoners",
+            checked: deactivateActiveAllocations === true
+          }
+        ]
+      }) }}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Continue",
+          preventDoubleClick: true
+        }) }}
+
+        {{ govukButton({
+          text: "Cancel",
+          classes: "govuk-button--secondary",
+          href: "cancel",
+          preventDoubleClick: true
+        }) }}
+      </div>
+    </form>
+  </div>
+{% endblock %}
