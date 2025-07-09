@@ -1,4 +1,5 @@
-import AuthorisedRoles from '../../authentication/authorisedRoles'
+import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
+import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 
 context('/manage-roles', () => {
   const getAssignRadio = () => cy.findByRole('radio', { name: `Make someone a key worker` })
@@ -9,9 +10,11 @@ context('/manage-roles', () => {
     cy.task('reset')
     cy.task('stubComponents')
     cy.task('stubEnabledPrison')
-    cy.task('stubSignIn', {
-      roles: [AuthorisedRoles.KW_MIGRATION],
-    })
+    cy.task('stubSignIn')
+  })
+
+  describe('Role based access', () => {
+    verifyRoleBasedAccess('/key-worker/manage-roles', UserPermissionLevel.ALLOCATE)
   })
 
   it('should proceed to Assign staff role journey', () => {

@@ -1,3 +1,5 @@
+import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
+import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import { getDateInReadableFormat } from '../../utils/datetimeUtils'
 
 context('Key workers data', () => {
@@ -6,6 +8,10 @@ context('Key workers data', () => {
     cy.task('stubComponents')
     cy.task('stubSignIn')
     cy.task('stubEnabledPrison')
+  })
+
+  describe('Role based access', () => {
+    verifyRoleBasedAccess('/key-worker/data', UserPermissionLevel.VIEW)
   })
 
   it('shows stats', () => {

@@ -1,4 +1,6 @@
+import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
 import AuthorisedRoles from '../../authentication/authorisedRoles'
+import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 
 context('/recommend-allocations', () => {
   beforeEach(() => {
@@ -41,6 +43,10 @@ context('/recommend-allocations', () => {
         },
       ],
     })
+  })
+
+  describe('Role based access', () => {
+    verifyRoleBasedAccess('/key-worker/recommend-allocations', UserPermissionLevel.ALLOCATE)
   })
 
   it('should load page correctly', () => {

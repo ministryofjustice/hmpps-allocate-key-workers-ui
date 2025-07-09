@@ -1,4 +1,6 @@
 import { defaultPrisonerAllocation } from '../../../integration_tests/mockApis/keyworkerApi'
+import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
+import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import { createMock } from '../../testutils/mockObjects'
 
 context('Prisoner Allocation History', () => {
@@ -13,13 +15,8 @@ context('Prisoner Allocation History', () => {
     cy.task('stubPrisonerAllocations')
   })
 
-  it('redirects to "not found" page if user does not have the correct role', () => {
-    cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-worker/prisoner-allocation-history/A9965EB?query=&location=&excludeActiveAllocations=true', {
-      failOnStatusCode: false,
-    })
-
-    cy.findByText('Page not found')
+  describe('Role based access', () => {
+    verifyRoleBasedAccess('/key-worker/prisoner-allocation-history/A9965EA', UserPermissionLevel.VIEW)
   })
 
   it('adds back query params on the back link', () => {

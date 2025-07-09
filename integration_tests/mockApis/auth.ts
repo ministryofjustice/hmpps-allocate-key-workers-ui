@@ -181,7 +181,7 @@ export default {
   stubAuthManageDetails: manageDetails,
   stubSignIn: (
     userToken: UserToken & { hasAllocationJobResponsibilities?: boolean } = {
-      roles: [AuthorisedRoles.KEYWORKER_MONITOR],
+      roles: [AuthorisedRoles.OMIC_ADMIN],
       hasAllocationJobResponsibilities: true,
     },
   ): Promise<[Response, Response, Response, Response, Response, Response, Response]> =>

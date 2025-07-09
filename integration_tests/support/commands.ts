@@ -25,3 +25,31 @@ Cypress.Commands.add('injectJourneyDataAndReload', <T>(uuid: string, json: T, po
   cy.request('GET', `${policy}/${uuid}/inject-journey-data?data=${data}`)
   cy.reload()
 })
+
+Cypress.Commands.add('postWithCsrf', ({ url, body }) => {
+  cy.get('input[name="_csrf"]')
+    .should('exist')
+    .then($token => {
+      const requestBody = {
+        _csrf: $token.val(),
+        ...body,
+      }
+
+      cy.request({
+        failOnStatusCode: false,
+        method: 'POST',
+        url,
+        form: true,
+        body: requestBody,
+      })
+    })
+})
+
+Cypress.Commands.add('verifyPostRedirectsToNotAuthorised', ({ body, url }) => {
+  cy.url().then(currentUrl => {
+    cy.postWithCsrf({ url: url || currentUrl, body }).then(response => {
+      expect(response.status).to.equal(403)
+      expect(response.redirects![0]).to.contain('/not-authorised')
+    })
+  })
+})

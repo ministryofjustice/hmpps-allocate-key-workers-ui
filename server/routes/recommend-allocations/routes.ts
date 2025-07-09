@@ -4,7 +4,8 @@ import { JourneyRouter } from '../base/routes'
 import { RecommendStaffAutomaticallyController } from './controller'
 import { validate } from '../../middleware/validationMiddleware'
 import { selectKeyworkerSchema } from '../base/selectKeyworkerSchema'
-import { requireAllocateRole } from '../../middleware/permissionsMiddleware'
+import { requireRole } from '../../middleware/permissionsMiddleware'
+import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 
 export const RecommendStaffAutomaticallyRoutes = ({ keyworkerApiService }: Services) => {
   const { router, get, post } = JourneyRouter()
@@ -18,7 +19,13 @@ export const RecommendStaffAutomaticallyRoutes = ({ keyworkerApiService }: Servi
   }
 
   get('/', allowAutoAllocationGuard, controller.GET)
-  post('/', requireAllocateRole, validate(selectKeyworkerSchema, true), controller.submitToApi, controller.POST)
+  post(
+    '/',
+    requireRole(UserPermissionLevel.ALLOCATE),
+    validate(selectKeyworkerSchema, true),
+    controller.submitToApi,
+    controller.POST,
+  )
 
   return router
 }

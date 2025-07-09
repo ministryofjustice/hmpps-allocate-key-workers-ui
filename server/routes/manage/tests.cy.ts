@@ -1,3 +1,6 @@
+import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
+import { UserPermissionLevel } from '../../interfaces/hmppsUser'
+
 context('Manage key workers', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -5,6 +8,11 @@ context('Manage key workers', () => {
     cy.task('stubSignIn')
     cy.task('stubEnabledPrison')
     cy.task('stubKeyworkerStatuses')
+    getAllKeyworkers()
+  })
+
+  describe('Role based access', () => {
+    verifyRoleBasedAccess('/key-worker/manage', UserPermissionLevel.VIEW)
   })
 
   it('should handle invalid queries', () => {

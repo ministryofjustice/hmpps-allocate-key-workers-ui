@@ -1,19 +1,45 @@
 import { defaultKeyworkerDetails } from '../../../integration_tests/mockApis/keyworkerApi'
+import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
 import AuthorisedRoles from '../../authentication/authorisedRoles'
+import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import { createMock } from '../../testutils/mockObjects'
 
 context('Profile Info', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubComponents')
-    cy.task('stubSignIn', {
-      roles: [AuthorisedRoles.OMIC_ADMIN, AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.KW_MIGRATION],
-    })
+    cy.task('stubSignIn')
     cy.task('stubEnabledPrison')
     cy.task('stubSearchAllocatableStaffStatusActive')
     cy.task('stubPutAllocationSuccess')
     cy.task('stubPutDeallocationSuccess')
     cy.task('stubKeyworkerDetails')
+  })
+
+  describe('Role based access', () => {
+    it('should show profile info (read self profile only)', () => {
+      cy.task('stubSignIn', {
+        user_id: '488095',
+        roles: [],
+        hasAllocationJobResponsibilities: true,
+      })
+
+      navigateToTestPage()
+
+      validatePageContents(true)
+    })
+
+    it('should deny access to a view only user POSTing to the page', () => {
+      cy.task('stubSignIn', {
+        roles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
+      })
+
+      navigateToTestPage()
+
+      cy.verifyPostRedirectsToNotAuthorised({ body: { selectStaffMember: 'G1618UI:allocate:486018' } })
+    })
+
+    verifyRoleBasedAccess('/key-worker/staff-profile/488095', UserPermissionLevel.VIEW)
   })
 
   it('should show profile info', () => {
@@ -39,31 +65,6 @@ context('Profile Info', () => {
     navigateToTestPage()
 
     validatePageContents(true)
-  })
-
-  it('should show profile info (read self profile only)', () => {
-    cy.task('stubSignIn', {
-      user_id: '488095',
-      roles: [],
-      hasAllocationJobResponsibilities: true,
-    })
-
-    navigateToTestPage()
-
-    validatePageContents(true)
-  })
-
-  it('should deny access to profile of other users (read self profile only)', () => {
-    cy.task('stubSignIn', {
-      user_id: 'OTHER_USER',
-      roles: [],
-      hasAllocationJobResponsibilities: true,
-    })
-
-    navigateToTestPage()
-
-    cy.title().should('equal', 'Not authorised - Key workers - DPS')
-    cy.findByText('You do not have permission to access this page').should('be.visible')
   })
 
   it('should show error when no allocations or deallocations are made', () => {

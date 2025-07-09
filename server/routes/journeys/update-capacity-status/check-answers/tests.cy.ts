@@ -2,7 +2,7 @@ import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../integration_tests/support/commands'
 
 context('/update-capacity-status/check-answers', () => {
-  let journeyId = uuidV4()
+  const journeyId = uuidV4()
 
   beforeEach(() => {
     cy.task('reset')
@@ -115,8 +115,6 @@ context('/update-capacity-status/check-answers', () => {
   }
 
   const navigateToTestPage = (journeyData: PartialJourneyData) => {
-    journeyId = uuidV4()
-
     cy.signIn({ failOnStatusCode: false })
     cy.visit(`/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status`, {
       failOnStatusCode: false,
@@ -124,6 +122,6 @@ context('/update-capacity-status/check-answers', () => {
 
     cy.injectJourneyDataAndReload<PartialJourneyData>(journeyId, journeyData)
 
-    cy.visit(`/key-worker/${journeyId}/update-capacity-status/check-answers`)
+    cy.visit(`/key-worker/${journeyId}/update-capacity-status/check-answers`, { failOnStatusCode: false })
   }
 })

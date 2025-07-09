@@ -1,4 +1,6 @@
 import { v4 as uuidV4 } from 'uuid'
+import { verifyRoleBasedAccess } from '../../../../../integration_tests/support/roleBasedAccess'
+import { UserPermissionLevel } from '../../../../interfaces/hmppsUser'
 
 context('/manage-roles/assign/** journey', () => {
   let journeyId = uuidV4()
@@ -37,6 +39,10 @@ context('/manage-roles/assign/** journey', () => {
       },
     ])
     cy.task('stubUpsertStaffDetails')
+  })
+
+  describe('Role based access', () => {
+    verifyRoleBasedAccess(`/key-worker/${journeyId}/manage-roles/assign`, UserPermissionLevel.ALLOCATE)
   })
 
   it('should end with error page if staff member is not a prison officer', () => {

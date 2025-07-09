@@ -3,6 +3,7 @@ import { PartialJourneyData } from '../../../../../../integration_tests/support/
 
 context('/manage-roles/remove/confirmation', () => {
   const journeyId = uuidV4()
+  const PAGE_URL = `/key-worker/${journeyId}/manage-roles/remove/confirmation`
 
   beforeEach(() => {
     cy.task('reset')
@@ -49,6 +50,6 @@ context('/manage-roles/remove/confirmation', () => {
       },
     })
 
-    cy.visit(`/key-worker/${journeyId}/manage-roles/remove/confirmation`)
+    cy.visit(PAGE_URL)
   }
 })

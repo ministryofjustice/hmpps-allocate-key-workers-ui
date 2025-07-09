@@ -1,4 +1,6 @@
+import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
 import AuthorisedRoles from '../../authentication/authorisedRoles'
+import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 
 context('/establishment-settings', () => {
   const getCapacityInput = (policyName: string = 'key worker') =>
@@ -8,6 +10,11 @@ context('/establishment-settings', () => {
     cy.task('reset')
     cy.task('stubComponents')
     cy.task('stubPutPrisonConfiguration')
+    cy.task('stubEnabledPrison')
+  })
+
+  describe('Role based access', () => {
+    verifyRoleBasedAccess(`/key-worker/establishment-settings`, UserPermissionLevel.ALLOCATE)
   })
 
   it('should test admin view', () => {

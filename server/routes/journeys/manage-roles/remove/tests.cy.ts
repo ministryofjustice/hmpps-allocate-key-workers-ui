@@ -1,7 +1,10 @@
 import { v4 as uuidV4 } from 'uuid'
+import { verifyRoleBasedAccess } from '../../../../../integration_tests/support/roleBasedAccess'
+import { UserPermissionLevel } from '../../../../interfaces/hmppsUser'
 
 context('/manage-roles/remove', () => {
-  let journeyId = uuidV4()
+  const journeyId = uuidV4()
+  const PAGE_URL = `/key-worker/${journeyId}/manage-roles/remove`
 
   const getSearchInput = () => cy.findByRole('textbox', { name: 'Find a staff member' })
   const getSearchButton = () => cy.findByRole('button', { name: 'Search' })
@@ -11,6 +14,10 @@ context('/manage-roles/remove', () => {
     cy.task('stubComponents')
     cy.task('stubSignIn')
     cy.task('stubEnabledPrison')
+  })
+
+  describe('Role based access', () => {
+    verifyRoleBasedAccess(PAGE_URL, UserPermissionLevel.ALLOCATE)
   })
 
   it('should search staff members', () => {
@@ -68,7 +75,6 @@ context('/manage-roles/remove', () => {
   })
 
   const navigateToTestPage = () => {
-    journeyId = uuidV4()
     cy.signIn({ failOnStatusCode: false })
     cy.visit(`/key-worker/${journeyId}/manage-roles/remove`, {
       failOnStatusCode: false,

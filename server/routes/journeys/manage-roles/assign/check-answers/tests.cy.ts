@@ -90,6 +90,6 @@ context('/manage-roles/assign/check-answers', () => {
       },
     })
 
-    cy.visit(`/key-worker/${journeyId}/manage-roles/assign/check-answers`)
+    cy.visit(`/key-worker/${journeyId}/manage-roles/assign/check-answers`, { failOnStatusCode: false })
   }
 })
