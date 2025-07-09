@@ -1,0 +1,91 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set pageTitle = "Check your answers" %}
+
+{% block innerContent %}
+  <div class="govuk-width-container govuk-body">
+    <h1 class="govuk-heading-xl">
+      Check your answers
+    </h1>
+
+    {{ govukSummaryList({
+      classes: "govuk-!-margin-bottom-7",
+      rows: [
+        {
+          key: {
+          text: "New status"
+        },
+          value: {
+          text: newStatus.description
+        },
+          actions: {
+          items: [
+            {
+              href: "update-status",
+              text: "Change",
+              visuallyHiddenText: "the new status",
+              classes: "govuk-link--no-visited-state"
+            }
+          ]
+        }
+        },
+        {
+          key: {
+          text: "Return date"
+        },
+          value: {
+          text: reactivateOn | formatDateConcise
+        },
+          actions: {
+          items: [
+            {
+              href: "update-status-annual-leave-return",
+              text: "Change",
+              visuallyHiddenText: "the return date",
+              classes: "govuk-link--no-visited-state"
+            }
+          ]
+        }
+        } if newStatus.code === 'UNAVAILABLE_ANNUAL_LEAVE' else undefined,
+        {
+          key: {
+          text: "Deallocate current prisoners?"
+        },
+          value: {
+          text: 'Yes' if deactivateActiveAllocations else 'No'
+        },
+          actions: {
+          items: [
+            {
+              href: "update-status-unavailable",
+              text: "Change",
+              visuallyHiddenText: "whether to deallocate current prisoners",
+              classes: "govuk-link--no-visited-state"
+            }
+          ]
+        }
+        } if newStatus.code !== 'ACTIVE' else undefined
+      ]
+    }) }}
+
+    <form method="post">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Confirm and submit",
+          preventDoubleClick: true
+        }) }}
+
+        {{ govukButton({
+          text: "Cancel",
+          classes: "govuk-button--secondary",
+          href: "/" + policyPath + "/staff-profile/" + staffId,
+          preventDoubleClick: true
+        }) }}
+      </div>
+    </form>
+  </div>
+{% endblock %}

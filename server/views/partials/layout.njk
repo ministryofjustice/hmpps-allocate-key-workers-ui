@@ -27,7 +27,7 @@
 {% block beforeContent %}
   {% if backUrl %}
     {{ govukBackLink({
-      text: "Back",
+      text: backLabel or "Back",
       href: backUrl
     }) }}
   {% endif %}

@@ -21,17 +21,15 @@ export type JourneyData = {
   instanceUnixEpoch: number
   isCheckAnswers?: boolean
   journeyCompleted?: boolean
-  keyWorkerDetails?: components['schemas']['StaffDetails']
-  updateCapacityStatus?: UpdateCapacityStatusJourney
+  staffDetails?: components['schemas']['StaffDetails']
+  updateStaffDetails?: UpdateStaffDetailsJourney
   assignStaffRole?: AssignStaffRoleJourney
   removeStaffRole?: RemoveStaffRoleJourney
 }
 
-export type UpdateCapacityStatusJourney = Partial<{
-  capacity: number
+export type UpdateStaffDetailsJourney = Partial<{
   status: ReferenceData
   deactivateActiveAllocations: boolean
-  removeFromAutoAllocation: boolean
   reactivateOn: string
 }>
 

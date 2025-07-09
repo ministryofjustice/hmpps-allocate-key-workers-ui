@@ -1,0 +1,38 @@
+{% extends "partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% set pageTitle = "Update [staff] capacity" %}
+
+{% block innerContent %}
+  <div class="govuk-width-container govuk-body">
+    <form method="post">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      {{ govukInput({
+        name: "capacity",
+        errorMessage: validationErrors | findError('capacity'),
+        classes: "govuk-input--width-2",
+        label: {
+          text: "What is the maximum number of prisoners " + staff | firstNameSpaceLastName + " should be assigned?",
+          classes: "govuk-label--l",
+          isPageHeading: true
+        },
+        value: capacity
+      }) }}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Confirm and save",
+          preventDoubleClick: true
+        }) }}
+
+        {{ govukButton({
+          text: "Cancel",
+          classes: "govuk-button--secondary",
+          href: "/" + policyPath + "/staff-profile/" + staffId,
+          preventDoubleClick: true
+        }) }}
+      </div>
+    </form>
+  </div>
+{% endblock %}
