@@ -19,23 +19,23 @@ context('Prisoner Allocation History', () => {
     verifyRoleBasedAccess('/key-worker/prisoner-allocation-history/A9965EA', UserPermissionLevel.SELF_PROFILE_ONLY)
   })
 
-  it('adds back query params on the back link', () => {
+  it('can go to previous page with query strings preserved', () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-worker/prisoner-allocation-history/A9965EA?query=&location=&excludeActiveAllocations=true', {
+    cy.visit('/key-worker?query=&location=&excludeActiveAllocations=true', {
+      failOnStatusCode: false,
+    })
+    cy.visit('/key-worker/prisoner-allocation-history/A9965EA', {
       failOnStatusCode: false,
     })
 
-    cy.findByRole('link', { name: /back/i }).should(
-      'have.attr',
-      'href',
-      '/key-worker/allocate?query=&location=&excludeActiveAllocations=true',
-    )
+    cy.findByRole('link', { name: /back/i }).click()
+    cy.url().should('match', /\/key-worker\?query=&location=&excludeActiveAllocations=true/)
   })
 
   it('happy path', () => {
     navigateToTestPage()
     cy.title().should('equal', 'Prisoner key worker allocation history - Key workers - DPS')
-    cy.findByRole('link', { name: /back/i }).should('have.attr', 'href', '/key-worker/allocate')
+    cy.findByRole('link', { name: /back/i }).should('be.visible')
 
     cy.get('h1').should('have.text', 'Cat, Tabby (A9965EA)')
 
