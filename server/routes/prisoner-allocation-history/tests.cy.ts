@@ -16,7 +16,7 @@ context('Prisoner Allocation History', () => {
   })
 
   describe('Role based access', () => {
-    verifyRoleBasedAccess('/key-worker/prisoner-allocation-history/A9965EA', UserPermissionLevel.VIEW)
+    verifyRoleBasedAccess('/key-worker/prisoner-allocation-history/A9965EA', UserPermissionLevel.SELF_PROFILE_ONLY)
   })
 
   it('adds back query params on the back link', () => {
