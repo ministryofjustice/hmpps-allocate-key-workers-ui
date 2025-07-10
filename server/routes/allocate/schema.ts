@@ -6,8 +6,8 @@ export const schema = createSchema({
   cellLocationPrefix: z.string().optional(),
   excludeActiveAllocations: z.boolean().optional(),
 }).refine(obj => obj.query || obj.cellLocationPrefix || obj.excludeActiveAllocations, {
-  message: 'At least one filter must be applied',
-  path: ['query'],
+  message: 'Select or enter text into at least one of the search options below',
+  path: ['searchBy'],
 })
 
 type SchemaType = z.infer<typeof schema>
