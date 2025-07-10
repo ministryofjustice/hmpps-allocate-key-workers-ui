@@ -25,7 +25,12 @@
 {% endblock %}
 
 {% block beforeContent %}
-  {% if backUrl %}
+  {% if backUrl == 'javascript-back' %}
+    {{ govukBackLink({
+      classes: 'js-back-link govuk-!-display-none',
+      text: backLabel or "Back"
+    }) }}
+  {% elseif backUrl %}
     {{ govukBackLink({
       text: backLabel or "Back",
       href: backUrl
@@ -82,4 +87,15 @@
     <script src="https://js.sentry-cdn.com/{{ sentry.loaderScriptId }}.min.js" nonce="{{ cspNonce }}" crossorigin="anonymous"></script>
   {% endif %}
   <script type="module" src="{{ '/assets/js/app.js' | assetMap }}"></script>
+  <script nonce="{{ cspNonce }}">
+    window.onload = function () {
+      const backLink = document.querySelector('.js-back-link')
+      if (backLink) {
+        backLink.classList.remove('govuk-!-display-none')
+        backLink.addEventListener('click', () => {
+          history.back()
+        })
+      }
+    }
+  </script>
 {% endblock %}
