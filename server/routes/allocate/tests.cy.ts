@@ -20,6 +20,11 @@ context('/allocate', () => {
     cy.task('stubPutDeallocationSuccess')
   })
 
+  const searchBtn = () => cy.findByRole('button', { name: /Search/i })
+  const queryTextbox = () => cy.findByRole('textbox', { name: /Name or prison number/ })
+  const locationTextBox = () => cy.findByRole('combobox', { name: /Residential location/ })
+  const excludeActiveCheckbox = () => cy.findByRole('checkbox', { name: /Prisoners without a key worker/ })
+
   describe('Role based access', () => {
     it('should deny access to a view only user POSTing to the page', () => {
       cy.task('stubSignIn', {
@@ -34,8 +39,31 @@ context('/allocate', () => {
     verifyRoleBasedAccess('/key-worker/allocate', UserPermissionLevel.VIEW)
   })
 
-  it('should load page correctly', () => {
-    navigateToTestPage()
+  it('should only display results table when a filter is used', () => {
+    cy.signIn({ failOnStatusCode: false })
+    cy.visit('/key-worker/allocate', { failOnStatusCode: false })
+
+    cy.findByRole('heading', { name: /Allocate key workers to prisoners/i }).should('be.visible')
+    cy.findByRole('heading', { name: /Filter by/i }).should('be.visible')
+    searchBtn().should('be.visible')
+
+    queryTextbox().should('exist')
+    locationTextBox().should('exist')
+
+    excludeActiveCheckbox().should('exist')
+
+    cy.get('.moj-pagination').should('have.length', 0)
+    cy.get('form').should('have.length', 1)
+    cy.get('p').should('have.length', 0)
+
+    queryTextbox().clear()
+    searchBtn().click()
+
+    cy.get('.govuk-error-summary').should('have.length', 1)
+    cy.findByText('At least one filter must be applied').should('exist').should('have.attr', 'href', '#query')
+
+    queryTextbox().type('ALL')
+    searchBtn().click()
 
     checkPageContentsNoFilter()
 
@@ -182,14 +210,10 @@ context('/allocate', () => {
     cy.visit('/key-worker/allocate?query=<script>alert%28%27inject%27%29<%2Fscript>', {
       failOnStatusCode: false,
     })
-    cy.findByRole('textbox', { name: /Name or prison number/ }).should('have.value', '')
-    cy.get('.govuk-table__row').should('have.length', 5)
+    queryTextbox().should('have.value', '')
 
-    cy.visit('/key-worker/allocate?cellLocationPrefix=<script>alert%28%27inject%27%29<%2Fscript>', {
-      failOnStatusCode: false,
-    })
-    cy.findByRole('combobox', { name: /Residential location/ }).should('have.value', '')
-    cy.get('.govuk-table__row').should('have.length', 5)
+    cy.get('.govuk-error-summary').should('have.length', 1)
+    cy.findByText('At least one filter must be applied').should('exist').should('have.attr', 'href', '#query')
   })
 
   it('should show error when no allocations or deallocations are made', () => {
@@ -290,8 +314,6 @@ context('/allocate', () => {
     cy.task('stubPutDeallocationSuccess')
     navigateToTestPage()
 
-    cy.visit('/key-worker/allocate', { failOnStatusCode: false })
-
     cy.get('.govuk-table__row').should('have.length', 5)
     cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'John, Doe')
 
@@ -327,13 +349,12 @@ context('/allocate', () => {
     cy.title().should('equal', 'Allocate key workers to prisoners - Key workers - DPS')
     cy.findByRole('heading', { name: /Allocate key workers to prisoners/i }).should('be.visible')
     cy.findByRole('heading', { name: /Filter by/i }).should('be.visible')
-    cy.findByRole('button', { name: /Apply filters/i }).should('be.visible')
-    cy.findByRole('link', { name: /Clear/i }).should('be.visible').should('have.attr', 'href', '?clear=true')
+    searchBtn().should('be.visible')
 
-    cy.findByRole('textbox', { name: /Name or prison number/ }).should('exist')
-    cy.findByRole('combobox', { name: /Residential location/ }).should('exist')
+    queryTextbox().should('exist')
+    locationTextBox().should('exist')
 
-    cy.findByRole('checkbox', { name: /Prisoners without a key worker/ }).should('exist')
+    excludeActiveCheckbox().should('exist')
 
     cy.get('.moj-pagination').should('have.length', 2).eq(0).should('contain.text', 'Showing 1 to 4 of 4 results')
 
@@ -401,7 +422,11 @@ context('/allocate', () => {
       .should('contain.text', 'View allocation history')
       .children()
       .eq(0)
-      .should('have.attr', 'href', '/key-worker/prisoner-allocation-history/A4288DZ')
+      .should(
+        'have.attr',
+        'href',
+        '/key-worker/prisoner-allocation-history/A4288DZ?query=ALL&cellLocationPrefix=&excludeActiveAllocations=false',
+      )
 
     if (!readonly) {
       cy.get('.govuk-table__row')
@@ -432,8 +457,9 @@ context('/allocate', () => {
   }
 
   const checkPrisonersExcludeActiveAllocationsFilter = (readonly = false) => {
-    cy.findByRole('checkbox', { name: /Prisoners without a key worker/ }).check()
-    cy.findByRole('button', { name: /Apply filters/i }).click()
+    queryTextbox().clear()
+    excludeActiveCheckbox().check()
+    searchBtn().click()
 
     cy.get('.moj-pagination').should('have.length', 2).eq(0).should('contain.text', 'Showing 1 to 3 of 3 results')
 
@@ -497,9 +523,9 @@ context('/allocate', () => {
   }
 
   const checkResidentialLocationFilter = (readonly = false) => {
-    cy.findByRole('textbox', { name: /Name or prison number/ }).clear()
-    cy.findByRole('combobox', { name: /Residential location/ }).select('Houseblock 3')
-    cy.findByRole('button', { name: /Apply filters/i }).click()
+    queryTextbox().clear()
+    locationTextBox().select('Houseblock 3')
+    searchBtn().click()
 
     cy.get('.moj-pagination').should('have.length', 2).eq(0).should('contain.text', 'Showing 1 to 1 of 1 result')
 
@@ -519,11 +545,9 @@ context('/allocate', () => {
   }
 
   const checkNameOrPrisonNumberFilter = (readonly = false) => {
-    cy.findByRole('checkbox', { name: /Prisoners without a key worker/ }).uncheck()
-    cy.findByRole('textbox', { name: /Name or prison number/ })
-      .clear()
-      .type('John')
-    cy.findByRole('button', { name: /Apply filters/i }).click()
+    excludeActiveCheckbox().uncheck()
+    queryTextbox().clear().type('John')
+    searchBtn().click()
 
     cy.get('.moj-pagination').should('have.length', 2).eq(0).should('contain.text', 'Showing 1 to 1 of 1 result')
 
@@ -544,6 +568,6 @@ context('/allocate', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-worker/allocate', { failOnStatusCode: false })
+    cy.visit('/key-worker/allocate?query=ALL', { failOnStatusCode: false })
   }
 })

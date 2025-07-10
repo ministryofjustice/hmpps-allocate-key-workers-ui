@@ -16,7 +16,7 @@ export const AllocateStaffRoutes = ({ keyworkerApiService, locationsApiService }
     '/',
     requireRole(UserPermissionLevel.ALLOCATE),
     validate(selectKeyworkerSchema, true),
-    controller.submitToApi,
+    controller.submitToApi(false),
     controller.POST,
   )
 
