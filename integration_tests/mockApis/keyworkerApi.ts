@@ -675,7 +675,7 @@ const stubSearchPrisoner = (
     [
       {
         equalToJson: {
-          query: '',
+          query: 'ALL',
           cellLocationPrefix: '',
           excludeActiveAllocations: false,
         },
