@@ -4,6 +4,7 @@ import LocationsInsidePrisonApiService from '../../services/locationsInsidePriso
 import { deduplicateFieldErrors, sanitizeQueryName, sanitizeSelectValue } from '../../middleware/validationMiddleware'
 import { ChangeStaffController } from '../base/changeStaffController'
 import { schema } from './schema'
+import { FLASH_KEY__ALLOCATE_RESULT } from '../../utils/constants'
 
 export class AllocateStaffController extends ChangeStaffController {
   constructor(
@@ -28,11 +29,15 @@ export class AllocateStaffController extends ChangeStaffController {
       excludeActiveAllocations: req.query['excludeActiveAllocations']?.toString() === 'true',
     }
 
+    let allocationResult = req.flash(FLASH_KEY__ALLOCATE_RESULT)[0]
+    allocationResult = allocationResult && JSON.parse(allocationResult)
+
     if (!Object.keys(req.query).length) {
       return res.render('allocate/view', {
         locations: locationsValues,
         showBreadcrumbs: true,
         allowAutoAllocation,
+        allocationResult,
       })
     }
 
@@ -43,6 +48,7 @@ export class AllocateStaffController extends ChangeStaffController {
         locations: locationsValues,
         showBreadcrumbs: true,
         allowAutoAllocation,
+        allocationResult,
       })
     }
 
@@ -56,6 +62,7 @@ export class AllocateStaffController extends ChangeStaffController {
       ...(await this.getChangeData(req, res)),
       showBreadcrumbs: true,
       allowAutoAllocation,
+      allocationResult,
     })
   }
 

@@ -1,8 +1,9 @@
 import { Request, Response } from 'express'
 import { ChangeStaffController } from '../base/changeStaffController'
 import {
-  AllocateErrorType,
-  FLASH_KEY__ALLOCATE_ERROR,
+  AllocateResult,
+  AllocateResultType,
+  FLASH_KEY__ALLOCATE_RESULT,
   FLASH_KEY__API_ERROR,
   FLASH_KEY__COUNT,
 } from '../../utils/constants'
@@ -17,7 +18,12 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
     const recommendations = await this.keyworkerApiService.allocationRecommendations(req, prisonCode)
 
     if (recommendations.allocations.length === 0) {
-      req.flash(FLASH_KEY__ALLOCATE_ERROR, AllocateErrorType.NO_CAPACITY_FOR_AUTO_ALLOCATION)
+      req.flash(
+        FLASH_KEY__ALLOCATE_RESULT,
+        JSON.stringify({
+          type: AllocateResultType.NO_CAPACITY_FOR_AUTO_ALLOCATION,
+        } as AllocateResult),
+      )
       return res.redirect(req.headers.referer ?? `${res.locals.policyPath}/allocate`)
     }
 
@@ -73,5 +79,5 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
     })
   }
 
-  POST = async (_req: Request, res: Response) => res.redirect('recommend-allocations')
+  POST = async (_req: Request, res: Response) => res.redirect('allocate')
 }

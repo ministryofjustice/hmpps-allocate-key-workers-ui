@@ -16,7 +16,7 @@ export const StaffProfileRoutes = (services: Services) => {
     '/',
     requireRole(UserPermissionLevel.ALLOCATE),
     validate(selectKeyworkerSchema),
-    controller.submitToApi,
+    controller.submitToApi(false),
     controller.POST,
   )
 
