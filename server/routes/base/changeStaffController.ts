@@ -2,7 +2,13 @@ import { Request, Response, NextFunction } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import { lastNameCommaFirstName } from '../../utils/formatUtils'
 import { components } from '../../@types/keyWorker'
-import { FLASH_KEY__COUNT, FLASH_KEY__API_ERROR } from '../../utils/constants'
+import {
+  FLASH_KEY__COUNT,
+  FLASH_KEY__API_ERROR,
+  FLASH_KEY__ALLOCATE_RESULT,
+  AllocateResultType,
+  AllocateResult,
+} from '../../utils/constants'
 import { SelectKeyworkerSchemaType } from './selectKeyworkerSchema'
 
 export class ChangeStaffController {
@@ -25,42 +31,54 @@ export class ChangeStaffController {
     }
   }
 
-  submitToApi = async (
-    req: Request<unknown, unknown, SelectKeyworkerSchemaType>,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
-    const apiBody: components['schemas']['PersonStaffAllocations'] = {
-      allocations: [],
-      deallocations: [],
-    }
-
-    for (const prisonerKeyworker of req.body.selectStaffMember.filter(Boolean)) {
-      const [prisonNumber, action, staffId, isAuto] = prisonerKeyworker.split(':')
-      if (action === 'deallocate') {
-        apiBody.deallocations.push({
-          personIdentifier: prisonNumber!,
-          staffId: Number(staffId),
-          deallocationReason: 'MANUAL',
-        })
-      } else {
-        apiBody.allocations.push({
-          personIdentifier: prisonNumber!,
-          staffId: Number(staffId),
-          allocationReason: isAuto ? 'AUTO' : 'MANUAL',
-        })
+  submitToApi =
+    (allocateOnly: boolean) =>
+    async (
+      req: Request<unknown, unknown, SelectKeyworkerSchemaType>,
+      res: Response,
+      next: NextFunction,
+    ): Promise<void> => {
+      const apiBody: components['schemas']['PersonStaffAllocations'] = {
+        allocations: [],
+        deallocations: [],
       }
+
+      for (const prisonerKeyworker of req.body.selectStaffMember.filter(Boolean)) {
+        const [prisonNumber, action, staffId, isAuto] = prisonerKeyworker.split(':')
+        if (action === 'deallocate') {
+          apiBody.deallocations.push({
+            personIdentifier: prisonNumber!,
+            staffId: Number(staffId),
+            deallocationReason: 'MANUAL',
+          })
+        } else {
+          apiBody.allocations.push({
+            personIdentifier: prisonNumber!,
+            staffId: Number(staffId),
+            allocationReason: isAuto ? 'AUTO' : 'MANUAL',
+          })
+        }
+      }
+
+      await this.keyworkerApiService.putAllocationDeallocations(
+        req as Request,
+        res,
+        res.locals.user.getActiveCaseloadId()!,
+        apiBody,
+      )
+
+      if (allocateOnly) {
+        req.flash(
+          FLASH_KEY__ALLOCATE_RESULT,
+          JSON.stringify({
+            type: AllocateResultType.SUCCESS,
+            count: apiBody.allocations.length,
+          } as AllocateResult),
+        )
+      } else {
+        req.flash(FLASH_KEY__COUNT, String(apiBody.allocations.length + apiBody.deallocations.length))
+      }
+
+      next()
     }
-
-    await this.keyworkerApiService.putAllocationDeallocations(
-      req as Request,
-      res,
-      res.locals.user.getActiveCaseloadId()!,
-      apiBody,
-    )
-
-    req.flash(FLASH_KEY__COUNT, String(apiBody.allocations.length + apiBody.deallocations.length))
-
-    next()
-  }
 }

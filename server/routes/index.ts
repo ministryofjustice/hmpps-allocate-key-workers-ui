@@ -42,11 +42,11 @@ export default function routes(services: Services) {
   )
 
   router.use(requirePermissionsAndConfig(permissionSelf))
+  router.use('/prisoner-allocation-history', PrisonerAllocationHistoryRoutes(services))
   router.use('/staff-profile/:staffId', StaffProfileRoutes(services))
 
   router.use(requirePermissionsAndConfig({ requirePrisonEnabled: true, minimumPermission: UserPermissionLevel.VIEW }))
   router.use('/allocate', AllocateStaffRoutes(services))
-  router.use('/prisoner-allocation-history', PrisonerAllocationHistoryRoutes(services))
   router.use('/data', StaffDataRoutes(services))
   router.use('/manage', StaffMembersRoutes(services))
 

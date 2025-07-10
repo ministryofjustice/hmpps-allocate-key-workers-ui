@@ -116,7 +116,22 @@ context('/recommend-allocations', () => {
     )
 
     cy.get('.moj-alert').should('contain.text', 'Changes made successfully')
-    cy.findByText('You have successfully made changes to 2 prisoners.').should('exist')
+
+    cy.url().should('match', /\/allocate$/)
+    cy.findByText('You have successfully allocated key worker to 2 prisoners.').should('exist')
+  })
+
+  it('should show error message when no capacity is available for auto allocation', () => {
+    cy.task('stubAllocationRecommendations', {
+      allocations: [],
+      staff: [],
+    })
+    navigateToTestPage()
+    cy.url().should('match', /\/allocate$/)
+    cy.findByRole('heading', { name: 'Not enough available capacity to assign any key workers' }).should('be.visible')
+    cy.findByText(
+      'Key workers could not be recommended for any prisoners who do not currently have a key worker. This is because none of your key workers have available capacity.',
+    ).should('exist')
   })
 
   const checkPageContents = () => {
@@ -232,8 +247,10 @@ context('/recommend-allocations', () => {
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Tester, Jane')
   }
 
-  const navigateToTestPage = () => {
+  const navigateToTestPage = (allowPartialAllocation: boolean = true) => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-worker/recommend-allocations', { failOnStatusCode: false })
+    cy.visit(`/key-worker/recommend-allocations?allowPartialAllocation=${allowPartialAllocation}`, {
+      failOnStatusCode: false,
+    })
   }
 })
