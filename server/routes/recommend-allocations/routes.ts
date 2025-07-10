@@ -23,7 +23,7 @@ export const RecommendStaffAutomaticallyRoutes = ({ keyworkerApiService }: Servi
     '/',
     requireRole(UserPermissionLevel.ALLOCATE),
     validate(selectKeyworkerSchema, true),
-    controller.submitToApi,
+    controller.submitToApi(true),
     controller.POST,
   )
 
