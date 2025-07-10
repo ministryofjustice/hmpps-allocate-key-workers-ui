@@ -647,7 +647,7 @@ const stubSearchPrisonersWithLocation = () =>
     { content: [keyworkerSearchPrisoners[1]] },
   )
 
-const stubSearchPrisonersWithExcludeAllocations = () =>
+const stubSearchPrisonersWithExcludeAllocations = (prisoners = keyworkerSearchPrisoners.slice(1)) =>
   createHttpStub(
     'POST',
     '/keyworker-api/search/prisons/.+/prisoners',
@@ -662,7 +662,7 @@ const stubSearchPrisonersWithExcludeAllocations = () =>
       },
     ],
     200,
-    { content: keyworkerSearchPrisoners.slice(1) },
+    { content: prisoners },
   )
 
 const stubSearchPrisoner = (

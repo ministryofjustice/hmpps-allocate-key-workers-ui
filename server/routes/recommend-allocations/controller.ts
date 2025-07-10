@@ -24,7 +24,7 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
           type: AllocateResultType.NO_CAPACITY_FOR_AUTO_ALLOCATION,
         } as AllocateResult),
       )
-      return res.redirect(req.headers.referer ?? `${res.locals.policyPath}/allocate`)
+      return res.redirect(req.headers.referer ?? `/${res.locals.policyPath}/allocate`)
     }
 
     const records = (
