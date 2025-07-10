@@ -1,44 +1,71 @@
 import { Request, Response } from 'express'
 import { ChangeStaffController } from '../base/changeStaffController'
-import { FLASH_KEY__API_ERROR, FLASH_KEY__COUNT } from '../../utils/constants'
+import {
+  AllocateErrorType,
+  FLASH_KEY__ALLOCATE_ERROR,
+  FLASH_KEY__API_ERROR,
+  FLASH_KEY__COUNT,
+} from '../../utils/constants'
 import { lastNameCommaFirstName } from '../../utils/formatUtils'
 
 export class RecommendStaffAutomaticallyController extends ChangeStaffController {
   GET = async (req: Request, res: Response): Promise<void> => {
+    const { allowPartialAllocation } = req.query
+
     const prisonCode = res.locals.user.getActiveCaseloadId()!
 
-    const records = await this.keyworkerApiService.searchPrisoners(req, prisonCode, {
-      query: '',
-      cellLocationPrefix: '',
-      excludeActiveAllocations: true,
-    })
     const recommendations = await this.keyworkerApiService.allocationRecommendations(req, prisonCode)
 
-    const matchedPrisoners = records
-      .filter(o => !o.hasHighComplexityOfNeeds)
-      .map(o => {
-        const match = recommendations.allocations.find(a => a.personIdentifier === o.personIdentifier)
-        const staff = [...recommendations.staff]
+    if (recommendations.allocations.length === 0) {
+      req.flash(FLASH_KEY__ALLOCATE_ERROR, AllocateErrorType.NO_CAPACITY_FOR_AUTO_ALLOCATION)
+      return res.redirect(req.headers.referer ?? `${res.locals.policyPath}/allocate`)
+    }
 
-        if (match && !recommendations.staff.find(s => s.staffId === match.staff.staffId)) {
-          staff.push(match.staff)
-        }
-
-        return {
-          ...o,
-          recommendation: match?.staff.staffId,
-          kwDropdown: staff
-            .sort((a, b) => (a.allocated > b.allocated ? 1 : -1))
-            .map(s => {
-              return {
-                text: `${lastNameCommaFirstName(s)} (allocations: ${s.allocated})`,
-                value: `allocate:${s.staffId}${s.staffId === match?.staff.staffId ? ':auto' : ''}`,
-              }
-            }),
-        }
+    const records = (
+      await this.keyworkerApiService.searchPrisoners(req, prisonCode, {
+        query: '',
+        cellLocationPrefix: '',
+        excludeActiveAllocations: true,
       })
+    ).filter(o => !o.hasHighComplexityOfNeeds)
 
-    res.render('recommend-allocations/view', {
+    const missingAllocation = allowPartialAllocation
+      ? null
+      : records.filter(
+          prisoner => !recommendations.allocations.find(match => prisoner.personIdentifier === match.personIdentifier),
+        ).length
+
+    if (missingAllocation) {
+      return res.render('recommend-allocations/not-enough-available-capacity/view', {
+        backUrl: 'allocate',
+        missingAllocation,
+        totalPrisoners: records.length,
+      })
+    }
+
+    const matchedPrisoners = records.map(o => {
+      const match = recommendations.allocations.find(a => a.personIdentifier === o.personIdentifier)
+      const staff = [...recommendations.staff]
+
+      if (match && !recommendations.staff.find(s => s.staffId === match.staff.staffId)) {
+        staff.push(match.staff)
+      }
+
+      return {
+        ...o,
+        recommendation: match?.staff.staffId,
+        kwDropdown: staff
+          .sort((a, b) => (a.allocated > b.allocated ? 1 : -1))
+          .map(s => {
+            return {
+              text: `${lastNameCommaFirstName(s)} (allocations: ${s.allocated})`,
+              value: `allocate:${s.staffId}${s.staffId === match?.staff.staffId ? ':auto' : ''}`,
+            }
+          }),
+      }
+    })
+
+    return res.render('recommend-allocations/view', {
       backUrl: 'allocate',
       records: matchedPrisoners,
       count: req.flash(FLASH_KEY__COUNT)[0],

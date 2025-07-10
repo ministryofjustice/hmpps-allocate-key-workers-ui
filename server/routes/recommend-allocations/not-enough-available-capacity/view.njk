@@ -1,0 +1,31 @@
+{%- from "moj/components/interruption-card/macro.njk" import interruptionCard -%}
+
+{% extends "partials/layout.njk" %}
+
+{% set fullWidth = true %}
+{% set pageTitle = "Not enough availability to allocate all prisoners"  %}
+
+{% block innerContent %}
+
+  {% call interruptionCard({
+    heading: "Not enough available capacity to allocate all prisoners",
+    primaryAction: {
+      text: "Continue",
+      href: "/" + policyPath + "/recommend-allocations?allowPartialAllocation=true"
+    },
+    secondaryAction: {
+      text: "Go back",
+      href: "/" + policyPath + "/allocate"
+    }
+  }) -%}
+    <p>{{ policyName | sentenceCase }}s could not be recommended for {{ missingAllocation }} out of {{ totalPrisoners }}.</p>
+    <p>To assign {{ policyName }}s to these prisoners, you can:</p>
+    <p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>manually select {{ policyName }}s for these prisoners using the dropdown lists</li>
+        <li>review the capacities of your {{ policyName }}s in Manage {{ policyName | sentenceCase }}s and update their capacities in their individual profiles</li>
+      </ul>
+    </p>
+  {%- endcall %}
+
+{% endblock %}
