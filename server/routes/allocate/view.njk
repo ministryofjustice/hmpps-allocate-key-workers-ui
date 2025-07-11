@@ -55,9 +55,11 @@
     <div class="govuk-grid-row">
 
       <div class="govuk-grid-column-full-width">
+        <p class="govuk-!-padding-left-3">You must select or enter text into at least one search option below.</p>
+
         <form method="post" action="/{{ policyPath }}/allocate/filter" class="govuk-grid-row govuk-!-margin-right-0 govuk-!-margin-left-0 govuk-!-margin-bottom-7 govuk-!-padding-top-4 govuk-!-padding-bottom-2 govuk-!-padding-left-4 govuk-!-padding-right-4 search-form">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-          <h2 class="govuk-heading-m">Filter by</h2>
+          <h2 id="searchBy" class="govuk-heading-m">Search by</h2>
           <div class="horizontal-form">
             {{ govukInput({
               id: "query",
@@ -98,14 +100,13 @@
                 text: "Search",
                 preventDoubleClick: true
               }) }}
+            <a class="govuk-link govuk-link--no-visited-state" href="/{{ policyPath }}/allocate">Clear</a>
           </div>
         </form>
       </div>
     </div>
 
-
-
-    {% if records or records.length == 0 %}
+    {% if records and records.length > 0 %}
       {% if user | hasPermission('allocate') %}
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-three-quarters">
@@ -126,6 +127,10 @@
           </div>
         {% endif %}
       {% endif %}
+    {% endif %}
+    {% if records.length == 0 %}
+      <p> No results for this search criteria.
+    {% elif records.length > 0 %}
       <form method="post">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
         {% set rows = [] %}
@@ -134,8 +139,8 @@
             {
               html: '<a class="govuk-link--no-visited-state" target="_blank" href="' + prisonerProfileUrl + '/prisoner/' + item.personIdentifier + '">' + item | lastNameCommaFirstName + "</a><br/>" + item.personIdentifier,
               attributes: {
-              "data-sort-value": item | lastNameCommaFirstName
-            }
+                "data-sort-value": item | lastNameCommaFirstName
+              }
             },
             {
               text: item.location

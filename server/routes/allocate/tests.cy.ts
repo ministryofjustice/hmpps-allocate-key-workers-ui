@@ -24,6 +24,9 @@ context('/allocate', () => {
   const queryTextbox = () => cy.findByRole('textbox', { name: /Name or prison number/ })
   const locationTextBox = () => cy.findByRole('combobox', { name: /Residential location/ })
   const excludeActiveCheckbox = () => cy.findByRole('checkbox', { name: /Prisoners without a key worker/ })
+  const invalidNameError = 'Enter a valid name or prison number'
+  const invalidSearchError = 'Select or enter text into at least one of the search options below'
+  const invalidLocationError = 'Select a valid location'
 
   describe('Role based access', () => {
     it('should deny access to a view only user POSTing to the page', () => {
@@ -44,7 +47,7 @@ context('/allocate', () => {
     cy.visit('/key-worker/allocate', { failOnStatusCode: false })
 
     cy.findByRole('heading', { name: /Allocate key workers to prisoners/i }).should('be.visible')
-    cy.findByRole('heading', { name: /Filter by/i }).should('be.visible')
+    cy.findByRole('heading', { name: /Search by/i }).should('be.visible')
     searchBtn().should('be.visible')
 
     queryTextbox().should('exist')
@@ -54,13 +57,16 @@ context('/allocate', () => {
 
     cy.get('.moj-pagination').should('have.length', 0)
     cy.get('form').should('have.length', 1)
-    cy.get('p').should('have.length', 0)
+    cy.get('p')
+      .should('have.length', 1)
+      .eq(0)
+      .should('contain', 'You must select or enter text into at least one search option below.')
 
     queryTextbox().clear()
     searchBtn().click()
 
     cy.get('.govuk-error-summary').should('have.length', 1)
-    cy.findByText('At least one filter must be applied').should('exist').should('have.attr', 'href', '#query')
+    cy.findByText(invalidSearchError).should('exist').should('have.attr', 'href', '#searchBy')
 
     queryTextbox().type('ALL')
     searchBtn().click()
@@ -207,13 +213,15 @@ context('/allocate', () => {
   it('should handle invalid queries', () => {
     navigateToTestPage()
 
-    cy.visit('/key-worker/allocate?query=<script>alert%28%27inject%27%29<%2Fscript>', {
+    cy.visit('/key-worker/allocate?query=<script>alert%28%27inject%27%29<%2Fscript>&cellLocationPrefix=FAKELOCATION', {
       failOnStatusCode: false,
     })
-    queryTextbox().should('have.value', '')
+    queryTextbox().should('have.value', `<script>alert('inject')</script>`)
+    locationTextBox().should('have.value', '')
 
     cy.get('.govuk-error-summary').should('have.length', 1)
-    cy.findByText('At least one filter must be applied').should('exist').should('have.attr', 'href', '#query')
+    cy.findByText(invalidNameError).should('exist').should('have.attr', 'href', '#query')
+    cy.findByText(invalidLocationError).should('exist').should('have.attr', 'href', '#cellLocationPrefix')
   })
 
   it('should show error when no allocations or deallocations are made', () => {
@@ -348,7 +356,7 @@ context('/allocate', () => {
   const checkPageContentsNoFilter = (readonly = false, allowAutoAllocation = true) => {
     cy.title().should('equal', 'Allocate key workers to prisoners - Key workers - DPS')
     cy.findByRole('heading', { name: /Allocate key workers to prisoners/i }).should('be.visible')
-    cy.findByRole('heading', { name: /Filter by/i }).should('be.visible')
+    cy.findByRole('heading', { name: /Search by/i }).should('be.visible')
     searchBtn().should('be.visible')
 
     queryTextbox().should('exist')
