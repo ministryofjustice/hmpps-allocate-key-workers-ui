@@ -34,7 +34,7 @@ export class ManageController {
       hasPolicyStaffRole: true,
     }
 
-    const data = await this.keyworkerApiService.searchAllocatableStaff(req, res, searchOptions)
+    const data = await this.keyworkerApiService.searchAllocatableStaff(req, res, searchOptions, true)
 
     res.render('manage/view', {
       params: query,

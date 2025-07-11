@@ -9,6 +9,7 @@ export class StartUpdateStaffController {
       req,
       res.locals.user.getActiveCaseloadId()!,
       req.params.staffId,
+      false,
     )
 
     res.redirect(`../${req.query.proceedTo}`)

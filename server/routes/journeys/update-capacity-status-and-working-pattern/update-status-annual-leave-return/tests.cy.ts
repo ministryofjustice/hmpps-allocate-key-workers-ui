@@ -15,7 +15,7 @@ context('/update-capacity-status-and-working-pattern/update-status-unavailable',
     cy.task('stubComponents')
     cy.task('stubSignIn')
     cy.task('stubEnabledPrison')
-    cy.task('stubKeyworkerDetails')
+    cy.task('stubKeyworkerDetailsWithoutStats')
     cy.task('stubKeyworkerStatuses')
   })
 

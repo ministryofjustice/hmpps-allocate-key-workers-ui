@@ -48,8 +48,9 @@ export default class KeyworkerApiService {
     req: Request,
     prisonCode: string,
     staffId: string | number,
+    includeStats: boolean,
   ): Promise<components['schemas']['StaffDetails'] & { staff: { firstName: string; lastName: string } }> {
-    const response = await this.keyworkerApiClientBuilder(req).getStaffDetails(prisonCode, staffId)
+    const response = await this.keyworkerApiClientBuilder(req).getStaffDetails(prisonCode, staffId, includeStats)
 
     return { ...response, staff: { firstName: response.firstName, lastName: response.lastName } }
   }
@@ -86,10 +87,12 @@ export default class KeyworkerApiService {
     req: Request,
     res: Response,
     searchOptions: components['schemas']['AllocatableSearchRequest'],
+    includeStats: boolean,
   ) {
     return this.keyworkerApiClientBuilder(req, res).searchAllocatableStaff(
       res.locals.user.getActiveCaseloadId()!,
       searchOptions,
+      includeStats,
     )
   }
 

@@ -9,7 +9,7 @@ context('/update-capacity-status-and-working-pattern/check-answers', () => {
     cy.task('stubComponents')
     cy.task('stubSignIn')
     cy.task('stubEnabledPrison')
-    cy.task('stubKeyworkerDetails')
+    cy.task('stubKeyworkerDetailsWithoutStats')
     cy.task('stubKeyworkerStatuses')
     cy.task('stubUpsertStaffDetails')
   })

@@ -422,26 +422,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/prisons/{prisonCode}/prisoners/{prisonNumber}/keyworkers/current': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** @description
-     *
-     *     Requires one of the following roles:
-     *     * ROLE_KEY_WORKER__RO */
-    get: operations['getCurrentKeyworker']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/prisons/{prisonCode}/prisoners/allocation-recommendations': {
     parameters: {
       query?: never
@@ -474,6 +454,26 @@ export interface paths {
      *     Requires one of the following roles:
      *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
     get: operations['getAllocations']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/prisoners/{personIdentifier}/allocations/current': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS__RO */
+    get: operations['getCurrentAllocation']
     put?: never
     post?: never
     delete?: never
@@ -860,7 +860,7 @@ export interface components {
       allocated: number
       allowAutoAllocation: boolean
       staffRole: components['schemas']['StaffRoleInfo']
-      stats: components['schemas']['StaffCountStats']
+      stats?: components['schemas']['StaffCountStats']
     }
     RecordedEventCount: {
       /** @enum {string} */
@@ -1051,6 +1051,7 @@ export interface components {
         | 'MISSING'
         | 'DUPLICATE'
         | 'MANUAL'
+        | 'CHANGE_IN_COMPLEXITY_OF_NEED'
     }
     SarKeyWorker: {
       /** Format: date-time */
@@ -1141,7 +1142,7 @@ export interface components {
       /** Format: int32 */
       allocated: number
       allocations: components['schemas']['Allocation'][]
-      stats: components['schemas']['StaffStats']
+      stats?: components['schemas']['StaffStats']
       allowAutoAllocation: boolean
       /** Format: date */
       reactivateOn?: string
@@ -1150,21 +1151,6 @@ export interface components {
     StaffStats: {
       current: components['schemas']['StaffCountStats']
       previous: components['schemas']['StaffCountStats']
-    }
-    CurrentAllocation: {
-      keyworker: components['schemas']['CurrentKeyworker']
-      prisonCode: string
-    }
-    CurrentKeyworker: {
-      firstName: string
-      lastName: string
-    }
-    CurrentPersonStaffAllocation: {
-      prisonNumber: string
-      hasHighComplexityOfNeeds: boolean
-      currentKeyworker?: components['schemas']['CurrentAllocation']
-      /** Format: date */
-      latestSession?: string
     }
     AllocationStaff: {
       /** Format: int64 */
@@ -1203,6 +1189,24 @@ export interface components {
     StaffAllocationHistory: {
       prisonNumber: string
       allocations: components['schemas']['StaffAllocation'][]
+    }
+    CurrentAllocation: {
+      policy: components['schemas']['CodedDescription']
+      prison: components['schemas']['CodedDescription']
+      staffMember: components['schemas']['StaffSummary']
+    }
+    CurrentPersonStaffAllocation: {
+      prisonNumber: string
+      hasHighComplexityOfNeeds: boolean
+      allocations: components['schemas']['CurrentAllocation'][]
+      latestRecordedEvents: components['schemas']['RecordedEvent'][]
+    }
+    RecordedEvent: {
+      prison: components['schemas']['CodedDescription']
+      /** @enum {string} */
+      type: 'SESSION' | 'ENTRY'
+      /** Format: date-time */
+      occurredAt: string
     }
     KeyworkerDto: {
       /**
@@ -1629,6 +1633,7 @@ export interface operations {
       query?: {
         from?: string
         to?: string
+        includeStats?: boolean
       }
       header: {
         /** @description
@@ -1932,7 +1937,9 @@ export interface operations {
   }
   searchAllocatableStaff: {
     parameters: {
-      query?: never
+      query?: {
+        includeStats?: boolean
+      }
       header: {
         /** @description
          *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
@@ -2535,29 +2542,6 @@ export interface operations {
       }
     }
   }
-  getCurrentKeyworker: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        prisonCode: string
-        prisonNumber: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['CurrentPersonStaffAllocation']
-        }
-      }
-    }
-  }
   getAllocationRecommendations: {
     parameters: {
       query?: never
@@ -2608,6 +2592,28 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['StaffAllocationHistory']
+        }
+      }
+    }
+  }
+  getCurrentAllocation: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        personIdentifier: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['CurrentPersonStaffAllocation']
         }
       }
     }
