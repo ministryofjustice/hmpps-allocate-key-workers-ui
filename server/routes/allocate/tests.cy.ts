@@ -430,11 +430,7 @@ context('/allocate', () => {
       .should('contain.text', 'View allocation history')
       .children()
       .eq(0)
-      .should(
-        'have.attr',
-        'href',
-        '/key-worker/prisoner-allocation-history/A4288DZ?query=ALL&cellLocationPrefix=&excludeActiveAllocations=false',
-      )
+      .should('have.attr', 'href', '/key-worker/prisoner-allocation-history/A4288DZ')
 
     if (!readonly) {
       cy.get('.govuk-table__row')
@@ -495,11 +491,7 @@ context('/allocate', () => {
       .should('contain.text', 'View allocation history')
       .children()
       .eq(0)
-      .should(
-        'have.attr',
-        'href',
-        '/key-worker/prisoner-allocation-history/A2504EA?query=&cellLocationPrefix=&excludeActiveAllocations=true',
-      )
+      .should('have.attr', 'href', '/key-worker/prisoner-allocation-history/A2504EA')
 
     cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'Tester, Jane')
     cy.get('.govuk-table__row').eq(3).children().eq(1).should('contain.text', '4-2-031')
@@ -545,11 +537,7 @@ context('/allocate', () => {
       .eq(readonly ? 4 : 5)
       .children()
       .eq(0)
-      .should(
-        'have.attr',
-        'href',
-        '/key-worker/prisoner-allocation-history/A2504EA?query=&cellLocationPrefix=3&excludeActiveAllocations=false',
-      )
+      .should('have.attr', 'href', '/key-worker/prisoner-allocation-history/A2504EA')
   }
 
   const checkNameOrPrisonNumberFilter = (readonly = false) => {
@@ -567,11 +555,7 @@ context('/allocate', () => {
       .eq(readonly ? 4 : 5)
       .children()
       .eq(0)
-      .should(
-        'have.attr',
-        'href',
-        '/key-worker/prisoner-allocation-history/A4288DZ?query=John&cellLocationPrefix=&excludeActiveAllocations=false',
-      )
+      .should('have.attr', 'href', '/key-worker/prisoner-allocation-history/A4288DZ')
   }
 
   const navigateToTestPage = () => {

@@ -53,7 +53,6 @@ export class AllocateStaffController extends ChangeStaffController {
     const records = await this.keyworkerApiService.searchPrisoners(req, prisonCode, sanitisedQuery)
 
     return res.render('allocate/view', {
-      searchQuery: `?${new URLSearchParams(Object.entries(sanitisedQuery).reduce((acc, [key, value]) => ({ ...acc, [key]: String(value) }), {}))}`,
       ...sanitisedQuery,
       records,
       locations: locationsValues,
