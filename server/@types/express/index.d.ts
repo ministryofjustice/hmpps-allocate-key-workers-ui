@@ -3,6 +3,8 @@ import { HmppsUser } from '../../interfaces/hmppsUser'
 import { components } from '../keyWorker'
 import Prisoner from '../../services/prisonerSearch/prisoner'
 import { Breadcrumbs } from '../../middleware/breadcrumbs'
+import { AuditEvent } from '../../data/hmppsAuditClient'
+import { Page } from '../../services/auditService'
 
 export declare module 'express-session' {
   // Declare that the session will potentially contain these additional fields
@@ -93,6 +95,12 @@ export declare global {
 
     interface Response {
       notFound(): void
+      getPageViewEvent(isAttempt: boolean): AuditEvent
+      setAuditDetails: {
+        prisonNumber(prisonNumber: string): void
+        searchTerm(searchTerm: string): void
+        staffId(staffId: number | string): void
+      }
     }
 
     interface Locals {
@@ -122,6 +130,21 @@ export declare global {
             href: string
             navEnabled: boolean
           }[]
+        }
+      }
+      auditEvent: {
+        who: string
+        correlationId: string
+        subjectId?: string
+        subjectType?: string
+        details?: {
+          activeCaseLoadId?: string
+          pageUrl: string
+          pageName?: Page
+          policy?: 'KEY_WORKER' | 'PERSONAL_OFFICER' | 'CuSP'
+          staffId?: string
+          query?: string
+          [key: string]: unknown
         }
       }
     }

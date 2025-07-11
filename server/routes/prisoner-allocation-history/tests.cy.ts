@@ -69,6 +69,27 @@ context('Prisoner Allocation History', () => {
         cy.contains('dt', 'Deallocated by').next().should('include.text', 'Fake Doe')
         cy.contains('dt', 'Deallocation reason').next().should('include.text', 'Manual')
       })
+
+    cy.verifyAuditEvents([
+      {
+        who: 'USER1',
+        subjectType: 'PRISONER_ID',
+        details:
+          '{"pageUrl":"/key-worker/prisoner-allocation-history/A9965EA","pageName":"PRISONER_ALLOCATION_HISTORY","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+        subjectId: 'A9965EA',
+        what: 'PAGE_VIEW',
+        service: 'DPS023',
+      },
+      {
+        who: 'USER1',
+        subjectType: 'PRISONER_ID',
+        details:
+          '{"pageUrl":"/key-worker/prisoner-allocation-history/A9965EA","pageName":"PRISONER_ALLOCATION_HISTORY","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+        subjectId: 'A9965EA',
+        what: 'PAGE_VIEW_ACCESS_ATTEMPT',
+        service: 'DPS023',
+      },
+    ])
   })
 
   it('correctly maps deallocation reasons', () => {

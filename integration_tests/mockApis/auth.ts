@@ -175,6 +175,21 @@ const stubAllocationJobResponsibilities = (hasAllocationJobResponsibilities: boo
   })
 }
 
+const stubAuditSqs = () =>
+  stubFor({
+    request: {
+      method: 'POST',
+      url: '/',
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/xml',
+      },
+      body: '{ }',
+    },
+  })
+
 export default {
   getSignInUrl,
   stubAuthPing: ping,
@@ -184,7 +199,7 @@ export default {
       roles: [AuthorisedRoles.OMIC_ADMIN],
       hasAllocationJobResponsibilities: true,
     },
-  ): Promise<[Response, Response, Response, Response, Response, Response, Response]> =>
+  ): Promise<[Response, Response, Response, Response, Response, Response, Response, Response]> =>
     Promise.all([
       favicon(),
       redirect(),
@@ -193,5 +208,6 @@ export default {
       tokenVerification.stubVerifyToken(),
       stubGetCaseLoads(),
       stubAllocationJobResponsibilities(userToken.hasAllocationJobResponsibilities),
+      stubAuditSqs(),
     ]),
 }

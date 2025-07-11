@@ -30,6 +30,7 @@ import populateClientToken from './middleware/populateSystemClientToken'
 import populateValidationErrors from './middleware/populateValidationErrors'
 import PrisonerImageRoutes from './routes/prisonerImageRoutes'
 import { handleApiError } from './middleware/handleApiError'
+import { auditPageViewMiddleware } from './middleware/audit/auditPageViewMiddleware'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -52,6 +53,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpStaticResources())
   nunjucksSetup(app)
   app.use(setUpAuthentication())
+  app.get('*any', auditPageViewMiddleware(services.auditService))
   app.use(authorisationMiddleware())
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
