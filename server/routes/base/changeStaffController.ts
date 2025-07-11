@@ -15,7 +15,7 @@ export class ChangeStaffController {
   constructor(readonly keyworkerApiService: KeyworkerApiService) {}
 
   getChangeData = async (req: Request, res: Response) => {
-    const staff = await this.keyworkerApiService.searchAllocatableStaff(req, res, { status: 'ACTIVE' })
+    const staff = await this.keyworkerApiService.searchAllocatableStaff(req, res, { status: 'ACTIVE' }, true)
 
     return {
       count: req.flash(FLASH_KEY__COUNT)[0],

@@ -91,9 +91,13 @@ export default class KeyworkerApiClient {
     return response.content
   }
 
-  async getStaffDetails(prisonCode: string, staffId: string | number): Promise<components['schemas']['StaffDetails']> {
+  async getStaffDetails(
+    prisonCode: string,
+    staffId: string | number,
+    includeStats: boolean,
+  ): Promise<components['schemas']['StaffDetails']> {
     return this.restClient.get<components['schemas']['StaffDetails']>({
-      path: `/prisons/${prisonCode}/staff/${staffId}`,
+      path: `/prisons/${prisonCode}/staff/${staffId}?includeStats=${includeStats}`,
     })
   }
 
@@ -139,9 +143,13 @@ export default class KeyworkerApiClient {
     return response
   }
 
-  async searchAllocatableStaff(prisonCode: string, query: components['schemas']['AllocatableSearchRequest']) {
+  async searchAllocatableStaff(
+    prisonCode: string,
+    query: components['schemas']['AllocatableSearchRequest'],
+    includeStats: boolean,
+  ) {
     return this.restClient.post<components['schemas']['AllocatableSearchResponse']>({
-      path: `/search/prisons/${prisonCode}/staff-allocations`,
+      path: `/search/prisons/${prisonCode}/staff-allocations?includeStats=${includeStats}`,
       data: query,
     })
   }

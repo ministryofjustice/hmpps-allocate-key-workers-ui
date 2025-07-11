@@ -12,5 +12,6 @@ export const resetJourneyAndReloadKeyWorkerDetails = async (
     req as Request,
     res.locals.user.getActiveCaseloadId()!,
     req.journeyData.staffDetails!.staffId,
+    false,
   )
 }

@@ -13,7 +13,7 @@ export class StaffProfileController extends ChangeStaffController {
       return res.redirect(`/${res.locals.policyPath}/not-authorised`)
     }
     const prisonCode = res.locals.user.getActiveCaseloadId()!
-    const Data = await this.keyworkerApiService.getStaffDetails(req, prisonCode, req.params.staffId)
+    const Data = await this.keyworkerApiService.getStaffDetails(req, prisonCode, req.params.staffId, true)
 
     res.locals.breadcrumbs.addItems({
       text: `Manage ${res.locals.policyName}s`,
