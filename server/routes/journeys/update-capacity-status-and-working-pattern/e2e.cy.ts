@@ -13,7 +13,7 @@ context('/update-capacity-status-and-working-pattern/** journey', () => {
     cy.task('stubSignIn')
     cy.task('stubEnabledPrison')
     cy.task(
-      'stubKeyworkerDetails',
+      'stubKeyworkerDetailsWithoutStats',
       createMock(defaultKeyworkerDetails, { status: { code: 'UNAVAILABLE', description: 'Unavailable' } }),
     )
     cy.task('stubKeyworkerStatuses')

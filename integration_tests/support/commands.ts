@@ -1,4 +1,4 @@
-import { getLastAPICallMatching } from '../mockApis/wiremock'
+import { getLastAPICallMatching, getSentAuditEvents } from '../mockApis/wiremock'
 import { JourneyData } from '../../server/@types/express'
 
 type RecursivePartial<T> = T extends unknown
@@ -52,4 +52,8 @@ Cypress.Commands.add('verifyPostRedirectsToNotAuthorised', ({ body, url }) => {
       expect(response.redirects![0]).to.contain('/not-authorised')
     })
   })
+})
+
+Cypress.Commands.add('verifyAuditEvents', (events: object[]) => {
+  return cy.wrap(getSentAuditEvents()).should('deep.equal', events)
 })

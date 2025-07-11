@@ -4,6 +4,8 @@ import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 
 export class StaffProfileController extends ChangeStaffController {
   GET = async (req: Request<{ staffId: string }>, res: Response): Promise<void> => {
+    res.setAuditDetails.staffId(req.params.staffId)
+
     if (
       res.locals.user.permissions === UserPermissionLevel.SELF_PROFILE_ONLY &&
       req.params.staffId !== String(res.locals.user.userId)
@@ -11,7 +13,7 @@ export class StaffProfileController extends ChangeStaffController {
       return res.redirect(`/${res.locals.policyPath}/not-authorised`)
     }
     const prisonCode = res.locals.user.getActiveCaseloadId()!
-    const Data = await this.keyworkerApiService.getStaffDetails(req, prisonCode, req.params.staffId)
+    const Data = await this.keyworkerApiService.getStaffDetails(req, prisonCode, req.params.staffId, true)
 
     res.locals.breadcrumbs.addItems({
       text: `Manage ${res.locals.policyName}s`,

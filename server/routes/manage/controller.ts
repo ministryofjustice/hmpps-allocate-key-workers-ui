@@ -10,6 +10,10 @@ export class ManageController {
     const { user } = res.locals
     const { activeCaseLoad } = user
 
+    const searchTerm = sanitizeQueryName(req.query['query']?.toString() || '')
+
+    if (searchTerm) res.setAuditDetails.searchTerm(searchTerm)
+
     if (!activeCaseLoad) {
       throw new Error('No active caseload')
     }
@@ -20,7 +24,7 @@ export class ManageController {
     })
 
     const query = {
-      query: sanitizeQueryName(req.query['query']?.toString() || ''),
+      query: searchTerm,
       status: sanitizeSelectValue(
         keyworkerStatuses.map(o => o.code),
         req.query['status']?.toString() || 'ALL',
@@ -34,7 +38,7 @@ export class ManageController {
       hasPolicyStaffRole: true,
     }
 
-    const data = await this.keyworkerApiService.searchAllocatableStaff(req, res, searchOptions)
+    const data = await this.keyworkerApiService.searchAllocatableStaff(req, res, searchOptions, true)
 
     res.render('manage/view', {
       params: query,

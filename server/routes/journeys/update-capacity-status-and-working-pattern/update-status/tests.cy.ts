@@ -22,7 +22,7 @@ context('/update-capacity-status-and-working-pattern/update-status', () => {
 
   it('should try ACTIVE case', () => {
     cy.task(
-      'stubKeyworkerDetails',
+      'stubKeyworkerDetailsWithoutStats',
       createMock(defaultKeyworkerDetails, { status: { code: 'INACTIVE', description: 'Inactive' } }),
     )
     navigateToTestPage()
@@ -39,7 +39,7 @@ context('/update-capacity-status-and-working-pattern/update-status', () => {
 
   it('should try UNAVAILABLE case', () => {
     cy.task(
-      'stubKeyworkerDetails',
+      'stubKeyworkerDetailsWithoutStats',
       createMock(defaultKeyworkerDetails, { status: { code: 'INACTIVE', description: 'Inactive' } }),
     )
     navigateToTestPage()
@@ -51,7 +51,7 @@ context('/update-capacity-status-and-working-pattern/update-status', () => {
   })
 
   it('should try INACTIVE case', () => {
-    cy.task('stubKeyworkerDetails')
+    cy.task('stubKeyworkerDetailsWithoutStats')
     navigateToTestPage()
     cy.url().should('match', /\/update-status$/)
 

@@ -19,6 +19,7 @@ import { JourneyRouter } from './base/routes'
 import breadcrumbs from '../middleware/breadcrumbs'
 import { UserPermissionLevel } from '../interfaces/hmppsUser'
 import { ManageRolesRoutes } from './manage-roles/routes'
+import { Page } from '../services/auditService'
 
 export default function routes(services: Services) {
   const { router, get } = JourneyRouter()
@@ -31,7 +32,7 @@ export default function routes(services: Services) {
   const permissionAllocate = { requirePrisonEnabled: true, minimumPermission: UserPermissionLevel.ALLOCATE }
   const permissionSelf = { requirePrisonEnabled: true, minimumPermission: UserPermissionLevel.SELF_PROFILE_ONLY }
 
-  get('/', requirePermissionsAndConfig(permissionAdmin, permissionSelf), controller.GET)
+  get('/', Page.HOMEPAGE, requirePermissionsAndConfig(permissionAdmin, permissionSelf), controller.GET)
 
   router.use(removeTrailingSlashMiddleware)
 

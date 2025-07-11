@@ -18,7 +18,7 @@ generic-service:
     LEGACY_KEY_WORKERS_UI_URL: "https://dev.manage-key-workers.service.justice.gov.uk"
     LOCATIONS_INSIDE_PRISON_API_URL: "https://locations-inside-prison-api-dev.hmpps.service.justice.gov.uk"
     ENVIRONMENT_NAME: DEV
-    AUDIT_ENABLED: "false"
+    AUDIT_ENABLED: "true"
     SENTRY_ENVIRONMENT: DEV
 
 generic-prometheus-alerts:
