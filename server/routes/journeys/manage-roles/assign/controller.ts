@@ -8,6 +8,10 @@ export class AssignStaffRoleController {
   GET = async (req: Request, res: Response, next: NextFunction) => {
     req.journeyData.assignStaffRole ??= {}
 
+    if (req.journeyData.assignStaffRole.query) {
+      res.setAuditDetails.searchTerm(req.journeyData.assignStaffRole.query)
+    }
+
     if (req.journeyData.assignStaffRole!.query && !req.journeyData.assignStaffRole!.searchResults) {
       try {
         const searchOptions: components['schemas']['StaffSearchRequest'] = {

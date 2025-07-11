@@ -10,6 +10,7 @@ import { WorkingPatternRoutes } from './working-pattern/routes'
 import { AssignRoleCheckAnswersRoutes } from './check-answers/routes'
 import { AssignRoleConfirmationRoutes } from './confirmation/routes'
 import { AssignRoleCapacityRoutes } from './capacity/routes'
+import { Page } from '../../../../services/auditService'
 
 export const AssignStaffRoleRoutes = (services: Services) => {
   const { router, get, post } = JourneyRouter()
@@ -17,6 +18,13 @@ export const AssignStaffRoleRoutes = (services: Services) => {
   const controller = new AssignStaffRoleController(keyworkerApiService)
 
   router.use(redirectCheckAnswersMiddleware([/assign$/, /not-prison-officer$/, /check-answers$/]))
+
+  get('*any', Page.UPDATE_STAFF_JOB_CLASSIFICATION, (req, res, next) => {
+    if (req.journeyData.assignStaffRole?.staff?.staffId) {
+      res.setAuditDetails.staffId(req.journeyData.assignStaffRole.staff.staffId)
+    }
+    next()
+  })
 
   get('/', controller.GET)
   get('/select', controller.selectStaff)

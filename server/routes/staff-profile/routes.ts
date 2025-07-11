@@ -5,13 +5,14 @@ import { StaffProfileController } from './controller'
 import { selectKeyworkerSchema } from '../base/selectKeyworkerSchema'
 import { requireRole } from '../../middleware/permissionsMiddleware'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
+import { Page } from '../../services/auditService'
 
 export const StaffProfileRoutes = (services: Services) => {
   const { keyworkerApiService } = services
   const { router, get, post } = JourneyRouter()
   const controller = new StaffProfileController(keyworkerApiService)
 
-  get('/', controller.GET)
+  get('/', Page.STAFF_ALLOCATIONS, controller.GET)
   post(
     '/',
     requireRole(UserPermissionLevel.ALLOCATE),

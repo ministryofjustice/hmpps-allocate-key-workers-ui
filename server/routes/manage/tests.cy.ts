@@ -33,6 +33,31 @@ context('Manage key workers', () => {
     cy.get('.govuk-table__row').should('have.length', 7)
   })
 
+  it('should send audit event with search term', () => {
+    getAllKeyworkers()
+    navigateToTestPage('?query=test%20term%20')
+    cy.verifyAuditEvents([
+      {
+        who: 'USER1',
+        subjectType: 'SEARCH_TERM',
+        details:
+          '{"pageUrl":"/key-worker/manage?query=test%20term%20","pageName":"MANAGE_ALLOCATABLE_STAFF","query":"test term","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+        subjectId: 'test term',
+        what: 'PAGE_VIEW',
+        service: 'DPS023',
+      },
+      {
+        who: 'USER1',
+        subjectType: 'SEARCH_TERM',
+        details:
+          '{"pageUrl":"/key-worker/manage?query=test%20term%20","pageName":"MANAGE_ALLOCATABLE_STAFF","query":"test term","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+        subjectId: 'test term',
+        what: 'PAGE_VIEW_ACCESS_ATTEMPT',
+        service: 'DPS023',
+      },
+    ])
+  })
+
   it('happy path', () => {
     getAllKeyworkers()
 
@@ -314,8 +339,8 @@ context('Manage key workers', () => {
     ])
   }
 
-  const navigateToTestPage = () => {
+  const navigateToTestPage = (query: string = '') => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-worker/manage', { failOnStatusCode: false })
+    cy.visit(`/key-worker/manage${query}`, { failOnStatusCode: false })
   }
 })

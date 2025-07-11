@@ -8,6 +8,10 @@ export class RemoveStaffRoleController {
   GET = async (req: Request, res: Response, next: NextFunction) => {
     req.journeyData.removeStaffRole ??= {}
 
+    if (req.journeyData.removeStaffRole.query) {
+      res.setAuditDetails.searchTerm(req.journeyData.removeStaffRole.query)
+    }
+
     if (req.journeyData.removeStaffRole!.query && !req.journeyData.removeStaffRole!.searchResults) {
       try {
         const searchOptions: components['schemas']['StaffSearchRequest'] = {

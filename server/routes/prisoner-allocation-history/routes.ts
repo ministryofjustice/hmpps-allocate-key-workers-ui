@@ -2,6 +2,7 @@ import { PrisonerBasePermission, prisonerPermissionsGuard } from '@ministryofjus
 import { Services } from '../../services'
 import { JourneyRouter } from '../base/routes'
 import { PrisonerAllocationHistoryController } from './controller'
+import { Page } from '../../services/auditService'
 
 export const PrisonerAllocationHistoryRoutes = ({ keyworkerApiService, prisonPermissionsService }: Services) => {
   const { router, get } = JourneyRouter()
@@ -11,7 +12,16 @@ export const PrisonerAllocationHistoryRoutes = ({ keyworkerApiService, prisonPer
     getPrisonerNumberFunction: req => req.params['prisonerId'] as string,
   })
 
-  get('/:prisonerId', populatePrisonerDataMiddleware, controller.GET)
+  get(
+    '/:prisonerId',
+    Page.PRISONER_ALLOCATION_HISTORY,
+    (req, res, next) => {
+      res.setAuditDetails.prisonNumber(req.params['prisonerId'] as string)
+      next()
+    },
+    populatePrisonerDataMiddleware,
+    controller.GET,
+  )
 
   return router
 }

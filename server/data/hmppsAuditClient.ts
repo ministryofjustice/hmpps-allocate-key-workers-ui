@@ -63,7 +63,9 @@ export default class HmppsAuditClient {
 
       return messageResponse
     } catch (error) {
-      logger.error('Error sending HMPPS Audit SQS message, ', error)
+      if (process.env.NODE_ENV !== 'e2e-test') {
+        logger.error('Error sending HMPPS Audit SQS message, ', error)
+      }
       if (throwOnError) throw error
     }
     return null

@@ -5,11 +5,19 @@ import { schema } from './schema'
 import { validate } from '../../../../middleware/validationMiddleware'
 import { RemoveRoleConfirmationRoutes } from './confirmation/routes'
 import { ConfirmRemoveRoleRoutes } from './remove-role/routes'
+import { Page } from '../../../../services/auditService'
 
 export const RemoveStaffRoleRoutes = (services: Services) => {
   const { router, get, post } = JourneyRouter()
   const { keyworkerApiService } = services
   const controller = new RemoveStaffRoleController(keyworkerApiService)
+
+  get('*any', Page.UPDATE_STAFF_JOB_CLASSIFICATION, (req, res, next) => {
+    if (req.journeyData.removeStaffRole?.staff?.staffId) {
+      res.setAuditDetails.staffId(req.journeyData.removeStaffRole.staff.staffId)
+    }
+    next()
+  })
 
   get('/', controller.GET)
   get('/select', controller.selectStaff)
