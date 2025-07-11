@@ -15,16 +15,20 @@ export class AllocateStaffController extends ChangeStaffController {
   }
 
   GET = async (req: Request, res: Response): Promise<void> => {
-    const { allowAutoAllocation } = req.middleware!.prisonConfiguration!
-    const prisonCode = res.locals.user.getActiveCaseloadId()!
-    const locations = await this.locationsApiService.getResidentialLocations(req, prisonCode)
-    const locationsValues = locations.map(o => ({ text: o.localName || o.fullLocationPath, value: o.fullLocationPath }))
-
     const sanitisedQuery = {
       query: req.query['query']?.toString() || '',
       cellLocationPrefix: req.query['cellLocationPrefix']?.toString() || '',
       excludeActiveAllocations: req.query['excludeActiveAllocations']?.toString() === 'true',
     }
+
+    if (sanitisedQuery.query) {
+      res.setAuditDetails.searchTerm(sanitisedQuery.query)
+    }
+
+    const { allowAutoAllocation } = req.middleware!.prisonConfiguration!
+    const prisonCode = res.locals.user.getActiveCaseloadId()!
+    const locations = await this.locationsApiService.getResidentialLocations(req, prisonCode)
+    const locationsValues = locations.map(o => ({ text: o.localName || o.fullLocationPath, value: o.fullLocationPath }))
 
     let allocationResult = req.flash(FLASH_KEY__ALLOCATE_RESULT)[0]
     allocationResult = allocationResult && JSON.parse(allocationResult)

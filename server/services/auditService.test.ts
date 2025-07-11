@@ -28,14 +28,17 @@ describe('Audit service', () => {
         details: { extraDetails: 'example' },
       })
 
-      expect(hmppsAuditClient.sendMessage).toHaveBeenCalledWith({
-        what: 'AUDIT_EVENT',
-        who: 'user1',
-        subjectId: 'subject123',
-        subjectType: 'exampleType',
-        correlationId: 'request123',
-        details: { extraDetails: 'example' },
-      })
+      expect(hmppsAuditClient.sendMessage).toHaveBeenCalledWith(
+        {
+          what: 'AUDIT_EVENT',
+          who: 'user1',
+          subjectId: 'subject123',
+          subjectType: 'exampleType',
+          correlationId: 'request123',
+          details: { extraDetails: 'example' },
+        },
+        false,
+      )
     })
   })
 
@@ -49,14 +52,17 @@ describe('Audit service', () => {
         details: { extraDetails: 'example' },
       })
 
-      expect(hmppsAuditClient.sendMessage).toHaveBeenCalledWith({
-        what: 'PAGE_VIEW_EXAMPLE_PAGE',
-        who: 'user1',
-        subjectId: 'subject123',
-        subjectType: 'exampleType',
-        correlationId: 'request123',
-        details: { extraDetails: 'example' },
-      })
+      expect(hmppsAuditClient.sendMessage).toHaveBeenCalledWith(
+        {
+          what: 'PAGE_VIEW_EXAMPLE_PAGE',
+          who: 'user1',
+          subjectId: 'subject123',
+          subjectType: 'exampleType',
+          correlationId: 'request123',
+          details: { extraDetails: 'example' },
+        },
+        false,
+      )
     })
   })
 })

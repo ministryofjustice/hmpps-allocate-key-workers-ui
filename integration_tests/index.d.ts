@@ -11,5 +11,6 @@ declare namespace Cypress {
     postWithCsrf(options: { body: object; url: string }): Cypress.Chainable<Cypress.Response<unknown>>
     /** Verify that a POST request to the given URL with the given body results in a not authorised redirect */
     verifyPostRedirectsToNotAuthorised(options: { body: object; url?: string }): Cypress.Chainable<number>
+    verifyAuditEvents(events: object[]): Chainable<unknown>
   }
 }

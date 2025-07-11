@@ -46,6 +46,25 @@ context('Profile Info', () => {
     navigateToTestPage()
 
     validatePageContents()
+
+    cy.verifyAuditEvents([
+      {
+        who: 'USER1',
+        subjectType: 'NOT_APPLICABLE',
+        details:
+          '{"pageUrl":"/key-worker/staff-profile/488095","pageName":"STAFF_ALLOCATIONS","staffId":"488095","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+        what: 'PAGE_VIEW',
+        service: 'DPS023',
+      },
+      {
+        who: 'USER1',
+        subjectType: 'NOT_APPLICABLE',
+        details:
+          '{"pageUrl":"/key-worker/staff-profile/488095","pageName":"STAFF_ALLOCATIONS","staffId":"488095","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+        what: 'PAGE_VIEW_ACCESS_ATTEMPT',
+        service: 'DPS023',
+      },
+    ])
   })
 
   it('shows empty text when staff member has no allocations', () => {

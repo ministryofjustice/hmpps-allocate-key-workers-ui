@@ -40,6 +40,23 @@ context('test / homepage', () => {
       navigateToTestPage()
       cy.title().should('equal', 'Key workers - DPS')
       validateTiles(true)
+
+      cy.verifyAuditEvents([
+        {
+          who: 'USER1',
+          subjectType: 'NOT_APPLICABLE',
+          details: '{"pageUrl":"/key-worker","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          what: 'PAGE_VIEW',
+          service: 'DPS023',
+        },
+        {
+          who: 'USER1',
+          subjectType: 'NOT_APPLICABLE',
+          details: '{"pageUrl":"/key-worker","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          what: 'PAGE_VIEW_ACCESS_ATTEMPT',
+          service: 'DPS023',
+        },
+      ])
     })
 
     it('should show correct services when user has allocate permission', () => {

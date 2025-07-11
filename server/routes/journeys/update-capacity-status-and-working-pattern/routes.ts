@@ -10,12 +10,20 @@ import { UpdateStatusReturnDateRoutes } from './update-status-annual-leave-retur
 import { UpdateWorkingPatternRoutes } from './update-working-pattern/routes'
 import { UpdateCapacityPatternRoutes } from './update-capacity/routes'
 import { UpdateStatusRoutes } from './update-status/routes'
+import { Page } from '../../../services/auditService'
 
 export const UpdateCapacityAndStatusRoutes = (services: Services) => {
   const { router, get } = JourneyRouter()
   const controller = new UpdateCapacityAndStatusController()
 
   router.use(redirectCheckAnswersMiddleware([/update-capacity-status-and-working-pattern$/, /check-answers$/]))
+
+  get('*any', Page.UPDATE_STAFF_CONFIGURATION, (req, res, next) => {
+    if (req.journeyData.staffDetails?.staffId) {
+      res.setAuditDetails.staffId(req.journeyData.staffDetails.staffId)
+    }
+    next()
+  })
 
   get('/', controller.GET)
 

@@ -4,6 +4,8 @@ import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 
 export class StaffProfileController extends ChangeStaffController {
   GET = async (req: Request<{ staffId: string }>, res: Response): Promise<void> => {
+    res.setAuditDetails.staffId(req.params.staffId)
+
     if (
       res.locals.user.permissions === UserPermissionLevel.SELF_PROFILE_ONLY &&
       req.params.staffId !== String(res.locals.user.userId)
