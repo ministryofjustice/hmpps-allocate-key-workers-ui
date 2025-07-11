@@ -128,105 +128,105 @@
         {% endif %}
       {% endif %}
     {% endif %}
-      {% if records.length == 0 %}
-        <p> No results for this search criteria.
-      {% elif records.length > 0 %}
-        <form method="post">
-          <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-          {% set rows = [] %}
-          {% for item in records %}
-            {% set rows = (rows.push([
+    {% if records.length == 0 %}
+      <p> No results for this search criteria.
+    {% elif records.length > 0 %}
+      <form method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+        {% set rows = [] %}
+        {% for item in records %}
+          {% set rows = (rows.push([
+            {
+              html: '<a class="govuk-link--no-visited-state" target="_blank" href="' + prisonerProfileUrl + '/prisoner/' + item.personIdentifier + '">' + item | lastNameCommaFirstName + "</a><br/>" + item.personIdentifier,
+              attributes: {
+                "data-sort-value": item | lastNameCommaFirstName
+              }
+            },
+            {
+              text: item.location
+            },
+            {
+              html: alertFlags(prisonerProfileUrl + '/prisoner/' + item.personIdentifier + '/alerts/active', item.relevantAlertCodes, item.remainingAlertCount),
+              attributes: {
+                "data-sort-value": item | alertsSortValue
+              }
+            },
+            {
+              html: ('<a class="govuk-link--no-visited-state" href="staff-profile/' + item.staffMember.staffId + '">' + item.staffMember | lastNameCommaFirstName + "</a>") if item.staffMember else 'None'
+            },
+            {
+              html: 'Not applicable - high complexity of need' if item.hasHighComplexityOfNeeds else govukSelect({
+                id: "selectStaffMember",
+                name: "selectStaffMember",
+                text: 'Select ' + policyName,
+                formGroup: {
+                  classes: "govuk-!-margin-0"
+                },
+                items: staff | excludeCurrentStaffMember(item.staffMember) | conditionallyAddDeallocate(item.staffMember.staffId) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select ' + policyName)
+              })
+            } if user | hasPermission('allocate') else undefined,
+            {
+              html: '<a class="govuk-link govuk-link--no-visited-state" href="/' + policyPath + '/prisoner-allocation-history/' + item.personIdentifier + '">View allocation history</a>' if item.hasAllocationHistory else ''
+            }
+          ] | removeNullish), rows) %}
+        {% endfor %}
+
+        {{ mojPagination(records.length) }}
+
+        {{ govukTable({
+            attributes: {
+              "data-module": "moj-sortable-table"
+            },
+            classes: 'table-vertical-align-middle govuk-!-margin-top-6 center-align-content',
+            head: [
               {
-                html: '<a class="govuk-link--no-visited-state" target="_blank" href="' + prisonerProfileUrl + '/prisoner/' + item.personIdentifier + '">' + item | lastNameCommaFirstName + "</a><br/>" + item.personIdentifier,
+                text: 'Name and prisoner number',
+                key: 'name',
                 attributes: {
-                  "data-sort-value": item | lastNameCommaFirstName
+                  "aria-sort": "ascending"
                 }
               },
               {
-                text: item.location
-              },
-              {
-                html: alertFlags(prisonerProfileUrl + '/prisoner/' + item.personIdentifier + '/alerts/active', item.relevantAlertCodes, item.remainingAlertCount),
+                text: "Residential location",
+                key: 'location',
                 attributes: {
-                  "data-sort-value": item | alertsSortValue
+                  "aria-sort": "none"
                 }
               },
               {
-                html: ('<a class="govuk-link--no-visited-state" href="staff-profile/' + item.staffMember.staffId + '">' + item.staffMember | lastNameCommaFirstName + "</a>") if item.staffMember else 'None'
+                text: "Relevant alerts",
+                key: 'alerts',
+                attributes: {
+                  "aria-sort": "none"
+                }
               },
               {
-                html: 'Not applicable - high complexity of need' if item.hasHighComplexityOfNeeds else govukSelect({
-                  id: "selectStaffMember",
-                  name: "selectStaffMember",
-                  text: 'Select ' + policyName,
-                  formGroup: {
-                    classes: "govuk-!-margin-0"
-                  },
-                  items: staff | excludeCurrentStaffMember(item.staffMember) | conditionallyAddDeallocate(item.staffMember.staffId) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select ' + policyName)
-                })
+                text: policyName | sentenceCase,
+                key: policyName,
+                attributes: {
+                  "aria-sort": "none"
+                }
+              },
+              {
+                text: "Change " + policyName,
+                key: 'change'
               } if user | hasPermission('allocate') else undefined,
               {
-                html: '<a class="govuk-link govuk-link--no-visited-state" href="/' + policyPath + '/prisoner-allocation-history/' + item.personIdentifier + '">View allocation history</a>' if item.hasAllocationHistory else ''
+                text: ""
               }
-            ] | removeNullish), rows) %}
-          {% endfor %}
+            ] | removeNullish,
+            rows: rows
+          }) }}
 
-          {{ mojPagination(records.length) }}
+        {{ mojPagination(records.length) }}
 
-          {{ govukTable({
-              attributes: {
-                "data-module": "moj-sortable-table"
-              },
-              classes: 'table-vertical-align-middle govuk-!-margin-top-6 center-align-content',
-              head: [
-                {
-                  text: 'Name and prisoner number',
-                  key: 'name',
-                  attributes: {
-                    "aria-sort": "ascending"
-                  }
-                },
-                {
-                  text: "Residential location",
-                  key: 'location',
-                  attributes: {
-                    "aria-sort": "none"
-                  }
-                },
-                {
-                  text: "Relevant alerts",
-                  key: 'alerts',
-                  attributes: {
-                    "aria-sort": "none"
-                  }
-                },
-                {
-                  text: policyName | sentenceCase,
-                  key: policyName,
-                  attributes: {
-                    "aria-sort": "none"
-                  }
-                },
-                {
-                  text: "Change " + policyName,
-                  key: 'change'
-                } if user | hasPermission('allocate') else undefined,
-                {
-                  text: ""
-                }
-              ] | removeNullish,
-              rows: rows
-            }) }}
-
-          {{ mojPagination(records.length) }}
-
-          {% if user | hasPermission('allocate') %}
-            {{ govukButton({
-              text: "Save changes",
-              preventDoubleClick: true
-            }) }}
-          {% endif %}
-        </form>
-      {% endif %}
+        {% if user | hasPermission('allocate') %}
+          {{ govukButton({
+            text: "Save changes",
+            preventDoubleClick: true
+          }) }}
+        {% endif %}
+      </form>
+    {% endif %}
   </div>
 {% endblock %}
