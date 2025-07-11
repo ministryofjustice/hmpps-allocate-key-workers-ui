@@ -24,6 +24,7 @@ context('/allocate', () => {
   const queryTextbox = () => cy.findByRole('textbox', { name: /Name or prison number/ })
   const locationTextBox = () => cy.findByRole('combobox', { name: /Residential location/ })
   const excludeActiveCheckbox = () => cy.findByRole('checkbox', { name: /Prisoners without a key worker/ })
+  const autoAllocateButton = () => cy.findByRole('button', { name: /Assign key workers automatically/i })
   const invalidNameError = 'Enter a valid name or prison number'
   const invalidSearchError = 'Select or enter text into at least one of the search options below'
   const invalidLocationError = 'Select a valid location'
@@ -454,9 +455,16 @@ context('/allocate', () => {
       readonly || !allowAutoAllocation ? 'not.exist' : 'exist',
     )
 
-    cy.findByRole('button', { name: 'Assign key workers automatically' }).should(
-      readonly || !allowAutoAllocation ? 'not.exist' : 'exist',
-    )
+    autoAllocateButton().should(readonly || !allowAutoAllocation ? 'not.exist' : 'exist')
+
+    if (!readonly && allowAutoAllocation) {
+      autoAllocateButton().should(
+        'have.attr',
+        'href',
+        '/key-worker/recommend-allocations?query=ALL&cellLocationPrefix=&excludeActiveAllocations=false',
+      )
+    }
+
     cy.findByRole('button', { name: 'Save changes' }).should(readonly ? 'not.exist' : 'exist')
   }
 

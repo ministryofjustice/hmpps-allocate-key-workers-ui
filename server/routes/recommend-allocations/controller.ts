@@ -43,8 +43,9 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
 
     if (missingAllocation) {
       return res.render('recommend-allocations/not-enough-available-capacity/view', {
-        backUrl: 'allocate',
+        backUrl: `/${res.locals.policyPath}/allocate?${req.url.split('?')[1]}`,
         missingAllocation,
+        searchQuery: req.url.split('?')[1],
         totalPrisoners: records.length,
       })
     }
@@ -72,7 +73,7 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
     })
 
     return res.render('recommend-allocations/view', {
-      backUrl: 'allocate',
+      backUrl: 'javascript-back',
       records: matchedPrisoners,
       count: req.flash(FLASH_KEY__COUNT)[0],
       apiError: req.flash(FLASH_KEY__API_ERROR)[0],

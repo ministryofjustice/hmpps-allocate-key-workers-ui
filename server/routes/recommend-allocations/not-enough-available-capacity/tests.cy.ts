@@ -50,12 +50,14 @@ context('/recommend-allocations not enough capacity interrupt card', () => {
     cy.findByRole('button', { name: 'Continue' })
       .should('be.visible')
       .and('have.attr', 'href', '/key-worker/recommend-allocations?allowPartialAllocation=true')
-    cy.findByRole('link', { name: 'Go back' }).should('be.visible').and('have.attr', 'href', '/key-worker/allocate')
+    cy.findByRole('link', { name: 'Go back' })
+      .should('be.visible')
+      .and('have.attr', 'href', '/key-worker/allocate?query=ALL&cellLocationPrefix=&excludeActiveAllocations=false')
   })
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/key-worker/recommend-allocations?allowPartialAllocation`, {
+    cy.visit(`/key-worker/recommend-allocations?query=ALL&cellLocationPrefix=&excludeActiveAllocations=false`, {
       failOnStatusCode: false,
     })
   }

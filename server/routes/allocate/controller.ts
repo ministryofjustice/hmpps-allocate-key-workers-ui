@@ -59,6 +59,9 @@ export class AllocateStaffController extends ChangeStaffController {
     return res.render('allocate/view', {
       ...sanitisedQuery,
       records,
+      searchQuery: new URLSearchParams(
+        Object.entries(sanitisedQuery).reduce((acc, [key, value]) => ({ ...acc, [key]: String(value) }), {}),
+      ).toString(),
       locations: locationsValues,
       ...(await this.getChangeData(req, res)),
       showBreadcrumbs: true,
