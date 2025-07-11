@@ -106,7 +106,7 @@
       </div>
     </div>
 
-    {% if records %}
+    {% if records and records.length > 0 %}
       {% if user | hasPermission('allocate') %}
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-three-quarters">
@@ -127,9 +127,10 @@
           </div>
         {% endif %}
       {% endif %}
+    {% endif %}
       {% if records.length == 0 %}
         <p> No results for this search criteria.
-      {% else %}
+      {% elif records.length > 0 %}
         <form method="post">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
           {% set rows = [] %}
@@ -165,7 +166,7 @@
                 })
               } if user | hasPermission('allocate') else undefined,
               {
-                html: '<a class="govuk-link govuk-link--no-visited-state" href="/' + policyPath + '/prisoner-allocation-history/' + item.personIdentifier + searchQuery + '">View allocation history</a>' if item.hasAllocationHistory else ''
+                html: '<a class="govuk-link govuk-link--no-visited-state" href="/' + policyPath + '/prisoner-allocation-history/' + item.personIdentifier + '">View allocation history</a>' if item.hasAllocationHistory else ''
               }
             ] | removeNullish), rows) %}
           {% endfor %}
@@ -227,6 +228,5 @@
           {% endif %}
         </form>
       {% endif %}
-    {% endif %}
   </div>
 {% endblock %}
