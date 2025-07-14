@@ -101,6 +101,7 @@ export declare global {
         searchTerm(searchTerm: string): void
         staffId(staffId: number | string): void
       }
+      sendApiEvent?: (apiUrl: string, isAttempt: boolean) => void
     }
 
     interface Locals {

@@ -41,7 +41,10 @@ export default class KeyworkerApiService {
       frequencyInWeeks: frequencyInWeeks ?? config.frequencyInWeeks,
     }
 
-    return this.keyworkerApiClientBuilder(req).updatePrisonConfig(res.locals.user.getActiveCaseloadId()!, requestBody)
+    return this.keyworkerApiClientBuilder(req, res).updatePrisonConfig(
+      res.locals.user.getActiveCaseloadId()!,
+      requestBody,
+    )
   }
 
   async getStaffDetails(
