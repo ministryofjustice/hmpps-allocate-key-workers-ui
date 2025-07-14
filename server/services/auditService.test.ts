@@ -9,7 +9,6 @@ describe('Audit service', () => {
 
   beforeEach(() => {
     hmppsAuditClient = new HmppsAuditClient({
-      enabled: false,
       queueUrl: '',
       region: '',
       serviceName: '',
