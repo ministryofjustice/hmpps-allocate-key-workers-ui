@@ -57,6 +57,66 @@ context('/establishment-settings', () => {
     )
   })
 
+  it('should send API Call audit event', () => {
+    cy.task('stubEnabledPrison')
+    cy.task('stubSignIn', {
+      roles: [AuthorisedRoles.KW_MIGRATION],
+    })
+
+    navigateToTestPage()
+    cy.url().should('match', /\/establishment-settings$/)
+    cy.findByRole('button', { name: 'Save' }).click()
+
+    cy.verifyAuditEvents([
+      {
+        who: 'USER1',
+        subjectType: 'NOT_APPLICABLE',
+        details:
+          '{"pageUrl":"/key-worker/establishment-settings","pageName":"ESTABLISHMENT_SETTINGS","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+        what: 'PAGE_VIEW',
+        service: 'DPS023',
+      },
+      {
+        who: 'USER1',
+        subjectType: 'NOT_APPLICABLE',
+        details:
+          '{"pageUrl":"/key-worker/establishment-settings","pageName":"ESTABLISHMENT_SETTINGS","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+        what: 'PAGE_VIEW_ACCESS_ATTEMPT',
+        service: 'DPS023',
+      },
+      {
+        what: 'API_CALL_ATTEMPT',
+        who: 'USER1',
+        subjectType: 'NOT_APPLICABLE',
+        details: '{"apiUrl":"PUT /prisons/LEI/configurations","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+        service: 'DPS023',
+      },
+      {
+        what: 'API_CALL_SUCCESS',
+        who: 'USER1',
+        subjectType: 'NOT_APPLICABLE',
+        details: '{"apiUrl":"PUT /prisons/LEI/configurations","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+        service: 'DPS023',
+      },
+      {
+        who: 'USER1',
+        subjectType: 'NOT_APPLICABLE',
+        details:
+          '{"pageUrl":"/key-worker/establishment-settings","pageName":"ESTABLISHMENT_SETTINGS","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+        what: 'PAGE_VIEW',
+        service: 'DPS023',
+      },
+      {
+        who: 'USER1',
+        subjectType: 'NOT_APPLICABLE',
+        details:
+          '{"pageUrl":"/key-worker/establishment-settings","pageName":"ESTABLISHMENT_SETTINGS","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+        what: 'PAGE_VIEW_ACCESS_ATTEMPT',
+        service: 'DPS023',
+      },
+    ])
+  })
+
   it('should test non-admin view', () => {
     cy.task('stubEnabledPrison')
     cy.task('stubSignIn', {

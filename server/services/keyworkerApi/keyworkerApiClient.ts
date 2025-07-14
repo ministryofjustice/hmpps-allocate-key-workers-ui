@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import RestClient from '../../data/restClient'
+import AuditedRestClient from '../../data/auditedRestClient'
 import config from '../../config'
 import type { components, operations } from '../../@types/keyWorker'
 import { MakeNullable } from '../../utils/utils'
@@ -33,7 +33,7 @@ export type StaffDetailsRequest = MakeNullable<
 >
 
 export default class KeyworkerApiClient {
-  private readonly restClient: RestClient
+  private readonly restClient: AuditedRestClient
 
   constructor(req: Request, res?: Response) {
     const headers: { [key: string]: string } = {}
@@ -43,7 +43,13 @@ export default class KeyworkerApiClient {
     if (res?.locals?.user?.activeCaseLoad?.caseLoadId) {
       headers['CaseloadId'] = res.locals.user.activeCaseLoad.caseLoadId
     }
-    this.restClient = new RestClient('Keyworker API', config.apis.keyworkerApi, req.systemClientToken, headers)
+    this.restClient = new AuditedRestClient(
+      'Keyworker API',
+      config.apis.keyworkerApi,
+      req.systemClientToken,
+      headers,
+      res,
+    )
   }
 
   async getServiceConfigInfo(): Promise<ServiceConfigInfo> {
@@ -83,10 +89,13 @@ export default class KeyworkerApiClient {
     prisonId: string,
     query: components['schemas']['StaffSearchRequest'],
   ): Promise<components['schemas']['StaffSearchResponse']['content']> {
-    const response = await this.restClient.post<components['schemas']['StaffSearchResponse']>({
-      path: `/search/prisons/${prisonId}/staff`,
-      data: query,
-    })
+    const response = await this.restClient.post<components['schemas']['StaffSearchResponse']>(
+      {
+        path: `/search/prisons/${prisonId}/staff`,
+        data: query,
+      },
+      true,
+    )
 
     return response.content
   }
@@ -115,10 +124,13 @@ export default class KeyworkerApiClient {
     prisonCode: string,
     body: components['schemas']['PersonSearchRequest'],
   ): Promise<components['schemas']['PersonSearchResponse']['content']> {
-    const response = await this.restClient.post<components['schemas']['PersonSearchResponse']>({
-      path: `/search/prisons/${prisonCode}/prisoners`,
-      data: body,
-    })
+    const response = await this.restClient.post<components['schemas']['PersonSearchResponse']>(
+      {
+        path: `/search/prisons/${prisonCode}/prisoners`,
+        data: body,
+      },
+      true,
+    )
 
     return response.content
   }
@@ -148,10 +160,13 @@ export default class KeyworkerApiClient {
     query: components['schemas']['AllocatableSearchRequest'],
     includeStats: boolean,
   ) {
-    return this.restClient.post<components['schemas']['AllocatableSearchResponse']>({
-      path: `/search/prisons/${prisonCode}/staff-allocations?includeStats=${includeStats}`,
-      data: query,
-    })
+    return this.restClient.post<components['schemas']['AllocatableSearchResponse']>(
+      {
+        path: `/search/prisons/${prisonCode}/staff-allocations?includeStats=${includeStats}`,
+        data: query,
+      },
+      true,
+    )
   }
 
   async upsertStaffDetails(prisonCode: string, staffId: string | number, requestBody: StaffDetailsRequest) {
