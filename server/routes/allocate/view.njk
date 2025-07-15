@@ -106,28 +106,31 @@
       </div>
     </div>
 
-    {% if records and records.length > 0 %}
-      {% if user | hasPermission('allocate') %}
-        <div class="govuk-grid-row">
-          <div class="govuk-grid-column-three-quarters">
+   
+    {% if user | hasPermission('allocate') %}
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+          {% if records and records.length > 0 %}
             <p>Use the dropdown lists to assign {{ policyNames }} to prisoners or deallocate them.<br/>Changes will only take affect when you select save.</p>
-            {% if allowAutoAllocation %}
-              <p>Select ‘Assign {{ policyNames }} automatically’ to get {{ policyName }} recommendations for all prisoners without a current {{ policyName }}. You should save any changes you’ve made before selecting this.</p>
-            {% endif %}
-          </div>
+          {% endif %}
+          {% if allowAutoAllocation %}
+            <p>Select ‘Assign {{ policyNames }} automatically’ to get {{ policyName }} recommendations for all prisoners without a current {{ policyName }}.{% if records and records.length > 0 %} You should save any changes you’ve made before selecting this.{% endif %}</p>
+          {% endif %}
         </div>
-        {% if allowAutoAllocation %}
-          <div class="govuk-grid-row">
-            {{ govukButton({
-              text: "Assign " + policyNames + " automatically",
-              classes: "govuk-button--secondary float-right govuk-!-margin-bottom-2",
-              preventDoubleClick: true,
-              href: '/' + policyPath + '/recommend-allocations?' + searchQuery
-            }) }}
-          </div>
-        {% endif %}
-      {% endif %}
+      </div>
     {% endif %}
+
+    {% if allowAutoAllocation and user | hasPermission('allocate')%}
+      <div class="govuk-grid-row">
+        {{ govukButton({
+          text: "Assign " + policyNames + " automatically",
+          classes: "govuk-button--secondary float-right govuk-!-margin-bottom-2",
+          preventDoubleClick: true,
+          href: '/' + policyPath + '/recommend-allocations?' + searchQuery
+        }) }}
+      </div>
+    {% endif %}
+  
     {% if records.length == 0 %}
       <p> No results for this search criteria.
     {% elif records.length > 0 %}
