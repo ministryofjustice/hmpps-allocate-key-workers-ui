@@ -11,7 +11,6 @@ describe('hmppsAuditClient', () => {
     queueUrl: 'http://localhost:4566/000000000000/mainQueue',
     region: 'eu-west-2',
     serviceName: 'hmpps-service',
-    enabled: true,
   }
 
   afterEach(() => {
@@ -66,7 +65,7 @@ describe('hmppsAuditClient', () => {
 
     it("shouldn't send sqs message to audit queue if client disabled", async () => {
       sqsMock.on(SendMessageCommand).resolves({ MessageId: '123' })
-      hmppsAuditClient = new HmppsAuditClient({ ...auditClientConfig, enabled: false })
+      hmppsAuditClient = new HmppsAuditClient({ ...auditClientConfig, serviceName: '' })
 
       await hmppsAuditClient.sendMessage({
         what: 'EXAMPLE_EVENT',
