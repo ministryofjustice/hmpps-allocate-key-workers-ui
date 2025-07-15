@@ -20,7 +20,7 @@
         variant: 'success',
         title: 'Changes made successfully',
         showTitleAsHeading: true,
-        text: 'You have successfully allocated '+ policyName + ' to ' + allocationResult.count + ' prisoners.',
+        text: ('You have successfully allocated '+ policyName + ' to 1 prisoner.') if allocationResult.count == 1 else ('You have successfully allocated '+ policyNames + ' to ' + allocationResult.count + ' prisoners.'),
         classes: 'govuk-!-margin-bottom-0 govuk-!-margin-top-5'
       }) }}
     {% elseif allocationResult.type == 'NO_CAPACITY_FOR_AUTO_ALLOCATION' %}
@@ -106,7 +106,7 @@
       </div>
     </div>
 
-   
+
     {% if user | hasPermission('allocate') %}
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
@@ -130,7 +130,7 @@
         }) }}
       </div>
     {% endif %}
-  
+
     {% if records.length == 0 %}
       <p> No results for this search criteria.
     {% elif records.length > 0 %}

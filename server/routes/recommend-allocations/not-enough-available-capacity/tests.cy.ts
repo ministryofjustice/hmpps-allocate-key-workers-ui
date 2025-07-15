@@ -46,7 +46,7 @@ context('/recommend-allocations not enough capacity interrupt card', () => {
   it('should show warning message when there is only capacity to partially auto allocate', () => {
     navigateToTestPage()
     cy.findByRole('heading', { name: 'Not enough available capacity to allocate all prisoners' }).should('be.visible')
-    cy.findByText('Key workers could not be recommended for 1 out of 2.').should('be.visible')
+    cy.findByText('Key workers could not be recommended for 1 out of 2 prisoners.').should('be.visible')
     cy.findByRole('button', { name: 'Continue' })
       .should('be.visible')
       .and('have.attr', 'href', '/key-worker/recommend-allocations?allowPartialAllocation=true')
