@@ -126,7 +126,7 @@
           text: "Assign " + policyName + "s automatically",
           classes: "govuk-button--secondary float-right govuk-!-margin-bottom-2",
           preventDoubleClick: true,
-          href: '/' + policyPath + '/recommend-allocations?' + searchQuery
+          href: '/' + policyPath + '/recommend-allocations' + (('?' + searchQuery) if searchQuery else "")
         }) }}
       </div>
     {% endif %}

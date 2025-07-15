@@ -15,7 +15,7 @@
     },
     secondaryAction: {
       text: "Go back",
-      href: "/" + policyPath + "/allocate?" + searchQuery
+      href: "/" + policyPath + "/allocate" + (('?' + searchQuery) if searchQuery else "")
     }
   }) -%}
     <p>{{ policyName | sentenceCase }}s could not be recommended for {{ missingAllocation }} out of {{ totalPrisoners }}.</p>

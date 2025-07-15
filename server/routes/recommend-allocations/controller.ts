@@ -42,10 +42,11 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
         ).length
 
     if (missingAllocation) {
+      const searchQuery = req.url.split('?')[1] || ''
       return res.render('recommend-allocations/not-enough-available-capacity/view', {
-        backUrl: `/${res.locals.policyPath}/allocate?${req.url.split('?')[1]}`,
+        backUrl: `/${res.locals.policyPath}/allocate${searchQuery ? `?${searchQuery}` : ''}`,
         missingAllocation,
-        searchQuery: req.url.split('?')[1],
+        searchQuery,
         totalPrisoners: records.length,
       })
     }
