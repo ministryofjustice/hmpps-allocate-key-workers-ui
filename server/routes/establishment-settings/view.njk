@@ -36,13 +36,13 @@
             errorMessage: validationErrors | findError('allowAutoAllocation'),
             fieldset: {
               legend: {
-                text: "Allow " + policyName + "s to be recommended automatically",
+                text: "Allow " + policyNames + " to be recommended automatically",
                 isPageHeading: false,
                 classes: "govuk-fieldset__legend--m"
               }
             },
             hint: {
-              text: "This will enable you to use the ‘recommend " + policyName + "s automatically’ option on the allocation page."
+              text: "This will enable you to use the ‘recommend " + policyNames + " automatically’ option on the allocation page."
             },
             items: [
               {
@@ -70,7 +70,7 @@
               isPageHeading: false
             },
             hint: {
-              text: "The ‘recommend " + policyName + "s automatically’ function will not recommend prisoners to " + policyName + "s over this limit. You’ll still be able to manually allocate more prisoners than this to a " + policyName + "."
+              text: "The ‘recommend " + policyNames + " automatically’ function will not recommend prisoners to " + policyName + "s over this limit. You’ll still be able to manually allocate more prisoners than this to a " + policyName + "."
             }
           }) }}
 

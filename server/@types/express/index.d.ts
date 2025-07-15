@@ -114,6 +114,7 @@ export declare global {
       breadcrumbs: Breadcrumbs
       prisoner?: PrisonerSummary
       policyName?: string
+      policyNames?: string
       policyPath?: string
       buildNumber?: string
       asset_path: string

@@ -10,7 +10,7 @@
 {% set pageTitle = "Manage [staffs]" %}
 
 {% block innerContent %}
-  <h1 class="govuk-heading-l govuk-!-margin-bottom-6">Manage {{ policyName }}s</h1>
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-6">Manage {{ policyNames }}</h1>
 
   <div class="govuk-width-container">
     <div class="govuk-grid-row">
@@ -83,7 +83,7 @@
           {
             text: item.stats.complianceRate | round(1) + '%',
             attributes: {
-              "data-sort-value": item.stats.complianceRate 
+              "data-sort-value": item.stats.complianceRate
             }
           } if policyPath == 'key-worker' else undefined
         ] | removeNullish), rows) %}

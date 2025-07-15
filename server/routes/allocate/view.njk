@@ -25,19 +25,19 @@
       }) }}
     {% elseif allocationResult.type == 'NO_CAPACITY_FOR_AUTO_ALLOCATION' %}
       {% set errorHtml %}
-        <p>{{ policyName | sentenceCase }}s could not be recommended for any prisoners who do not currently have a {{ policyName }}. This is because none of your {{ policyName }}s have available capacity.</p>
-        <p>To assign {{ policyName }}s to these prisoners, you can:</p>
+        <p>{{ policyName | sentenceCase }}s could not be recommended for any prisoners who do not currently have a {{ policyName }}. This is because none of your {{ policyNames }} have available capacity.</p>
+        <p>To assign {{ policyNames }} to these prisoners, you can:</p>
         <p>
           <ul class="govuk-list govuk-list--bullet">
-            <li>manually select {{ policyName }}s for these prisoners using the dropdown lists</li>
-            <li>review the capacities of your {{ policyName }}s in <a href="/{{ policyPath }}/manage">manage {{ policyName }}s</a> and update their capacities in their individual profiles</li>
+            <li>manually select {{ policyNames }} for these prisoners using the dropdown lists</li>
+            <li>review the capacities of your {{ policyNames }} in <a href="/{{ policyPath }}/manage">manage {{ policyNames }}</a> and update their capacities in their individual profiles</li>
           </ul>
         </p>
       {% endset %}
 
       {{ mojAlert({
         variant: 'error',
-        title: 'Not enough available capacity to assign any ' + policyName + 's',
+        title: 'Not enough available capacity to assign any ' + policyNames,
         showTitleAsHeading: true,
         html: errorHtml,
         classes: 'govuk-!-margin-bottom-0 govuk-!-margin-top-5'
@@ -110,16 +110,16 @@
       {% if user | hasPermission('allocate') %}
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-three-quarters">
-            <p>Use the dropdown lists to assign {{ policyName }}s to prisoners or deallocate them.<br/>Changes will only take affect when you select save.</p>
+            <p>Use the dropdown lists to assign {{ policyNames }} to prisoners or deallocate them.<br/>Changes will only take affect when you select save.</p>
             {% if allowAutoAllocation %}
-              <p>Select ‘Assign {{ policyName }}s automatically’ to get {{ policyName }} recommendations for all prisoners without a current {{ policyName }}. You should save any changes you’ve made before selecting this.</p>
+              <p>Select ‘Assign {{ policyNames }} automatically’ to get {{ policyName }} recommendations for all prisoners without a current {{ policyName }}. You should save any changes you’ve made before selecting this.</p>
             {% endif %}
           </div>
         </div>
         {% if allowAutoAllocation %}
           <div class="govuk-grid-row">
             {{ govukButton({
-              text: "Assign " + policyName + "s automatically",
+              text: "Assign " + policyNames + " automatically",
               classes: "govuk-button--secondary float-right govuk-!-margin-bottom-2",
               preventDoubleClick: true,
               href: '/' + policyPath + '/recommend-allocations?' + searchQuery

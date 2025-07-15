@@ -76,7 +76,7 @@
     <hr class="govuk-section-break govuk-section-break--m"/>
 
     {% if user | hasPermission('allocate') %}
-      <p>Select {{ policyName }}s from the dropdown lists to reallocate or deallocate prisoners.</p>
+      <p>Select {{ policyNames }} from the dropdown lists to reallocate or deallocate prisoners.</p>
       <p>{{ policyName | sentenceCase }}s will only be allocated when you save your changes.</p>
 
       <br/>
