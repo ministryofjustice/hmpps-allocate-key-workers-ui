@@ -1,5 +1,4 @@
 # Whole files or case-insensitive regex strings can be excluded from the scan by adding them to this file.
 
 'HMPPS Allocate Key Workers Ui'
-res.locals.policyName =
-res.locals.policyNames =
+res.locals.policyStaff

@@ -13,7 +13,7 @@ export class Breadcrumbs {
         href: res.locals.digitalPrisonServicesUrl,
       },
       {
-        text: `${sentenceCase(res.locals.policyName!)}s`,
+        text: `${sentenceCase(res.locals.policyStaff!)}s`,
         href: `/${res.locals.policyPath}`,
       },
     ]

@@ -11,7 +11,7 @@
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
 
 {% set fullWidth = true %}
-{% set pageTitle = "Allocate [staffs] to prisoners" | policyAware(policyName) %}
+{% set pageTitle = "Allocate [staffs] to prisoners" | policyAware(policyStaff) %}
 
 {% block pageHeader %}
   {% if allocationResult %}
@@ -20,24 +20,24 @@
         variant: 'success',
         title: 'Changes made successfully',
         showTitleAsHeading: true,
-        text: ('You have successfully allocated '+ policyName + ' to 1 prisoner.') if allocationResult.count == 1 else ('You have successfully allocated '+ policyNames + ' to ' + allocationResult.count + ' prisoners.'),
+        text: ('You have successfully allocated '+ policyStaff + ' to 1 prisoner.') if allocationResult.count == 1 else ('You have successfully allocated '+ policyStaffs + ' to ' + allocationResult.count + ' prisoners.'),
         classes: 'govuk-!-margin-bottom-0 govuk-!-margin-top-5'
       }) }}
     {% elseif allocationResult.type == 'NO_CAPACITY_FOR_AUTO_ALLOCATION' %}
       {% set errorHtml %}
-        <p>{{ policyName | sentenceCase }}s could not be recommended for any prisoners who do not currently have a {{ policyName }}. This is because none of your {{ policyNames }} have available capacity.</p>
-        <p>To assign {{ policyNames }} to these prisoners, you can:</p>
+        <p>{{ policyStaff | sentenceCase }}s could not be recommended for any prisoners who do not currently have a {{ policyStaff }}. This is because none of your {{ policyStaffs }} have available capacity.</p>
+        <p>To assign {{ policyStaffs }} to these prisoners, you can:</p>
         <p>
           <ul class="govuk-list govuk-list--bullet">
-            <li>manually select {{ policyNames }} for these prisoners using the dropdown lists</li>
-            <li>review the capacities of your {{ policyNames }} in <a href="/{{ policyPath }}/manage">manage {{ policyNames }}</a> and update their capacities in their individual profiles</li>
+            <li>manually select {{ policyStaffs }} for these prisoners using the dropdown lists</li>
+            <li>review the capacities of your {{ policyStaffs }} in <a href="/{{ policyPath }}/manage">manage {{ policyStaffs }}</a> and update their capacities in their individual profiles</li>
           </ul>
         </p>
       {% endset %}
 
       {{ mojAlert({
         variant: 'error',
-        title: 'Not enough available capacity to assign any ' + policyNames,
+        title: 'Not enough available capacity to assign any ' + policyStaffs,
         showTitleAsHeading: true,
         html: errorHtml,
         classes: 'govuk-!-margin-bottom-0 govuk-!-margin-top-5'
@@ -87,7 +87,7 @@
               items: [
                 {
                   value: "true",
-                  text: "Prisoners without a " + policyName,
+                  text: "Prisoners without a " + policyStaff,
                   checked: excludeActiveAllocations
                 }
               ]
@@ -111,10 +111,10 @@
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
           {% if records and records.length > 0 %}
-            <p>Use the dropdown lists to assign {{ policyNames }} to prisoners or deallocate them.<br/>Changes will only take affect when you select save.</p>
+            <p>Use the dropdown lists to assign {{ policyStaffs }} to prisoners or deallocate them.<br/>Changes will only take affect when you select save.</p>
           {% endif %}
           {% if allowAutoAllocation %}
-            <p>Select ‘Assign {{ policyNames }} automatically’ to get {{ policyName }} recommendations for all prisoners without a current {{ policyName }}.{% if records and records.length > 0 %} You should save any changes you’ve made before selecting this.{% endif %}</p>
+            <p>Select ‘Assign {{ policyStaffs }} automatically’ to get {{ policyStaff }} recommendations for all prisoners without a current {{ policyStaff }}.{% if records and records.length > 0 %} You should save any changes you’ve made before selecting this.{% endif %}</p>
           {% endif %}
         </div>
       </div>
@@ -123,7 +123,7 @@
     {% if allowAutoAllocation and user | hasPermission('allocate')%}
       <div class="govuk-grid-row">
         {{ govukButton({
-          text: "Assign " + policyNames + " automatically",
+          text: "Assign " + policyStaffs + " automatically",
           classes: "govuk-button--secondary float-right govuk-!-margin-bottom-2",
           preventDoubleClick: true,
           href: '/' + policyPath + '/recommend-allocations' + (('?' + searchQuery) if searchQuery else "")
@@ -161,11 +161,11 @@
               html: 'Not applicable - high complexity of need' if item.hasHighComplexityOfNeeds else govukSelect({
                 id: "selectStaffMember",
                 name: "selectStaffMember",
-                text: 'Select ' + policyName,
+                text: 'Select ' + policyStaff,
                 formGroup: {
                   classes: "govuk-!-margin-0"
                 },
-                items: staff | excludeCurrentStaffMember(item.staffMember) | conditionallyAddDeallocate(item.staffMember.staffId) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select ' + policyName)
+                items: staff | excludeCurrentStaffMember(item.staffMember) | conditionallyAddDeallocate(item.staffMember.staffId) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select ' + policyStaff)
               })
             } if user | hasPermission('allocate') else undefined,
             {
@@ -204,14 +204,14 @@
                 }
               },
               {
-                text: policyName | sentenceCase,
-                key: policyName,
+                text: policyStaff | sentenceCase,
+                key: policyStaff,
                 attributes: {
                   "aria-sort": "none"
                 }
               },
               {
-                text: "Change " + policyName,
+                text: "Change " + policyStaff,
                 key: 'change'
               } if user | hasPermission('allocate') else undefined,
               {

@@ -78,15 +78,15 @@ export function populateUserPermissionsAndPrisonConfig(): RequestHandler {
       switch (req.params['policy']) {
         case 'key-worker':
           req.middleware.policy = 'KEY_WORKER'
-          res.locals.policyName = 'key worker'
-          res.locals.policyNames = 'key workers'
+          res.locals.policyStaff = 'key worker'
+          res.locals.policyStaffs = 'key workers'
           res.locals.policyPath = 'key-worker'
           res.locals.user.hasJobResponsibility = !!res.locals.user.allocationJobResponsibilities?.includes('KEY_WORKER')
           break
         case 'personal-officer':
           req.middleware.policy = 'PERSONAL_OFFICER'
-          res.locals.policyName = 'personal officer'
-          res.locals.policyNames = 'personal officers'
+          res.locals.policyStaff = 'personal officer'
+          res.locals.policyStaffs = 'personal officers'
           res.locals.policyPath = 'personal-officer'
           res.locals.user.hasJobResponsibility =
             !!res.locals.user.allocationJobResponsibilities?.includes('PERSONAL_OFFICER')

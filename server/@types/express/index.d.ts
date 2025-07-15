@@ -113,8 +113,8 @@ export declare global {
       legacyKeyWorkersUiUrl: string
       breadcrumbs: Breadcrumbs
       prisoner?: PrisonerSummary
-      policyName?: string
-      policyNames?: string
+      policyStaff?: string
+      policyStaffs?: string
       policyPath?: string
       buildNumber?: string
       asset_path: string

@@ -22,7 +22,7 @@ export class UpdateStatusInactiveController {
 
       req.flash(
         FLASH_KEY__SUCCESS_MESSAGE,
-        `You have updated this ${res.locals.policyName}’s status to ${req.journeyData.updateStaffDetails!.status!.description}.`,
+        `You have updated this ${res.locals.policyStaff}’s status to ${req.journeyData.updateStaffDetails!.status!.description}.`,
       )
 
       next()

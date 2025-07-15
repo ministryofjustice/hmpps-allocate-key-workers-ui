@@ -26,7 +26,7 @@ export class UpdateWorkingPatternController {
           hoursPerWeek: scheduleType.hoursPerWeek,
         },
       })
-      req.flash(FLASH_KEY__SUCCESS_MESSAGE, `You have updated this ${res.locals.policyName}’s working pattern.`)
+      req.flash(FLASH_KEY__SUCCESS_MESSAGE, `You have updated this ${res.locals.policyStaff}’s working pattern.`)
       next()
     } catch (e) {
       next(e)

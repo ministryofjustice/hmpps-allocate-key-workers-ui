@@ -10,7 +10,7 @@
 {% set pageTitle = "Manage [staffs]" %}
 
 {% block innerContent %}
-  <h1 class="govuk-heading-l govuk-!-margin-bottom-6">Manage {{ policyNames }}</h1>
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-6">Manage {{ policyStaffs }}</h1>
 
   <div class="govuk-width-container">
     <div class="govuk-grid-row">
@@ -28,7 +28,7 @@
               classes: "flex-grow"
             },
             label: {
-              text: policyName | sentenceCase + ' name'
+              text: policyStaff | sentenceCase + ' name'
             }
             }) }}
 

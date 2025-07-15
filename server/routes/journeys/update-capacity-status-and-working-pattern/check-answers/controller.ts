@@ -37,7 +37,7 @@ export class UpdateStatusCheckAnswersController {
 
       req.flash(
         FLASH_KEY__SUCCESS_MESSAGE,
-        `You have updated this ${res.locals.policyName}’s status to ${status!.description}.`,
+        `You have updated this ${res.locals.policyStaff}’s status to ${status!.description}.`,
       )
 
       next()

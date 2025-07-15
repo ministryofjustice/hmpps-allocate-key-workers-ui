@@ -1,5 +1,5 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% set errorSummaryList = validationErrors | policyAware(policyName) | buildErrorSummaryList %}
+{% set errorSummaryList = validationErrors | policyAware(policyStaff) | buildErrorSummaryList %}
 
 {% if errorSummaryList.length > 0 %}
     <div class="govuk-grid-row">

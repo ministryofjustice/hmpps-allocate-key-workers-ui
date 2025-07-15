@@ -13,7 +13,7 @@
         errorMessage: validationErrors | findError('assignOrRemove'),
         fieldset: {
           legend: {
-            text: "Do you want to make someone a " + policyName + " or remove the role from someone?",
+            text: "Do you want to make someone a " + policyStaff + " or remove the role from someone?",
             isPageHeading: true,
             classes: "govuk-fieldset__legend--xl"
           }
@@ -21,11 +21,11 @@
         items: [
           {
             value: 'ASSIGN',
-            text: "Make someone a " + policyName
+            text: "Make someone a " + policyStaff
           },
           {
             value: 'REMOVE',
-            text: "Remove the " + policyName + " role from someone"
+            text: "Remove the " + policyStaff + " role from someone"
           }
         ]
       }) }}

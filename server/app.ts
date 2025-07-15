@@ -84,7 +84,7 @@ export default function createApp(services: Services): express.Application {
 
   app.get('/:policy/not-authorised', (req, res) => {
     res.status(403)
-    res.render('not-authorised', { showBreadcrumbs: true, policyName: req.params['policy'].replace('-', ' ') })
+    res.render('not-authorised', { showBreadcrumbs: true, policyStaff: req.params['policy'].replace('-', ' ') })
   })
 
   app.use('/:policy', routes(services))

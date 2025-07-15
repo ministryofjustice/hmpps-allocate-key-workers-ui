@@ -6,11 +6,11 @@
 
 {% block innerContent %}
     {{ govukPanel({
-        titleText: policyName | sentenceCase  + " role removed",
-        text: "You have successfully removed the " + policyName + " role from " + staff | lastNameCommaFirstName
+        titleText: policyStaff | sentenceCase  + " role removed",
+        text: "You have successfully removed the " + policyStaff + " role from " + staff | lastNameCommaFirstName
     }) }}
 
   <p class="govuk-body">
-    <a class="govuk-link govuk-link--no-visited-state" href="/{{ policyPath }}">Return to {{ policyNames }} homepage</a>
+    <a class="govuk-link govuk-link--no-visited-state" href="/{{ policyPath }}">Return to {{ policyStaffs }} homepage</a>
   </p>
 {% endblock %}

@@ -21,7 +21,7 @@ export class UpdateCapacityController {
 
     try {
       await this.keyworkerApiService.upsertStaffDetails(req as Request, res, staffDetails.staffId, { capacity })
-      req.flash(FLASH_KEY__SUCCESS_MESSAGE, `You have updated this ${res.locals.policyName}’s maximum capacity.`)
+      req.flash(FLASH_KEY__SUCCESS_MESSAGE, `You have updated this ${res.locals.policyStaff}’s maximum capacity.`)
       next()
     } catch (e) {
       next(e)
