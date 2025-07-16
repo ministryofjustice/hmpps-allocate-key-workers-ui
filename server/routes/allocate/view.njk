@@ -11,7 +11,9 @@
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
 
 {% set fullWidth = true %}
-{% set pageTitle = "Allocate [staffs] to prisoners" | policyAware(policyStaff) %}
+{% set pageTitle -%}
+  Allocate {{ policyStaffs }} to prisoners
+{%- endset %}
 
 {% block pageHeader %}
   {% if allocationResult %}

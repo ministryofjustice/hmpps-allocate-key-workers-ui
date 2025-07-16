@@ -9,7 +9,9 @@
 {% from "partials/alertFlags/macro.njk" import alertFlags %}
 
 {% set fullWidth = true %}
-{% set pageTitle = "Allocate [staffs] automatically" | policyAware(policyStaff) %}
+{% set pageTitle -%}
+  Allocate {{ policyStaffs }} automatically
+{%- endset %}
 
 {% block pageHeader %}
   {{ deallocateSuccessError(apiError, count) }}

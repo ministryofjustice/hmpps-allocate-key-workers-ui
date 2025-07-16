@@ -2,7 +2,9 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% set fullWidth = true %}
-{% set pageTitle = "Prisoner [staff] allocation history"  %}
+{% set pageTitle -%}
+  Prisoner {{ policyStaff }} allocation history
+{%- endset %}
 
 {% block innerContent %}
 

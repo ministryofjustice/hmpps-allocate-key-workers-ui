@@ -16,8 +16,7 @@
 
 {% block pageTitle %}
   {% set policyNameAlias = (policyStaff | sentenceCase + 's') if policyStaff else undefined %}
-  {% set policyAwarePageTitle = pageTitle | policyAware(policyStaff) if pageTitle else undefined %}
-  {{[policyAwarePageTitle, policyNameAlias, 'DPS'] | removeNullish | join(' - ')}}
+  {{[pageTitle, policyNameAlias, 'DPS'] | removeNullish | join(' - ')}}
 {% endblock %}
 
 {% block header %}

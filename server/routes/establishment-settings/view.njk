@@ -6,7 +6,9 @@
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 
 {% set fullWidth = true %}
-{% set pageTitle = "Manage your establishment’s [staff] settings" %}
+{% set pageTitle -%}
+  Manage your establishment’s {{ policyStaff }} settings
+{%- endset %}
 
 {% block innerContent %}
   <div class="govuk-width-container govuk-body">

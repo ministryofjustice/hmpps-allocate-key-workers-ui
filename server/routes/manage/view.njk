@@ -7,7 +7,9 @@
 {% from "partials/mojPagination/macro.njk" import mojPagination %}
 
 {% set fullWidth = true %}
-{% set pageTitle = "Manage [staffs]" %}
+{% set pageTitle -%}
+  Manage {{ policyStaffs }}
+{%- endset %}
 
 {% block innerContent %}
   <h1 class="govuk-heading-l govuk-!-margin-bottom-6">Manage {{ policyStaffs }}</h1>

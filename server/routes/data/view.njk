@@ -4,7 +4,9 @@
 {% from "./components/statCard.njk" import statCard %}
 
 {% set fullWidth = true %}
-{% set pageTitle = "View [staff] data" %}
+{% set pageTitle -%}
+  View {{ policyStaff }} data
+{%- endset %}
 
 {% block innerContent %}
 

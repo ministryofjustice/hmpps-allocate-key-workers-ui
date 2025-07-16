@@ -11,7 +11,9 @@
 
 
 {% set fullWidth = true %}
-{% set pageTitle = "[staff] profile" %}
+{% set pageTitle -%}
+  {{ policyStaff | sentenceCase }} profile
+{%- endset %}
 
 {% block pageHeader %}
   {{ deallocateSuccessError(apiError, count) }}
@@ -194,7 +196,7 @@
         {% endif %}
 
       {% else %}
-        <p class="govuk-!-margin-bottom-6">{{ 'There are no allocations for this [staff]' | policyAware(policyStaff) }}.</p>
+        <p class="govuk-!-margin-bottom-6">There are no allocations for this {{ policyStaff }}.</p>
       {% endif %}
     </form>
   </div>

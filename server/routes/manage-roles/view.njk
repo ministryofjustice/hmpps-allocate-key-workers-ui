@@ -2,7 +2,9 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% set pageTitle = "Add or remove [staff] role" %}
+{% set pageTitle -%}
+  Add or remove {{ policyStaff }} role
+{%- endset %}
 
 {% block innerContent %}
   <div class="govuk-width-container govuk-body">
