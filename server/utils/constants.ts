@@ -7,6 +7,7 @@ export const FLASH_KEY__API_ERROR = 'apiError'
 export type AllocateResult = {
   type: AllocateResultType
   count?: number
+  staffCount?: number
 }
 export enum AllocateResultType {
   SUCCESS = 'SUCCESS',
