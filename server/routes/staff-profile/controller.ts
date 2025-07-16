@@ -16,7 +16,7 @@ export class StaffProfileController extends ChangeStaffController {
     const Data = await this.keyworkerApiService.getStaffDetails(req, prisonCode, req.params.staffId, true)
 
     res.locals.breadcrumbs.addItems({
-      text: `Manage ${res.locals.policyStaff}s`,
+      text: `Manage ${res.locals.policyStaffs}`,
       href: `/${res.locals.policyPath}/manage`,
     })
 

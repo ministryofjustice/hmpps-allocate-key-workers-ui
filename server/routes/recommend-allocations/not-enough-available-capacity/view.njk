@@ -18,12 +18,12 @@
       href: "/" + policyPath + "/allocate" + (('?' + searchQuery) if searchQuery else "")
     }
   }) -%}
-    <p>{{ policyStaff | sentenceCase }}s could not be recommended for {{ missingAllocation }} out of {{ totalPrisoners }} prisoners.</p>
+    <p>{{ policyStaffs | sentenceCase }} could not be recommended for {{ missingAllocation }} out of {{ totalPrisoners }} prisoners.</p>
     <p>To assign {{ policyStaffs }} to these prisoners, you can:</p>
     <p>
       <ul class="govuk-list govuk-list--bullet">
         <li>manually select {{ policyStaffs }} for these prisoners using the dropdown lists</li>
-        <li>review the capacities of your {{ policyStaffs }} in Manage {{ policyStaff | sentenceCase }}s and update their capacities in their individual profiles</li>
+        <li>review the capacities of your {{ policyStaffs }} in Manage {{ policyStaffs | sentenceCase }} and update their capacities in their individual profiles</li>
       </ul>
     </p>
   {%- endcall %}

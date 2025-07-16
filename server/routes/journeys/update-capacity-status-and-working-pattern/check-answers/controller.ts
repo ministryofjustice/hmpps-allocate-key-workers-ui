@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import KeyworkerApiService from '../../../../services/keyworkerApi/keyworkerApiService'
 import { FLASH_KEY__SUCCESS_MESSAGE } from '../../../../utils/constants'
 import { resetJourneyAndReloadKeyWorkerDetails } from '../common/utils'
+import { possessiveComma } from '../../../../utils/formatUtils'
 
 export class UpdateStatusCheckAnswersController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
@@ -37,7 +38,7 @@ export class UpdateStatusCheckAnswersController {
 
       req.flash(
         FLASH_KEY__SUCCESS_MESSAGE,
-        `You have updated this ${res.locals.policyStaff}’s status to ${status!.description}.`,
+        `You have updated this ${possessiveComma(res.locals.policyStaff!)} status to ${status!.description}.`,
       )
 
       next()

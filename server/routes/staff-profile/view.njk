@@ -79,7 +79,7 @@
 
     {% if user | hasPermission('allocate') %}
       <p>Select {{ policyStaffs }} from the dropdown lists to reallocate or deallocate prisoners.</p>
-      <p>{{ policyStaff | sentenceCase }}s will only be allocated when you save your changes.</p>
+      <p>{{ policyStaffs | sentenceCase }} will only be allocated when you save your changes.</p>
 
       <br/>
     {% endif %}

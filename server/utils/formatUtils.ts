@@ -65,3 +65,5 @@ export const alertsSortValue = (o: components['schemas']['PrisonerSummary']) => 
 
   return attributes.join('')
 }
+
+export const possessiveComma = (name: string) => (name.endsWith('s') ? `${name}’` : `${name}’s`)

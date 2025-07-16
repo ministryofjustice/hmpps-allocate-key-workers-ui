@@ -27,7 +27,7 @@
       }) }}
     {% elseif allocationResult.type == 'NO_CAPACITY_FOR_AUTO_ALLOCATION' %}
       {% set errorHtml %}
-        <p>{{ policyStaff | sentenceCase }}s could not be recommended for any prisoners who do not currently have a {{ policyStaff }}. This is because none of your {{ policyStaffs }} have available capacity.</p>
+        <p>{{ policyStaffs | sentenceCase }} could not be recommended for any prisoners who do not currently have a {{ policyStaff }}. This is because none of your {{ policyStaffs }} have available capacity.</p>
         <p>To assign {{ policyStaffs }} to these prisoners, you can:</p>
         <p>
           <ul class="govuk-list govuk-list--bullet">

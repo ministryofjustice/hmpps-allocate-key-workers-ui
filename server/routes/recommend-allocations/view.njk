@@ -23,13 +23,13 @@
   <div class="govuk-width-container">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-three-quarters">
-        <p>{{ policyStaff | sentenceCase }}s have been recommended for the prisoners listed below without a current {{ policyStaff }}. Only {{ policyStaffs }} with an active status have been recommended.</p>
+        <p>{{ policyStaffs | sentenceCase }} have been recommended for the prisoners listed below without a current {{ policyStaff }}. Only {{ policyStaffs }} with an active status have been recommended.</p>
         <p>These recommendations prioritise {{ policyStaffs }} who have:</p>
         <ul class="govuk-list govuk-list--bullet">
           <li>previously been assigned to a specific prisoner</li>
           <li>the most available capacity</li>
         </ul>
-        <p>You can change these by selecting alternative {{ policyStaffs }} from the dropdown menus. {{ policyStaff | sentenceCase }}s will only be allocated to prisoners when you select save.</p>
+        <p>You can change these by selecting alternative {{ policyStaffs }} from the dropdown menus. {{ policyStaffs | sentenceCase }} will only be allocated to prisoners when you select save.</p>
       </div>
     </div>
     <form method="post">
