@@ -20,7 +20,6 @@
 {% block innerContent %}
   <h1 class="govuk-heading-l govuk-!-margin-bottom-6">{{ pageTitle }}</h1>
 
-{% if records.length > 0 %}
   <div class="govuk-width-container">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-three-quarters">
@@ -33,7 +32,7 @@
         <p>You can change these by selecting alternative {{ policyStaffs }} from the dropdown menus. {{ policyStaffs | sentenceCase }} will only be allocated to prisoners when you select save.</p>
       </div>
     </div>
-    
+    {% if records.length > 0 %}
       <form method="post">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
         {% set rows = [] %}
