@@ -50,17 +50,19 @@ context('Profile Info', () => {
     cy.verifyAuditEvents([
       {
         who: 'USER1',
-        subjectType: 'NOT_APPLICABLE',
+        subjectType: 'SEARCH_TERM',
         details:
-          '{"pageUrl":"/key-worker/staff-profile/488095","pageName":"STAFF_ALLOCATIONS","staffId":"488095","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          '{"pageUrl":"/key-worker/staff-profile/488095","pageName":"STAFF_ALLOCATIONS","staffId":"488095","query":"488095","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+        subjectId: '488095',
         what: 'PAGE_VIEW',
         service: 'DPS023',
       },
       {
         who: 'USER1',
-        subjectType: 'NOT_APPLICABLE',
+        subjectType: 'SEARCH_TERM',
         details:
-          '{"pageUrl":"/key-worker/staff-profile/488095","pageName":"STAFF_ALLOCATIONS","staffId":"488095","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          '{"pageUrl":"/key-worker/staff-profile/488095","pageName":"STAFF_ALLOCATIONS","staffId":"488095","query":"488095","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+        subjectId: '488095',
         what: 'PAGE_VIEW_ACCESS_ATTEMPT',
         service: 'DPS023',
       },
