@@ -22,7 +22,7 @@
         variant: 'success',
         title: 'Changes made successfully',
         showTitleAsHeading: true,
-        text: ('You have successfully allocated '+ policyStaff + ' to 1 prisoner.') if allocationResult.count == 1 else ('You have successfully allocated '+ policyStaffs + ' to ' + allocationResult.count + ' prisoners.'),
+        text: 'You have successfully allocated '+ (('a ' + policyStaff) if allocationResult.staffCount == 1 else policyStaffs) + ' to ' + allocationResult.count + (' prisoner.' if allocationResult.count == 1 else ' prisoners.'),
         classes: 'govuk-!-margin-bottom-0 govuk-!-margin-top-5'
       }) }}
     {% elseif allocationResult.type == 'NO_CAPACITY_FOR_AUTO_ALLOCATION' %}

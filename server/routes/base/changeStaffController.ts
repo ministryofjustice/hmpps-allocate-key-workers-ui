@@ -73,6 +73,7 @@ export class ChangeStaffController {
           JSON.stringify({
             type: AllocateResultType.SUCCESS,
             count: apiBody.allocations.length,
+            staffCount: new Set(apiBody.allocations.map(itm => itm.staffId)).size,
           } as AllocateResult),
         )
       } else {
