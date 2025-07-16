@@ -121,6 +121,55 @@ context('/recommend-allocations', () => {
     cy.findByText('You have successfully allocated key workers to 2 prisoners.').should('exist')
   })
 
+  it('should show success message on allocation - singular staff', () => {
+    cy.task('stubAllocationRecommendations', {
+      allocations: [
+        {
+          personIdentifier: 'A2504EA',
+          location: 'COURT',
+          staff: {
+            staffId: 488096,
+            firstName: 'AVAILABLE',
+            lastName: 'ACTIVE',
+            status: { code: 'ACT', description: 'Active' },
+            capacity: 1,
+            allocated: 0,
+            allowAutoAllocation: true,
+          },
+        },
+      ],
+      staff: [
+        {
+          staffId: 488096,
+          firstName: 'AVAILABLE',
+          lastName: 'ACTIVE',
+          status: { code: 'ACT', description: 'Active' },
+          capacity: 1,
+          allocated: 0,
+          allowAutoAllocation: true,
+        },
+      ],
+    })
+    cy.task('stubPutAllocationRecommendationSuccess')
+    navigateToTestPage()
+
+    cy.get('select').eq(1).select('Active, Available (allocations: 0)')
+    cy.findByRole('button', { name: /Save changes/i }).click()
+
+    cy.url().should('match', /\/allocate$/)
+    cy.findByText('You have successfully allocated a key worker to 2 prisoners.').should('exist')
+  })
+
+  it('should show success message on allocation - singular prisoner', () => {
+    cy.task('stubPutAllocationRecommendationSuccess')
+    navigateToTestPage()
+
+    cy.findByRole('button', { name: /Save changes/i }).click()
+
+    cy.url().should('match', /\/allocate$/)
+    cy.findByText('You have successfully allocated a key worker to 1 prisoner.').should('exist')
+  })
+
   it('should show error message when no capacity is available for auto allocation', () => {
     cy.task('stubAllocationRecommendations', {
       allocations: [],
