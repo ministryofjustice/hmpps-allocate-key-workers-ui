@@ -3,7 +3,7 @@
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}
-  <h1 class="govuk-heading-l govuk-!-margin-bottom-6">{{ (policyName or "NOT SET") | sentenceCase }}s</h1>
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-6">{{ (policyStaffs or "NOT SET") | sentenceCase }}</h1>
     <div class="homepage-content">
       <div class="govuk-width-container">
         <div class="govuk-grid-row">
@@ -14,36 +14,36 @@
                 <div class="govuk-grid-column-one-third card-group__item">
                   <div class="card card--clickable">
                     <h2 class="govuk-heading-m card__heading">
-                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/allocate">Allocate {{ policyName }}s to prisoners</a>
+                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/allocate">Allocate {{ policyStaffs }} to prisoners</a>
                     </h2>
-                    <p class="govuk-body card__description">View all prisoners or filter by location or allocation status, search for individuals, and automatically assign {{ policyName }}s.</p>
+                    <p class="govuk-body card__description">View all prisoners or filter by location or allocation status, search for individuals, and automatically assign {{ policyStaffs }}.</p>
                   </div>
                 </div>
 
                 <div class="govuk-grid-column-one-third card-group__item">
                   <div class="card card--clickable">
                     <h2 class="govuk-heading-m card__heading">
-                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/manage">Manage {{ policyName }}s</a>
+                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/manage">Manage {{ policyStaffs }}</a>
                     </h2>
-                    <p class="govuk-body card__description">View {{ policyName }}s, change their status and capacity, and view and reassign their prisoners.</p>
+                    <p class="govuk-body card__description">View {{ policyStaffs }}, change their status and capacity, and view and reassign their prisoners.</p>
                   </div>
                 </div>
 
                 <div class="govuk-grid-column-one-third card-group__item">
                   <div class="card card--clickable">
                     <h2 class="govuk-heading-m card__heading">
-                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/data">View {{ policyName }} data</a>
+                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/data">View {{ policyStaff }} data</a>
                     </h2>
-                    <p class="govuk-body card__description">View {{ policyName }} data for your establishment.</p>
+                    <p class="govuk-body card__description">View {{ policyStaff }} data for your establishment.</p>
                   </div>
                 </div>
               {% else %}
                 <div class="govuk-grid-column-one-third card-group__item">
                   <div class="card card--clickable">
                     <h2 class="govuk-heading-m card__heading">
-                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/staff-profile/{{ user.userId }}">My {{ policyName }} allocations</a>
+                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/staff-profile/{{ user.userId }}">My {{ policyStaff }} allocations</a>
                     </h2>
-                    <p class="govuk-body card__description">View your {{ policyName }} allocations and personal statistics.</p>
+                    <p class="govuk-body card__description">View your {{ policyStaff }} allocations and personal statistics.</p>
                   </div>
                 </div>
               {% endif %}
@@ -52,9 +52,9 @@
                 <div class="govuk-grid-column-one-third card-group__item">
                   <div class="card card--clickable">
                     <h2 class="govuk-heading-m card__heading">
-                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/manage-roles">Manage {{ policyName }} roles</a>
+                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/manage-roles">Manage {{ policyStaff }} roles</a>
                     </h2>
-                    <p class="govuk-body card__description">Assign or remove the {{ policyName }} role for prison officers in your establishment.</p>
+                    <p class="govuk-body card__description">Assign or remove the {{ policyStaff }} role for prison officers in your establishment.</p>
                   </div>
                 </div>
               {% endif %}
@@ -64,9 +64,9 @@
                 <div class="govuk-grid-column-one-third card-group__item">
                   <div class="card card--clickable">
                     <h2 class="govuk-heading-m card__heading">
-                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/establishment-settings">Manage your establishment’s {{ policyName }} settings</a>
+                      <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/establishment-settings">Manage your establishment’s {{ policyStaff }} settings</a>
                     </h2>
-                    <p class="govuk-body card__description">Enable automatic assignment of {{ policyName }}s, set capacity and view session frequency settings.</p>
+                    <p class="govuk-body card__description">Enable automatic assignment of {{ policyStaffs }}, set capacity and view session frequency settings.</p>
                   </div>
                 </div>
               {% endif %}

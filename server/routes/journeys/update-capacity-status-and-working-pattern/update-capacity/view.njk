@@ -2,7 +2,9 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
-{% set pageTitle = "Update [staff] capacity" %}
+{% set pageTitle -%}
+  Update {{ policyStaff }} capacity
+{%- endset %}
 
 {% block innerContent %}
   <div class="govuk-width-container govuk-body">

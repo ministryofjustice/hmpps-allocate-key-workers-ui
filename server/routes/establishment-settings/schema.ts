@@ -22,7 +22,7 @@ export const parseFrequencyInWeeks = (val: string) => {
 export const schemaFactory = async (_req: Request, res: Response) =>
   createSchema({
     allowAutoAllocation: z
-      .enum(['TRUE', 'FALSE'], { message: `Select if ${res.locals.policyName}s can be recommended automatically` })
+      .enum(['TRUE', 'FALSE'], { message: `Select if ${res.locals.policyStaffs} can be recommended automatically` })
       .transform(val => val === 'TRUE'),
     maximumCapacity: validateNumberBetween(
       'Enter maximum number of prisoners to be allocated',

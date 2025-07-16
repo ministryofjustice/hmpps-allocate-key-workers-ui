@@ -6,19 +6,19 @@
 
 {% block innerContent %}
     {{ govukPanel({
-        titleText: policyName | sentenceCase  + " role assigned",
-        text: "You have successfully made " + staff | lastNameCommaFirstName  + " a " + policyName
+        titleText: policyStaff | sentenceCase  + " role assigned",
+        text: "You have successfully made " + staff | lastNameCommaFirstName  + " a " + policyStaff
     }) }}
 
   <p class="govuk-body">
-    You can now assign prisoners to this {{ policyName }} on the <a class="govuk-link govuk-link--no-visited-state" href="/{{ policyPath }}/allocate">allocate prisoners to {{ policyName }}s</a> page.
+    You can now assign prisoners to this {{ policyStaff }} on the <a class="govuk-link govuk-link--no-visited-state" href="/{{ policyPath }}/allocate">allocate prisoners to {{ policyStaffs }}</a> page.
   </p>
 
   <p class="govuk-body">
-    <a class="govuk-link govuk-link--no-visited-state" href="/{{ policyPath }}/staff-profile/{{ staff.staffId }}">View this individual’s {{ policyName }} profile</a>
+    <a class="govuk-link govuk-link--no-visited-state" href="/{{ policyPath }}/staff-profile/{{ staff.staffId }}">View this individual’s {{ policyStaff }} profile</a>
   </p>
 
   <p class="govuk-body">
-    <a class="govuk-link govuk-link--no-visited-state" href="/{{ policyPath }}">Return to {{ policyName }}s homepage</a>
+    <a class="govuk-link govuk-link--no-visited-state" href="/{{ policyPath }}">Return to {{ policyStaffs }} homepage</a>
   </p>
 {% endblock %}

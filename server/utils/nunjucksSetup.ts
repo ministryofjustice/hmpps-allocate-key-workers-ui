@@ -14,7 +14,14 @@ import {
   yesterdayStringGBFormat,
 } from './datetimeUtils'
 import { buildErrorSummaryList, customErrorOrderBuilder, findError } from '../middleware/validationMiddleware'
-import { alertsSortValue, firstNameSpaceLastName, lastNameCommaFirstName, nameCase, sentenceCase } from './formatUtils'
+import {
+  alertsSortValue,
+  firstNameSpaceLastName,
+  lastNameCommaFirstName,
+  nameCase,
+  possessiveComma,
+  sentenceCase,
+} from './formatUtils'
 import {
   addSelectValue,
   conditionallyAddDeallocate,
@@ -93,5 +100,5 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('policyAware', policyAware)
   njkEnv.addFilter('alertsSortValue', alertsSortValue)
   njkEnv.addFilter('takeFirstWord', (val: string) => val.split(' ')[0])
-  njkEnv.addFilter('possessiveComma', (name: string) => (name.endsWith('s') ? `${name}’` : `${name}’s`))
+  njkEnv.addFilter('possessiveComma', possessiveComma)
 }

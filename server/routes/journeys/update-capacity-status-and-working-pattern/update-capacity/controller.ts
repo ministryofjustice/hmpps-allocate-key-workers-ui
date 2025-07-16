@@ -3,6 +3,7 @@ import { FLASH_KEY__SUCCESS_MESSAGE } from '../../../../utils/constants'
 import KeyworkerApiService from '../../../../services/keyworkerApi/keyworkerApiService'
 import { resetJourneyAndReloadKeyWorkerDetails } from '../common/utils'
 import { SchemaType } from './schema'
+import { possessiveComma } from '../../../../utils/formatUtils'
 
 export class UpdateCapacityController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
@@ -21,7 +22,10 @@ export class UpdateCapacityController {
 
     try {
       await this.keyworkerApiService.upsertStaffDetails(req as Request, res, staffDetails.staffId, { capacity })
-      req.flash(FLASH_KEY__SUCCESS_MESSAGE, `You have updated this ${res.locals.policyName}’s maximum capacity.`)
+      req.flash(
+        FLASH_KEY__SUCCESS_MESSAGE,
+        `You have updated this ${possessiveComma(res.locals.policyStaff!)} maximum capacity.`,
+      )
       next()
     } catch (e) {
       next(e)

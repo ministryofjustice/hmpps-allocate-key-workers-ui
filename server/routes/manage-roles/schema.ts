@@ -5,7 +5,7 @@ import { createSchema } from '../../middleware/validationMiddleware'
 export const schemaFactory = async (_req: Request, res: Response) =>
   createSchema({
     assignOrRemove: z.enum(['ASSIGN', 'REMOVE'], {
-      message: `Select if you want to assign or remove the ${res.locals.policyName} role`,
+      message: `Select if you want to assign or remove the ${res.locals.policyStaff} role`,
     }),
   })
 

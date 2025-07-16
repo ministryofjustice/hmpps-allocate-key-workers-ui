@@ -7,14 +7,14 @@
 {% block innerContent %}
   <div class="govuk-width-container govuk-body">
     <h1 class="govuk-heading-xl">
-      Are you sure you want to remove the {{ policyName }} role from {{ staff | lastNameCommaFirstName }}?
+      Are you sure you want to remove the {{ policyStaff }} role from {{ staff | lastNameCommaFirstName }}?
     </h1>
 
     <p class="govuk-!-margin-bottom-6">
       {% if staff.allocated %}
-        This prison officer will no longer be a {{ policyName }} and their {{ staff.allocated }} allocated prisoners will be deallocated. You will need to make them a {{ policyName }} again to be able to assign prisoners to them in future.
+        This prison officer will no longer be a {{ policyStaff }} and their {{ staff.allocated }} allocated prisoners will be deallocated. You will need to make them a {{ policyStaff }} again to be able to assign prisoners to them in future.
       {% else %}
-        This prison officer will no longer be a {{ policyName }}. You will need to make them a {{ policyName }} again to be able to assign prisoners to them in future.
+        This prison officer will no longer be a {{ policyStaff }}. You will need to make them a {{ policyStaff }} again to be able to assign prisoners to them in future.
       {% endif %}
     </p>
 

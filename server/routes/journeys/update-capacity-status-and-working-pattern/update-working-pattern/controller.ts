@@ -3,6 +3,7 @@ import { FLASH_KEY__SUCCESS_MESSAGE } from '../../../../utils/constants'
 import KeyworkerApiService from '../../../../services/keyworkerApi/keyworkerApiService'
 import { SchemaType } from '../../manage-roles/assign/working-pattern/schema'
 import { resetJourneyAndReloadKeyWorkerDetails } from '../common/utils'
+import { possessiveComma } from '../../../../utils/formatUtils'
 
 export class UpdateWorkingPatternController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
@@ -26,7 +27,10 @@ export class UpdateWorkingPatternController {
           hoursPerWeek: scheduleType.hoursPerWeek,
         },
       })
-      req.flash(FLASH_KEY__SUCCESS_MESSAGE, `You have updated this ${res.locals.policyName}’s working pattern.`)
+      req.flash(
+        FLASH_KEY__SUCCESS_MESSAGE,
+        `You have updated this ${possessiveComma(res.locals.policyStaff!)} working pattern.`,
+      )
       next()
     } catch (e) {
       next(e)

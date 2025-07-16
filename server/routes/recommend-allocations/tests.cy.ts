@@ -118,7 +118,7 @@ context('/recommend-allocations', () => {
     cy.get('.moj-alert').should('contain.text', 'Changes made successfully')
 
     cy.url().should('match', /\/allocate$/)
-    cy.findByText('You have successfully allocated key worker to 2 prisoners.').should('exist')
+    cy.findByText('You have successfully allocated key workers to 2 prisoners.').should('exist')
   })
 
   it('should show error message when no capacity is available for auto allocation', () => {
