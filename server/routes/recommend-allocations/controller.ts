@@ -17,6 +17,15 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
 
     const recommendations = await this.keyworkerApiService.allocationRecommendations(req, prisonCode)
 
+    if (!recommendations.allocations.length && !recommendations.noAvailableStaffFor?.length) {
+      return res.render('recommend-allocations/view', {
+        backUrl: 'javascript-back',
+        records: [],
+        count: req.flash(FLASH_KEY__COUNT)[0],
+        apiError: req.flash(FLASH_KEY__API_ERROR)[0],
+      })
+    }
+
     if (recommendations.allocations.length === 0) {
       req.flash(
         FLASH_KEY__ALLOCATE_RESULT,
