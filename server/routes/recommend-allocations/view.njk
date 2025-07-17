@@ -32,7 +32,6 @@
           <p>You can change these by selecting alternative {{ policyStaffs }} from the dropdown menus. {{ policyStaffs | sentenceCase }} will only be allocated to prisoners when you select save.</p>
         </div>
       </div>
-    
       <form method="post">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
         {% set rows = [] %}
