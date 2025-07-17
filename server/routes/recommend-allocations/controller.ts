@@ -26,7 +26,7 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
       })
     }
 
-    if (recommendations.allocations.length === 0) {
+    if (recommendations.allocations.length === 0 && recommendations.noAvailableStaffFor?.length) {
       req.flash(
         FLASH_KEY__ALLOCATE_RESULT,
         JSON.stringify({

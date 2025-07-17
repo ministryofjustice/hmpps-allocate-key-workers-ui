@@ -80,6 +80,7 @@ context('/recommend-allocations', () => {
 
     cy.get('.moj-pagination').should('have.length', 0)
     cy.get('.govuk-table__row').should('have.length', 0)
+    cy.get('p').should('have.length', 1)
   })
 
   it('should show error when no allocations or deallocations are made', () => {
