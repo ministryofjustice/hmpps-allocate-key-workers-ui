@@ -627,7 +627,6 @@ const stubSearchPrisonersWithQuery = () =>
       {
         equalToJson: {
           query: 'John',
-          cellLocationPrefix: '',
           excludeActiveAllocations: false,
         },
       },
@@ -644,7 +643,6 @@ const stubSearchPrisonersWithLocation = () =>
     [
       {
         equalToJson: {
-          query: '',
           cellLocationPrefix: '3',
           excludeActiveAllocations: false,
         },
@@ -662,8 +660,6 @@ const stubSearchPrisonersWithExcludeAllocations = (prisoners = keyworkerSearchPr
     [
       {
         equalToJson: {
-          query: '',
-          cellLocationPrefix: '',
           excludeActiveAllocations: true,
         },
       },
@@ -683,7 +679,6 @@ const stubSearchPrisoner = (
       {
         equalToJson: {
           query: 'ALL',
-          cellLocationPrefix: '',
           excludeActiveAllocations: false,
         },
       },
