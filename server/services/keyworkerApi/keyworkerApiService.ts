@@ -3,7 +3,6 @@ import { EnhancedRestClientBuilder } from '../../data'
 import KeyworkerApiClient, { ServiceConfigInfo, StaffDetailsRequest } from './keyworkerApiClient'
 import { components } from '../../@types/keyWorker'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
-import { getTruthyProp } from '../../utils/utils'
 
 export default class KeyworkerApiService {
   constructor(private readonly keyworkerApiClientBuilder: EnhancedRestClientBuilder<KeyworkerApiClient>) {}
@@ -71,11 +70,19 @@ export default class KeyworkerApiService {
     prisonCode: string,
     body: components['schemas']['PersonSearchRequest'],
   ): ReturnType<KeyworkerApiClient['searchPrisoners']> {
-    return this.keyworkerApiClientBuilder(req).searchPrisoners(prisonCode, {
-      ...getTruthyProp(body, 'query'),
-      ...getTruthyProp(body, 'cellLocationPrefix'),
+    const query = {
       excludeActiveAllocations: body.excludeActiveAllocations,
-    })
+    } as components['schemas']['PersonSearchRequest']
+
+    if (body.query) {
+      query.query = body.query
+    }
+
+    if (body.cellLocationPrefix) {
+      query.cellLocationPrefix = body.cellLocationPrefix.replace(/([^-])$/, '$1-')
+    }
+
+    return this.keyworkerApiClientBuilder(req).searchPrisoners(prisonCode, query)
   }
 
   getStaffAllocations(req: Request, prisonerId: string): ReturnType<KeyworkerApiClient['getStaffAllocations']> {
