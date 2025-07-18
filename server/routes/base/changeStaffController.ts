@@ -14,8 +14,8 @@ import { SelectKeyworkerSchemaType } from './selectKeyworkerSchema'
 export class ChangeStaffController {
   constructor(readonly keyworkerApiService: KeyworkerApiService) {}
 
-  getChangeData = async (req: Request, res: Response) => {
-    const staff = await this.keyworkerApiService.searchAllocatableStaff(req, res, { status: 'ACTIVE' }, true)
+  getChangeData = async (req: Request, res: Response, includeStats: boolean = true) => {
+    const staff = await this.keyworkerApiService.searchAllocatableStaff(req, res, { status: 'ACTIVE' }, includeStats)
 
     return {
       count: req.flash(FLASH_KEY__COUNT)[0],
