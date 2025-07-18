@@ -63,7 +63,7 @@ export class AllocateStaffController extends ChangeStaffController {
         Object.entries(sanitisedQuery).reduce((acc, [key, value]) => ({ ...acc, [key]: String(value) }), {}),
       ).toString(),
       locations: locationsValues,
-      ...(await this.getChangeData(req, res)),
+      ...(await this.getChangeData(req, res, false)),
       showBreadcrumbs: true,
       allowAutoAllocation,
       allocationResult,

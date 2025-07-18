@@ -28,46 +28,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/prisons/{prisonCode}/staff/{staffId}/job-classifications': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    /** @description
-     *
-     *     Requires one of the following roles:
-     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
-    put: operations['modifyStaffJob']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/prisons/{prisonCode}/staff/{staffId}/configuration': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    /** @description
-     *
-     *     Requires one of the following roles:
-     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
-    put: operations['modifyStaffConfig']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/prisons/{prisonCode}/prisoners/allocations': {
     parameters: {
       query?: never
@@ -722,30 +682,6 @@ export interface components {
       hoursPerWeek?: number
       /** @example 1980-01-01 */
       fromDate?: string
-    }
-    StaffJobClassificationRequest: {
-      position: string
-      scheduleType: string
-      hoursPerWeek: number
-      /** Format: date */
-      fromDate: string
-      /** Format: date */
-      toDate?: string
-    }
-    StaffConfigRequest: {
-      /** @enum {string} */
-      status:
-        | 'ACTIVE'
-        | 'UNAVAILABLE_ANNUAL_LEAVE'
-        | 'UNAVAILABLE_LONG_TERM_ABSENCE'
-        | 'UNAVAILABLE_NO_PRISONER_CONTACT'
-        | 'INACTIVE'
-      /** Format: int32 */
-      capacity: number
-      deactivateActiveAllocations: boolean
-      removeFromAutoAllocation: boolean
-      /** Format: date */
-      reactivateOn?: string
     }
     PersonStaffAllocation: {
       personIdentifier: string
@@ -1682,74 +1618,6 @@ export interface operations {
     requestBody: {
       content: {
         'application/json': components['schemas']['StaffDetailsRequest']
-      }
-    }
-    responses: {
-      /** @description No Content */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  modifyStaffJob: {
-    parameters: {
-      query?: never
-      header: {
-        /** @description
-         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
-         *          */
-        Policy: string
-        /** @description
-         *         Relevant caseload id for the client identity in context e.g. the active caseload id of the logged in user.
-         *          */
-        CaseloadId?: string
-      }
-      path: {
-        prisonCode: string
-        staffId: number
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['StaffJobClassificationRequest']
-      }
-    }
-    responses: {
-      /** @description No Content */
-      204: {
-        headers: {
-          [name: string]: unknown
-        }
-        content?: never
-      }
-    }
-  }
-  modifyStaffConfig: {
-    parameters: {
-      query?: never
-      header: {
-        /** @description
-         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
-         *          */
-        Policy: string
-        /** @description
-         *         Relevant caseload id for the client identity in context e.g. the active caseload id of the logged in user.
-         *          */
-        CaseloadId?: string
-      }
-      path: {
-        prisonCode: string
-        staffId: number
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['StaffConfigRequest']
       }
     }
     responses: {
