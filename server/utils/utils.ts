@@ -48,11 +48,3 @@ export const policyAware = (text: string | Record<string, string[]>, policy: str
 
 // @ts-expect-error T[P] index error
 export type MakeNullable<T, K extends PropertyKey> = Pick<T, Exclude<keyof T, K>> & { [P in K]?: T[P] | null }
-
-export const getTruthyProp = <T extends Record<string, unknown>>(obj: T, prop: string): T | object => {
-  if (obj[prop]) {
-    return { [prop]: obj[prop] }
-  }
-
-  return {}
-}

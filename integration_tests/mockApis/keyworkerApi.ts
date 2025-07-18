@@ -643,7 +643,7 @@ const stubSearchPrisonersWithLocation = () =>
     [
       {
         equalToJson: {
-          cellLocationPrefix: '3',
+          cellLocationPrefix: '3-',
           excludeActiveAllocations: false,
         },
       },
