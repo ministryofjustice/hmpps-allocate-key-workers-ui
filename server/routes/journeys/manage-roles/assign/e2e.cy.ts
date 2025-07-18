@@ -126,11 +126,11 @@ context('/manage-roles/assign/** journey', () => {
     cy.verifyLastAPICall(
       { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/1002' },
       {
+        capacity: 9,
         staffRole: {
           position: 'PRO',
           scheduleType: 'PT',
           hoursPerWeek: 6,
-          capacity: 9,
         },
       },
     )
