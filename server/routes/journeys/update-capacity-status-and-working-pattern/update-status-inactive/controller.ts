@@ -18,6 +18,7 @@ export class UpdateStatusInactiveController {
     try {
       await this.keyworkerApiService.upsertStaffDetails(req as Request, res, req.journeyData.staffDetails!.staffId, {
         status: req.journeyData.updateStaffDetails!.status!.code,
+        reactivateOn: null,
         deactivateActiveAllocations: true,
       })
 
