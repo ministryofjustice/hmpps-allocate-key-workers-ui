@@ -25,11 +25,11 @@ export class AssignRoleCheckAnswersController {
     const { staff, scheduleType, hoursPerWeek, capacity } = req.journeyData.assignStaffRole!
 
     await this.keyworkerApiService.upsertStaffDetails(req, res, staff!.staffId, {
+      ...(capacity !== req.middleware!.prisonConfiguration!.capacity ? { capacity } : {}),
       staffRole: {
         position: 'PRO',
         scheduleType: scheduleType!.code,
         hoursPerWeek: hoursPerWeek!,
-        ...(capacity !== req.middleware!.prisonConfiguration!.capacity ? { capacity } : {}),
       },
     })
     next()
