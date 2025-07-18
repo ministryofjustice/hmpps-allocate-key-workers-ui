@@ -26,6 +26,7 @@ context('/update-capacity-status-and-working-pattern/update-status-inactive', ()
       { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
       {
         status: 'INACTIVE',
+        reactivateOn: null,
         deactivateActiveAllocations: true,
       },
     )
