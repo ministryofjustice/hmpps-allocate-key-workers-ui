@@ -813,7 +813,8 @@ export default {
   stubSearchAllocatableStaffNone,
   stubSearchAllocatableStaffError,
   stubEnabledPrisonWithHighComplexityNeedsPrisoners: () => stubKeyworkerPrisonConfig(true, true),
-  stubEnabledPrison: () => stubKeyworkerPrisonConfig(true, false),
+  stubEnabledPrison: (allowAutoAllocation: boolean = true) =>
+    stubKeyworkerPrisonConfig(true, false, allowAutoAllocation),
   stubPrisonNotEnabled: () => stubKeyworkerPrisonConfig(false, false),
   stubKeyworkerDetails,
   stubKeyworkerDetailsWithoutStats,

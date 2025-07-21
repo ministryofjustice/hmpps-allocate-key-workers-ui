@@ -16,7 +16,13 @@
                     <h2 class="govuk-heading-m card__heading">
                       <a class="govuk-link govuk-link--no-visited-state card__link" href="/{{ policyPath }}/allocate">Allocate {{ policyStaffs }} to prisoners</a>
                     </h2>
-                    <p class="govuk-body card__description">View all prisoners or filter by location or allocation status, search for individuals, and automatically assign {{ policyStaffs }}.</p>
+                    <p class="govuk-body card__description">
+                      {% if allowAutoAllocation -%}
+                        View all prisoners or filter by location or allocation status, search for individuals, and automatically assign {{ policyStaffs }}.
+                      {%- else -%}
+                        View all prisoners, search for individuals, or filter by location or allocation status.
+                      {%- endif %}
+                    </p>
                   </div>
                 </div>
 
