@@ -76,6 +76,23 @@ context('test / homepage', () => {
       ])
     })
 
+    it('should show alternative description for allocation tile if auto allocation is disabled', () => {
+      cy.task('stubSignIn', {
+        roles: [AuthorisedRoles.OMIC_ADMIN],
+        hasAllocationJobResponsibilities: false,
+      })
+      cy.task('stubEnabledPrison', false)
+
+      navigateToTestPage()
+
+      cy.get('.card__description')
+        .eq(0)
+        .should(
+          'contain.text',
+          'View all prisoners, search for individuals, or filter by location or allocation status.',
+        )
+    })
+
     it('should show correct services when user has allocate permission', () => {
       cy.task('stubSignIn', {
         roles: [AuthorisedRoles.OMIC_ADMIN],
