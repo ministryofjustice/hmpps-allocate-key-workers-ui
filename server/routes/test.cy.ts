@@ -29,6 +29,23 @@ context('test / homepage', () => {
       cy.url().should('include', 'not-authorised')
       cy.findByText('You do not have permission to access this page').should('be.visible')
       cy.findByText('Contact the helpdesk').should('be.visible')
+
+      cy.verifyAuditEvents([
+        {
+          who: 'USER1',
+          subjectType: 'NOT_APPLICABLE',
+          details: '{"pageUrl":"/key-worker","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          what: 'PAGE_VIEW_ACCESS_ATTEMPT',
+          service: 'DPS023',
+        },
+        {
+          who: 'USER1',
+          subjectType: 'NOT_APPLICABLE',
+          details: '{"pageUrl":"/key-worker/not-authorised","activeCaseLoadId":"LEI"}',
+          what: 'PAGE_VIEW',
+          service: 'DPS023',
+        },
+      ])
     })
 
     it('should show correct services when user has only a view permission', () => {
