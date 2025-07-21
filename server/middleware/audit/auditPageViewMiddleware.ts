@@ -42,9 +42,6 @@ export const auditPageViewMiddleware =
 
     // Send page view attempt event when the request closes
     res.prependOnceListener('close', () => {
-      if (req.originalUrl.match(/\/not-authorised$/)) {
-        return
-      }
       auditService.logAuditEvent(res.getPageViewEvent(true))
     })
 

@@ -42,7 +42,7 @@ context('test / homepage', () => {
           who: 'USER1',
           subjectType: 'NOT_APPLICABLE',
           details: '{"pageUrl":"/key-worker/not-authorised","activeCaseLoadId":"LEI"}',
-          what: 'PAGE_VIEW',
+          what: 'PAGE_VIEW_ACCESS_ATTEMPT',
           service: 'DPS023',
         },
       ])
