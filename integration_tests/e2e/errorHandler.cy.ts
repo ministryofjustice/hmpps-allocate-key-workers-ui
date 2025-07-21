@@ -18,5 +18,15 @@ context('test errorHandler', () => {
     cy.signIn()
     cy.visit(`/foobar`, { failOnStatusCode: false })
     cy.findByRole('heading', { name: /Page not found/i }).should('be.visible')
+
+    cy.verifyAuditEvents([
+      {
+        who: 'USER1',
+        subjectType: 'NOT_APPLICABLE',
+        details: '{"pageUrl":"/foobar","activeCaseLoadId":"LEI"}',
+        what: 'PAGE_VIEW_ACCESS_ATTEMPT',
+        service: 'DPS023',
+      },
+    ])
   })
 })

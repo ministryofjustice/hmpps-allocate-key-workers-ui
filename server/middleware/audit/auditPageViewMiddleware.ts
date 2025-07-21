@@ -41,8 +41,8 @@ export const auditPageViewMiddleware =
     }
 
     // Send page view attempt event when the request closes
-    res.prependOnceListener('close', async () => {
-      await auditService.logAuditEvent(res.getPageViewEvent(true))
+    res.prependOnceListener('close', () => {
+      auditService.logAuditEvent(res.getPageViewEvent(true))
     })
 
     // Send page view event when a page view is rendered
@@ -52,12 +52,14 @@ export const auditPageViewMiddleware =
       callback?: (err: Error, html: string) => void,
     ) => void
     res.render = (view: string, options?) => {
-      resRender.call(res, view, options, async (err: Error, html: string) => {
+      resRender.call(res, view, options, (err: Error, html: string) => {
         if (err) {
           res.status(500).send(err)
           return
         }
-        await auditService.logAuditEvent(res.getPageViewEvent(false))
+        if (res.statusCode === 200) {
+          auditService.logAuditEvent(res.getPageViewEvent(false))
+        }
         res.send(html)
       })
     }
