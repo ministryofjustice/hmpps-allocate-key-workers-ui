@@ -1,5 +1,5 @@
 import { Request, RequestHandler, Response } from 'express'
-import { z, ZodError } from 'zod'
+import { z } from 'zod'
 import { FLASH_KEY__FORM_RESPONSES, FLASH_KEY__VALIDATION_ERRORS } from '../utils/constants'
 
 export type fieldErrors = {
@@ -49,29 +49,13 @@ const normaliseNewLines = (body: Record<string, unknown>) => {
   )
 }
 
-const pathArrayToString = (previous: string | number, next: string | number): string | number => {
-  if (!previous) {
-    return next.toString()
-  }
-  if (typeof next === 'number') {
-    return `${previous}[${next.toString()}]`
-  }
-  return `${previous}.${next.toString()}`
-}
-
-export const deduplicateFieldErrors = (error: ZodError) => {
-  const flattened: Record<string, Set<string>> = {}
-  error.issues.forEach(issue => {
-    // only field issues have a path
-    if (issue.path.length > 0) {
-      const path = issue.path.reduce(pathArrayToString)
-      if (!flattened[path]) {
-        flattened[path] = new Set([])
-      }
-      flattened[path]!.add(issue.message)
-    }
-  })
-  return Object.fromEntries(Object.entries(flattened).map(([key, value]) => [key, [...value]]))
+export const deduplicateFieldErrors = (error: z.ZodError<unknown>) => {
+  return Object.fromEntries(
+    Object.entries(z.flattenError(error).fieldErrors).map(([key, value]) => [
+      key,
+      Array.isArray(value) ? [...new Set(value)].map(o => o.replace(/^Invalid input$/, '')) : [],
+    ]),
+  )
 }
 
 export const validateOnGET =
@@ -85,7 +69,8 @@ export const validateOnGET =
       if (result.success) {
         res.locals['query'].validated = result.data
       } else {
-        res.locals['validationErrors'] = deduplicateFieldErrors(result.error)
+        const deduplicatedFieldErrors = deduplicateFieldErrors(result.error)
+        res.locals['validationErrors'] = deduplicatedFieldErrors
       }
     }
     next()
@@ -104,15 +89,13 @@ export const validate = (schema: z.ZodTypeAny | SchemaFactory, retainQueryString
     }
     req.flash(FLASH_KEY__FORM_RESPONSES, JSON.stringify(req.body))
 
-    const deduplicatedFieldErrors = deduplicateFieldErrors(result.error)
-
     if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'e2e-test') {
       // eslint-disable-next-line no-console
       console.error(
         `There were validation errors: ${JSON.stringify(result.error.format())} || body was: ${JSON.stringify(req.body)}`,
       )
     }
-    req.flash(FLASH_KEY__VALIDATION_ERRORS, JSON.stringify(deduplicatedFieldErrors))
+    req.flash(FLASH_KEY__VALIDATION_ERRORS, JSON.stringify(deduplicateFieldErrors(result.error)))
     // Remove any hash from the URL by appending an empty hash string)
     return res.redirect(`${retainQueryString ? req.originalUrl : req.baseUrl}#`)
   }

@@ -47,9 +47,10 @@ export const createDateInputSchema = ({
     year: z.string().optional(),
     ...(additionalParams ?? {}),
   })
-    .superRefine((val, ctx) => {
+    .check(ctx => {
+      const val = ctx.value
       if (!val.day && !val.month && !val.year) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: DATE_IS_REQUIRED_MESSAGE, path: [inputId] })
+        ctx.issues.push({ code: 'custom', message: DATE_IS_REQUIRED_MESSAGE, path: [inputId], input: val })
       } else {
         const missing: string[] = []
         if (!val.day) {
@@ -63,22 +64,28 @@ export const createDateInputSchema = ({
         }
         if (missing.length === 1) {
           const field = missing[0]!
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: SINGLE_FIELD_MISSING_ERROR(field), path: [field] })
+          ctx.issues.push({ code: 'custom', message: SINGLE_FIELD_MISSING_ERROR(field), path: [field], input: val })
         } else if (missing.length === 2) {
           const fieldOne = missing[0]!
           const fieldTwo = missing[1]!
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
+          ctx.issues.push({
+            code: 'custom',
             message: TWO_FIELDS_MISSING_ERROR(fieldOne, fieldTwo),
             path: [fieldOne],
+            input: val,
           })
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: BLANK_MESSAGE_SO_FIELD_HIGHLIGHTED, path: [fieldTwo] })
+          ctx.issues.push({ code: 'custom', message: BLANK_MESSAGE_SO_FIELD_HIGHLIGHTED, path: [fieldTwo], input: val })
         } else if (val.year && val.year.length >= 4) {
           const parsed = parse(`${val.year}-${val.month}-${val.day}`, 'yyyy-MM-dd', new Date())
           if (!isValid(parsed)) {
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: REAL_DATE_ERROR, path: ['day'] })
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: BLANK_MESSAGE_SO_FIELD_HIGHLIGHTED, path: ['month'] })
-            ctx.addIssue({ code: z.ZodIssueCode.custom, message: BLANK_MESSAGE_SO_FIELD_HIGHLIGHTED, path: ['year'] })
+            ctx.issues.push({ code: 'custom', message: REAL_DATE_ERROR, path: ['day'], input: val })
+            ctx.issues.push({
+              code: 'custom',
+              message: BLANK_MESSAGE_SO_FIELD_HIGHLIGHTED,
+              path: ['month'],
+              input: val,
+            })
+            ctx.issues.push({ code: 'custom', message: BLANK_MESSAGE_SO_FIELD_HIGHLIGHTED, path: ['year'], input: val })
           } else {
             const inputDateStr = formatDate(
               `${val.year}-${val.month?.padStart(2, '0')}-${val.day?.padStart(2, '0')}`,
@@ -86,45 +93,69 @@ export const createDateInputSchema = ({
             )!
             const todayStr = new Date().toISOString().substring(0, 10)
             if (additionalRule === DateInputSchemaRule.MUST_BE_TODAY_OR_PAST && inputDateStr > todayStr) {
-              ctx.addIssue({ code: z.ZodIssueCode.custom, message: NOT_TODAY_OR_PAST_ERROR, path: ['day'] })
-              ctx.addIssue({
-                code: z.ZodIssueCode.custom,
+              ctx.issues.push({ code: 'custom', message: NOT_TODAY_OR_PAST_ERROR, path: ['day'], input: val })
+              ctx.issues.push({
+                code: 'custom',
                 message: BLANK_MESSAGE_SO_FIELD_HIGHLIGHTED,
                 path: ['month'],
+                input: val,
               })
-              ctx.addIssue({ code: z.ZodIssueCode.custom, message: BLANK_MESSAGE_SO_FIELD_HIGHLIGHTED, path: ['year'] })
+              ctx.issues.push({
+                code: 'custom',
+                message: BLANK_MESSAGE_SO_FIELD_HIGHLIGHTED,
+                path: ['year'],
+                input: val,
+              })
             }
             if (additionalRule === DateInputSchemaRule.MUST_BE_PAST && inputDateStr >= todayStr) {
-              ctx.addIssue({ code: z.ZodIssueCode.custom, message: NOT_PAST_ERROR, path: ['day'] })
-              ctx.addIssue({
-                code: z.ZodIssueCode.custom,
+              ctx.issues.push({ code: 'custom', message: NOT_PAST_ERROR, path: ['day'], input: val })
+              ctx.issues.push({
+                code: 'custom',
                 message: BLANK_MESSAGE_SO_FIELD_HIGHLIGHTED,
                 path: ['month'],
+                input: val,
               })
-              ctx.addIssue({ code: z.ZodIssueCode.custom, message: BLANK_MESSAGE_SO_FIELD_HIGHLIGHTED, path: ['year'] })
+              ctx.issues.push({
+                code: 'custom',
+                message: BLANK_MESSAGE_SO_FIELD_HIGHLIGHTED,
+                path: ['year'],
+                input: val,
+              })
             }
             if (additionalRule === DateInputSchemaRule.MUST_BE_TODAY_OR_FUTURE && inputDateStr < todayStr) {
-              ctx.addIssue({ code: z.ZodIssueCode.custom, message: NOT_TODAY_OR_FUTURE_ERROR, path: ['day'] })
-              ctx.addIssue({
-                code: z.ZodIssueCode.custom,
+              ctx.issues.push({ code: 'custom', message: NOT_TODAY_OR_FUTURE_ERROR, path: ['day'], input: val })
+              ctx.issues.push({
+                code: 'custom',
                 message: BLANK_MESSAGE_SO_FIELD_HIGHLIGHTED,
                 path: ['month'],
+                input: val,
               })
-              ctx.addIssue({ code: z.ZodIssueCode.custom, message: BLANK_MESSAGE_SO_FIELD_HIGHLIGHTED, path: ['year'] })
+              ctx.issues.push({
+                code: 'custom',
+                message: BLANK_MESSAGE_SO_FIELD_HIGHLIGHTED,
+                path: ['year'],
+                input: val,
+              })
             }
             if (additionalRule === DateInputSchemaRule.MUST_BE_FUTURE && inputDateStr <= todayStr) {
-              ctx.addIssue({ code: z.ZodIssueCode.custom, message: NOT_FUTURE_ERROR, path: ['day'] })
-              ctx.addIssue({
-                code: z.ZodIssueCode.custom,
+              ctx.issues.push({ code: 'custom', message: NOT_FUTURE_ERROR, path: ['day'], input: val })
+              ctx.issues.push({
+                code: 'custom',
                 message: BLANK_MESSAGE_SO_FIELD_HIGHLIGHTED,
                 path: ['month'],
+                input: val,
               })
-              ctx.addIssue({ code: z.ZodIssueCode.custom, message: BLANK_MESSAGE_SO_FIELD_HIGHLIGHTED, path: ['year'] })
+              ctx.issues.push({
+                code: 'custom',
+                message: BLANK_MESSAGE_SO_FIELD_HIGHLIGHTED,
+                path: ['year'],
+                input: val,
+              })
             }
           }
         }
         if (val.year && val.year.length < 4) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: YEAR_ERROR, path: ['year'] })
+          ctx.issues.push({ code: 'custom', message: YEAR_ERROR, path: ['year'], input: val })
         }
       }
     })
