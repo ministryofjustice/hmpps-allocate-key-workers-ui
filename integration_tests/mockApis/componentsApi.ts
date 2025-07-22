@@ -45,6 +45,12 @@ const stubComponents = () => {
               href: 'https://csip-dev.hmpps.service.justice.gov.uk',
               navEnabled: true,
             },
+            {
+              id: 'allocate-key-workers',
+            },
+            {
+              id: 'allocate-personal-officers',
+            },
           ],
         },
         header: {
