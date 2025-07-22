@@ -18,6 +18,7 @@ generic-service:
     LEGACY_KEY_WORKERS_UI_URL: "https://manage-key-workers.service.justice.gov.uk"
     LOCATIONS_INSIDE_PRISON_API_URL: "https://locations-inside-prison-api.hmpps.service.justice.gov.uk"
     SENTRY_ENVIRONMENT: PRODUCTION
+    PRISON_CONFIG_CACHE_TIMEOUT: 3600
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-alerts-api-prod
