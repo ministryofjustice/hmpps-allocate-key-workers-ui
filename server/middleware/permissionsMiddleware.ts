@@ -82,6 +82,15 @@ export function populateUserPermissionsAndPrisonConfig(): RequestHandler {
           res.locals.policyStaffs = 'key workers'
           res.locals.policyPath = 'key-worker'
           res.locals.user.hasJobResponsibility = !!res.locals.user.allocationJobResponsibilities?.includes('KEY_WORKER')
+          if (res.locals.feComponents?.sharedData) {
+            if (
+              !res.locals.feComponents.sharedData.services.find(
+                ({ id }) => id === 'allocate-key-workers' || id === 'my-key-worker-allocations',
+              )
+            ) {
+              return res.render('pages/service-not-enabled')
+            }
+          }
           break
         case 'personal-officer':
           req.middleware.policy = 'PERSONAL_OFFICER'
@@ -90,6 +99,15 @@ export function populateUserPermissionsAndPrisonConfig(): RequestHandler {
           res.locals.policyPath = 'personal-officer'
           res.locals.user.hasJobResponsibility =
             !!res.locals.user.allocationJobResponsibilities?.includes('PERSONAL_OFFICER')
+          if (res.locals.feComponents?.sharedData) {
+            if (
+              !res.locals.feComponents.sharedData.services.find(
+                ({ id }) => id === 'allocate-personal-officers' || id === 'my-personal-officer-allocations',
+              )
+            ) {
+              return res.render('pages/service-not-enabled')
+            }
+          }
           break
         default:
           return res.notFound()
