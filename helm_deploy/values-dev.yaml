@@ -19,6 +19,7 @@ generic-service:
     LOCATIONS_INSIDE_PRISON_API_URL: "https://locations-inside-prison-api-dev.hmpps.service.justice.gov.uk"
     ENVIRONMENT_NAME: DEV
     SENTRY_ENVIRONMENT: DEV
+    PRISON_CONFIG_CACHE_TIMEOUT: 60
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-alerts-api-non-prod
