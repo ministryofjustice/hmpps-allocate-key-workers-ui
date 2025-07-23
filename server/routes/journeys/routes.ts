@@ -7,10 +7,10 @@ import { UpdateCapacityAndStatusRoutes } from './update-capacity-status-and-work
 import { AssignStaffRoleRoutes } from './manage-roles/assign/routes'
 import { RemoveStaffRoleRoutes } from './manage-roles/remove/routes'
 
-export default function JourneyRoutes(dataAccess: DataAccess, services: Services) {
+export default function JourneyRoutes({ cacheStore }: DataAccess, services: Services) {
   const router = Router({ mergeParams: true })
 
-  router.use(setUpJourneyData(dataAccess.tokenStore))
+  router.use(setUpJourneyData(cacheStore('journey')))
 
   router.use('/start-update-staff/:staffId', StartUpdateStaffRoutes(services))
   router.use('/update-capacity-status-and-working-pattern', UpdateCapacityAndStatusRoutes(services))

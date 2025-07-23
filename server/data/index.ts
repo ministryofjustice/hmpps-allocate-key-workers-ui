@@ -15,6 +15,9 @@ import PrisonApiRestClient from '../services/prisonApi/prisonApiClient'
 import KeyworkerApiClient from '../services/keyworkerApi/keyworkerApiClient'
 import LocationsInsidePrisonApiRestClient from '../services/locationsInsidePrisonApi/locationsInsidePrisonApiClient'
 import PrisonerSearchApiRestClient from '../services/prisonerSearch/prisonerSearchApiClient'
+import RedisCache from './cache/redisCache'
+import InMemoryCache from './cache/inMemoryCache'
+import CacheInterface from './cache/cacheInterface'
 
 const applicationInfo = applicationInfoSupplier()
 initialiseAppInsights()
@@ -23,7 +26,9 @@ const telemetryClient = buildAppInsightsClient(applicationInfo)!
 type RestClientBuilder<T> = (token: string) => T
 type EnhancedRestClientBuilder<T> = (req: Request, res?: Response) => T
 
-const tokenStore = config.redis.enabled ? new RedisTokenStore(createRedisClient()) : new InMemoryTokenStore()
+const redisClient = config.redis.enabled ? createRedisClient() : null
+
+const tokenStore = redisClient ? new RedisTokenStore(redisClient) : new InMemoryTokenStore()
 
 export const dataAccess = () => ({
   applicationInfo,
@@ -35,6 +40,8 @@ export const dataAccess = () => ({
   prisonerSearchApiClient: (token: string) => new PrisonerSearchApiRestClient(token),
   tokenStore,
   telemetryClient,
+  cacheStore: <T>(prefix: string): CacheInterface<T> =>
+    redisClient ? new RedisCache<T>(redisClient, prefix) : new InMemoryCache<T>(prefix),
 })
 
 export type DataAccess = ReturnType<typeof dataAccess>

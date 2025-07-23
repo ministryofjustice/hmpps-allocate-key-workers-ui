@@ -19,10 +19,11 @@ export const services = () => {
     prisonerSearchApiClient,
     telemetryClient,
     tokenStore,
+    cacheStore,
   } = dataAccess()
 
   const auditService = new AuditService(hmppsAuditClient)
-  const keyworkerApiService = new KeyworkerApiService(keyworkerApiClient)
+  const keyworkerApiService = new KeyworkerApiService(keyworkerApiClient, cacheStore)
   const prisonApiService = new PrisonApiService(prisonApiClient)
   const locationsApiService = new LocationsInsidePrisonApiService(locationsWithinPrisonApiClient)
   const prisonerSearchApiService = new PrisonerSearchApiService(prisonerSearchApiClient)

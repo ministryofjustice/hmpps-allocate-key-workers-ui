@@ -3,14 +3,19 @@ import { EnhancedRestClientBuilder } from '../../data'
 import KeyworkerApiClient, { ServiceConfigInfo, StaffDetailsRequest } from './keyworkerApiClient'
 import { components } from '../../@types/keyWorker'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
-import InMemoryCache from '../../utils/inMemoryCache'
+import CacheInterface from '../../data/cache/cacheInterface'
 
 export default class KeyworkerApiService {
-  private readonly prisonConfigCache = new InMemoryCache<components['schemas']['PrisonConfigResponse']>()
+  private prisonConfigCache: CacheInterface<components['schemas']['PrisonConfigResponse']>
 
   private readonly PRISON_CONFIG_CACHE_TIMEOUT = Number(process.env['PRISON_CONFIG_CACHE_TIMEOUT'] ?? 60)
 
-  constructor(private readonly keyworkerApiClientBuilder: EnhancedRestClientBuilder<KeyworkerApiClient>) {}
+  constructor(
+    private readonly keyworkerApiClientBuilder: EnhancedRestClientBuilder<KeyworkerApiClient>,
+    cacheStore: (prefix: string) => CacheInterface<components['schemas']['PrisonConfigResponse']>,
+  ) {
+    this.prisonConfigCache = cacheStore('prison-config')
+  }
 
   getServiceConfigInfo(req: Request): Promise<ServiceConfigInfo> {
     return this.keyworkerApiClientBuilder(req).getServiceConfigInfo()
@@ -26,13 +31,13 @@ export default class KeyworkerApiService {
   }
 
   async getPrisonConfig(req: Request, prisonId: string): Promise<ReturnType<KeyworkerApiClient['getPrisonConfig']>> {
-    const cached = this.prisonConfigCache.get(prisonId)
+    const cached = await this.prisonConfigCache.get(prisonId)
     if (cached) {
       return cached
     }
     const prisonConfig = await this.keyworkerApiClientBuilder(req).getPrisonConfig(prisonId)
 
-    this.prisonConfigCache.set(prisonId, prisonConfig, this.PRISON_CONFIG_CACHE_TIMEOUT)
+    await this.prisonConfigCache.set(prisonId, prisonConfig, this.PRISON_CONFIG_CACHE_TIMEOUT)
 
     return prisonConfig
   }
@@ -59,7 +64,7 @@ export default class KeyworkerApiService {
       requestBody,
     )
 
-    this.prisonConfigCache.del(res.locals.user.getActiveCaseloadId()!)
+    await this.prisonConfigCache.del(res.locals.user.getActiveCaseloadId()!)
 
     return result
   }
