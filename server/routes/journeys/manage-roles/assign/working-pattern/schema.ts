@@ -24,9 +24,7 @@ const refDataMap = new Map([
 ])
 
 export const schema = createSchema({
-  scheduleType: z
-    .string({ required_error: ERROR_MSG })
-    .transform(validateAndTransformReferenceData(refDataMap, ERROR_MSG)),
+  scheduleType: z.string({ error: ERROR_MSG }).transform(validateAndTransformReferenceData(refDataMap, ERROR_MSG)),
 })
 
 export type SchemaType = z.infer<typeof schema>

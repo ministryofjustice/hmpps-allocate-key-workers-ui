@@ -13,34 +13,35 @@ const validateDateBase = (requiredErr: string, invalidErr: string) => {
       return `${value[0]}-${month}-${date}T00:00:00Z` // We put a full timestamp on it so it gets parsed as UTC time and the date doesn't get changed due to locale
     })
     .transform(date => parseISO(date))
-    .superRefine((date, ctx) => {
-      return isValid(date) || ctx.addIssue({ code: z.ZodIssueCode.custom, message: invalidErr })
+    .check(ctx => {
+      if (!isValid(ctx.value)) {
+        ctx.issues.push({ code: 'custom', message: invalidErr, input: ctx.value })
+      }
     })
-}
-
-export const validateTransformDate = (requiredErr: string, invalidErr: string) => {
-  return validateDateBase(requiredErr, invalidErr).transform(date => date.toISOString().substring(0, 10))
 }
 
 export const validateTransformPastDate = (requiredErr: string, invalidErr: string, maxErr: string) => {
   return validateDateBase(requiredErr, invalidErr)
-    .superRefine(
-      (date, ctx) => isBefore(date, new Date()) || ctx.addIssue({ code: z.ZodIssueCode.custom, message: maxErr }),
-    )
+    .check(ctx => {
+      const date = ctx.value
+      if (!isBefore(date, new Date())) {
+        ctx.issues.push({ code: 'custom', message: maxErr, input: ctx.value })
+      }
+    })
     .transform(date => date.toISOString().substring(0, 10))
 }
 
 export const validateTransformFutureDate = (requiredErr: string, invalidErr: string, maxErr: string) => {
   return validateDateBase(requiredErr, invalidErr)
-    .superRefine((date, ctx) => {
+    .check(ctx => {
       const today = new Date()
       today.setHours(0)
       today.setMinutes(0)
       today.setSeconds(0)
       today.setMilliseconds(0)
-      return (
-        isAfter(date, today) || isEqual(date, today) || ctx.addIssue({ code: z.ZodIssueCode.custom, message: maxErr })
-      )
+      if (!isAfter(ctx.value, today) && !isEqual(ctx.value, today)) {
+        ctx.issues.push({ code: 'custom', message: maxErr, input: ctx.value })
+      }
     })
     .transform(date => date.toISOString().substring(0, 10))
 }

@@ -9,7 +9,7 @@ export const validateNumberBetween = (
 ) => {
   // Validate that the input is a number and between 0-999
   return z
-    .string({ required_error: requiredErr })
+    .string({ error: requiredErr })
     .min(1, { message: requiredErr })
     .refine(val => /^\d+$/.test(val), { message: invalidErr })
     .transform(Number)

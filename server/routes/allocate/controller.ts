@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import LocationsInsidePrisonApiService from '../../services/locationsInsidePrisonApi/locationsInsidePrisonApiService'
-import { deduplicateFieldErrors } from '../../middleware/validationMiddleware'
 import { ChangeStaffController } from '../base/changeStaffController'
 import { schemaFactory } from './schema'
 import { FLASH_KEY__ALLOCATE_RESULT } from '../../utils/constants'
+import { deduplicateFieldErrors } from '../../middleware/validationMiddleware'
 
 export class AllocateStaffController extends ChangeStaffController {
   constructor(
