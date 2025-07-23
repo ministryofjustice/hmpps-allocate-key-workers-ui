@@ -11,7 +11,7 @@ export const schemaFactory = (keyworkerApiService: KeyworkerApiService) => async
 
   return createSchema({
     status: z
-      .string({ required_error: 'Select a status' })
+      .string({ error: 'Select a status' })
       .transform(validateAndTransformReferenceData(refDataMap, 'Select a valid status')),
   })
 }
