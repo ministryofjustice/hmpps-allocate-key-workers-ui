@@ -3,9 +3,6 @@ import { EnhancedRestClientBuilder } from '../../data'
 import KeyworkerApiClient, { ServiceConfigInfo, StaffDetailsRequest } from './keyworkerApiClient'
 import { components } from '../../@types/keyWorker'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
-import InMemoryCache from '../../data/cache/inMemoryCache'
-import { RedisClient } from '../../data/redisClient'
-import RedisCache from '../../data/cache/redisCache'
 import CacheInterface from '../../data/cache/cacheInterface'
 
 export default class KeyworkerApiService {
@@ -15,11 +12,9 @@ export default class KeyworkerApiService {
 
   constructor(
     private readonly keyworkerApiClientBuilder: EnhancedRestClientBuilder<KeyworkerApiClient>,
-    redisClient: RedisClient | null,
+    cacheStore: (prefix: string) => CacheInterface<components['schemas']['PrisonConfigResponse']>,
   ) {
-    this.prisonConfigCache = redisClient
-      ? new RedisCache(redisClient, 'prison-config')
-      : new InMemoryCache('prison-config')
+    this.prisonConfigCache = cacheStore('prison-config')
   }
 
   getServiceConfigInfo(req: Request): Promise<ServiceConfigInfo> {

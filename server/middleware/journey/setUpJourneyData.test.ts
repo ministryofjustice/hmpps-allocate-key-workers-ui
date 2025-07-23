@@ -1,13 +1,14 @@
 import { Request, RequestHandler, Response } from 'express'
 import { v4 as uuidV4 } from 'uuid'
 import setUpJourneyData from './setUpJourneyData'
-import TokenStore from '../../data/tokenStore/tokenStore'
+import CacheInterface from '../../data/cache/cacheInterface'
+import { JourneyData } from '../../@types/express'
 
 let middleware: RequestHandler
 
 let req: Request
 let res: Response
-let tokenStore: TokenStore
+let cacheStore: CacheInterface<JourneyData>
 
 let journeyId: string
 
@@ -38,13 +39,13 @@ beforeEach(() => {
 
 describe('setUpJourneyData', () => {
   it('should create a new journey data when no key is stored', async () => {
-    tokenStore = {
-      getToken: async () => null,
-      setToken: jest.fn(),
-      delToken: jest.fn(),
+    cacheStore = {
+      get: async () => null,
+      set: jest.fn(),
+      del: jest.fn(),
     }
 
-    middleware = setUpJourneyData(tokenStore)
+    middleware = setUpJourneyData(cacheStore)
 
     expect(req.journeyData).toBeUndefined()
     await middleware(req, res, next)
@@ -53,34 +54,30 @@ describe('setUpJourneyData', () => {
   })
 
   it('should read journey data from store', async () => {
-    tokenStore = {
-      getToken: async () => `{ "instanceUnixEpoch" : 1234 }`,
-      setToken: jest.fn(),
-      delToken: jest.fn(),
+    cacheStore = {
+      get: async () => ({ instanceUnixEpoch: 1234 }),
+      set: jest.fn(),
+      del: jest.fn(),
     }
 
-    middleware = setUpJourneyData(tokenStore)
+    middleware = setUpJourneyData(cacheStore)
 
     await middleware(req, res, next)
     expect(req.journeyData.instanceUnixEpoch).toEqual(1234)
   })
 
   it('should save journey data to store', async () => {
-    tokenStore = {
-      getToken: async () => `{ "instanceUnixEpoch" : 1234 }`,
-      setToken: jest.fn(),
-      delToken: jest.fn(),
+    cacheStore = {
+      get: async () => ({ instanceUnixEpoch: 1234 }),
+      set: jest.fn(),
+      del: jest.fn(),
     }
 
-    middleware = setUpJourneyData(tokenStore)
+    middleware = setUpJourneyData(cacheStore)
 
     await middleware(req, res, next)
     req.journeyData.instanceUnixEpoch = 4321
     await res.send('end')
-    expect(tokenStore.setToken).toHaveBeenCalledWith(
-      `journey.tester.${journeyId}`,
-      '{"instanceUnixEpoch":4321}',
-      20 * 60 * 60,
-    )
+    expect(cacheStore.set).toHaveBeenCalledWith(`tester.${journeyId}`, { instanceUnixEpoch: 4321 }, 20 * 60 * 60)
   })
 })

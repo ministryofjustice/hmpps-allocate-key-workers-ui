@@ -1,18 +1,16 @@
 import { NextFunction, Request, Response } from 'express'
 import { JourneyData } from '../../@types/express'
-import TokenStore from '../../data/tokenStore/tokenStore'
+import CacheInterface from '../../data/cache/cacheInterface'
 
-export default function setUpJourneyData(store: TokenStore) {
+export default function setUpJourneyData(store: CacheInterface<JourneyData>) {
   return async (req: Request, res: Response, next: NextFunction) => {
     const journeyId = req.params['journeyId'] ?? 'default'
-    const journeyTokenKey = `journey.${req.user?.username}.${journeyId}`
+    const key = `${req.user?.username}.${journeyId}`
 
-    const cached = await store.getToken(journeyTokenKey)
-    req.journeyData = cached
-      ? (JSON.parse(cached) as JourneyData)
-      : (req.journeyData ?? { instanceUnixEpoch: Date.now() })
+    const cached = await store.get(key)
+    req.journeyData = cached ?? req.journeyData ?? { instanceUnixEpoch: Date.now() }
     res.prependOnceListener('close', async () => {
-      await store.setToken(journeyTokenKey, JSON.stringify(req.journeyData), 20 * 60 * 60)
+      await store.set(key, req.journeyData, 20 * 60 * 60)
     })
     next()
   }

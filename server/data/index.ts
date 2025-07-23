@@ -15,6 +15,9 @@ import PrisonApiRestClient from '../services/prisonApi/prisonApiClient'
 import KeyworkerApiClient from '../services/keyworkerApi/keyworkerApiClient'
 import LocationsInsidePrisonApiRestClient from '../services/locationsInsidePrisonApi/locationsInsidePrisonApiClient'
 import PrisonerSearchApiRestClient from '../services/prisonerSearch/prisonerSearchApiClient'
+import RedisCache from './cache/redisCache'
+import InMemoryCache from './cache/inMemoryCache'
+import CacheInterface from './cache/cacheInterface'
 
 const applicationInfo = applicationInfoSupplier()
 initialiseAppInsights()
@@ -36,8 +39,9 @@ export const dataAccess = () => ({
   locationsWithinPrisonApiClient: (token: string) => new LocationsInsidePrisonApiRestClient(token),
   prisonerSearchApiClient: (token: string) => new PrisonerSearchApiRestClient(token),
   tokenStore,
-  redisClient,
   telemetryClient,
+  cacheStore: <T>(prefix: string): CacheInterface<T> =>
+    redisClient ? new RedisCache<T>(redisClient, prefix) : new InMemoryCache<T>(prefix),
 })
 
 export type DataAccess = ReturnType<typeof dataAccess>
