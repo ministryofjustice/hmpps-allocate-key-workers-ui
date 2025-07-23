@@ -23,7 +23,9 @@ const telemetryClient = buildAppInsightsClient(applicationInfo)!
 type RestClientBuilder<T> = (token: string) => T
 type EnhancedRestClientBuilder<T> = (req: Request, res?: Response) => T
 
-const tokenStore = config.redis.enabled ? new RedisTokenStore(createRedisClient()) : new InMemoryTokenStore()
+const redisClient = config.redis.enabled ? createRedisClient() : null
+
+const tokenStore = redisClient ? new RedisTokenStore(redisClient) : new InMemoryTokenStore()
 
 export const dataAccess = () => ({
   applicationInfo,
@@ -34,6 +36,7 @@ export const dataAccess = () => ({
   locationsWithinPrisonApiClient: (token: string) => new LocationsInsidePrisonApiRestClient(token),
   prisonerSearchApiClient: (token: string) => new PrisonerSearchApiRestClient(token),
   tokenStore,
+  redisClient,
   telemetryClient,
 })
 
