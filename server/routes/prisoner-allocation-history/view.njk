@@ -19,11 +19,11 @@
       classes: 'govuk-!-margin-top-9',
       items: [{
         text: 'Personal officer allocation history',
-        href: '/' + policyPath + '/prisoner-allocation-history/' + prisoner.prisonerNumber + '/personal-officer',
+        href: '/' + policyPath + '/prisoner-allocation-history/' + prisoner.prisonerNumber + '/personal-officer?backTo=' + backTo,
         active: tabPolicy != 'key-worker'
       }, {
         text: 'Key worker allocation history',
-        href: '/' + policyPath + '/prisoner-allocation-history/' + prisoner.prisonerNumber + '/key-worker',
+        href: '/' + policyPath + '/prisoner-allocation-history/' + prisoner.prisonerNumber + '/key-worker?backTo=' + backTo,
         active: tabPolicy == 'key-worker'
       }]
     }) }}

@@ -8,14 +8,16 @@ export class PrisonerAllocationHistoryController {
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const prisoner = req.middleware!.prisonerData!
-    const policy = sanitisePolicy(res, req.url.split('/').pop())
+    const policy = sanitisePolicy(res, req.url.split('/').pop()?.split('?')[0])
     const staffAllocations = await this.keyworkerApiService.getStaffAllocations(req, prisoner.prisonerNumber, policy)
+    const backTo = req.query['backTo']?.toString() || ''
 
     res.render('prisoner-allocation-history/view', {
       prisoner,
+      backTo: encodeURIComponent(backTo),
       tabPolicy: policy,
       allocationHistory: simplifyDeallocationReasons(staffAllocations.allocations),
-      backUrl: 'javascript-back',
+      backUrl: backTo,
     })
   }
 }
