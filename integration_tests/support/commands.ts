@@ -16,7 +16,7 @@ Cypress.Commands.add('signIn', (options = { failOnStatusCode: true }) => {
   })
 })
 
-Cypress.Commands.add('verifyLastAPICall', (matching: string | object, expected: object) => {
+Cypress.Commands.add('verifyLastAPICall', (matching: string | object, expected: unknown) => {
   return cy.wrap(getLastAPICallMatching(matching)).should('deep.equal', expected)
 })
 

@@ -1,20 +1,29 @@
 import { Request, Response } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import { components } from '../../@types/keyWorker'
+import { POLICIES } from '../../utils/constants'
 
 export class PrisonerAllocationHistoryController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const prisoner = req.middleware!.prisonerData!
-    const staffAllocations = await this.keyworkerApiService.getStaffAllocations(req, prisoner.prisonerNumber)
+    const policy = sanitisePolicy(res, req.url.split('/').pop())
+    const staffAllocations = await this.keyworkerApiService.getStaffAllocations(req, prisoner.prisonerNumber, policy)
 
     res.render('prisoner-allocation-history/view', {
       prisoner,
+      tabPolicy: policy,
       allocationHistory: simplifyDeallocationReasons(staffAllocations.allocations),
       backUrl: 'javascript-back',
     })
   }
+}
+
+const sanitisePolicy = (res: Response, policy?: string) => {
+  return res.locals['policyPath'] === 'personal-officer' && Object.keys(POLICIES).includes(policy || '')
+    ? policy
+    : res.locals['policyPath']
 }
 
 const manualDeallocation = {

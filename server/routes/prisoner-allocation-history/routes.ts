@@ -13,7 +13,7 @@ export const PrisonerAllocationHistoryRoutes = ({ keyworkerApiService, prisonPer
   })
 
   get(
-    '/:prisonerId',
+    '/:prisonerId{/:policy}',
     Page.PRISONER_ALLOCATION_HISTORY,
     (req, res, next) => {
       res.setAuditDetails.prisonNumber(req.params['prisonerId'] as string)

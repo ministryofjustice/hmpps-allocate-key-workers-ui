@@ -107,8 +107,12 @@ export default class KeyworkerApiService {
     return this.keyworkerApiClientBuilder(req).searchPrisoners(prisonCode, query)
   }
 
-  getStaffAllocations(req: Request, prisonerId: string): ReturnType<KeyworkerApiClient['getStaffAllocations']> {
-    return this.keyworkerApiClientBuilder(req).getStaffAllocations(prisonerId)
+  getStaffAllocations(
+    req: Request,
+    prisonerId: string,
+    policy?: string,
+  ): ReturnType<KeyworkerApiClient['getStaffAllocations']> {
+    return this.keyworkerApiClientBuilder(req).getStaffAllocations(prisonerId, policy)
   }
 
   putAllocationDeallocations(
