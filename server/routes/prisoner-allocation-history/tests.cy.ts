@@ -20,16 +20,12 @@ context('Prisoner Allocation History', () => {
   })
 
   it('can go to previous page with query strings preserved', () => {
-    cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-worker?query=&location=&excludeActiveAllocations=true', {
-      failOnStatusCode: false,
-    })
-    cy.visit('/key-worker/prisoner-allocation-history/A9965EA', {
-      failOnStatusCode: false,
-    })
-
+    navigateToTestPage()
     cy.findByRole('link', { name: /back/i }).click()
-    cy.url().should('match', /\/key-worker\?query=&location=&excludeActiveAllocations=true/)
+    cy.url().should(
+      'equal',
+      'http://localhost:3007/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true',
+    )
   })
 
   it('happy path', () => {
@@ -85,7 +81,7 @@ context('Prisoner Allocation History', () => {
         who: 'USER1',
         subjectType: 'PRISONER_ID',
         details:
-          '{"pageUrl":"/key-worker/prisoner-allocation-history/A9965EA","pageName":"PRISONER_ALLOCATION_HISTORY","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          '{"pageUrl":"/key-worker/prisoner-allocation-history/A9965EA?backTo=%2Fkey-worker%2Fallocate%3Fquery%3D%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dtrue","pageName":"PRISONER_ALLOCATION_HISTORY","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
         subjectId: 'A9965EA',
         what: 'PAGE_VIEW',
         service: 'DPS023',
@@ -94,7 +90,7 @@ context('Prisoner Allocation History', () => {
         who: 'USER1',
         subjectType: 'PRISONER_ID',
         details:
-          '{"pageUrl":"/key-worker/prisoner-allocation-history/A9965EA","pageName":"PRISONER_ALLOCATION_HISTORY","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          '{"pageUrl":"/key-worker/prisoner-allocation-history/A9965EA?backTo=%2Fkey-worker%2Fallocate%3Fquery%3D%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dtrue","pageName":"PRISONER_ALLOCATION_HISTORY","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
         subjectId: 'A9965EA',
         what: 'PAGE_VIEW_ACCESS_ATTEMPT',
         service: 'DPS023',
@@ -225,6 +221,9 @@ context('Prisoner Allocation History', () => {
 
   const navigateToTestPage = (policy: string = 'key-worker') => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/${policy}/prisoner-allocation-history/A9965EA`, { failOnStatusCode: false })
+    cy.visit(
+      `/${policy}/prisoner-allocation-history/A9965EA?backTo=%2Fkey-worker%2Fallocate%3Fquery%3D%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dtrue`,
+      { failOnStatusCode: false },
+    )
   }
 })
