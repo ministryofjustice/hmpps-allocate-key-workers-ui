@@ -439,7 +439,11 @@ context('/allocate', () => {
       .should('contain.text', 'View allocation history')
       .children()
       .eq(0)
-      .should('have.attr', 'href', '/key-worker/prisoner-allocation-history/A4288DZ')
+      .should(
+        'have.attr',
+        'href',
+        '/key-worker/prisoner-allocation-history/A4288DZ?backTo=%2Fkey-worker%2Fallocate%3Fquery%3DALL%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dfalse',
+      )
 
     if (!readonly) {
       cy.get('.govuk-table__row')
@@ -469,7 +473,7 @@ context('/allocate', () => {
       autoAllocateButton().should(
         'have.attr',
         'href',
-        '/key-worker/recommend-allocations?query=ALL&cellLocationPrefix=&excludeActiveAllocations=false',
+        '/key-worker/recommend-allocations?backTo=%2Fkey-worker%2Fallocate%3Fquery%3DALL%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dfalse',
       )
     }
 
@@ -507,7 +511,11 @@ context('/allocate', () => {
       .should('contain.text', 'View allocation history')
       .children()
       .eq(0)
-      .should('have.attr', 'href', '/key-worker/prisoner-allocation-history/A2504EA')
+      .should(
+        'have.attr',
+        'href',
+        '/key-worker/prisoner-allocation-history/A2504EA?backTo=%2Fkey-worker%2Fallocate%3Fquery%3D%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dtrue',
+      )
 
     cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'Tester, Jane')
     cy.get('.govuk-table__row').eq(3).children().eq(1).should('contain.text', '4-2-031')
@@ -553,7 +561,11 @@ context('/allocate', () => {
       .eq(readonly ? 4 : 5)
       .children()
       .eq(0)
-      .should('have.attr', 'href', '/key-worker/prisoner-allocation-history/A2504EA')
+      .should(
+        'have.attr',
+        'href',
+        '/key-worker/prisoner-allocation-history/A2504EA?backTo=%2Fkey-worker%2Fallocate%3Fquery%3D%26cellLocationPrefix%3D3%26excludeActiveAllocations%3Dfalse',
+      )
   }
 
   const checkNameOrPrisonNumberFilter = (readonly = false) => {
@@ -571,7 +583,11 @@ context('/allocate', () => {
       .eq(readonly ? 4 : 5)
       .children()
       .eq(0)
-      .should('have.attr', 'href', '/key-worker/prisoner-allocation-history/A4288DZ')
+      .should(
+        'have.attr',
+        'href',
+        '/key-worker/prisoner-allocation-history/A4288DZ?backTo=%2Fkey-worker%2Fallocate%3Fquery%3DJohn%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dfalse',
+      )
   }
 
   const navigateToTestPage = () => {

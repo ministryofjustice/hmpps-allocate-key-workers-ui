@@ -5,7 +5,7 @@ declare namespace Cypress {
      * @example cy.signIn({ failOnStatusCode: boolean })
      */
     signIn(options?: { failOnStatusCode: boolean }): Chainable<string>
-    verifyLastAPICall(matching: string | object, expected: object): Chainable<unknown>
+    verifyLastAPICall(matching: string | object, expected: unknown): Chainable<unknown>
     injectJourneyDataAndReload<T>(uuid: string, json: T, policy?: string): void
     /** Make a POST request to the given URL with the given body - automatically picks up the CSRF token from the current page */
     postWithCsrf(options: { body: object; url: string }): Cypress.Chainable<Cypress.Response<unknown>>
