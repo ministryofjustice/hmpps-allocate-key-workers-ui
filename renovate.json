@@ -6,7 +6,8 @@
   "packageRules": [
     {
       "matchManagers": ["npm"],
-      "rangeStrategy": "bump"
+      "rangeStrategy": "bump",
+      "automerge": true
     },
     {
       "matchManagers": ["npm"],
