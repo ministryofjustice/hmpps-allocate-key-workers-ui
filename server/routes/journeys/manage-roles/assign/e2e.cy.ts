@@ -1,6 +1,7 @@
 import { v4 as uuidV4 } from 'uuid'
 import { verifyRoleBasedAccess } from '../../../../../integration_tests/support/roleBasedAccess'
 import { UserPermissionLevel } from '../../../../interfaces/hmppsUser'
+import AuthorisedRoles from '../../../../authentication/authorisedRoles'
 
 context('/manage-roles/assign/** journey', () => {
   let journeyId = uuidV4()
@@ -20,7 +21,7 @@ context('/manage-roles/assign/** journey', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubComponents')
-    cy.task('stubSignIn')
+    cy.task('stubSignIn', { roles: [AuthorisedRoles.KW_MIGRATION] })
     cy.task('stubEnabledPrison')
     cy.task('stubSearchStaff', [
       {

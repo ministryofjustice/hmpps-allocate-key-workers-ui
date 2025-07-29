@@ -124,7 +124,7 @@ export function populateUserPermissionsAndPrisonConfig(): RequestHandler {
           res.locals.user.permissions = UserPermissionLevel.SELF_PROFILE_ONLY
         }
       } else if (req.params['policy'] === 'personal-officer') {
-        if (hasRole(res, AuthorisedRoles.PERSONAL_OFFICER_ADMIN)) {
+        if (hasRole(res, AuthorisedRoles.KW_MIGRATION)) {
           res.locals.user.permissions = UserPermissionLevel.ADMIN
         } else if (hasRole(res, AuthorisedRoles.PERSONAL_OFFICER_ALLOCATE)) {
           res.locals.user.permissions = UserPermissionLevel.ALLOCATE
