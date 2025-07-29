@@ -157,7 +157,7 @@ context('/establishment-settings', () => {
   it('should allow admin to enable service in a prison', () => {
     cy.task('stubPrisonNotEnabled')
     cy.task('stubSignIn', {
-      roles: [AuthorisedRoles.PERSONAL_OFFICER_ADMIN],
+      roles: [AuthorisedRoles.KW_MIGRATION],
     })
 
     navigateToTestPage('personal-officer')
