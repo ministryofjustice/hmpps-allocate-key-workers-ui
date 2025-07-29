@@ -20,20 +20,26 @@ context('Prisoner Allocation History', () => {
   })
 
   it('can go to previous page with query strings preserved', () => {
-    cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-worker?query=&location=&excludeActiveAllocations=true', {
-      failOnStatusCode: false,
-    })
-    cy.visit('/key-worker/prisoner-allocation-history/A9965EA', {
-      failOnStatusCode: false,
-    })
-
+    navigateToTestPage()
     cy.findByRole('link', { name: /back/i }).click()
-    cy.url().should('match', /\/key-worker\?query=&location=&excludeActiveAllocations=true/)
+    cy.url().should(
+      'equal',
+      'http://localhost:3007/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true',
+    )
   })
 
   it('happy path', () => {
     navigateToTestPage()
+
+    cy.verifyLastAPICall(
+      {
+        method: 'GET',
+        headers: { Policy: { matches: 'key-worker' } },
+        url: '/keyworker-api/prisoners/A9965EA/allocations',
+      },
+      '',
+    )
+
     cy.title().should('equal', 'Prisoner key worker allocation history - Key workers - DPS')
     cy.findByRole('link', { name: /back/i }).should('be.visible')
 
@@ -75,7 +81,7 @@ context('Prisoner Allocation History', () => {
         who: 'USER1',
         subjectType: 'PRISONER_ID',
         details:
-          '{"pageUrl":"/key-worker/prisoner-allocation-history/A9965EA","pageName":"PRISONER_ALLOCATION_HISTORY","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          '{"pageUrl":"/key-worker/prisoner-allocation-history/A9965EA?backTo=%2Fkey-worker%2Fallocate%3Fquery%3D%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dtrue","pageName":"PRISONER_ALLOCATION_HISTORY","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
         subjectId: 'A9965EA',
         what: 'PAGE_VIEW',
         service: 'DPS023',
@@ -84,7 +90,7 @@ context('Prisoner Allocation History', () => {
         who: 'USER1',
         subjectType: 'PRISONER_ID',
         details:
-          '{"pageUrl":"/key-worker/prisoner-allocation-history/A9965EA","pageName":"PRISONER_ALLOCATION_HISTORY","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          '{"pageUrl":"/key-worker/prisoner-allocation-history/A9965EA?backTo=%2Fkey-worker%2Fallocate%3Fquery%3D%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dtrue","pageName":"PRISONER_ALLOCATION_HISTORY","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
         subjectId: 'A9965EA',
         what: 'PAGE_VIEW_ACCESS_ATTEMPT',
         service: 'DPS023',
@@ -168,8 +174,56 @@ context('Prisoner Allocation History', () => {
       })
   })
 
-  const navigateToTestPage = () => {
+  describe('Personal officer', () => {
+    it('happy path', () => {
+      navigateToTestPage('personal-officer')
+
+      cy.verifyLastAPICall(
+        {
+          method: 'GET',
+          headers: { Policy: { matches: 'personal-officer' } },
+          url: '/keyworker-api/prisoners/A9965EA/allocations',
+        },
+        '',
+      )
+
+      cy.title().should('equal', 'Prisoner personal officer allocation history - Personal officers - DPS')
+      cy.findByRole('link', { name: /back/i }).should('be.visible')
+
+      cy.get('h1').should('have.text', 'Cat, Tabby (A9965EA)')
+
+      cy.get('.govuk-heading-l').should('have.length', 0)
+      cy.findByText('Current and previous allocations: 2').should('be.visible')
+
+      cy.get('.moj-sub-navigation__item').should('have.length', 2)
+      cy.get('.moj-sub-navigation__item').eq(0).should('include.text', 'Personal officer allocation history')
+      cy.get('.moj-sub-navigation__item').eq(1).should('include.text', 'Key worker allocation history')
+
+      cy.get('.govuk-summary-card__title').eq(0).should('include.text', 'Current personal officer: Sample Keyworker')
+      cy.get('.govuk-summary-card__title').eq(1).should('include.text', 'Previous personal officer: Smith Last-Name')
+
+      cy.get('.moj-sub-navigation__item').eq(1).click()
+      cy.url().should('match', /\/personal-officer\/prisoner-allocation-history\/A9965EA\/key-worker/)
+
+      cy.verifyLastAPICall(
+        {
+          method: 'GET',
+          headers: { Policy: { matches: 'key-worker' } },
+          url: '/keyworker-api/prisoners/A9965EA/allocations',
+        },
+        '',
+      )
+
+      cy.get('.govuk-summary-card__title').eq(0).should('include.text', 'Current key worker: Sample Keyworker')
+      cy.get('.govuk-summary-card__title').eq(1).should('include.text', 'Previous key worker: Smith Last-Name')
+    })
+  })
+
+  const navigateToTestPage = (policy: string = 'key-worker') => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-worker/prisoner-allocation-history/A9965EA', { failOnStatusCode: false })
+    cy.visit(
+      `/${policy}/prisoner-allocation-history/A9965EA?backTo=%2Fkey-worker%2Fallocate%3Fquery%3D%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dtrue`,
+      { failOnStatusCode: false },
+    )
   }
 })

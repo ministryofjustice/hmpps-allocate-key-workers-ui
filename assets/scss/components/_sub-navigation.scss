@@ -1,0 +1,39 @@
+.moj-sub-navigation__list {
+  box-shadow: none;
+}
+
+.moj-sub-navigation__item[aria-current="page"] {
+    position: relative;
+    margin-top: -5px;
+    margin-bottom: -1px;
+    padding: 14px 19px 16px;
+    border: 1px solid #b1b4b6;
+    border-bottom: 0;
+    background-color: #fff;
+    margin-right: 5px;
+}
+
+.moj-sub-navigation__item {
+    margin: 0;
+    margin-right: 5px;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding: 10px 20px;
+    background-color: #f3f2f1;
+    text-align: center;
+}
+
+.moj-sub-navigation__link {
+  color: #0b0c0c !important;
+  text-decoration: underline !important;
+  margin: 0px;
+  padding: 0px;
+  &::before {
+    width:0 !important;
+    height:0 !important
+  }
+
+  &[aria-current="page"] {
+    text-decoration: none !important;
+  }
+}

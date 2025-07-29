@@ -1,27 +1,46 @@
 {% extends "partials/layout.njk" %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "partials/mojTabsNavigation/macro.njk" import mojTabsNavigation %}
 
 {% set fullWidth = true %}
 {% set pageTitle -%}
-  Prisoner {{ policyStaff }} allocation history
+  Prisoner {{ tabPolicy | policyString('staff') }} allocation history
 {%- endset %}
 
 {% block innerContent %}
 
   <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">{{ prisoner | lastNameCommaFirstName }} ({{ prisoner.prisonerNumber }})</h1>
 
-  <hr class="govuk-!-margin-bottom-6" />
+  <hr class="govuk-!-margin-bottom-6"/>
 
-  <h2 class="govuk-heading-l">Prisoner {{ policyStaff }} allocation history</h2>
+  {% if policyPath == 'personal-officer' %}
+    {{ mojTabsNavigation({
+      label: 'Sub navigation',
+      classes: 'govuk-!-margin-top-9',
+      items: [{
+        text: 'Personal officer allocation history',
+        href: '/' + policyPath + '/prisoner-allocation-history/' + prisoner.prisonerNumber + '/personal-officer?backTo=' + backTo,
+        active: tabPolicy != 'key-worker'
+      }, {
+        text: 'Key worker allocation history',
+        href: '/' + policyPath + '/prisoner-allocation-history/' + prisoner.prisonerNumber + '/key-worker?backTo=' + backTo,
+        active: tabPolicy == 'key-worker'
+      }]
+    }) }}
+  {% else %}
+    <h2 class="govuk-heading-l">Prisoner {{ policyPath | policyString('staff') }} allocation history</h2>
+  {% endif %}
 
   <p class="govuk-body govuk-!-font-weight-bold">Current and previous allocations: {{ allocationHistory.length }}</p>
 
   <div class="govuk-!-width-one-half">
     {% for allocation in allocationHistory %}
       {% if allocation.active %}
-        {% set cardTitle = "Current " + policyStaff + ": " + (allocation.staffMember | firstNameSpaceLastName) %}
+        {% set cardTitle = "Current " + tabPolicy | policyString('staff') + ": " + (
+        allocation.staffMember | firstNameSpaceLastName) %}
       {% else %}
-        {% set cardTitle = "Previous " + policyStaff + ": " + (allocation.staffMember | firstNameSpaceLastName) %}
+        {% set cardTitle = "Previous " + tabPolicy | policyString('staff') + ": " + (
+        allocation.staffMember | firstNameSpaceLastName) %}
       {% endif %}
 
       {% if allocation.deallocated %}

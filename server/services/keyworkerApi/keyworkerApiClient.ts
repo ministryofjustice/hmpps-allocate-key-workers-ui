@@ -135,9 +135,13 @@ export default class KeyworkerApiClient {
     return response.content
   }
 
-  async getStaffAllocations(prisonerId: string): Promise<components['schemas']['StaffAllocationHistory']> {
+  async getStaffAllocations(
+    prisonerId: string,
+    policy?: string,
+  ): Promise<components['schemas']['StaffAllocationHistory']> {
     const response = await this.restClient.get<components['schemas']['StaffAllocationHistory']>({
       path: `/prisoners/${prisonerId}/allocations`,
+      ...(policy ? { headers: { Policy: policy } } : {}),
     })
 
     return response
