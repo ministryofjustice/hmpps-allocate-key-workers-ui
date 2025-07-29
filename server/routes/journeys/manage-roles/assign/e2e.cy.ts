@@ -168,10 +168,54 @@ context('/manage-roles/assign/** journey', () => {
     )
   })
 
-  const beginJourney = () => {
+  it('personal-officer should skip the prison officer pages', () => {
+    beginJourney('personal-officer')
+
+    getSearchInput().type('Joe')
+    getSearchButton().click()
+    cy.findByRole('link', { name: 'Doe, Joe' }).click()
+
+    fullTimeRadio().click()
+    continueButton().click()
+
+    continueButton().click()
+
+    // Can change answers
+    cy.findByRole('link', { name: /Change the staff member$/i }).click()
+    getSearchInput().clear().type('John')
+    getSearchButton().click()
+    cy.findByRole('link', { name: 'Smith, John' }).click()
+
+    cy.findByRole('link', { name: /Change the staff member’s working pattern/i }).click()
+    partTimeRadio().click()
+    continueButton().click()
+
+    cy.findByRole('link', { name: /Change the staff member’s maximum capacity/i }).click()
+    capacityInput().clear().type('9')
+    continueButton().click()
+
+    // Confirm and submit
+    cy.findByRole('button', { name: 'Confirm and submit' }).click()
+
+    cy.findByText('You have successfully made Smith, John a personal officer').should('be.visible')
+
+    cy.verifyLastAPICall(
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/1002' },
+      {
+        capacity: 9,
+        staffRole: {
+          position: 'PRO',
+          scheduleType: 'PT',
+          hoursPerWeek: 6,
+        },
+      },
+    )
+  })
+
+  const beginJourney = (policyPath: string = 'key-worker') => {
     journeyId = uuidV4()
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/key-worker/${journeyId}/manage-roles/assign`, {
+    cy.visit(`/${policyPath}/${journeyId}/manage-roles/assign`, {
       failOnStatusCode: false,
     })
   }

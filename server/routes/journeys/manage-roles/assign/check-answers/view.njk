@@ -15,77 +15,77 @@
       rows: [
         {
           key: {
-          text: "Name"
-        },
+            text: "Name"
+          },
           value: {
-          text: staff | lastNameCommaFirstName
-        },
+            text: staff | lastNameCommaFirstName
+          },
           actions: {
-          items: [
-            {
-              href: "../assign",
-              text: "Change",
-              visuallyHiddenText: "the staff member",
-              classes: "govuk-link--no-visited-state"
-            }
-          ]
-        }
+            items: [
+              {
+                href: "../assign",
+                text: "Change",
+                visuallyHiddenText: "the staff member",
+                classes: "govuk-link--no-visited-state"
+              }
+            ]
+          }
         },
         {
           key: {
-          text: "Role"
-        },
+            text: "Role"
+          },
           value: {
-          text: "Prison officer"
-        },
+            text: "Prison officer"
+          },
           actions: {
-          items: [
-            {
-              href: "role",
-              text: "Change",
-              visuallyHiddenText: "whether the staff member is a prison officer",
-              classes: "govuk-link--no-visited-state"
-            }
-          ]
-        }
+            items: [
+              {
+                href: "role",
+                text: "Change",
+                visuallyHiddenText: "whether the staff member is a prison officer",
+                classes: "govuk-link--no-visited-state"
+              }
+            ]
+          }
+        } if policyPath != 'personal-officer',
+        {
+          key: {
+            text: "Working pattern"
+          },
+          value: {
+            text: scheduleType.description
+          },
+          actions: {
+            items: [
+              {
+                href: "working-pattern",
+                text: "Change",
+                visuallyHiddenText: "the staff member’s working pattern",
+                classes: "govuk-link--no-visited-state"
+              }
+            ]
+          }
         },
         {
           key: {
-          text: "Working pattern"
-        },
+            text: "Maximum capacity"
+          },
           value: {
-          text: scheduleType.description
-        },
+            text: capacity
+          },
           actions: {
-          items: [
-            {
-              href: "working-pattern",
-              text: "Change",
-              visuallyHiddenText: "the staff member’s working pattern",
-              classes: "govuk-link--no-visited-state"
-            }
-          ]
+            items: [
+              {
+                href: "capacity",
+                text: "Change",
+                visuallyHiddenText: "the staff member’s maximum capacity",
+                classes: "govuk-link--no-visited-state"
+              }
+            ]
+          }
         }
-        },
-        {
-          key: {
-          text: "Maximum capacity"
-        },
-          value: {
-          text: capacity
-        },
-          actions: {
-          items: [
-            {
-              href: "capacity",
-              text: "Change",
-              visuallyHiddenText: "the staff member’s maximum capacity",
-              classes: "govuk-link--no-visited-state"
-            }
-          ]
-        }
-        }
-      ]
+      ] | removeNullish
     }) }}
 
     <form method="post">

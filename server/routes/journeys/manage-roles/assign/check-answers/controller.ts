@@ -5,7 +5,7 @@ export class AssignRoleCheckAnswersController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
   GET = async (req: Request, res: Response) => {
-    if (!req.journeyData.assignStaffRole!.isPrisonOfficer) {
+    if (!req.journeyData.assignStaffRole!.isPrisonOfficer && req.middleware?.policy !== 'PERSONAL_OFFICER') {
       return res.redirect('not-prison-officer')
     }
 
