@@ -1,5 +1,6 @@
 import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../../integration_tests/support/commands'
+import { POLICIES } from '../../../../../utils/constants'
 
 context('/manage-roles/assign/check-answers', () => {
   const journeyId = uuidV4()
@@ -12,54 +13,64 @@ context('/manage-roles/assign/check-answers', () => {
     cy.task('stubUpsertStaffDetails')
   })
 
-  it('should try all cases', () => {
-    navigateToTestPage()
-    cy.url().should('match', /\/check-answers$/)
+  Object.values(POLICIES).forEach(policy => {
+    it(`should try all cases - ${policy.name}`, () => {
+      navigateToTestPage(policy.path)
+      cy.url().should('match', /\/check-answers$/)
 
-    verifyPageContent()
+      verifyPageContent(policy.staffs)
 
-    cy.contains('dt', 'Name').next().should('include.text', 'Doe, Joe')
-    cy.contains('dt', 'Role').next().should('include.text', 'Prison officer')
-    cy.contains('dt', 'Working pattern').next().should('include.text', 'Full-time')
-    cy.contains('dt', 'Maximum capacity').next().should('include.text', '9')
+      cy.contains('dt', 'Name').next().should('include.text', 'Doe, Joe')
 
-    cy.findByRole('link', { name: /Change the staff member$/i })
-      .should('be.visible')
-      .and('have.attr', 'href')
-      .and('to.match', /..\/assign$/)
+      if (policy.path === 'personal-officer') {
+        cy.contains('dt', 'Role').should('not.exist')
+      } else {
+        cy.contains('dt', 'Role').next().should('include.text', 'Prison officer')
+      }
 
-    cy.findByRole('link', { name: /Change whether the staff member is a prison officer/i })
-      .should('be.visible')
-      .and('have.attr', 'href')
-      .and('to.match', /role$/)
+      cy.contains('dt', 'Working pattern').next().should('include.text', 'Full-time')
+      cy.contains('dt', 'Maximum capacity').next().should('include.text', '9')
 
-    cy.findByRole('link', { name: /Change the staff member’s working pattern/i })
-      .should('be.visible')
-      .and('have.attr', 'href')
-      .and('to.match', /working-pattern$/)
+      cy.findByRole('link', { name: /Change the staff member$/i })
+        .should('be.visible')
+        .and('have.attr', 'href')
+        .and('to.match', /..\/assign$/)
 
-    cy.findByRole('link', { name: /Change the staff member’s maximum capacity/i })
-      .should('be.visible')
-      .and('have.attr', 'href')
-      .and('to.match', /capacity$/)
+      if (policy.path !== 'personal-officer') {
+        cy.findByRole('link', { name: /Change whether the staff member is a prison officer/i })
+          .should('be.visible')
+          .and('have.attr', 'href')
+          .and('to.match', /role$/)
+      }
 
-    proceedToNextPage()
+      cy.findByRole('link', { name: /Change the staff member’s working pattern/i })
+        .should('be.visible')
+        .and('have.attr', 'href')
+        .and('to.match', /working-pattern$/)
 
-    cy.verifyLastAPICall(
-      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/1001' },
-      {
-        capacity: 9,
-        staffRole: {
-          position: 'PRO',
-          scheduleType: 'FT',
-          hoursPerWeek: 35,
+      cy.findByRole('link', { name: /Change the staff member’s maximum capacity/i })
+        .should('be.visible')
+        .and('have.attr', 'href')
+        .and('to.match', /capacity$/)
+
+      proceedToNextPage()
+
+      cy.verifyLastAPICall(
+        { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/1001' },
+        {
+          capacity: 9,
+          staffRole: {
+            position: 'PRO',
+            scheduleType: 'FT',
+            hoursPerWeek: 35,
+          },
         },
-      },
-    )
+      )
+    })
   })
 
-  const verifyPageContent = () => {
-    cy.title().should('equal', 'Check your answers - Key workers - DPS')
+  const verifyPageContent = (policyName: string = 'Key workers') => {
+    cy.title().should('match', new RegExp(`Check your answers - ${policyName} - DPS`, 'i'))
     cy.findByRole('heading', { name: 'Check your answers' }).should('be.visible')
     cy.findByRole('button', { name: 'Confirm and submit' }).should('be.visible')
   }
@@ -69,9 +80,9 @@ context('/manage-roles/assign/check-answers', () => {
     cy.url().should('match', /\/confirmation$/)
   }
 
-  const navigateToTestPage = () => {
+  const navigateToTestPage = (policyPath: string = 'key-worker') => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/key-worker/${journeyId}/manage-roles/assign`, {
+    cy.visit(`/${policyPath}/${journeyId}/manage-roles/assign`, {
       failOnStatusCode: false,
     })
 
@@ -83,13 +94,13 @@ context('/manage-roles/assign/check-answers', () => {
           firstName: 'Joe',
           lastName: 'Doe',
         },
-        isPrisonOfficer: true,
+        ...(policyPath === 'key-worker' ? { isPrisonOfficer: true } : {}),
         scheduleType: { code: 'FT', description: 'Full-time' },
         hoursPerWeek: 35,
         capacity: 9,
       },
     })
 
-    cy.visit(`/key-worker/${journeyId}/manage-roles/assign/check-answers`, { failOnStatusCode: false })
+    cy.visit(`/${policyPath}/${journeyId}/manage-roles/assign/check-answers`, { failOnStatusCode: false })
   }
 })

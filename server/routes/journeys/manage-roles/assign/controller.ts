@@ -54,11 +54,10 @@ export class AssignStaffRoleController {
   selectStaff = async (req: Request<unknown, unknown, unknown, { staffId?: string }>, res: Response) => {
     const staffId = Number(req.query.staffId)
     const staff = req.journeyData.assignStaffRole!.searchResults?.find(item => item.staffId === staffId)
-    if (staff) {
-      req.journeyData.assignStaffRole!.staff = staff
-      res.redirect('role')
-    } else {
-      res.redirect('../assign')
+    if (!staff) {
+      return res.redirect('../assign')
     }
+    req.journeyData.assignStaffRole!.staff = staff
+    return res.redirect(res.locals['policyPath'] === 'personal-officer' ? 'working-pattern' : 'role')
   }
 }
