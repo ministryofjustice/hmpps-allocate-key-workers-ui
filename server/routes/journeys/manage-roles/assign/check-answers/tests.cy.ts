@@ -1,6 +1,7 @@
 import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../../integration_tests/support/commands'
 import { POLICIES } from '../../../../../utils/constants'
+import AuthorisedRoles from '../../../../../authentication/authorisedRoles'
 
 context('/manage-roles/assign/check-answers', () => {
   const journeyId = uuidV4()
@@ -8,7 +9,7 @@ context('/manage-roles/assign/check-answers', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubComponents')
-    cy.task('stubSignIn')
+    cy.task('stubSignIn', { roles: [AuthorisedRoles.KW_MIGRATION] })
     cy.task('stubEnabledPrison')
     cy.task('stubUpsertStaffDetails')
   })
