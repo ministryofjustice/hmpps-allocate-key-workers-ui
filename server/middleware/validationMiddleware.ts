@@ -1,5 +1,6 @@
 import { Request, RequestHandler, Response } from 'express'
 import { z } from 'zod'
+import { $ZodSuperRefineIssue } from 'zod/v4/core'
 import { FLASH_KEY__FORM_RESPONSES, FLASH_KEY__VALIDATION_ERRORS } from '../utils/constants'
 
 export type fieldErrors = {
@@ -37,7 +38,7 @@ const zObjectStrict = <T = object>(shape: T) => z.object({ _csrf: z.string().opt
 const zodAlwaysRefine = <T extends z.ZodTypeAny>(zodType: T) =>
   z.any().transform((val, ctx) => {
     const res = zodType.safeParse(val)
-    if (!res.success) res.error.issues.forEach(ctx.addIssue)
+    if (!res.success) res.error.issues.forEach(issue => ctx.addIssue(issue as $ZodSuperRefineIssue))
     return res.data || val
   }) as unknown as T
 
