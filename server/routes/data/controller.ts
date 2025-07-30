@@ -55,16 +55,16 @@ export class StaffDataController {
       keyworkerSessions: {
         heading: 'Number of recorded [staff] sessions',
         type: 'number',
-        currentValue: current?.keyworkerSessions,
-        previousValue: previous?.keyworkerSessions,
+        currentValue: current?.recordedEvents.find(o => o.type === 'SESSION')?.count,
+        previousValue: previous?.recordedEvents.find(o => o.type === 'SESSION')?.count,
         calculationMethod:
           'This figure is calculated by taking the total number of [staff] session case notes created in the selected date range.',
       },
       keyworkerEntries: {
         heading: 'Number of recorded [staff] entries',
         type: 'number',
-        currentValue: current?.keyworkerEntries,
-        previousValue: previous?.keyworkerEntries,
+        currentValue: current?.recordedEvents.find(o => o.type === 'ENTRY')?.count,
+        previousValue: previous?.recordedEvents.find(o => o.type === 'ENTRY')?.count,
         calculationMethod:
           'This figure is calculated by taking the total number of [staff] entry case notes created in the selected date range.',
       },
@@ -87,24 +87,24 @@ export class StaffDataController {
       percentageWithKeyworker: {
         heading: 'Percentage of prisoners with an allocated [staff]',
         type: 'percentage',
-        currentValue: current?.percentageWithKeyworker,
-        previousValue: previous?.percentageWithKeyworker,
+        currentValue: current?.percentageAssigned,
+        previousValue: previous?.percentageAssigned,
         calculationMethod:
           'This figure is created by dividing the total number of prisoners in the establishment with the total number of prisoners who have been allocated a [staff].',
       },
       activeKeyworkers: {
         heading: 'Total number of active [staffs]',
         type: 'number',
-        currentValue: current?.activeKeyworkers,
-        previousValue: previous?.activeKeyworkers,
+        currentValue: current?.eligibleStaff,
+        previousValue: previous?.eligibleStaff,
         calculationMethod:
           'This figure displays the average total number of active [staffs] in the establishment during the date range selected. This does not include [staffs] with an unavailable or inactive status.',
       },
       avgReceptionToSessionDays: {
         heading: 'Average time from reception to first [staff] session',
         type: 'day',
-        currentValue: current?.avgReceptionToSessionDays,
-        previousValue: previous?.avgReceptionToSessionDays,
+        currentValue: current?.avgReceptionToRecordedEventDays,
+        previousValue: previous?.avgReceptionToRecordedEventDays,
         calculationMethod:
           'The reception date is calculated by taking the date from the latest instance of a transfer case note for the prisoner within the last 6 months. <br /> <br />' +
           'The first [staff] session is taken from the date of the first [staff] session case note added in the prison in the last 6 months. ',
@@ -120,8 +120,8 @@ export class StaffDataController {
       compliance: {
         heading: complianceTitle,
         type: 'percentage',
-        currentValue: current?.compliance,
-        previousValue: previous?.compliance,
+        currentValue: current?.recordedEventComplianceRate,
+        previousValue: previous?.recordedEventComplianceRate,
         calculationMethod:
           'This figure is calculated by comparing the number of recorded [staff] sessions against the number of projected [staff] sessions. <br /> <br />' +
           'The number of projected [staff] sessions is calculated by taking the total number of prisoners with an allocated [staff] and comparing it to the expected frequency of [staff] sessions in the establishment.',
@@ -129,8 +129,8 @@ export class StaffDataController {
       projectedSessions: {
         heading: 'Number of projected [staff] sessions',
         type: 'number',
-        currentValue: current?.projectedSessions,
-        previousValue: previous?.projectedSessions,
+        currentValue: current?.projectedRecordedEvents,
+        previousValue: previous?.projectedRecordedEvents,
         calculationMethod:
           'This figure is calculated by taking the total number of prisoners with an allocated [staff] and comparing it to the expected frequency of [staff] sessions in the establishment.',
       },

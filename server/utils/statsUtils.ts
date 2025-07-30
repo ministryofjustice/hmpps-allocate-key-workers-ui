@@ -8,7 +8,7 @@ export const formatValue = (value: number, type: string = 'number'): string | nu
     const roundedValue = value !== 0 ? value.toFixed(2) : 0
     return `${roundedValue} %`
   }
-  if (type === 'day') return `${value} days`
+  if (type === 'day') return `${value} day${value === 1 ? '' : 's'}`
   if (value === 0) return 0
   if (!value) return '-'
   return Number(value)

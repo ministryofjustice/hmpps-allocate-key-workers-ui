@@ -362,6 +362,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/prisons/{prisonCode}/statistics': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
+    get: operations['getPrisonStatistics']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/prisons/{prisonCode}/statistics/keyworker': {
     parameters: {
       query?: never
@@ -373,7 +393,7 @@ export interface paths {
      *
      *     Requires one of the following roles:
      *     * ROLE_KEY_WORKER__RO */
-    get: operations['getPrisonStatistics']
+    get: operations['getKeyworkerStatistics']
     put?: never
     post?: never
     delete?: never
@@ -1009,13 +1029,40 @@ export interface components {
       prn: string
       content: components['schemas']['SarKeyWorker'][]
     }
+    PrisonStatSummary: {
+      /** Format: date */
+      from: string
+      /** Format: date */
+      to: string
+      /** Format: int32 */
+      totalPrisoners: number
+      /** Format: int32 */
+      highComplexityOfNeedPrisoners: number
+      /** Format: int32 */
+      eligiblePrisoners: number
+      /** Format: int32 */
+      prisonersAssigned: number
+      /** Format: int32 */
+      eligibleStaff: number
+      recordedEvents: components['schemas']['RecordedEventCount'][]
+      /** Format: int32 */
+      avgReceptionToAllocationDays?: number
+      /** Format: int32 */
+      avgReceptionToRecordedEventDays?: number
+      /** Format: int32 */
+      projectedRecordedEvents: number
+      /** Format: double */
+      percentageAssigned?: number
+      /** Format: double */
+      recordedEventComplianceRate: number
+    }
     PrisonStats: {
       prisonCode: string
-      current?: components['schemas']['StatSummary']
-      previous?: components['schemas']['StatSummary']
+      current?: components['schemas']['PrisonStatSummary']
+      previous?: components['schemas']['PrisonStatSummary']
       hasPrisonersWithHighComplexityOfNeed: boolean
     }
-    StatSummary: {
+    KeyworkerStatisticSummary: {
       /** Format: date */
       from: string
       /** Format: date */
@@ -1044,6 +1091,12 @@ export interface components {
       percentageWithKeyworker?: number
       /** Format: double */
       compliance: number
+    }
+    KeyworkerStats: {
+      prisonCode: string
+      current?: components['schemas']['KeyworkerStatisticSummary']
+      previous?: components['schemas']['KeyworkerStatisticSummary']
+      hasPrisonersWithHighComplexityOfNeed: boolean
     }
     Allocation: {
       prisoner: components['schemas']['Prisoner']
@@ -2391,7 +2444,12 @@ export interface operations {
         from: string
         to: string
       }
-      header?: never
+      header: {
+        /** @description
+         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
+         *          */
+        Policy: string
+      }
       path: {
         prisonCode: string
       }
@@ -2406,6 +2464,31 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['PrisonStats']
+        }
+      }
+    }
+  }
+  getKeyworkerStatistics: {
+    parameters: {
+      query: {
+        from: string
+        to: string
+      }
+      header?: never
+      path: {
+        prisonCode: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['KeyworkerStats']
         }
       }
     }

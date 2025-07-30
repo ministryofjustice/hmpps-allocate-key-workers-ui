@@ -96,7 +96,7 @@ const stubKeyworkerApiHealth = () => createBasicHttpStub('GET', '/keyworker-api/
 const createKeyworkerStatsStub = (from: string, to: string, jsonBody = {}) => {
   return createHttpStub(
     'GET',
-    '/keyworker-api/prisons/LEI/statistics/keyworker',
+    '/keyworker-api/prisons/LEI/statistics',
     { from: { matches: from }, to: { matches: to } },
     undefined,
     200,
@@ -134,11 +134,9 @@ const stubKeyworkerApiStats2024 = () => createKeyworkerStatsStub('2024.+', '.+',
 
 const stubKeyworkerApiStatsNoData = () =>
   createKeyworkerStatsStub('.+', '.+', {
-    summary: {
-      ...keyworkerStatisticsResponse,
-      current: undefined,
-      previous: undefined,
-    },
+    ...keyworkerStatisticsResponse,
+    current: undefined,
+    previous: undefined,
   })
 
 const stubSearchAllocatableStaffAll = () =>
@@ -241,17 +239,26 @@ const stubKeyWorkerStatsWithNullPreviousValues = () =>
     previous: {
       from: '2025-01-11',
       to: '2025-01-11',
+      highComplexityOfNeedPrisoners: 0,
       totalPrisoners: 1169,
       eligiblePrisoners: 1169,
-      prisonersAssignedKeyworker: 1077,
-      activeKeyworkers: 8,
-      keyworkerSessions: 0,
-      keyworkerEntries: 0,
+      prisonersAssigned: 1077,
+      eligibleStaff: 8,
+      recordedEvents: [
+        {
+          type: 'SESSION',
+          count: 0,
+        },
+        {
+          type: 'ENTRY',
+          count: 0,
+        },
+      ],
       avgReceptionToAllocationDays: null,
-      avgReceptionToSessionDays: null,
-      projectedSessions: 167,
-      percentageWithKeyworker: null,
-      compliance: 0,
+      avgReceptionToRecordedEventDays: null,
+      projectedRecordedEvents: 167,
+      percentageAssigned: null,
+      recordedEventComplianceRate: 0,
     },
   })
 
@@ -367,128 +374,53 @@ const keyworkerStatisticsResponse = {
   current: {
     from: '2025-02-06',
     to: '2025-02-28',
+    highComplexityOfNeedPrisoners: 0,
     totalPrisoners: 1172,
     eligiblePrisoners: 1172,
-    prisonersAssignedKeyworker: 1078,
-    activeKeyworkers: 11,
-    keyworkerSessions: 1,
-    keyworkerEntries: 0,
+    prisonersAssigned: 1078,
+    eligibleStaff: 11,
+    recordedEvents: [
+      {
+        type: 'SESSION',
+        count: 1,
+      },
+      {
+        type: 'ENTRY',
+        count: 0,
+      },
+    ],
     avgReceptionToAllocationDays: 66,
-    avgReceptionToSessionDays: 0,
-    projectedSessions: 3851,
-    percentageWithKeyworker: 91.98,
-    compliance: 0.03,
+    avgReceptionToRecordedEventDays: 0,
+    projectedRecordedEvents: 3851,
+    percentageAssigned: 91.98,
+    recordedEventComplianceRate: 0.03,
   },
   previous: {
     from: '2025-01-11',
     to: '2025-01-11',
     totalPrisoners: 1169,
+    highComplexityOfNeedPrisoners: 0,
     eligiblePrisoners: 1169,
-    prisonersAssignedKeyworker: 1077,
-    activeKeyworkers: 8,
-    keyworkerSessions: 0,
-    keyworkerEntries: 0,
+    prisonersAssigned: 1077,
+    eligibleStaff: 8,
+    recordedEvents: [
+      {
+        type: 'SESSION',
+        count: 0,
+      },
+      {
+        type: 'ENTRY',
+        count: 0,
+      },
+    ],
     avgReceptionToAllocationDays: 0,
-    avgReceptionToSessionDays: 0,
-    projectedSessions: 167,
-    percentageWithKeyworker: 92.13,
-    compliance: 0,
+    avgReceptionToRecordedEventDays: 0,
+    projectedRecordedEvents: 167,
+    percentageAssigned: 92.13,
+    recordedEventComplianceRate: 0,
   },
-  sessionTimeline: [
-    {
-      date: '2024-04-14',
-      value: 0,
-    },
-    {
-      date: '2024-05-19',
-      value: 0,
-    },
-    {
-      date: '2024-06-02',
-      value: 0,
-    },
-    {
-      date: '2024-08-18',
-      value: 0,
-    },
-    {
-      date: '2024-11-10',
-      value: 0,
-    },
-    {
-      date: '2024-12-01',
-      value: 0,
-    },
-    {
-      date: '2025-01-05',
-      value: 0,
-    },
-    {
-      date: '2025-02-02',
-      value: 0,
-    },
-    {
-      date: '2025-02-09',
-      value: 0,
-    },
-    {
-      date: '2025-02-16',
-      value: 0,
-    },
-    {
-      date: '2025-02-23',
-      value: 1,
-    },
-  ],
-  averageSessions: 0,
-  complianceTimeline: [
-    {
-      date: '2024-04-14',
-      value: 0,
-    },
-    {
-      date: '2024-05-19',
-      value: 0,
-    },
-    {
-      date: '2024-06-02',
-      value: 0,
-    },
-    {
-      date: '2024-08-18',
-      value: 0,
-    },
-    {
-      date: '2024-11-10',
-      value: 0,
-    },
-    {
-      date: '2024-12-01',
-      value: 0,
-    },
-    {
-      date: '2025-01-05',
-      value: 0,
-    },
-    {
-      date: '2025-02-02',
-      value: 0,
-    },
-    {
-      date: '2025-02-09',
-      value: 0,
-    },
-    {
-      date: '2025-02-16',
-      value: 0,
-    },
-    {
-      date: '2025-02-23',
-      value: 0.1,
-    },
-  ],
-  averageCompliance: 0.01,
-}
+  hasPrisonersWithHighComplexityOfNeed: false,
+} as components['schemas']['PrisonStats']
 
 export const defaultKeyworkerDetails = {
   staffId: 488095,
