@@ -22,7 +22,7 @@ export type Policy = {
   name: string
 }
 
-export const POLICIES: { [path: string]: Policy } = {
+export const POLICIES = {
   'key-worker': { staff: 'key worker', staffs: 'key workers', path: 'key-worker', name: 'Key worker' },
   'personal-officer': {
     staff: 'personal officer',
