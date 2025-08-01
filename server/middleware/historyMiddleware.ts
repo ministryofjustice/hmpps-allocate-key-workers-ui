@@ -13,7 +13,8 @@ export function historyMiddlware(...excludeUrls: RegExp[]): RequestHandler {
       req.session.history.push(req.originalUrl)
     }
 
-    res.locals.historyBackUrl = getLastDifferentPage(req) || req.headers?.['referer'] || '/'
+    res.locals.historyBackUrl =
+      getLastDifferentPage(req) || req.headers?.['referer'] || `/${res.locals.policyPath || ''}`
     return next()
   }
 }

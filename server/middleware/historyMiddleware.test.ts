@@ -7,7 +7,9 @@ describe('historyMiddleware', () => {
 
   function createResWithToken(): Response {
     return {
-      locals: {},
+      locals: {
+        policyPath: 'policy-home',
+      },
       redirect: jest.fn(),
     } as unknown as Response
   }
@@ -182,12 +184,29 @@ describe('historyMiddleware', () => {
     expect(res.locals.historyBackUrl).toBe('http://outside-service.gov.uk')
   })
 
-  it('should set historyBackUrl to "/" if no history exists in session and no referer header', () => {
+  it('should set historyBackUrl to /policy if no history exists in session and no referer header', () => {
     const res = createResWithToken()
 
     const reqSession = {}
     const middleware = historyMiddlware(/journey-start/)
-    middleware({ method: 'GET', originalUrl: '/policy-home', session: reqSession } as jest.Mocked<Request>, res, next)
+    middleware(
+      { method: 'GET', originalUrl: '/policy-home/feature-landing', session: reqSession } as jest.Mocked<Request>,
+      res,
+      next,
+    )
+    expect(res.locals.historyBackUrl).toBe('/policy-home')
+  })
+
+  it('should set historyBackUrl to / if no history exists in session, no referer header and no policyPath set', () => {
+    const res = createResWithToken()
+    res.locals.policyPath = ''
+    const reqSession = {}
+    const middleware = historyMiddlware(/journey-start/)
+    middleware(
+      { method: 'GET', originalUrl: '/policy-home/feature-landing', session: reqSession } as jest.Mocked<Request>,
+      res,
+      next,
+    )
     expect(res.locals.historyBackUrl).toBe('/')
   })
 })
