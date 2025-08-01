@@ -80,6 +80,7 @@ context('/manage-roles/assign/working-pattern', () => {
       },
     })
 
+    cy.visit(`/key-worker/${journeyId}/manage-roles/assign/role`)
     cy.visit(`/key-worker/${journeyId}/manage-roles/assign/working-pattern`)
   }
 })
