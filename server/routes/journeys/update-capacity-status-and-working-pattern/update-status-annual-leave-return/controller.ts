@@ -10,7 +10,7 @@ export class UpdateStatusReturnDateController {
       day: res.locals?.formResponses?.['day'] ?? day,
       month: res.locals?.formResponses?.['month'] ?? month,
       year: res.locals?.formResponses?.['year'] ?? year,
-      backUrl: 'update-status-unavailable',
+      backUrl: 'back',
     })
   }
 

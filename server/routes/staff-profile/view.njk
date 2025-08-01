@@ -125,7 +125,7 @@
             })
           } if user | hasPermission('allocate') else undefined,
           {
-            html: '<a class="govuk-link govuk-link--no-visited-state" href="/' + policyPath + '/prisoner-allocation-history/' + item.prisoner.prisonNumber + '?backTo=' + backTo +'">View allocation history</a>'
+            html: '<a class="govuk-link govuk-link--no-visited-state" href="/' + policyPath + '/prisoner-allocation-history/' + item.prisoner.prisonNumber + '">View allocation history</a>'
           }
         ] | removeNullish), rows) %}
     {% endfor %}

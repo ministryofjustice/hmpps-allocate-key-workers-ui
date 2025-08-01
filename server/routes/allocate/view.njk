@@ -128,7 +128,7 @@
           text: "Assign " + policyStaffs + " automatically",
           classes: "govuk-button--secondary float-right govuk-!-margin-bottom-2",
           preventDoubleClick: true,
-          href: '/' + policyPath + '/recommend-allocations?backTo=' + backTo
+          href: '/' + policyPath + '/recommend-allocations'
         }) }}
       </div>
     {% endif %}
@@ -171,7 +171,7 @@
               })
             } if user | hasPermission('allocate') else undefined,
             {
-              html: '<a class="govuk-link govuk-link--no-visited-state" href="/' + policyPath + '/prisoner-allocation-history/' + item.personIdentifier + '?backTo=' + backTo + '">View allocation history</a>' if item.hasAllocationHistory else ''
+              html: '<a class="govuk-link govuk-link--no-visited-state" href="/' + policyPath + '/prisoner-allocation-history/' + item.personIdentifier + '">View allocation history</a>' if item.hasAllocationHistory else ''
             }
           ] | removeNullish), rows) %}
         {% endfor %}

@@ -25,7 +25,6 @@ export class StaffProfileController extends ChangeStaffController {
       ...{ ...Data, staffMember: { firstName: Data.firstName, lastName: Data.lastName } },
       ...(await this.getChangeData(req, res)),
       showBreadcrumbs: true,
-      backTo: encodeURIComponent(`/${res.locals.policyPath}/staff-profile/${req.params.staffId}`),
     })
   }
 

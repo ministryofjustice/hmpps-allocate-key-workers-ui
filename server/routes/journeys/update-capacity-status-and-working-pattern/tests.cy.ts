@@ -58,6 +58,7 @@ context('Update capacity, status and working pattern', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
+    cy.visit(`/key-worker/staff-profile/488095`, { failOnStatusCode: false })
     cy.visit(
       `/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern`,
       {

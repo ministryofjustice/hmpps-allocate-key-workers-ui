@@ -37,18 +37,12 @@ export class AllocateStaffController extends ChangeStaffController {
       Object.entries(sanitisedQuery).reduce((acc, [key, value]) => ({ ...acc, [key]: String(value) }), {}),
     ).toString()
 
-    const hasMeaningfulQuery = Object.values(sanitisedQuery).some(val => val)
-    const backTo = encodeURIComponent(
-      `/${res.locals.policyPath}/allocate${hasMeaningfulQuery ? `?${searchQuery}` : ''}`,
-    )
-
     if (!Object.keys(req.query).length) {
       return res.render('allocate/view', {
         locations: locationsValues,
         showBreadcrumbs: true,
         allowAutoAllocation,
         allocationResult,
-        backTo,
       })
     }
 
@@ -61,7 +55,6 @@ export class AllocateStaffController extends ChangeStaffController {
         showBreadcrumbs: true,
         allowAutoAllocation,
         allocationResult,
-        backTo,
       })
     }
 
@@ -70,7 +63,6 @@ export class AllocateStaffController extends ChangeStaffController {
       ...sanitisedQuery,
       records,
       searchQuery,
-      backTo,
       locations: locationsValues,
       ...(await this.getChangeData(req, res)),
       showBreadcrumbs: true,

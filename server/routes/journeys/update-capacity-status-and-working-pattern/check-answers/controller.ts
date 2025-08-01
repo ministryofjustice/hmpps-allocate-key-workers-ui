@@ -17,7 +17,7 @@ export class UpdateStatusCheckAnswersController {
       newStatus: status,
       deactivateActiveAllocations,
       reactivateOn,
-      backUrl: this.getBackUrl(req.journeyData.updateStaffDetails!.status!.code),
+      backUrl: 'back',
     })
   }
 
@@ -51,16 +51,5 @@ export class UpdateStatusCheckAnswersController {
   POST = async (req: Request, res: Response) => {
     await resetJourneyAndReloadKeyWorkerDetails(this.keyworkerApiService, req, res)
     res.redirect('../update-capacity-status-and-working-pattern')
-  }
-
-  private getBackUrl = (statusCode: string) => {
-    switch (statusCode) {
-      case 'ACTIVE':
-        return 'update-status'
-      case 'UNAVAILABLE_ANNUAL_LEAVE':
-        return 'update-status-annual-leave-return'
-      default:
-        return 'update-status-unavailable'
-    }
   }
 }

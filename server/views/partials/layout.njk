@@ -32,7 +32,7 @@
   {% elseif backUrl %}
     {{ govukBackLink({
       text: backLabel or "Back",
-      href: backUrl
+      href: historyBackUrl if backUrl == 'back' else backUrl
     }) }}
   {% endif %}
 

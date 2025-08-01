@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import { components } from '../../@types/keyWorker'
 import { POLICIES } from '../../utils/constants'
+import { getLastDifferentPageNotMatching } from '../../middleware/historyMiddleware'
 
 export class PrisonerAllocationHistoryController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
@@ -10,14 +11,15 @@ export class PrisonerAllocationHistoryController {
     const prisoner = req.middleware!.prisonerData!
     const policy = sanitisePolicy(res, req.url.split('/').pop()?.split('?')[0])
     const staffAllocations = await this.keyworkerApiService.getStaffAllocations(req, prisoner.prisonerNumber, policy)
-    const backTo = req.query['backTo']?.toString() || ''
 
     res.render('prisoner-allocation-history/view', {
       prisoner,
-      backTo: encodeURIComponent(backTo),
       tabPolicy: policy,
       allocationHistory: simplifyDeallocationReasons(staffAllocations.allocations),
-      backUrl: backTo,
+      backUrl: getLastDifferentPageNotMatching(
+        req,
+        new RegExp(`/prisoner-allocation-history/${prisoner.prisonerNumber}`),
+      ),
     })
   }
 }

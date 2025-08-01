@@ -11,6 +11,7 @@ export declare module 'express-session' {
   interface SessionData {
     returnTo: string
     nowInMinutes: number
+    history: string[]
   }
 }
 
@@ -149,6 +150,7 @@ export declare global {
           [key: string]: unknown
         }
       }
+      historyBackUrl?: string
     }
   }
 }
