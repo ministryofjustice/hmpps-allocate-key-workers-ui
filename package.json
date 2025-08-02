@@ -98,7 +98,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.848.0",
+    "@aws-sdk/client-sqs": "^3.855.0",
     "@cypress/code-coverage": "^3.14.5",
     "@ministryofjustice/frontend": "^5.1.5",
     "@ministryofjustice/hmpps-auth-clients": "^0.0.1",
@@ -106,7 +106,7 @@
     "@ministryofjustice/hmpps-monitoring": "^0.0.1",
     "@ministryofjustice/hmpps-precommit-hooks": "^0.0.3",
     "@ministryofjustice/hmpps-prison-permissions-lib": "^0.0.1",
-    "@sentry/node": "^9.41.0",
+    "@sentry/node": "^9.42.1",
     "@types/cypress__code-coverage": "^3.10.2",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^2.9.6",
@@ -131,15 +131,15 @@
     "redis": "^5.6.1",
     "superagent": "^10.2.3",
     "uuid": "^11.1.0",
-    "zod": "^4.0.8"
+    "zod": "^4.0.10"
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@jgoz/esbuild-plugin-typecheck": "^4.0.3",
     "@ministryofjustice/eslint-config-hmpps": "^0.0.1",
     "@testing-library/cypress": "^10.0.3",
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/user-event": "^14.6.1",
     "@tsconfig/node22": "^22.0.2",
     "@types/bunyan": "^1.8.11",
@@ -163,7 +163,7 @@
     "chai": "^5.2.1",
     "chokidar": "^3.6.0",
     "concurrently": "^9.2.0",
-    "cypress": "^14.5.2",
+    "cypress": "^14.5.3",
     "cypress-ctrf-json-reporter": "^0.0.12",
     "cypress-diff": "^0.0.6",
     "cypress-multi-reporters": "^2.0.5",
@@ -180,13 +180,13 @@
     "jsonwebtoken": "^9.0.2",
     "lint-staged": "^16.1.2",
     "mocha-junit-reporter": "^2.2.1",
-    "nock": "^14.0.6",
+    "nock": "^14.0.7",
     "nyc": "^17.1.0",
     "openapi-typescript": "^7.8.0",
     "prettier": "^3.6.2",
     "prettier-plugin-jinja-template": "^2.1.0",
     "supertest": "^7.1.4",
     "ts-jest": "^29.4.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.2"
   }
 }
