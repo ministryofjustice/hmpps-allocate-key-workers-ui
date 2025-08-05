@@ -39,13 +39,6 @@ const stubComponents = () => {
           },
           services: [
             {
-              id: 'csipUI',
-              heading: 'CSIP',
-              description: 'View and manage the Challenge, Support and Intervention Plan (CSIP) caseload.',
-              href: 'https://csip-dev.hmpps.service.justice.gov.uk',
-              navEnabled: true,
-            },
-            {
               id: 'allocate-key-workers',
             },
             {
@@ -68,7 +61,7 @@ const stubComponents = () => {
   })
 }
 
-const stubComponentsNoCsip = () => {
+const stubComponentsNoService = () => {
   return stubFor({
     request: {
       method: 'GET',
@@ -112,6 +105,6 @@ const stubComponentsNoCsip = () => {
 
 export default {
   stubComponents,
-  stubComponentsNoCsip,
+  stubComponentsNoService,
   stubComponentsFail,
 }

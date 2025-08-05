@@ -82,12 +82,20 @@ export function populateUserPermissionsAndPrisonConfig(): RequestHandler {
           res.locals.policyStaffs = 'key workers'
           res.locals.policyPath = 'key-worker'
           res.locals.user.hasJobResponsibility = !!res.locals.user.allocationJobResponsibilities?.includes('KEY_WORKER')
-          if (res.locals.feComponents?.sharedData) {
-            if (
-              !res.locals.feComponents.sharedData.services.find(
-                ({ id }) => id === 'allocate-key-workers' || id === 'my-key-worker-allocations',
-              )
-            ) {
+
+          if (hasRole(res, AuthorisedRoles.KW_MIGRATION)) {
+            res.locals.user.permissions = UserPermissionLevel.ADMIN
+          } else if (hasRole(res, AuthorisedRoles.OMIC_ADMIN)) {
+            res.locals.user.permissions = UserPermissionLevel.ALLOCATE
+          } else if (hasRole(res, AuthorisedRoles.KEYWORKER_MONITOR)) {
+            res.locals.user.permissions = UserPermissionLevel.VIEW
+          } else if (res.locals.user.hasJobResponsibility) {
+            res.locals.user.permissions = UserPermissionLevel.SELF_PROFILE_ONLY
+          }
+
+          if (res.locals.feComponents?.sharedData && res.locals.user.permissions !== UserPermissionLevel.ADMIN) {
+            const feServices = ['allocate-key-workers', 'my-key-worker-allocations']
+            if (!res.locals.feComponents.sharedData.services.find(({ id }) => feServices.includes(id))) {
               return res.render('pages/service-not-enabled')
             }
           }
@@ -99,12 +107,20 @@ export function populateUserPermissionsAndPrisonConfig(): RequestHandler {
           res.locals.policyPath = 'personal-officer'
           res.locals.user.hasJobResponsibility =
             !!res.locals.user.allocationJobResponsibilities?.includes('PERSONAL_OFFICER')
-          if (res.locals.feComponents?.sharedData) {
-            if (
-              !res.locals.feComponents.sharedData.services.find(
-                ({ id }) => id === 'allocate-personal-officers' || id === 'my-personal-officer-allocations',
-              )
-            ) {
+
+          if (hasRole(res, AuthorisedRoles.KW_MIGRATION)) {
+            res.locals.user.permissions = UserPermissionLevel.ADMIN
+          } else if (hasRole(res, AuthorisedRoles.PERSONAL_OFFICER_ALLOCATE)) {
+            res.locals.user.permissions = UserPermissionLevel.ALLOCATE
+          } else if (hasRole(res, AuthorisedRoles.PERSONAL_OFFICER_VIEW)) {
+            res.locals.user.permissions = UserPermissionLevel.VIEW
+          } else if (res.locals.user.hasJobResponsibility) {
+            res.locals.user.permissions = UserPermissionLevel.SELF_PROFILE_ONLY
+          }
+
+          if (res.locals.feComponents?.sharedData && res.locals.user.permissions !== UserPermissionLevel.ADMIN) {
+            const feServices = ['allocate-personal-officers', 'my-personal-officer-allocations']
+            if (!res.locals.feComponents.sharedData.services.find(({ id }) => feServices.includes(id))) {
               return res.render('pages/service-not-enabled')
             }
           }
@@ -113,27 +129,6 @@ export function populateUserPermissionsAndPrisonConfig(): RequestHandler {
           return res.notFound()
       }
 
-      if (req.params['policy'] === 'key-worker') {
-        if (hasRole(res, AuthorisedRoles.KW_MIGRATION)) {
-          res.locals.user.permissions = UserPermissionLevel.ADMIN
-        } else if (hasRole(res, AuthorisedRoles.OMIC_ADMIN)) {
-          res.locals.user.permissions = UserPermissionLevel.ALLOCATE
-        } else if (hasRole(res, AuthorisedRoles.KEYWORKER_MONITOR)) {
-          res.locals.user.permissions = UserPermissionLevel.VIEW
-        } else if (res.locals.user.hasJobResponsibility) {
-          res.locals.user.permissions = UserPermissionLevel.SELF_PROFILE_ONLY
-        }
-      } else if (req.params['policy'] === 'personal-officer') {
-        if (hasRole(res, AuthorisedRoles.KW_MIGRATION)) {
-          res.locals.user.permissions = UserPermissionLevel.ADMIN
-        } else if (hasRole(res, AuthorisedRoles.PERSONAL_OFFICER_ALLOCATE)) {
-          res.locals.user.permissions = UserPermissionLevel.ALLOCATE
-        } else if (hasRole(res, AuthorisedRoles.PERSONAL_OFFICER_VIEW)) {
-          res.locals.user.permissions = UserPermissionLevel.VIEW
-        } else if (res.locals.user.hasJobResponsibility) {
-          res.locals.user.permissions = UserPermissionLevel.SELF_PROFILE_ONLY
-        }
-      }
       req.middleware.prisonConfiguration = await keyworkerApiService.getPrisonConfig(req, prisonCode)
 
       return next()

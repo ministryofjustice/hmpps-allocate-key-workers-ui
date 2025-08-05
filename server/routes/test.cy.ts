@@ -111,6 +111,7 @@ context('test / homepage', () => {
         hasAllocationJobResponsibilities: false,
       })
       cy.task('stubEnabledPrison')
+      cy.task('stubComponentsNoService')
 
       navigateToTestPage()
       cy.title().should('equal', 'Key workers - DPS')
