@@ -1,4 +1,4 @@
-import { POLICIES, Policy } from './constants'
+import { POLICIES, Policy } from '../middleware/policyMiddleware'
 import { sentenceCase } from './formatUtils'
 
 const properCase = (word: string): string =>
