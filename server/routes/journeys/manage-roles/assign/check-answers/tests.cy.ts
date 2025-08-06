@@ -1,6 +1,6 @@
 import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../../integration_tests/support/commands'
-import { POLICIES } from '../../../../../utils/constants'
+import { POLICIES } from '../../../../../middleware/policyMiddleware'
 import AuthorisedRoles from '../../../../../authentication/authorisedRoles'
 
 context('/manage-roles/assign/check-answers', () => {

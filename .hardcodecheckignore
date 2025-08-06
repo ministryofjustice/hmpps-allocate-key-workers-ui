@@ -2,6 +2,6 @@
 
 'HMPPS Allocate Key Workers Ui'
 res.locals.policyStaff
-server/utils/constants.ts
+server/middleware/policyMiddleware.ts
 text: 'Personal officer allocation history'
 text: 'Key worker allocation history'

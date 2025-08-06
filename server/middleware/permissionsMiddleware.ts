@@ -1,12 +1,8 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { services } from '../services'
 import logger from '../../logger'
-import AuthorisedRoles from '../authentication/authorisedRoles'
 import { HmppsUser, UserPermissionLevel } from '../interfaces/hmppsUser'
-
-function hasRole(res: Response, ...roles: AuthorisedRoles[]): boolean {
-  return roles.some(role => res.locals.user.userRoles.includes(role))
-}
+import { POLICIES } from './policyMiddleware'
 
 export const requireRole = (minimumRole: UserPermissionLevel) => {
   return requirePermissionsAndConfig({ requirePrisonEnabled: true, minimumPermission: minimumRole })
@@ -75,65 +71,30 @@ export function populateUserPermissionsAndPrisonConfig(): RequestHandler {
       const prisonCode = res.locals.user.getActiveCaseloadId()!
 
       req.middleware ??= {}
-      switch (req.params['policy']) {
-        case 'key-worker':
-          req.middleware.policy = 'KEY_WORKER'
-          res.locals.policyStaff = 'key worker'
-          res.locals.policyStaffs = 'key workers'
-          res.locals.policyPath = 'key-worker'
-          res.locals.user.hasJobResponsibility = !!res.locals.user.allocationJobResponsibilities?.includes('KEY_WORKER')
-          if (res.locals.feComponents?.sharedData) {
-            if (
-              !res.locals.feComponents.sharedData.services.find(
-                ({ id }) => id === 'allocate-key-workers' || id === 'my-key-worker-allocations',
-              )
-            ) {
-              return res.render('pages/service-not-enabled')
-            }
-          }
-          break
-        case 'personal-officer':
-          req.middleware.policy = 'PERSONAL_OFFICER'
-          res.locals.policyStaff = 'personal officer'
-          res.locals.policyStaffs = 'personal officers'
-          res.locals.policyPath = 'personal-officer'
-          res.locals.user.hasJobResponsibility =
-            !!res.locals.user.allocationJobResponsibilities?.includes('PERSONAL_OFFICER')
-          if (res.locals.feComponents?.sharedData) {
-            if (
-              !res.locals.feComponents.sharedData.services.find(
-                ({ id }) => id === 'allocate-personal-officers' || id === 'my-personal-officer-allocations',
-              )
-            ) {
-              return res.render('pages/service-not-enabled')
-            }
-          }
-          break
-        default:
-          return res.notFound()
+
+      const policy = req.params['policy'] as string
+      const policyConfig = POLICIES[policy]
+
+      if (!policyConfig) {
+        return res.notFound()
       }
 
-      if (req.params['policy'] === 'key-worker') {
-        if (hasRole(res, AuthorisedRoles.KW_MIGRATION)) {
-          res.locals.user.permissions = UserPermissionLevel.ADMIN
-        } else if (hasRole(res, AuthorisedRoles.OMIC_ADMIN)) {
-          res.locals.user.permissions = UserPermissionLevel.ALLOCATE
-        } else if (hasRole(res, AuthorisedRoles.KEYWORKER_MONITOR)) {
-          res.locals.user.permissions = UserPermissionLevel.VIEW
-        } else if (res.locals.user.hasJobResponsibility) {
-          res.locals.user.permissions = UserPermissionLevel.SELF_PROFILE_ONLY
-        }
-      } else if (req.params['policy'] === 'personal-officer') {
-        if (hasRole(res, AuthorisedRoles.KW_MIGRATION)) {
-          res.locals.user.permissions = UserPermissionLevel.ADMIN
-        } else if (hasRole(res, AuthorisedRoles.PERSONAL_OFFICER_ALLOCATE)) {
-          res.locals.user.permissions = UserPermissionLevel.ALLOCATE
-        } else if (hasRole(res, AuthorisedRoles.PERSONAL_OFFICER_VIEW)) {
-          res.locals.user.permissions = UserPermissionLevel.VIEW
-        } else if (res.locals.user.hasJobResponsibility) {
-          res.locals.user.permissions = UserPermissionLevel.SELF_PROFILE_ONLY
+      req.middleware.policy = policyConfig.jobResponsibility
+      res.locals.policyStaff = policyConfig.staff
+      res.locals.policyStaffs = policyConfig.staffs
+      res.locals.policyPath = policyConfig.path
+      res.locals.user.hasJobResponsibility = !!res.locals.user.allocationJobResponsibilities?.includes(
+        policyConfig.jobResponsibility,
+      )
+
+      policyConfig.permissionMapper(res)
+
+      if (res.locals.feComponents?.sharedData && res.locals.user.permissions !== UserPermissionLevel.ADMIN) {
+        if (!res.locals.feComponents.sharedData.services.find(({ id }) => policyConfig.serviceNames.includes(id))) {
+          return res.render('pages/service-not-enabled')
         }
       }
+
       req.middleware.prisonConfiguration = await keyworkerApiService.getPrisonConfig(req, prisonCode)
 
       return next()
