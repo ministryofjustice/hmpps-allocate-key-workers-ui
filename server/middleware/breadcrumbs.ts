@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction, RequestHandler } from 'express'
 import { sentenceCase } from '../utils/formatUtils'
+import { getBreadcrumbs } from './historyMiddleware'
 
 export type Breadcrumb = { href: string } & ({ text: string } | { html: string })
 
@@ -34,7 +35,7 @@ export class Breadcrumbs {
 
 export default function breadcrumbs(): RequestHandler {
   return (_req: Request, res: Response, next: NextFunction): void => {
-    res.locals.breadcrumbs = new Breadcrumbs(res)
+    res.locals.breadcrumbs = getBreadcrumbs(_req, res)
     next()
   }
 }

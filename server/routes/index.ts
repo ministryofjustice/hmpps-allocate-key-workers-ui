@@ -27,13 +27,13 @@ export default function routes(services: Services) {
   const controller = new HomePageController()
 
   router.use(populateUserPermissionsAndPrisonConfig())
-  router.use(breadcrumbs())
 
   const permissionAdmin = { requirePrisonEnabled: false, minimumPermission: UserPermissionLevel.ADMIN }
   const permissionAllocate = { requirePrisonEnabled: true, minimumPermission: UserPermissionLevel.ALLOCATE }
   const permissionSelf = { requirePrisonEnabled: true, minimumPermission: UserPermissionLevel.SELF_PROFILE_ONLY }
 
   router.use(historyMiddlware(/start-update-staff/, /\/select\?staffId/))
+  router.use(breadcrumbs())
   get('/', Page.HOMEPAGE, requirePermissionsAndConfig(permissionAdmin, permissionSelf), controller.GET)
 
   router.use(removeTrailingSlashMiddleware)
