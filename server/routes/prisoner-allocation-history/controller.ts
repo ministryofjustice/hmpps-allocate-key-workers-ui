@@ -18,6 +18,7 @@ export class PrisonerAllocationHistoryController {
       allocationHistory: simplifyDeallocationReasons(staffAllocations.allocations),
       backUrl: getLastDifferentPageNotMatching(
         req,
+        res,
         new RegExp(`/prisoner-allocation-history/${prisoner.prisonerNumber}`),
       ),
     })

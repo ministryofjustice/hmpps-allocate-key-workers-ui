@@ -37,7 +37,7 @@ export class AllocateStaffController extends ChangeStaffController {
       Object.entries(sanitisedQuery).reduce((acc, [key, value]) => ({ ...acc, [key]: String(value) }), {}),
     ).toString()
 
-    if (!Object.keys(req.query).length) {
+    if (!Object.keys(req.query).filter(o => o !== 'history').length) {
       return res.render('allocate/view', {
         locations: locationsValues,
         showBreadcrumbs: true,
