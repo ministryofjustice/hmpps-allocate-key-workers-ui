@@ -12,10 +12,31 @@
   {% for css in feComponents.cssIncludes %}
     <link href="{{ css }}" nonce="{{ cspNonce }}" rel="stylesheet"/>
   {% endfor %}
+
+  <script nonce="{{ cspNonce }}">
+    document.addEventListener('DOMContentLoaded', function () {
+      const paramKey = 'myParam';
+      const paramValue = 'myValue';
+
+      console.log("{{ b64History }}");
+      console.log(atob("{{ b64History }}"));
+
+      document
+        .querySelectorAll('a[href]')
+        .forEach(function (link) {
+          const url = new URL(link.href, window.location.origin);
+          if (!url.searchParams.get('history')) {
+            url.searchParams.set('history', '{{ b64History }}')
+            link.href = url.pathname + url.search + url.hash;
+          }
+        });
+    });
+  </script>
 {% endblock %}
 
 {% block pageTitle %}
-  {% set policyNameAlias = (policyStaff | sentenceCase + 's') if policyStaff else undefined %}
+  {% set policyNameAlias = (policyStaff | sentenceCase + 's')if policyStaff else 
+    undefined %}
   {{[pageTitle, policyNameAlias, 'DPS'] | removeNullish | join(' - ')}}
 {% endblock %}
 
@@ -37,13 +58,13 @@
   {# {% endif %} #}
 
   {# {% if showBreadcrumbs and breadcrumbs and(not backUrl) %} #}
-    <div class="csip-breadcrumbs govuk-!-display-none-print">
-      <div class="csip-breadcrumbs__breadcrumbs">
-        {{ govukBreadcrumbs({
+  <div class="csip-breadcrumbs govuk-!-display-none-print">
+    <div class="csip-breadcrumbs__breadcrumbs">
+      {{ govukBreadcrumbs({
           items: breadcrumbs.items
         }) }}
-      </div>
     </div>
+  </div>
   {# {% endif %} #}
 
   {% include './formErrorSummary.njk' %}
@@ -90,7 +111,9 @@
     window.onload = function () {
       const backLink = document.querySelector('.js-back-link')
       if (backLink) {
-        backLink.classList.remove('govuk-!-display-none')
+        backLink
+          .classList
+          .remove('govuk-!-display-none')
         backLink.addEventListener('click', () => {
           history.back()
         })

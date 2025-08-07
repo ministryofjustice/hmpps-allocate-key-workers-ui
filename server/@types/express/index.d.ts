@@ -151,6 +151,7 @@ export declare global {
       }
       historyBackUrl?: string
       history?: string[]
+      b64History?: string
     }
   }
 }
