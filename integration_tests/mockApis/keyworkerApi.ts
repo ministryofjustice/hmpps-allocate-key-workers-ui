@@ -291,7 +291,7 @@ const keyworkerManageResponse = {
     {
       staffId: 488095,
       firstName: 'AVAILABLE-ACTIVE',
-      lastName: 'KEY-WORKER',
+      lastName: 'KEY-WORKER2',
       status: {
         code: 'ACT',
         description: 'Active',
