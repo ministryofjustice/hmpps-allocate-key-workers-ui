@@ -157,7 +157,7 @@
               }
             },
             {
-              html: ('<a class="govuk-link--no-visited-state" href="staff-profile/' + item.staffMember.staffId + '">' + item.staffMember | lastNameCommaFirstName + " (" + (item.staffMember.allocationCount or 0) + ") </a>") if item.staffMember else 'None'
+              html: ('<a class="govuk-link--no-visited-state" href="staff-profile/' + item.staffMember.staffId + '">' + item.staffMember | lastNameCommaFirstName + " (allocations: " + (item.staffMember.allocationCount or 0) + ") </a>") if item.staffMember else 'None'
             },
             {
               html: 'Not applicable - high complexity of need' if item.hasHighComplexityOfNeeds else govukSelect({
