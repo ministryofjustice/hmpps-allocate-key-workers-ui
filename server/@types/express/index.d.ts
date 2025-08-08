@@ -149,6 +149,9 @@ export declare global {
           [key: string]: unknown
         }
       }
+      historyBackUrl?: string
+      history?: string[]
+      b64History?: string
     }
   }
 }

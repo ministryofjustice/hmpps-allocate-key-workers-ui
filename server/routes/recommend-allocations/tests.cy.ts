@@ -262,11 +262,7 @@ context('/recommend-allocations', () => {
       .should('contain.text', 'View allocation history')
       .children()
       .eq(0)
-      .should(
-        'have.attr',
-        'href',
-        '/key-worker/prisoner-allocation-history/A2504EA?backTo=%2Fkey-worker%2Frecommend-allocations%3FallowPartialAllocation%3Dtrue%26backTo%3D',
-      )
+      .should('have.attr', 'href', '/key-worker/prisoner-allocation-history/A2504EA')
 
     cy.get('.govuk-table__row')
       .eq(1)

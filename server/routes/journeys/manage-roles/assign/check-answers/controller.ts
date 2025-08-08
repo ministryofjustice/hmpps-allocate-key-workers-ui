@@ -17,7 +17,7 @@ export class AssignRoleCheckAnswersController {
       staff,
       scheduleType,
       capacity,
-      backUrl: 'working-pattern',
+      backUrl: 'back',
     })
   }
 

@@ -1,7 +1,6 @@
 import type { Request, Response, NextFunction, RequestHandler } from 'express'
-import { sentenceCase } from '../utils/formatUtils'
 
-export type Breadcrumb = { href: string } & ({ text: string } | { html: string })
+export type Breadcrumb = { href: string; text: string; alias?: string }
 
 export class Breadcrumbs {
   breadcrumbs: Breadcrumb[]
@@ -11,10 +10,6 @@ export class Breadcrumbs {
       {
         text: 'Digital Prison Services',
         href: res.locals.digitalPrisonServicesUrl,
-      },
-      {
-        text: `${sentenceCase(res.locals.policyStaff!)}s`,
-        href: `/${res.locals.policyPath}`,
       },
     ]
   }
@@ -29,6 +24,10 @@ export class Breadcrumbs {
 
   get items(): readonly Breadcrumb[] {
     return [...this.breadcrumbs]
+  }
+
+  fromAlias(alias: string) {
+    return this.breadcrumbs.find(o => o.alias === alias)
   }
 }
 

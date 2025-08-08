@@ -27,7 +27,7 @@ export default function redirectCheckAnswersMiddleware(excludePaths: RegExp[] = 
         if (errors.length) {
           req.flash(FLASH_KEY__VALIDATION_ERRORS, errors[0]!)
         }
-        resRedirect.call(res, status || 302, req.journeyData.isCheckAnswers && !errors.length ? checkAnswersUrl : url)
+        resRedirect.call(res, status || 302, req.journeyData.isCheckAnswers && errors.length ? checkAnswersUrl : url)
       }
     }
     next()

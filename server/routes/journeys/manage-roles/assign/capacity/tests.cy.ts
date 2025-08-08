@@ -86,6 +86,7 @@ context('/manage-roles/assign/capacity', () => {
       },
     })
 
+    cy.visit(`/key-worker/${journeyId}/manage-roles/assign/working-pattern`)
     cy.visit(`/key-worker/${journeyId}/manage-roles/assign/capacity`)
   }
 })

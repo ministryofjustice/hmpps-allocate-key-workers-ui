@@ -46,6 +46,7 @@ context('/manage-roles/assign/not-prison-officer', () => {
       },
     })
 
+    cy.visit(`/key-worker/${journeyId}/manage-roles/assign/role`)
     cy.visit(`/key-worker/${journeyId}/manage-roles/assign/not-prison-officer`)
   }
 })
