@@ -45,7 +45,7 @@
 {% endblock %}
 
 {% block beforeContent %}
-  {# {% if backUrl == 'javascript-back' %}
+  {% if backUrl == 'javascript-back' %}
     {{ govukBackLink({
       classes: 'js-back-link govuk-!-display-none',
       text: backLabel or "Back"
@@ -54,18 +54,18 @@
     {{ govukBackLink({
       text: backLabel or "Back",
       href: historyBackUrl if backUrl == 'back' else backUrl
-    }) }} #}
-  {# {% endif %} #}
+    }) }}
+  {% endif %}
 
-  {# {% if showBreadcrumbs and breadcrumbs and(not backUrl) %} #}
-  <div class="csip-breadcrumbs govuk-!-display-none-print">
-    <div class="csip-breadcrumbs__breadcrumbs">
-      {{ govukBreadcrumbs({
+  {% if showBreadcrumbs and breadcrumbs and(not backUrl) %}
+    <div class="csip-breadcrumbs govuk-!-display-none-print">
+      <div class="csip-breadcrumbs__breadcrumbs">
+        {{ govukBreadcrumbs({
           items: breadcrumbs.items
         }) }}
+      </div>
     </div>
-  </div>
-  {# {% endif %} #}
+  {% endif %}
 
   {% include './formErrorSummary.njk' %}
 

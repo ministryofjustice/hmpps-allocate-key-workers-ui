@@ -8,7 +8,7 @@ import {
   FLASH_KEY__COUNT,
 } from '../../utils/constants'
 import { lastNameCommaFirstName } from '../../utils/formatUtils'
-import { getLastDifferentPage } from '../../middleware/historyMiddleware'
+import { Page } from '../../services/auditService'
 
 export class RecommendStaffAutomaticallyController extends ChangeStaffController {
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -20,7 +20,7 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
 
     if (!recommendations.allocations.length && !recommendations.noAvailableStaffFor?.length) {
       return res.render('recommend-allocations/view', {
-        backUrl: 'back',
+        showBreadcrumbs: true,
         records: [],
         count: req.flash(FLASH_KEY__COUNT)[0],
         apiError: req.flash(FLASH_KEY__API_ERROR)[0],
@@ -54,7 +54,11 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
     if (missingAllocation) {
       const searchQuery = req.url.split('?')[1] || ''
       return res.render('recommend-allocations/not-enough-available-capacity/view', {
-        backUrl: getLastDifferentPage(req, res) || req.headers?.['referer'] || `/${res.locals.policyPath || ''}`,
+        goBackUrl:
+          res.locals.breadcrumbs.fromAlias(Page.ALLOCATE)?.href ||
+          req.headers?.['referer'] ||
+          `/${res.locals.policyPath || ''}`,
+        showBreadcrumbs: true,
         missingAllocation,
         searchQuery,
         totalPrisoners: records.length,
@@ -84,7 +88,7 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
     })
 
     return res.render('recommend-allocations/view', {
-      backUrl: 'back',
+      showBreadcrumbs: true,
       records: matchedPrisoners,
       count: req.flash(FLASH_KEY__COUNT)[0],
       apiError: req.flash(FLASH_KEY__API_ERROR)[0],

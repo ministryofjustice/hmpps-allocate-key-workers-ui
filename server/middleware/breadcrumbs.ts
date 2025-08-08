@@ -1,7 +1,6 @@
 import type { Request, Response, NextFunction, RequestHandler } from 'express'
-import { getBreadcrumbs } from './historyMiddleware'
 
-export type Breadcrumb = { href: string } & ({ text: string } | { html: string })
+export type Breadcrumb = { href: string; text: string; alias?: string }
 
 export class Breadcrumbs {
   breadcrumbs: Breadcrumb[]
@@ -11,7 +10,7 @@ export class Breadcrumbs {
       {
         text: 'Digital Prison Services',
         href: res.locals.digitalPrisonServicesUrl,
-      }
+      },
     ]
   }
 
@@ -26,11 +25,15 @@ export class Breadcrumbs {
   get items(): readonly Breadcrumb[] {
     return [...this.breadcrumbs]
   }
+
+  fromAlias(alias: string) {
+    return this.breadcrumbs.find(o => o.alias === alias)
+  }
 }
 
 export default function breadcrumbs(): RequestHandler {
   return (_req: Request, res: Response, next: NextFunction): void => {
-    res.locals.breadcrumbs = getBreadcrumbs(_req, res)
+    res.locals.breadcrumbs = new Breadcrumbs(res)
     next()
   }
 }

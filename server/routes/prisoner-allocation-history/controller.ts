@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import { components } from '../../@types/keyWorker'
 import { POLICIES } from '../../utils/constants'
-import { getLastDifferentPageNotMatching } from '../../middleware/historyMiddleware'
 
 export class PrisonerAllocationHistoryController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
@@ -16,11 +15,7 @@ export class PrisonerAllocationHistoryController {
       prisoner,
       tabPolicy: policy,
       allocationHistory: simplifyDeallocationReasons(staffAllocations.allocations),
-      backUrl: getLastDifferentPageNotMatching(
-        req,
-        res,
-        new RegExp(`/prisoner-allocation-history/${prisoner.prisonerNumber}`),
-      ),
+      showBreadcrumbs: true,
     })
   }
 }
