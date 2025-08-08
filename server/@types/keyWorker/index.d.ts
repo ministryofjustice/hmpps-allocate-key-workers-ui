@@ -382,26 +382,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/prisons/{prisonCode}/statistics/keyworker': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** @description
-     *
-     *     Requires one of the following roles:
-     *     * ROLE_KEY_WORKER__RO */
-    get: operations['getKeyworkerStatistics']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/prisons/{prisonCode}/prisoners/allocation-recommendations': {
     parameters: {
       query?: never
@@ -1062,42 +1042,6 @@ export interface components {
       previous?: components['schemas']['PrisonStatSummary']
       hasPrisonersWithHighComplexityOfNeed: boolean
     }
-    KeyworkerStatisticSummary: {
-      /** Format: date */
-      from: string
-      /** Format: date */
-      to: string
-      /** Format: int32 */
-      totalPrisoners: number
-      /** Format: int32 */
-      highComplexityOfNeedPrisoners: number
-      /** Format: int32 */
-      eligiblePrisoners: number
-      /** Format: int32 */
-      prisonersAssignedKeyworker: number
-      /** Format: int32 */
-      activeKeyworkers: number
-      /** Format: int32 */
-      keyworkerSessions: number
-      /** Format: int32 */
-      keyworkerEntries: number
-      /** Format: int32 */
-      avgReceptionToAllocationDays?: number
-      /** Format: int32 */
-      avgReceptionToSessionDays?: number
-      /** Format: int32 */
-      projectedSessions: number
-      /** Format: double */
-      percentageWithKeyworker?: number
-      /** Format: double */
-      compliance: number
-    }
-    KeyworkerStats: {
-      prisonCode: string
-      current?: components['schemas']['KeyworkerStatisticSummary']
-      previous?: components['schemas']['KeyworkerStatisticSummary']
-      hasPrisonersWithHighComplexityOfNeed: boolean
-    }
     Allocation: {
       prisoner: components['schemas']['Prisoner']
       stats: components['schemas']['StaffCountStats']
@@ -1196,6 +1140,8 @@ export interface components {
       type: 'SESSION' | 'ENTRY'
       /** Format: date-time */
       occurredAt: string
+      /** @enum {string} */
+      policy: 'KEY_WORKER' | 'PERSONAL_OFFICER'
     }
     KeyworkerDto: {
       /**
@@ -2464,31 +2410,6 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['PrisonStats']
-        }
-      }
-    }
-  }
-  getKeyworkerStatistics: {
-    parameters: {
-      query: {
-        from: string
-        to: string
-      }
-      header?: never
-      path: {
-        prisonCode: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['KeyworkerStats']
         }
       }
     }

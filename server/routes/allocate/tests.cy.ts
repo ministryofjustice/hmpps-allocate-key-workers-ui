@@ -431,7 +431,11 @@ context('/allocate', () => {
     cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'John, Doe')
     cy.get('.govuk-table__row').eq(3).children().eq(1).should('contain.text', '1-1-035')
     cy.get('.govuk-table__row').eq(3).children().eq(3).should('contain.text', 'Key-Worker, Available-Active')
-    cy.findByRole('link', { name: 'Key-Worker, Available-Active' }).should('have.attr', 'href', 'staff-profile/488095')
+    cy.findByRole('link', { name: 'Key-Worker, Available-Active (allocations: 1)' }).should(
+      'have.attr',
+      'href',
+      'staff-profile/488095',
+    )
 
     cy.get('.govuk-table__row')
       .eq(3)
