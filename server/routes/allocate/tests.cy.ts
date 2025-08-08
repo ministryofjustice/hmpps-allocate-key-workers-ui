@@ -83,6 +83,7 @@ context('/allocate', () => {
     checkPageContentsNoFilter()
 
     checkSorting()
+    checkSelectSorting()
 
     checkPrisonersExcludeActiveAllocationsFilter()
 
@@ -338,9 +339,9 @@ context('/allocate', () => {
     cy.get('select').eq(2).should('not.contain', 'Key-Worker, Available-Active (allocations: 32)')
 
     cy.get('select').eq(1).should('not.contain', 'Deallocate')
-    cy.get('select').eq(1).should('contain', 'Key-Worker, Available-Active (allocations: 32)')
+    cy.get('select').eq(1).should('contain', 'Key-Worker2, Available-Active (allocations: 32)')
     cy.get('select').eq(3).should('not.contain', 'Deallocate')
-    cy.get('select').eq(3).should('contain', 'Key-Worker, Available-Active (allocations: 32)')
+    cy.get('select').eq(3).should('contain', 'Key-Worker2, Available-Active (allocations: 32)')
 
     cy.get('select').eq(1).select('Key-Worker, Available-Active2 (allocations: 32)')
     cy.get('select').eq(2).select('Key-Worker, Available-Active2 (allocations: 32)')
@@ -505,7 +506,7 @@ context('/allocate', () => {
         .eq(1)
         .children()
         .eq(4)
-        .should('contain.text', 'Key-Worker, Available-Active (allocations: 32)')
+        .should('contain.text', 'Key-Worker2, Available-Active (allocations: 32)')
     }
 
     cy.get('.govuk-table__row')
@@ -530,7 +531,7 @@ context('/allocate', () => {
         .eq(3)
         .children()
         .eq(4)
-        .should('contain.text', 'Key-Worker, Available-Active (allocations: 32)')
+        .should('contain.text', 'Key-Worker2, Available-Active (allocations: 32)')
     }
 
     cy.get('.govuk-table__row')
@@ -548,6 +549,11 @@ context('/allocate', () => {
     cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'Complexity-Needs, High')
     cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'Tester, Jane')
     cy.get('.govuk-table__row').eq(4).children().eq(0).should('contain.text', 'John, Doe')
+  }
+
+  const checkSelectSorting = () => {
+    cy.get('#selectStaffMember').eq(0).children().eq(1).should('contain.text', 'Key-Worker, Available-Active2')
+    cy.get('#selectStaffMember').eq(0).children().eq(2).should('contain.text', 'Key-Worker2, Available-Active')
   }
 
   const checkResidentialLocationFilter = (readonly = false) => {
