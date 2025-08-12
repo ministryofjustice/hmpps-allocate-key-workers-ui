@@ -24,10 +24,14 @@
       document
         .querySelectorAll('a[href]')
         .forEach(function (link) {
-          const url = new URL(link.href, window.location.origin);
-          if (!url.searchParams.get('history')) {
-            url.searchParams.set('history', '{{ b64History }}')
-            link.href = url.pathname + url.search + url.hash;
+          if (link.href.startsWith(window.location.origin)) {
+            const url = new URL(link.href, window.location.origin);
+            if (!url.searchParams.get('history')) {
+              url
+                .searchParams
+                .set('history', '{{ b64History }}')
+              link.href = url.pathname + url.search + url.hash;
+            }
           }
         });
     });
