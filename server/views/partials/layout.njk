@@ -15,7 +15,7 @@
 
   <script nonce="{{ cspNonce }}">
     document.addEventListener('DOMContentLoaded', function () {
-      const history = JSON.parse(atob("{{ b64History }}"));
+      try { const history = JSON.parse(atob("{{ b64History }}") || '[]');
       console.log(history)
       document
         .querySelectorAll('a[href]')
@@ -29,6 +29,9 @@
             }
           }
         });
+      } catch(e) {
+        console.error(`Error decoding history: ${e}`)
+      }
     });
   </script>
 {% endblock %}
