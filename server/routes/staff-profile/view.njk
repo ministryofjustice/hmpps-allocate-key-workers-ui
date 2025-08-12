@@ -29,7 +29,7 @@
         {{ statusTag({ text: status.description, fullText: true }) }}
       </p>
       {% if user | hasPermission('allocate') %}
-        <a class="govuk-!-margin-left-2 govuk-link govuk-link--no-visited-state govuk-!-display-inline-block " href="../start-update-staff/{{ staffId }}">Update capacity, status or working pattern</a>
+        <a class="govuk-!-margin-left-2 govuk-link govuk-link--no-visited-state govuk-!-display-inline-block " href="../start-update-staff/{{ staffId }}?proceedTo=update-capacity-status-and-working-pattern">Update capacity, status or working pattern</a> 
       {% endif %}
     </div>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>

@@ -15,21 +15,16 @@
 
   <script nonce="{{ cspNonce }}">
     document.addEventListener('DOMContentLoaded', function () {
-      const paramKey = 'myParam';
-      const paramValue = 'myValue';
-
-      console.log("{{ b64History }}");
-      console.log(atob("{{ b64History }}"));
-
+      const history = JSON.parse(atob("{{ b64History }}"));
+      console.log(history)
       document
         .querySelectorAll('a[href]')
         .forEach(function (link) {
           if (link.href.startsWith(window.location.origin)) {
             const url = new URL(link.href, window.location.origin);
             if (!url.searchParams.get('history')) {
-              url
-                .searchParams
-                .set('history', '{{ b64History }}')
+              const urlHistory = [...history, link.href.replace(window.location.origin, '')]
+              url.searchParams.set('history', btoa(JSON.stringify(urlHistory)))
               link.href = url.pathname + url.search + url.hash;
             }
           }

@@ -7,7 +7,7 @@ function deserialiseHistory(b64String: string = '') {
   return JSON.parse(Buffer.from(b64String || '', 'base64').toString() || '[]')
 }
 
-export function serialiseHistory(history: string[]) {
+function serialiseHistory(history: string[]) {
   return Buffer.from(JSON.stringify(history)).toString('base64')
 }
 
@@ -40,6 +40,7 @@ export function historyMiddlware(...excludeUrls: RegExp[]): RequestHandler {
     const history = pruneHistory(req.originalUrl, queryHistory)
 
     const prevUrl = history[history.length - 1]
+
     if (!shouldExcludeUrl(req.originalUrl) && prevUrl !== noHistoryParam(req.originalUrl)) {
       history.push(noHistoryParam(req.originalUrl))
     }
