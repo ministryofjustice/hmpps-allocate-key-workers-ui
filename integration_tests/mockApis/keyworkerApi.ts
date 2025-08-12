@@ -291,7 +291,7 @@ const keyworkerManageResponse = {
     {
       staffId: 488095,
       firstName: 'AVAILABLE-ACTIVE',
-      lastName: 'KEY-WORKER',
+      lastName: 'KEY-WORKER2',
       status: {
         code: 'ACT',
         description: 'Active',
@@ -645,6 +645,7 @@ const keyworkerSearchPrisoners = [
     hasHighComplexityOfNeeds: false,
     hasAllocationHistory: true,
     staffMember: {
+      allocationCount: 1,
       staffId: 488095,
       firstName: 'AVAILABLE-ACTIVE',
       lastName: 'KEY-WORKER',

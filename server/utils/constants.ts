@@ -14,20 +14,3 @@ export enum AllocateResultType {
   NO_CAPACITY_FOR_AUTO_ALLOCATION = 'NO_CAPACITY_FOR_AUTO_ALLOCATION',
 }
 export const FLASH_KEY__ALLOCATE_RESULT = 'allocateError'
-
-export type Policy = {
-  staff: string
-  staffs: string
-  path: string
-  name: string
-}
-
-export const POLICIES = {
-  'key-worker': { staff: 'key worker', staffs: 'key workers', path: 'key-worker', name: 'Key worker' },
-  'personal-officer': {
-    staff: 'personal officer',
-    staffs: 'personal officers',
-    path: 'personal-officer',
-    name: 'Personal officer',
-  },
-}

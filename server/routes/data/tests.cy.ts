@@ -1,7 +1,6 @@
 import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
 import AuthorisedRoles from '../../authentication/authorisedRoles'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
-import { POLICIES } from '../../utils/constants'
 import { getDateInReadableFormat } from '../../utils/datetimeUtils'
 
 context('Key workers data', () => {
@@ -122,7 +121,7 @@ context('Key workers data', () => {
     cy.task('stubKeyworkerApiStats2025')
     cy.task('stubKeyworkerApiStats2024')
 
-    navigateToTestPage(POLICIES['personal-officer'].path)
+    navigateToTestPage('personal-officer')
 
     cy.get('.key-worker-data-stat-card').should('have.length', 9)
 

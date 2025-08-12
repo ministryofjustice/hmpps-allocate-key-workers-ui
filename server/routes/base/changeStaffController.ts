@@ -21,7 +21,11 @@ export class ChangeStaffController {
       count: req.flash(FLASH_KEY__COUNT)[0],
       apiError: req.flash(FLASH_KEY__API_ERROR)[0],
       staff: staff.content
-        .sort((a, b) => (a.allocated > b.allocated ? 1 : -1))
+        .sort((a, b) =>
+          a.allocated === b.allocated
+            ? `${a.lastName},${a.firstName}`.localeCompare(`${b.lastName},${b.firstName}`)
+            : a.allocated - b.allocated,
+        )
         .map(o => {
           return {
             text: `${lastNameCommaFirstName(o)} (allocations: ${o.allocated})`,
