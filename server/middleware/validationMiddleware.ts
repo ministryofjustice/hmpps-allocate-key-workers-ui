@@ -77,7 +77,7 @@ export const validateOnGET =
     next()
   }
 
-export const validate = (schema: z.ZodTypeAny | SchemaFactory, retainQueryString: boolean = false): RequestHandler => {
+export const validate = (schema: z.ZodTypeAny | SchemaFactory, retainQueryString: boolean = true): RequestHandler => {
   return async (req, res, next) => {
     if (!schema) {
       return next()

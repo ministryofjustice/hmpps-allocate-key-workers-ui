@@ -7,7 +7,7 @@ function deserialiseHistory(b64String: string = '') {
   return JSON.parse(Buffer.from(b64String || '', 'base64').toString() || '[]')
 }
 
-function serialiseHistory(history: string[]) {
+export function serialiseHistory(history: string[]) {
   return Buffer.from(JSON.stringify(history)).toString('base64')
 }
 
@@ -17,13 +17,21 @@ export function historyMiddlware(...excludeUrls: RegExp[]): RequestHandler {
       return next()
     }
 
+    const shouldExcludeUrl = (url: string) => excludeUrls.some(itm => itm.test(url))
+
     const queryHistory: string[] = deserialiseHistory(req.query['history'] as string)
     const searchParams = new URLSearchParams(req.originalUrl.split('?')[1] || '')
 
     if (!queryHistory.length) {
       const refererHistory = getHistoryFromReferrer(req)
       const jointHistory = [...refererHistory, req.originalUrl]
-      const history = [...pruneHistory(req.originalUrl, jointHistory), req.originalUrl]
+      const history = pruneHistory(req.originalUrl, jointHistory)
+
+      if (!shouldExcludeUrl(req.originalUrl)) {
+        history.push(noHistoryParam(req.originalUrl))
+      }
+      res.locals.history = history
+
       searchParams.set('history', serialiseHistory(history))
       const str = searchParams.toString()
       return res.redirect(`${req.originalUrl.split('?')[0]}?${str}`)
@@ -31,16 +39,16 @@ export function historyMiddlware(...excludeUrls: RegExp[]): RequestHandler {
 
     const history = pruneHistory(req.originalUrl, queryHistory)
 
-    const prevHistory = history[history.length - 1]
-    if (
-      !excludeUrls.some(itm => itm.test(req.originalUrl)) &&
-      prevHistory !== getUrlWithoutHistoryParams(req.originalUrl)
-    ) {
-      history.push(getUrlWithoutHistoryParams(req.originalUrl))
+    const prevUrl = history[history.length - 1]
+    if (!shouldExcludeUrl(req.originalUrl) && prevUrl !== noHistoryParam(req.originalUrl)) {
+      history.push(noHistoryParam(req.originalUrl))
     }
 
-    res.locals.history = history
-    res.locals.b64History = serialiseHistory(history)
+    // Remove exclude Urls again
+    const finalHistory = history.filter(itm => !excludeUrls.some(url => url.test(itm)))
+
+    res.locals.history = finalHistory
+    res.locals.b64History = serialiseHistory(finalHistory)
 
     res.locals.historyBackUrl =
       getLastDifferentPage(req, res) || req.headers?.['referer'] || `/${res.locals.policyPath || ''}`
@@ -53,11 +61,22 @@ export function historyMiddlware(...excludeUrls: RegExp[]): RequestHandler {
 }
 
 function pruneHistory(url: string, history: string[]) {
-  const historyBefore = getHistoryBefore(history, url)
+  const deduplicatedHistory = removeDuplicateConsecutiveUrls(history)
+  const historyBefore = getHistoryBefore(deduplicatedHistory, url)
   const targetUrlNoQuery = url.split('?')[0]
   const lastIndex = historyBefore.findLastIndex(o => o.split('?')[0] === targetUrlNoQuery)
   if (lastIndex === -1 || lastIndex === historyBefore.length - 1) return historyBefore
   return historyBefore.slice(0, lastIndex + 1)
+}
+
+function removeDuplicateConsecutiveUrls(history: string[]) {
+  const historyWithoutDuplicates: string[] = []
+  for (let i = 0; i < history.length; i += 1) {
+    if (i === 0 || (history[i] !== history[i - 1] && history[i])) {
+      historyWithoutDuplicates.push(history[i]!)
+    }
+  }
+  return historyWithoutDuplicates
 }
 
 export function getBreadcrumbs(req: Request, res: Response) {
@@ -67,14 +86,14 @@ export function getBreadcrumbs(req: Request, res: Response) {
       text: sentenceCase(res.locals.policyStaff!, true),
       alias: Page.HOMEPAGE,
     },
-    { matcher: /\/allocate/g, text: `Allocate ${res.locals.policyStaff!}`, alias: Page.ALLOCATE },
+    { matcher: /\/allocate/g, text: `Allocate ${res.locals.policyStaffs!}`, alias: Page.ALLOCATE },
     { matcher: /recommend-allocations/g, text: 'Recommend allocations', alias: Page.RECOMMENDED_ALLOCATIONS },
     {
       matcher: /prisoner-allocation-history/g,
       text: 'Prisoner allocation history',
       alias: Page.PRISONER_ALLOCATION_HISTORY,
     },
-    { matcher: /\/manage/g, text: `Manage ${res.locals.policyStaff!}`, alias: Page.MANAGE_ALLOCATABLE_STAFF },
+    { matcher: /\/manage/g, text: `Manage ${res.locals.policyStaffs!}`, alias: Page.MANAGE_ALLOCATABLE_STAFF },
     { matcher: /\/staff-profile/g, text: 'Profile', alias: Page.STAFF_PROFILE },
   ]
 
@@ -83,7 +102,7 @@ export function getBreadcrumbs(req: Request, res: Response) {
   const itemsToAdd = new Map<string, Breadcrumb>()
 
   for (const [i, url] of (res.locals.history || []).entries()) {
-    const matched = URL_MAPPINGS.find(mapping => getUrlWithoutHistoryParams(url).match(mapping.matcher))
+    const matched = URL_MAPPINGS.find(mapping => noHistoryParam(url).match(mapping.matcher))
     if (matched) {
       const historyUpUntil = res.locals.history!.slice(0, i + 1)
       const urlWithParams = new URLSearchParams(url.split('?')[1] || '')
@@ -97,7 +116,7 @@ export function getBreadcrumbs(req: Request, res: Response) {
   }
 
   for (const breadcrumb of itemsToAdd.values()) {
-    if (getUrlWithoutHistoryParams(breadcrumb.href) !== getUrlWithoutHistoryParams(req.originalUrl)) {
+    if (noHistoryParam(breadcrumb.href) !== noHistoryParam(req.originalUrl)) {
       breadcrumbs.push(breadcrumb)
     }
   }
@@ -105,7 +124,7 @@ export function getBreadcrumbs(req: Request, res: Response) {
   return breadcrumbs
 }
 
-function getUrlWithoutHistoryParams(url: string) {
+function noHistoryParam(url: string) {
   const noHistoreySearchParams = new URLSearchParams(url.split('?')[1] || '')
   noHistoreySearchParams.delete('history')
   const noHistoryUrl = `${url.split('?')[0]}?${noHistoreySearchParams.toString()}`
@@ -117,10 +136,10 @@ export function getLast(res: Response) {
 }
 
 function getHistoryBefore(history: string[], url: string) {
-  const urlNoHistory = getUrlWithoutHistoryParams(url)
+  const urlNoHistory = noHistoryParam(url)
   const newHistory = [...history]
   for (let i = history.length - 1; i >= 0; i -= 1) {
-    if (getUrlWithoutHistoryParams(history[i]!) === urlNoHistory) {
+    if (noHistoryParam(history[i]!) === urlNoHistory) {
       newHistory.splice(i, 1)
     } else {
       break
