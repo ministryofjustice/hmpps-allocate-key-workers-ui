@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     if: always()
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: download test artifacts
       uses: actions/download-artifact@v5
       with:
