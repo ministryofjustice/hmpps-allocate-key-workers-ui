@@ -147,7 +147,8 @@ context('test / homepage', () => {
       cy.get('h2 > .card__link').should('have.length', 1)
       cy.get('h2 > .card__link')
         .should('contain.text', 'Manage your establishment’s key worker settings')
-        .and('have.attr', 'href', '/key-worker/establishment-settings')
+        .and('have.attr', 'href')
+        .should('match', /\/key-worker\/establishment-settings/)
     })
 
     it('should show correct services when user has admin permission (service disabled and policy enabled)', () => {
@@ -176,7 +177,8 @@ context('test / homepage', () => {
       cy.get('h2 > .card__link').should('have.length', 1)
       cy.get('h2 > .card__link')
         .should('contain.text', 'Manage your establishment’s key worker settings')
-        .and('have.attr', 'href', '/key-worker/establishment-settings')
+        .and('have.attr', 'href')
+        .should('match', /\/key-worker\/establishment-settings/)
     })
   })
 

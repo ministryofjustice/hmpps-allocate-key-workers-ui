@@ -62,7 +62,7 @@ context('Profile Info', () => {
         details:
           '{"pageUrl":"/key-worker/staff-profile/488095?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL21hbmFnZSIsIi9rZXktd29ya2VyL3N0YWZmLXByb2ZpbGUvMzQzNTMiXQ%3D%3D","pageName":"STAFF_ALLOCATIONS","staffId":"488095","query":"488095","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
         subjectId: '488095',
-        what: 'PAGE_VIEW_ACCESS_ATTEMPT',
+        what: 'PAGE_VIEW',
         service: 'DPS023',
       },
       {
@@ -71,7 +71,7 @@ context('Profile Info', () => {
         details:
           '{"pageUrl":"/key-worker/staff-profile/488095?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL21hbmFnZSIsIi9rZXktd29ya2VyL3N0YWZmLXByb2ZpbGUvMzQzNTMiXQ%3D%3D","pageName":"STAFF_ALLOCATIONS","staffId":"488095","query":"488095","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
         subjectId: '488095',
-        what: 'PAGE_VIEW',
+        what: 'PAGE_VIEW_ACCESS_ATTEMPT',
         service: 'DPS023',
       },
     ])
