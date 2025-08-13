@@ -15,7 +15,7 @@ context('Key workers data', () => {
     verifyRoleBasedAccess('/key-worker/data', UserPermissionLevel.VIEW)
   })
 
-  it('shows stats', () => {
+  it('shows stats - key worker - high complexity', () => {
     cy.task('stubEnabledPrisonWithHighComplexityNeedsPrisoners')
     cy.task('stubKeyworkerApiStats2025')
     cy.task('stubKeyworkerApiStats2024')
@@ -84,14 +84,14 @@ context('Key workers data', () => {
     cy.get('.key-worker-data-stat-card')
       .eq(6)
       .within(() => {
-        cy.get('h2').should('have.text', 'Average time from reception to first key worker session')
+        cy.get('h2').should('have.text', 'Average time from eligibility to first key worker session')
         cy.get('.govuk-heading-l').should('have.text', '0 days')
         cy.get('p').eq(1).should('have.text', 'No change')
       })
     cy.get('.key-worker-data-stat-card')
       .eq(7)
       .within(() => {
-        cy.get('h2').should('have.text', 'Average time from reception to key worker allocation')
+        cy.get('h2').should('have.text', 'Average time from eligibility to key worker allocation')
         cy.get('.govuk-heading-l').should('have.text', '66 days')
         cy.get('p').eq(1).should('have.text', '+66 days increase')
       })
@@ -116,7 +116,98 @@ context('Key workers data', () => {
     verifyErrorMessages()
   })
 
-  it('hides case note sessions stat on personal officer', () => {
+  it('shows stats - key worker - no high complexity', () => {
+    cy.task('stubEnabledPrison')
+    cy.task('stubKeyworkerApiStats2025')
+    cy.task('stubKeyworkerApiStats2024')
+
+    navigateToTestPage()
+
+    cy.title().should('equal', 'View key worker data - Key workers - DPS')
+    cy.findByRole('heading', { name: /^Key worker data for Leeds \(HMP\)$/i }).should('be.visible')
+    cy.findByText('Select a date range to view')
+
+    cy.findByRole('textbox', { name: 'From' }).should('be.visible')
+    cy.findByRole('textbox', { name: 'To' }).should('be.visible')
+    cy.findByRole('button', { name: 'View' })
+
+    cy.findByText(
+      'Displaying statistics from 6 February 2025 to 28 February 2025. Comparing against statistics from 11 January 2025 to 11 January 2025.',
+    )
+
+    cy.findByText(`Date updated: ${getDateInReadableFormat(new Date().toISOString())}`)
+
+    cy.get('.key-worker-data-stat-card')
+      .eq(0)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Number of recorded key worker sessions')
+        cy.get('.govuk-heading-l').should('have.text', '1')
+        cy.get('p').eq(1).should('have.text', '+1 increase')
+        cy.get('span.stat-change--increase').should('have.text', '+1')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(1)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Number of recorded key worker entries')
+        cy.get('.govuk-heading-l').should('have.text', '0')
+        cy.get('p').eq(1).should('have.text', 'No change')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(2)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Total number of prisoners')
+        cy.get('.govuk-heading-l').should('have.text', '1172')
+        cy.get('p').eq(1).should('have.text', '+3 increase')
+        cy.get('span.stat-change--increase').should('have.text', '+3')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(3)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Percentage of prisoners with an allocated key worker')
+        cy.get('.govuk-heading-l').should('have.text', '91.98 %')
+        cy.get('p').eq(1).should('have.text', '-0.15 % decrease')
+        cy.get('span.stat-change--decrease').should('have.text', '-0.15 %')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(4)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Total number of active key workers')
+        cy.get('.govuk-heading-l').should('have.text', '11')
+        cy.get('p').eq(1).should('have.text', '+3 increase')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(5)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Average time from reception to first key worker session')
+        cy.get('.govuk-heading-l').should('have.text', '0 days')
+        cy.get('p').eq(1).should('have.text', 'No change')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(6)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Average time from reception to key worker allocation')
+        cy.get('.govuk-heading-l').should('have.text', '66 days')
+        cy.get('p').eq(1).should('have.text', '+66 days increase')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(7)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Delivery rate against frequency of a session every week')
+        cy.get('.govuk-heading-l').should('have.text', '0.03 %')
+        cy.get('p').eq(1).should('have.text', '+0.03 % increase')
+        cy.get('span.stat-change--increase').should('have.text', '+0.03 %')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(8)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Number of projected key worker sessions')
+        cy.get('.govuk-heading-l').should('have.text', '3851')
+        cy.get('p').eq(1).should('have.text', '+3684 increase')
+        cy.get('span.stat-change--increase').should('have.text', '+3684')
+      })
+  })
+
+  it('show stats - personal officer - high complexity', () => {
     cy.task('stubEnabledPrisonWithHighComplexityNeedsPrisoners')
     cy.task('stubKeyworkerApiStats2025')
     cy.task('stubKeyworkerApiStats2024')
@@ -165,14 +256,14 @@ context('Key workers data', () => {
     cy.get('.key-worker-data-stat-card')
       .eq(5)
       .within(() => {
-        cy.get('h2').should('have.text', 'Average time from reception to first personal officer session')
+        cy.get('h2').should('have.text', 'Average time from eligibility to first personal officer session')
         cy.get('.govuk-heading-l').should('have.text', '0 days')
         cy.get('p').eq(1).should('have.text', 'No change')
       })
     cy.get('.key-worker-data-stat-card')
       .eq(6)
       .within(() => {
-        cy.get('h2').should('have.text', 'Average time from reception to personal officer allocation')
+        cy.get('h2').should('have.text', 'Average time from eligibility to personal officer allocation')
         cy.get('.govuk-heading-l').should('have.text', '66 days')
         cy.get('p').eq(1).should('have.text', '+66 days increase')
       })
@@ -186,6 +277,77 @@ context('Key workers data', () => {
       })
     cy.get('.key-worker-data-stat-card')
       .eq(8)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Number of projected personal officer sessions')
+        cy.get('.govuk-heading-l').should('have.text', '3851')
+        cy.get('p').eq(1).should('have.text', '+3684 increase')
+        cy.get('span.stat-change--increase').should('have.text', '+3684')
+      })
+  })
+
+  it('show stats - personal officer - no high complexity', () => {
+    cy.task('stubEnabledPrison')
+    cy.task('stubKeyworkerApiStats2025')
+    cy.task('stubKeyworkerApiStats2024')
+
+    navigateToTestPage('personal-officer')
+
+    cy.get('.key-worker-data-stat-card').should('have.length', 8)
+
+    cy.get('.key-worker-data-stat-card')
+      .eq(0)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Number of recorded personal officer entries')
+        cy.get('.govuk-heading-l').should('have.text', '0')
+        cy.get('p').eq(1).should('have.text', 'No change')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(1)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Total number of prisoners')
+        cy.get('.govuk-heading-l').should('have.text', '1172')
+        cy.get('p').eq(1).should('have.text', '+3 increase')
+        cy.get('span.stat-change--increase').should('have.text', '+3')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(2)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Percentage of prisoners with an allocated personal officer')
+        cy.get('.govuk-heading-l').should('have.text', '91.98 %')
+        cy.get('p').eq(1).should('have.text', '-0.15 % decrease')
+        cy.get('span.stat-change--decrease').should('have.text', '-0.15 %')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(3)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Total number of active personal officers')
+        cy.get('.govuk-heading-l').should('have.text', '11')
+        cy.get('p').eq(1).should('have.text', '+3 increase')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(4)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Average time from reception to first personal officer session')
+        cy.get('.govuk-heading-l').should('have.text', '0 days')
+        cy.get('p').eq(1).should('have.text', 'No change')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(5)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Average time from reception to personal officer allocation')
+        cy.get('.govuk-heading-l').should('have.text', '66 days')
+        cy.get('p').eq(1).should('have.text', '+66 days increase')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(6)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Delivery rate against frequency of a session every week')
+        cy.get('.govuk-heading-l').should('have.text', '0.03 %')
+        cy.get('p').eq(1).should('have.text', '+0.03 % increase')
+        cy.get('span.stat-change--increase').should('have.text', '+0.03 %')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(7)
       .within(() => {
         cy.get('h2').should('have.text', 'Number of projected personal officer sessions')
         cy.get('.govuk-heading-l').should('have.text', '3851')
@@ -284,7 +446,7 @@ context('Key workers data', () => {
       .eq(0)
       .invoke('text')
       .then(text => {
-        expect(text.trim()).to.equal('Average time from reception to first key worker session')
+        expect(text.trim()).to.equal('Average time from eligibility to first key worker session')
       })
     cy.get('.key-worker-data-stats').eq(6).children().eq(0).should('have.text', '0 days')
     cy.get('.key-worker-data-stats').eq(6).children().eq(1).should('have.text', 'No change')
@@ -295,7 +457,7 @@ context('Key workers data', () => {
       .eq(0)
       .invoke('text')
       .then(text => {
-        expect(text.trim()).to.equal('Average time from reception to key worker allocation')
+        expect(text.trim()).to.equal('Average time from eligibility to key worker allocation')
       })
     cy.get('.key-worker-data-stats').eq(7).children().eq(0).should('have.text', '66 days')
     cy.get('.key-worker-data-stats').eq(7).children().eq(1).should('have.text', '+66 days increase')

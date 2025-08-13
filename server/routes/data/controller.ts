@@ -85,8 +85,7 @@ export class StaffDataController {
                 type: 'day',
                 currentValue: stats.current?.avgReceptionToRecordedEventDays,
                 previousValue: stats.previous?.avgReceptionToRecordedEventDays,
-                calculationMethod:
-                  'This figure displays the average time between prisoners becoming eligible for key work and the first recorded [staff] session for sessions recorded in the selected date range.',
+                calculationMethod: `This figure displays the average time between prisoners becoming eligible for ${req.middleware?.policy !== 'KEY_WORKER' ? 'key work' : '[staff] sessions'} and the first recorded [staff] session for sessions recorded in the selected date range.`,
               }
             : {
                 heading: 'Average time from reception to first [staff] session',
@@ -98,12 +97,11 @@ export class StaffDataController {
               },
           prison.hasPrisonersWithHighComplexityNeeds
             ? {
-                heading: 'Average time from eligibility to [staff] allocation ',
+                heading: 'Average time from eligibility to [staff] allocation',
                 type: 'day',
                 currentValue: stats.current?.avgReceptionToAllocationDays,
                 previousValue: stats.previous?.avgReceptionToAllocationDays,
-                calculationMethod:
-                  'This figure displays the average time between prisoners becoming eligible for key work and [staff] allocation for allocations made in the selected date range.',
+                calculationMethod: `This figure displays the average time between prisoners becoming eligible for ${req.middleware?.policy !== 'KEY_WORKER' ? 'key work' : '[staff] sessions'} and [staff] allocation for allocations made in the selected date range.`,
               }
             : {
                 heading: 'Average time from reception to [staff] allocation',
