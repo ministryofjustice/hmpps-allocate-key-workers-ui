@@ -56,7 +56,7 @@ context('/manage-roles/assign/** journey', () => {
     noRadio().click()
     continueButton().click()
 
-    cy.url().should('match', /\/assign\/not-prison-officer$/)
+    cy.url().should('match', /\/assign\/not-prison-officer/)
     cy.title().should('equal', 'Not a prison officer - Key workers - DPS')
     cy.findByRole('heading', {
       name: 'You cannot make this person a key worker',
@@ -83,7 +83,7 @@ context('/manage-roles/assign/** journey', () => {
     noRadio().click()
     continueButton().click()
 
-    cy.url().should('match', /\/assign\/not-prison-officer$/)
+    cy.url().should('match', /\/assign\/not-prison-officer/)
     cy.title().should('equal', 'Not a prison officer - Key workers - DPS')
     cy.findByRole('heading', {
       name: 'You cannot make this person a key worker',
@@ -216,8 +216,6 @@ context('/manage-roles/assign/** journey', () => {
   const beginJourney = (policyPath: string = 'key-worker') => {
     journeyId = uuidV4()
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/${policyPath}/${journeyId}/manage-roles/assign`, {
-      failOnStatusCode: false,
-    })
+    cy.navigateWithHistory(`/${policyPath}/${journeyId}/manage-roles/assign`, [`/${policyPath}`])
   }
 })

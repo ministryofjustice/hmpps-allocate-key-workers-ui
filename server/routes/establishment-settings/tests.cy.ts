@@ -24,7 +24,7 @@ context('/establishment-settings', () => {
     })
 
     navigateToTestPage()
-    cy.url().should('match', /\/establishment-settings$/)
+    cy.url().should('match', /\/establishment-settings/)
 
     verifyPageCommonContent()
 
@@ -64,7 +64,7 @@ context('/establishment-settings', () => {
     })
 
     navigateToTestPage()
-    cy.url().should('match', /\/establishment-settings$/)
+    cy.url().should('match', /\/establishment-settings/)
     cy.findByRole('button', { name: 'Save' }).click()
 
     cy.verifyAuditEvents([
@@ -72,7 +72,15 @@ context('/establishment-settings', () => {
         who: 'USER1',
         subjectType: 'NOT_APPLICABLE',
         details:
-          '{"pageUrl":"/key-worker/establishment-settings","pageName":"ESTABLISHMENT_SETTINGS","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          '{"pageUrl":"/key-worker?history=WyIva2V5LXdvcmtlciJd","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+        what: 'PAGE_VIEW_ACCESS_ATTEMPT',
+        service: 'DPS023',
+      },
+      {
+        who: 'USER1',
+        subjectType: 'NOT_APPLICABLE',
+        details:
+          '{"pageUrl":"/key-worker/establishment-settings?history=WyIva2V5LXdvcmtlciJd","pageName":"ESTABLISHMENT_SETTINGS","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
         what: 'PAGE_VIEW',
         service: 'DPS023',
       },
@@ -80,7 +88,7 @@ context('/establishment-settings', () => {
         who: 'USER1',
         subjectType: 'NOT_APPLICABLE',
         details:
-          '{"pageUrl":"/key-worker/establishment-settings","pageName":"ESTABLISHMENT_SETTINGS","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          '{"pageUrl":"/key-worker/establishment-settings?history=WyIva2V5LXdvcmtlciJd","pageName":"ESTABLISHMENT_SETTINGS","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
         what: 'PAGE_VIEW_ACCESS_ATTEMPT',
         service: 'DPS023',
       },
@@ -102,7 +110,7 @@ context('/establishment-settings', () => {
         who: 'USER1',
         subjectType: 'NOT_APPLICABLE',
         details:
-          '{"pageUrl":"/key-worker/establishment-settings","pageName":"ESTABLISHMENT_SETTINGS","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          '{"pageUrl":"/key-worker/establishment-settings?history=WyIva2V5LXdvcmtlciJd","pageName":"ESTABLISHMENT_SETTINGS","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
         what: 'PAGE_VIEW',
         service: 'DPS023',
       },
@@ -110,7 +118,7 @@ context('/establishment-settings', () => {
         who: 'USER1',
         subjectType: 'NOT_APPLICABLE',
         details:
-          '{"pageUrl":"/key-worker/establishment-settings","pageName":"ESTABLISHMENT_SETTINGS","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          '{"pageUrl":"/key-worker/establishment-settings?history=WyIva2V5LXdvcmtlciJd","pageName":"ESTABLISHMENT_SETTINGS","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
         what: 'PAGE_VIEW_ACCESS_ATTEMPT',
         service: 'DPS023',
       },
@@ -124,7 +132,7 @@ context('/establishment-settings', () => {
     })
 
     navigateToTestPage()
-    cy.url().should('match', /\/establishment-settings$/)
+    cy.url().should('match', /\/establishment-settings/)
 
     verifyPageCommonContent()
 
@@ -161,7 +169,7 @@ context('/establishment-settings', () => {
     })
 
     navigateToTestPage('personal-officer')
-    cy.url().should('match', /\/establishment-settings$/)
+    cy.url().should('match', /\/establishment-settings/)
 
     cy.findByRole('heading', { name: 'Establishment settings for Leeds (HMP)' }).should('be.visible')
     cy.findByRole('radio', { name: 'Yes' }).should('exist').and('be.checked')
@@ -170,7 +178,7 @@ context('/establishment-settings', () => {
     cy.findByRole('button', { name: 'Cancel' })
       .should('be.visible')
       .and('have.attr', 'href')
-      .should('equal', '/personal-officer')
+      .should('match', /\/personal-officer/)
 
     cy.findByRole('combobox', { name: 'How often should personal officer sessions take place?' })
       .should('be.visible')
@@ -217,7 +225,7 @@ context('/establishment-settings', () => {
     cy.findByRole('button', { name: 'Cancel' })
       .should('be.visible')
       .and('have.attr', 'href')
-      .should('equal', '/key-worker')
+      .should('match', /\/key-worker/)
   }
 
   const verifyValidationErrors = () => {
@@ -232,6 +240,6 @@ context('/establishment-settings', () => {
 
   const navigateToTestPage = (policy: string = 'key-worker') => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/${policy}/establishment-settings`, { failOnStatusCode: false })
+    cy.visit(`/${policy}/establishment-settings?history=WyIva2V5LXdvcmtlciJd`, { failOnStatusCode: false })
   }
 })

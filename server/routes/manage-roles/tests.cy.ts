@@ -19,7 +19,7 @@ context('/manage-roles', () => {
 
   it('should proceed to Assign staff role journey', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/manage-roles$/)
+    cy.url().should('match', /\/manage-roles/)
 
     verifyPageContent()
     verifyValidationErrors()
@@ -27,12 +27,12 @@ context('/manage-roles', () => {
     getAssignRadio().click()
     getContinueButton().click()
 
-    cy.url().should('match', /\/manage-roles\/assign$/)
+    cy.url().should('match', /\/manage-roles\/assign/)
   })
 
   it('should proceed to Remove staff role journey', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/manage-roles$/)
+    cy.url().should('match', /\/manage-roles/)
 
     verifyPageContent()
     verifyValidationErrors()
@@ -40,7 +40,7 @@ context('/manage-roles', () => {
     getRemoveRadio().click()
     getContinueButton().click()
 
-    cy.url().should('match', /\/manage-roles\/remove$/)
+    cy.url().should('match', /\/manage-roles\/remove/)
   })
 
   const verifyPageContent = () => {

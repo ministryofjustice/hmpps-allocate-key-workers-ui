@@ -20,26 +20,26 @@ context('/update-capacity-status-and-working-pattern/update-status-unavailable',
 
   it('should try non-annual-leave case', () => {
     navigateToTestPage('UNAVAILABLE_LONG_TERM_ABSENCE', 'Unavailable - long-term absence')
-    cy.url().should('match', /\/update-status-unavailable$/)
+    cy.url().should('match', /\/update-status-unavailable/)
 
     verifyPageContent()
 
     verifyValidationErrors()
 
-    proceedToNextPage(/\/check-answers$/)
+    proceedToNextPage(/\/check-answers/)
 
     verifyInputValuesArePersisted()
   })
 
   it('should try annual-leave case', () => {
     navigateToTestPage('UNAVAILABLE_ANNUAL_LEAVE', 'Unavailable - annual leave')
-    cy.url().should('match', /\/update-status-unavailable$/)
+    cy.url().should('match', /\/update-status-unavailable/)
 
     verifyPageContent()
 
     verifyValidationErrors()
 
-    proceedToNextPage(/\/update-status-annual-leave-return$/)
+    proceedToNextPage(/\/update-status-annual-leave-return/)
 
     verifyInputValuesArePersisted()
   })
@@ -57,7 +57,7 @@ context('/update-capacity-status-and-working-pattern/update-status-unavailable',
     cancelButton()
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('match', /cancel$/)
+      .and('match', /cancel/)
   }
 
   const verifyValidationErrors = () => {
@@ -85,11 +85,9 @@ context('/update-capacity-status-and-working-pattern/update-status-unavailable',
     journeyId = uuidV4()
 
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(
+    cy.navigateWithHistory(
       `/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern`,
-      {
-        failOnStatusCode: false,
-      },
+      ['/key-worker'],
     )
 
     cy.injectJourneyDataAndReload<PartialJourneyData>(journeyId, {
@@ -101,6 +99,9 @@ context('/update-capacity-status-and-working-pattern/update-status-unavailable',
       },
     })
 
-    cy.visit(`/key-worker/${journeyId}/update-capacity-status-and-working-pattern/update-status-unavailable`)
+    cy.navigateWithHistory(
+      `/key-worker/${journeyId}/update-capacity-status-and-working-pattern/update-status-unavailable`,
+      ['/key-worker'],
+    )
   }
 })

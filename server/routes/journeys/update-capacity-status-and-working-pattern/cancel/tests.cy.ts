@@ -19,15 +19,15 @@ context('/update-capacity-status-and-working-pattern/cancel', () => {
 
   it('should cancel to /update-capacity-status-and-working-pattern page', () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(
+
+    cy.navigateWithHistory(
       `/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern`,
-      {
-        failOnStatusCode: false,
-      },
+      ['/key-worker'],
     )
+    cy.navigateWithHistory(`/key-worker/${journeyId}/update-capacity-status-and-working-pattern/cancel`, [
+      '/key-worker',
+    ])
 
-    cy.visit(`/key-worker/${journeyId}/update-capacity-status-and-working-pattern/cancel`)
-
-    cy.url().should('match', /\/update-capacity-status-and-working-pattern$/)
+    cy.url().should('match', /\/update-capacity-status-and-working-pattern/)
   })
 })

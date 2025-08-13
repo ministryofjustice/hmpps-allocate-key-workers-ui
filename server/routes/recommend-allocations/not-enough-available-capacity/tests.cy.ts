@@ -49,19 +49,21 @@ context('/recommend-allocations not enough capacity interrupt card', () => {
     cy.findByText('Key workers could not be recommended for 1 out of 2 prisoners.').should('be.visible')
     cy.findByRole('button', { name: 'Continue' })
       .should('be.visible')
-      .and('have.attr', 'href', '/key-worker/recommend-allocations?allowPartialAllocation=true')
+      .and('have.attr', 'href')
+      .should('match', /\/key-worker\/recommend-allocations\?allowPartialAllocation=true/)
     cy.findByRole('link', { name: 'Go back' })
       .should('be.visible')
-      .and('have.attr', 'href', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true')
+      .and('have.attr', 'href')
+      .should('match', /\/key-worker\/allocate\?query=&cellLocationPrefix=1&excludeActiveAllocations=true/)
   })
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true', {
-      failOnStatusCode: false,
-    })
-    cy.visit(`/key-worker/recommend-allocations`, {
-      failOnStatusCode: false,
-    })
+    cy.visit(
+      `/key-worker/recommend-allocations?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL2FsbG9jYXRlIiwiL2tleS13b3JrZXIvYWxsb2NhdGU%2FcXVlcnk9JmNlbGxMb2NhdGlvblByZWZpeD0xJmV4Y2x1ZGVBY3RpdmVBbGxvY2F0aW9ucz10cnVlIiwiL2tleS13b3JrZXIvcmVjb21tZW5kLWFsbG9jYXRpb25zIl0%3D`,
+      {
+        failOnStatusCode: false,
+      },
+    )
   }
 })

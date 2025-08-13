@@ -34,7 +34,15 @@ context('test / homepage', () => {
         {
           who: 'USER1',
           subjectType: 'NOT_APPLICABLE',
-          details: '{"pageUrl":"/key-worker","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          details: '{"pageUrl":"/key-worker/not-authorised","activeCaseLoadId":"LEI"}',
+          what: 'PAGE_VIEW_ACCESS_ATTEMPT',
+          service: 'DPS023',
+        },
+        {
+          who: 'USER1',
+          subjectType: 'NOT_APPLICABLE',
+          details:
+            '{"pageUrl":"/key-worker?history=WyIva2V5LXdvcmtlciJdr","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
           what: 'PAGE_VIEW_ACCESS_ATTEMPT',
           service: 'DPS023',
         },
@@ -62,14 +70,24 @@ context('test / homepage', () => {
         {
           who: 'USER1',
           subjectType: 'NOT_APPLICABLE',
-          details: '{"pageUrl":"/key-worker","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          details:
+            '{"pageUrl":"/key-worker?history=WyIva2V5LXdvcmtlciJd","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          what: 'PAGE_VIEW_ACCESS_ATTEMPT',
+          service: 'DPS023',
+        },
+        {
+          who: 'USER1',
+          subjectType: 'NOT_APPLICABLE',
+          details:
+            '{"pageUrl":"/key-worker?history=WyIva2V5LXdvcmtlciJdr","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
           what: 'PAGE_VIEW',
           service: 'DPS023',
         },
         {
           who: 'USER1',
           subjectType: 'NOT_APPLICABLE',
-          details: '{"pageUrl":"/key-worker","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          details:
+            '{"pageUrl":"/key-worker?history=WyIva2V5LXdvcmtlciJdr","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
           what: 'PAGE_VIEW_ACCESS_ATTEMPT',
           service: 'DPS023',
         },
@@ -124,7 +142,7 @@ context('test / homepage', () => {
     cy.get('h2 > .card__link')
       .eq(0)
       .should('contain.text', 'Allocate key workers to prisoners')
-      .and('have.attr', 'href', '/key-worker/allocate')
+      .and('have.attr', 'href', '/key-worker/allocate?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL2FsbG9jYXRlIl0%3D')
     cy.get('.card__description')
       .eq(0)
       .should(
@@ -134,7 +152,7 @@ context('test / homepage', () => {
     cy.get('h2 > .card__link')
       .eq(1)
       .should('contain.text', 'Manage key workers')
-      .and('have.attr', 'href', '/key-worker/manage')
+      .and('have.attr', 'href', '/key-worker/manage?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL21hbmFnZSJd')
     cy.get('.card__description')
       .eq(1)
       .should(
@@ -144,21 +162,29 @@ context('test / homepage', () => {
     cy.get('h2 > .card__link')
       .eq(2)
       .should('contain.text', 'View key worker data')
-      .and('have.attr', 'href', '/key-worker/data')
+      .and('have.attr', 'href', '/key-worker/data?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL2RhdGEiXQ%3D%3D')
     cy.get('.card__description').eq(2).should('contain.text', 'View key worker data for your establishment.')
 
     if (!readonly) {
       cy.get('h2 > .card__link')
         .eq(3)
         .should('contain.text', 'Manage key worker role')
-        .and('have.attr', 'href', '/key-worker/manage-roles')
+        .and(
+          'have.attr',
+          'href',
+          '/key-worker/manage-roles?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL21hbmFnZS1yb2xlcyJd',
+        )
       cy.get('.card__description')
         .eq(3)
         .should('contain.text', 'Assign or remove the key worker role for prison officers in your establishment.')
       cy.get('h2 > .card__link')
         .eq(4)
         .should('contain.text', 'Manage your establishment’s key worker settings')
-        .and('have.attr', 'href', '/key-worker/establishment-settings')
+        .and(
+          'have.attr',
+          'href',
+          '/key-worker/establishment-settings?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL2VzdGFibGlzaG1lbnQtc2V0dGluZ3MiXQ%3D%3D',
+        )
       cy.get('.card__description')
         .eq(4)
         .should(
@@ -189,7 +215,7 @@ context('test / homepage', () => {
     cy.findByRole('link', { name: 'Manage your establishment’s key worker settings' }).should(
       'have.attr',
       'href',
-      '/key-worker/establishment-settings',
+      '/key-worker/establishment-settings?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL2VzdGFibGlzaG1lbnQtc2V0dGluZ3MiXQ%3D%3D',
     )
   })
 
@@ -207,12 +233,12 @@ context('test / homepage', () => {
     cy.findByRole('link', { name: 'My key worker allocations' }).should(
       'have.attr',
       'href',
-      '/key-worker/staff-profile/1234',
+      '/key-worker/staff-profile/1234?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL3N0YWZmLXByb2ZpbGUvMTIzNCJd',
     )
   })
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-worker', { failOnStatusCode: false })
+    cy.visit('/key-worker?history=WyIva2V5LXdvcmtlciJdr', { failOnStatusCode: false })
   }
 })

@@ -13,6 +13,7 @@ function serialiseHistory(history: string[]) {
 
 export function historyMiddlware(...excludeUrls: RegExp[]): RequestHandler {
   return (req, res, next) => {
+    console.error(`Got call to historyMiddleware with url ${req.originalUrl}`)
     if (req.method !== 'GET') {
       return next()
     }
@@ -84,7 +85,7 @@ export function getBreadcrumbs(req: Request, res: Response) {
   const URL_MAPPINGS: { matcher: RegExp; text: string; alias: string }[] = [
     {
       matcher: new RegExp(`^/${res.locals.policyPath}/?$`, 'i'),
-      text: sentenceCase(res.locals.policyStaff!, true),
+      text: sentenceCase(res.locals.policyStaffs!, true),
       alias: Page.HOMEPAGE,
     },
     { matcher: /\/allocate/g, text: `Allocate ${res.locals.policyStaffs!}`, alias: Page.ALLOCATE },

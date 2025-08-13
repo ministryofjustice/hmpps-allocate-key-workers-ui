@@ -23,6 +23,14 @@ context('test errorHandler', () => {
       {
         who: 'USER1',
         subjectType: 'NOT_APPLICABLE',
+        details:
+          '{"pageUrl":"/key-worker?history=WyIva2V5LXdvcmtlciJd","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+        what: 'PAGE_VIEW_ACCESS_ATTEMPT',
+        service: 'DPS023',
+      },
+      {
+        who: 'USER1',
+        subjectType: 'NOT_APPLICABLE',
         details: '{"pageUrl":"/foobar","activeCaseLoadId":"LEI"}',
         what: 'PAGE_VIEW_ACCESS_ATTEMPT',
         service: 'DPS023',

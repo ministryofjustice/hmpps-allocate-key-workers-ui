@@ -21,7 +21,7 @@ context('/update-capacity-status-and-working-pattern/update-capacity', () => {
 
   it('should try all cases', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/update-capacity$/)
+    cy.url().should('match', /\/update-capacity/)
 
     verifyPageContent()
 
@@ -48,7 +48,7 @@ context('/update-capacity-status-and-working-pattern/update-capacity', () => {
     cy.findByRole('button', { name: 'Cancel' })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('equal', '/key-worker/staff-profile/488095')
+      .and('match', /\/key-worker\/staff-profile\/488095/)
   }
 
   const verifyValidationErrors = () => {
@@ -63,7 +63,7 @@ context('/update-capacity-status-and-working-pattern/update-capacity', () => {
   const proceedToNextPage = () => {
     capacityInput().clear().type('12')
     continueButton().click()
-    cy.url().should('match', /\/update-capacity-status-and-working-pattern$/)
+    cy.url().should('match', /\/update-capacity-status-and-working-pattern/)
     cy.get('.govuk-notification-banner__heading')
       .should('be.visible')
       .and('contain.text', 'You have updated this key worker’s maximum capacity.')
@@ -71,13 +71,17 @@ context('/update-capacity-status-and-working-pattern/update-capacity', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(
+    cy.navigateWithHistory(
       `/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern`,
-      {
-        failOnStatusCode: false,
-      },
+      [
+        '/key-worker',
+        '/key-worker/manage',
+        '/key-worker/staff-profile/488095',
+        '/key-worker/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern',
+      ],
     )
-
-    cy.visit(`/key-worker/${journeyId}/update-capacity-status-and-working-pattern/update-capacity`)
+    cy.navigateWithHistory(`/key-worker/${journeyId}/update-capacity-status-and-working-pattern/update-capacity`, [
+      '/key-worker',
+    ])
   }
 })

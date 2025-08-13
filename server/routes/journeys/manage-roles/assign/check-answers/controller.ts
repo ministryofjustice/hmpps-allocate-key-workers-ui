@@ -35,7 +35,8 @@ export class AssignRoleCheckAnswersController {
     next()
   }
 
-  POST = async (_req: Request, res: Response) => {
+  POST = async (req: Request, res: Response) => {
+    req.journeyData.isCheckAnswers = false
     res.redirect('confirmation')
   }
 }

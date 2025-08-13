@@ -12,5 +12,7 @@ declare namespace Cypress {
     /** Verify that a POST request to the given URL with the given body results in a not authorised redirect */
     verifyPostRedirectsToNotAuthorised(options: { body: object; url?: string }): Cypress.Chainable<number>
     verifyAuditEvents(events: object[]): Chainable<unknown>
+    navigateWithHistory(url: string, history: string[]): Chainable<unknown>
+    verifyHistoryLink(urlRegex: RegExp): Chainable<Subject>
   }
 }

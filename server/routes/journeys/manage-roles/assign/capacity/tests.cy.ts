@@ -19,7 +19,7 @@ context('/manage-roles/assign/capacity', () => {
 
   it('should try all cases', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/assign\/capacity$/)
+    cy.url().should('match', /\/assign\/capacity/)
 
     verifyPageContent()
 
@@ -43,7 +43,7 @@ context('/manage-roles/assign/capacity', () => {
     cy.findByRole('link', { name: 'Back' })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('match', /working-pattern$/)
+      .and('match', /working-pattern/)
   }
 
   const verifyValidationErrors = () => {
@@ -58,7 +58,7 @@ context('/manage-roles/assign/capacity', () => {
   const proceedToNextPage = () => {
     capacityInput().type('9')
     continueButton().click()
-    cy.url().should('match', /\/check-answers$/)
+    cy.url().should('match', /\/check-answers/)
   }
 
   const verifyInputValuesArePersisted = () => {
@@ -86,7 +86,6 @@ context('/manage-roles/assign/capacity', () => {
       },
     })
 
-    cy.visit(`/key-worker/${journeyId}/manage-roles/assign/working-pattern`)
-    cy.visit(`/key-worker/${journeyId}/manage-roles/assign/capacity`)
+    cy.navigateWithHistory(`/key-worker/${journeyId}/manage-roles/assign/capacity`, ['working-pattern'])
   }
 })
