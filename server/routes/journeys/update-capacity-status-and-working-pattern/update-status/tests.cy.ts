@@ -26,13 +26,13 @@ context('/update-capacity-status-and-working-pattern/update-status', () => {
       createMock(defaultKeyworkerDetails, { status: { code: 'INACTIVE', description: 'Inactive' } }),
     )
     navigateToTestPage()
-    cy.url().should('match', /\/update-status/)
+    cy.url().should('match', /\/update-status$/)
 
     verifyPageContent()
 
     verifyValidationErrors()
 
-    proceedToNextPage(/\/check-answers/)
+    proceedToNextPage(/\/check-answers$/)
 
     verifyInputValuesArePersisted()
   })
@@ -43,21 +43,21 @@ context('/update-capacity-status-and-working-pattern/update-status', () => {
       createMock(defaultKeyworkerDetails, { status: { code: 'INACTIVE', description: 'Inactive' } }),
     )
     navigateToTestPage()
-    cy.url().should('match', /\/update-status/)
+    cy.url().should('match', /\/update-status$/)
 
     unavailableRadio().click()
     continueButton().click()
-    cy.url().should('match', /\/update-status-unavailable/)
+    cy.url().should('match', /\/update-status-unavailable$/)
   })
 
   it('should try INACTIVE case', () => {
     cy.task('stubKeyworkerDetailsWithoutStats')
     navigateToTestPage()
-    cy.url().should('match', /\/update-status/)
+    cy.url().should('match', /\/update-status$/)
 
     inactiveRadio().click()
     continueButton().click()
-    cy.url().should('match', /\/update-status-inactive/)
+    cy.url().should('match', /\/update-status-inactive$/)
   })
 
   const verifyPageContent = () => {
@@ -67,10 +67,7 @@ context('/update-capacity-status-and-working-pattern/update-status', () => {
     }).should('be.visible')
 
     continueButton().should('be.visible')
-    cancelButton()
-      .should('be.visible')
-      .and('have.attr', 'href')
-      .and('match', /\/key-worker\/staff-profile\/488095/)
+    cancelButton().should('be.visible').and('have.attr', 'href').and('equal', '/key-worker/staff-profile/488095')
   }
 
   const verifyValidationErrors = () => {
@@ -98,18 +95,13 @@ context('/update-capacity-status-and-working-pattern/update-status', () => {
     journeyId = uuidV4()
 
     cy.signIn({ failOnStatusCode: false })
-
-    cy.navigateWithHistory(
+    cy.visit(
       `/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern`,
-      [
-        '/key-worker',
-        '/key-worker/manage',
-        '/key-worker/staff-profile/488095',
-        '/key-worker/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern',
-      ],
+      {
+        failOnStatusCode: false,
+      },
     )
-    cy.navigateWithHistory(`/key-worker/${journeyId}/update-capacity-status-and-working-pattern/update-status`, [
-      '/key-worker',
-    ])
+
+    cy.visit(`/key-worker/${journeyId}/update-capacity-status-and-working-pattern/update-status`)
   }
 })

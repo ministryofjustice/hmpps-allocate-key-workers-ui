@@ -17,7 +17,7 @@ context('/manage-roles/assign/check-answers', () => {
   Object.values(POLICIES).forEach(policy => {
     it(`should try all cases - ${policy.name}`, () => {
       navigateToTestPage(policy.path)
-      cy.url().should('match', /\/check-answers/)
+      cy.url().should('match', /\/check-answers$/)
 
       verifyPageContent(policy.staffs)
 
@@ -35,24 +35,24 @@ context('/manage-roles/assign/check-answers', () => {
       cy.findByRole('link', { name: /Change the staff member$/i })
         .should('be.visible')
         .and('have.attr', 'href')
-        .and('to.match', /..\/assign/)
+        .and('to.match', /..\/assign$/)
 
       if (policy.path !== 'personal-officer') {
         cy.findByRole('link', { name: /Change whether the staff member is a prison officer/i })
           .should('be.visible')
           .and('have.attr', 'href')
-          .and('to.match', /role/)
+          .and('to.match', /role$/)
       }
 
       cy.findByRole('link', { name: /Change the staff member’s working pattern/i })
         .should('be.visible')
         .and('have.attr', 'href')
-        .and('to.match', /working-pattern/)
+        .and('to.match', /working-pattern$/)
 
       cy.findByRole('link', { name: /Change the staff member’s maximum capacity/i })
         .should('be.visible')
         .and('have.attr', 'href')
-        .and('to.match', /capacity/)
+        .and('to.match', /capacity$/)
 
       proceedToNextPage()
 
@@ -78,7 +78,7 @@ context('/manage-roles/assign/check-answers', () => {
 
   const proceedToNextPage = () => {
     cy.findByRole('button', { name: 'Confirm and submit' }).click()
-    cy.url().should('match', /\/confirmation/)
+    cy.url().should('match', /\/confirmation$/)
   }
 
   const navigateToTestPage = (policyPath: string = 'key-worker') => {

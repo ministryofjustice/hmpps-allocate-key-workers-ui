@@ -4,7 +4,7 @@ import { SchemaType } from './schema'
 export class AssignRoleCapacityController {
   GET = async (req: Request, res: Response) => {
     res.render('manage-roles/assign/capacity/view', {
-      backUrl: 'back',
+      backUrl: 'working-pattern',
       capacity:
         res.locals.formResponses?.['capacity'] ??
         req.journeyData.assignStaffRole!.capacity ??

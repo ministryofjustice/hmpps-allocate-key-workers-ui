@@ -15,6 +15,11 @@
 
   <script nonce="{{ cspNonce }}">
     document.addEventListener('DOMContentLoaded', function () {
+      // Do nothing if we're inside a journey
+      const uuidRegex = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/
+      if (window.location.pathname.match(uuidRegex)) {
+        return
+      }
       try { const history = JSON.parse(atob("{{ b64History }}") || '[]');
       console.log(history)
       document

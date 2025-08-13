@@ -17,7 +17,7 @@ export class AssignRoleCheckAnswersController {
       staff,
       scheduleType,
       capacity,
-      backUrl: 'back',
+      backUrl: 'working-pattern',
     })
   }
 
@@ -35,8 +35,7 @@ export class AssignRoleCheckAnswersController {
     next()
   }
 
-  POST = async (req: Request, res: Response) => {
-    req.journeyData.isCheckAnswers = false
+  POST = async (_req: Request, res: Response) => {
     res.redirect('confirmation')
   }
 }

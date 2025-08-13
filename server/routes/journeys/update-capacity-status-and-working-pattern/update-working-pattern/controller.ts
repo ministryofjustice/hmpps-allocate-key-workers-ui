@@ -12,7 +12,7 @@ export class UpdateWorkingPatternController {
     res.render('journeys/update-capacity-status-and-working-pattern/update-working-pattern/view', {
       ...req.journeyData.staffDetails!,
       scheduleType: req.journeyData.staffDetails!.staffRole!.scheduleType!.code,
-      backUrl: 'back',
+      backUrl: '../update-capacity-status-and-working-pattern',
     })
   }
 

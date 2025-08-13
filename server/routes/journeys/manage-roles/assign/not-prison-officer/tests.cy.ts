@@ -13,7 +13,7 @@ context('/manage-roles/assign/not-prison-officer', () => {
 
   it('should render error page', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/assign\/not-prison-officer/)
+    cy.url().should('match', /\/assign\/not-prison-officer$/)
 
     cy.title().should('equal', 'Not a prison officer - Key workers - DPS')
 
@@ -24,8 +24,8 @@ context('/manage-roles/assign/not-prison-officer', () => {
     cy.findByRole('link', { name: 'Return to key workers homepage' })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('match', /key-worker/)
-    cy.findByRole('link', { name: 'Back' }).should('be.visible').and('have.attr', 'href').and('match', /role/)
+      .and('match', /key-worker$/)
+    cy.findByRole('link', { name: 'Back' }).should('be.visible').and('have.attr', 'href').and('match', /role$/)
   })
 
   const navigateToTestPage = () => {
@@ -46,6 +46,6 @@ context('/manage-roles/assign/not-prison-officer', () => {
       },
     })
 
-    cy.navigateWithHistory(`/key-worker/${journeyId}/manage-roles/assign/not-prison-officer`, ['/role'])
+    cy.visit(`/key-worker/${journeyId}/manage-roles/assign/not-prison-officer`)
   }
 })

@@ -9,7 +9,7 @@ export class UpdateStatusUnavailableController {
       newStatus: req.journeyData.updateStaffDetails!.status,
       statusReasonPageTitle,
       deactivateActiveAllocations: req.journeyData.updateStaffDetails!.deactivateActiveAllocations,
-      backUrl: 'back',
+      backUrl: '../update-capacity-status-and-working-pattern',
     })
   }
 

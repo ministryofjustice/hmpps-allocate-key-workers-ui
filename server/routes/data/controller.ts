@@ -3,6 +3,7 @@ import { format, lastDayOfMonth, startOfMonth, subMonths, isLastDayOfMonth } fro
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import { formatDateConcise } from '../../utils/datetimeUtils'
 import { ResQuerySchemaType } from './schema'
+import { getHistoryParam } from '../../middleware/historyMiddleware'
 
 export class StaffDataController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
@@ -127,6 +128,11 @@ export class StaffDataController {
   }
 
   POST = async (req: Request, res: Response) => {
-    res.redirect(`data?dateFrom=${req.body.dateFrom ?? ''}&dateTo=${req.body.dateTo ?? ''}`)
+    const searchParams = new URLSearchParams({
+      dateFrom: req.body.dateFrom,
+      dateTo: req.body.dateTo,
+      history: getHistoryParam(req),
+    })
+    res.redirect(`data?${searchParams.toString()}`)
   }
 }

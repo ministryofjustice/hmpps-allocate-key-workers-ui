@@ -11,6 +11,13 @@ function serialiseHistory(history: string[]) {
   return Buffer.from(JSON.stringify(history)).toString('base64')
 }
 
+export function getHistoryParam(req: Request) {
+  const refererHistory = getHistoryFromReferrer(req)
+  refererHistory.push(noHistoryParam(req.originalUrl))
+  const history = pruneHistory(req.originalUrl, refererHistory)
+  return serialiseHistory(history)
+}
+
 export function historyMiddlware(...excludeUrls: RegExp[]): RequestHandler {
   return (req, res, next) => {
     if (req.method !== 'GET') {
@@ -20,6 +27,18 @@ export function historyMiddlware(...excludeUrls: RegExp[]): RequestHandler {
     const shouldExcludeUrl = (url: string) => excludeUrls.some(itm => itm.test(url))
 
     const queryHistory: string[] = deserialiseHistory(req.query['history'] as string)
+
+    // Disable for journey pages
+    const journeyRegex = new RegExp(
+      `${res.locals.policyPath}/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}`,
+    )
+    if (req.originalUrl.match(journeyRegex)) {
+      res.locals.history = queryHistory
+      res.locals.breadcrumbs = new Breadcrumbs(res)
+      res.locals.breadcrumbs.addItems(...getBreadcrumbs(req, res))
+      return next()
+    }
+
     const searchParams = new URLSearchParams(req.originalUrl.split('?')[1] || '')
 
     if (!queryHistory.length) {
@@ -94,7 +113,8 @@ export function getBreadcrumbs(req: Request, res: Response) {
       text: 'Prisoner allocation history',
       alias: Page.PRISONER_ALLOCATION_HISTORY,
     },
-    { matcher: /\/manage/g, text: `Manage ${res.locals.policyStaffs!}`, alias: Page.MANAGE_ALLOCATABLE_STAFF },
+    { matcher: /\/manage([^-]|$)/g, text: `Manage ${res.locals.policyStaffs!}`, alias: Page.MANAGE_ALLOCATABLE_STAFF },
+    { matcher: /\/manage-roles([^/]|$)/g, text: `Manage roles`, alias: Page.MANAGE_ROLES },
     { matcher: /\/staff-profile/g, text: 'Profile', alias: Page.STAFF_PROFILE },
   ]
 

@@ -20,14 +20,14 @@ context('Update capacity, status and working pattern', () => {
 
   describe('Role based access', () => {
     verifyRoleBasedAccess(
-      `/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern&history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL2FsbG9jYXRlIl0%3D`,
+      `/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern`,
       UserPermissionLevel.ALLOCATE,
     )
   })
 
   it('should show staff details and change links', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/update-capacity-status-and-working-pattern/)
+    cy.url().should('match', /\/update-capacity-status-and-working-pattern$/)
 
     cy.findByRole('heading', {
       name: 'Available-Active Key-Worker – update capacity, status or working pattern',
@@ -36,7 +36,7 @@ context('Update capacity, status and working pattern', () => {
     cy.findByRole('link', { name: 'Back to key worker profile' })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('match', /\/key-worker\/staff-profile\/488095/)
+      .and('match', /\/key-worker\/staff-profile\/488095$/)
 
     cy.contains('dt', 'Status').next().should('include.text', 'Inactive')
     cy.contains('dt', 'Maximum capacity').next().should('include.text', '6')
@@ -45,23 +45,24 @@ context('Update capacity, status and working pattern', () => {
     cy.findByRole('link', { name: /Update status/i })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('to.match', /update-status/)
+      .and('to.match', /update-status$/)
     cy.findByRole('link', { name: /Update maximum capacity/i })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('to.match', /update-capacity/)
+      .and('to.match', /update-capacity$/)
     cy.findByRole('link', { name: /Update working pattern/i })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('to.match', /update-working-pattern/)
+      .and('to.match', /update-working-pattern$/)
   })
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.navigateWithHistory(`/key-worker/staff-profile/488095`, ['/key-worker'])
-    cy.navigateWithHistory(
+    cy.visit(
       `/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern`,
-      ['/key-worker', '/key-worker/manage', '/key-worker/staff-profile/488095'],
+      {
+        failOnStatusCode: false,
+      },
     )
   }
 })

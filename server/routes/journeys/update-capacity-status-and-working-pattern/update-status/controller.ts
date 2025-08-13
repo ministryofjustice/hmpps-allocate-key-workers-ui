@@ -16,7 +16,7 @@ export class UpdateStatusController {
           value: code,
           text: description,
         })),
-      backUrl: 'back',
+      backUrl: '../update-capacity-status-and-working-pattern',
     })
   }
 

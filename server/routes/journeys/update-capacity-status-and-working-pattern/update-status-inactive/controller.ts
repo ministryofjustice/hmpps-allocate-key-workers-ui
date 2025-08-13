@@ -10,7 +10,7 @@ export class UpdateStatusInactiveController {
   GET = async (req: Request, res: Response) => {
     res.render('journeys/update-capacity-status-and-working-pattern/update-status-inactive/view', {
       ...req.journeyData.staffDetails!,
-      backUrl: 'back',
+      backUrl: '../update-capacity-status-and-working-pattern',
     })
   }
 

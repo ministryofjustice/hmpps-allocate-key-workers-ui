@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import { sanitizeQueryName, sanitizeSelectValue } from '../../middleware/validationMiddleware'
 import { components } from '../../@types/keyWorker'
+import { getHistoryParam } from '../../middleware/historyMiddleware'
 
 export class ManageController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
@@ -49,7 +50,11 @@ export class ManageController {
   }
 
   POST = async (req: Request, res: Response): Promise<void> => {
-    const queryParams = new URLSearchParams({ query: req.body.query, status: req.body.status })
+    const queryParams = new URLSearchParams({
+      query: req.body.query,
+      status: req.body.status,
+      history: getHistoryParam(req),
+    })
     res.redirect(`manage?${queryParams.toString()}`)
   }
 }

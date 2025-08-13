@@ -13,7 +13,7 @@ context('/manage-roles/assign/confirmation', () => {
 
   it('should render confirmation page', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/confirmation/)
+    cy.url().should('match', /\/confirmation$/)
 
     cy.title().should('equal', 'Confirmation - Key workers - DPS')
     cy.findByText('Key worker role assigned').should('be.visible')
@@ -22,17 +22,17 @@ context('/manage-roles/assign/confirmation', () => {
     cy.findByRole('link', { name: /allocate prisoners to key workers/ })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('match', /\/key-worker\/allocate/)
+      .and('match', /\/key-worker\/allocate$/)
 
     cy.findByRole('link', { name: /View this individual’s key worker profile/ })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('match', /\/key-worker\/staff-profile\/1001/)
+      .and('match', /\/key-worker\/staff-profile\/1001$/)
 
     cy.findByRole('link', { name: /Return to key workers homepage/ })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('match', /\/key-worker/)
+      .and('match', /\/key-worker$/)
   })
 
   const navigateToTestPage = () => {
@@ -55,6 +55,6 @@ context('/manage-roles/assign/confirmation', () => {
       },
     })
 
-    cy.navigateWithHistory(`/key-worker/${journeyId}/manage-roles/assign/confirmation`, ['/key-worker'])
+    cy.visit(`/key-worker/${journeyId}/manage-roles/assign/confirmation`)
   }
 })

@@ -7,7 +7,7 @@ export class ConfirmRemoveRoleController {
   GET = async (req: Request, res: Response) => {
     res.render('manage-roles/remove/remove-role/view', {
       staff: req.journeyData.removeStaffRole!.staff,
-      backUrl: 'back',
+      backUrl: '../remove',
     })
   }
 

@@ -14,7 +14,7 @@ context('/manage-roles/remove/remove-role', () => {
 
   it('should try all cases for key worker', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/remove-role/)
+    cy.url().should('match', /\/remove-role$/)
 
     verifyPageContent()
     cy.findByText(
@@ -33,7 +33,7 @@ context('/manage-roles/remove/remove-role', () => {
 
   it('should skip content about deallocating prisoners if the staff has no assigned prisoner', () => {
     navigateToTestPage('key-worker', 0)
-    cy.url().should('match', /\/remove-role/)
+    cy.url().should('match', /\/remove-role$/)
 
     verifyPageContent()
 
@@ -53,12 +53,12 @@ context('/manage-roles/remove/remove-role', () => {
     cy.findByRole('button', { name: 'No, return to homepage' })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('match', /\/key-worker/)
+      .and('match', /\/key-worker$/)
   }
 
   const proceedToNextPage = () => {
     cy.findByRole('button', { name: 'Yes, remove the role' }).click()
-    cy.url().should('match', /\/confirmation/)
+    cy.url().should('match', /\/confirmation$/)
   }
 
   const navigateToTestPage = (policyPath: string = 'key-worker', allocated: number = 12) => {

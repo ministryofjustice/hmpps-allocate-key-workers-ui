@@ -12,7 +12,7 @@ export class UpdateCapacityController {
     res.render('journeys/update-capacity-status-and-working-pattern/update-capacity/view', {
       ...req.journeyData.staffDetails!,
       capacity: res.locals.formResponses?.['capacity'] ?? req.journeyData.staffDetails!.capacity,
-      backUrl: 'back',
+      backUrl: '../update-capacity-status-and-working-pattern',
     })
   }
 

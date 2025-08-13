@@ -22,7 +22,7 @@ context('/update-capacity-status-and-working-pattern/** journey', () => {
 
   describe('Role based access', () => {
     verifyRoleBasedAccess(
-      `/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern&history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL2FsbG9jYXRlIl0%3D`,
+      `/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern`,
       UserPermissionLevel.ALLOCATE,
     )
   })
@@ -154,9 +154,11 @@ context('/update-capacity-status-and-working-pattern/** journey', () => {
   const beginJourney = () => {
     journeyId = uuidV4()
     cy.signIn({ failOnStatusCode: false })
-    cy.navigateWithHistory(
+    cy.visit(
       `/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern`,
-      ['/key-worker'],
+      {
+        failOnStatusCode: false,
+      },
     )
   }
 })

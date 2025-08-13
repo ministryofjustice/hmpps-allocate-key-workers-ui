@@ -21,7 +21,7 @@ context('/update-capacity-status-and-working-pattern/update-status-unavailable',
 
   it('should try all cases', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/update-status-annual-leave-return/)
+    cy.url().should('match', /\/update-status-annual-leave-return$/)
 
     verifyPageContent()
 
@@ -46,7 +46,7 @@ context('/update-capacity-status-and-working-pattern/update-status-unavailable',
     cancelButton()
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('match', /cancel/)
+      .and('match', /cancel$/)
   }
 
   const verifyValidationErrors = () => {
@@ -62,7 +62,7 @@ context('/update-capacity-status-and-working-pattern/update-status-unavailable',
   const proceedToNextPage = () => {
     yearInput().type('2070')
     continueButton().click()
-    cy.url().should('match', /\/check-answers/)
+    cy.url().should('match', /\/check-answers$/)
   }
 
   const verifyInputValuesArePersisted = () => {
@@ -74,14 +74,11 @@ context('/update-capacity-status-and-working-pattern/update-status-unavailable',
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.navigateWithHistory(
+    cy.visit(
       `/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern`,
-      [
-        '/key-worker',
-        '/key-worker/manage',
-        '/key-worker/staff-profile/488095',
-        '/key-worker/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern',
-      ],
+      {
+        failOnStatusCode: false,
+      },
     )
 
     cy.injectJourneyDataAndReload<PartialJourneyData>(journeyId, {
@@ -94,9 +91,6 @@ context('/update-capacity-status-and-working-pattern/update-status-unavailable',
       },
     })
 
-    cy.navigateWithHistory(
-      `/key-worker/${journeyId}/update-capacity-status-and-working-pattern/update-status-annual-leave-return`,
-      ['/key-worker'],
-    )
+    cy.visit(`/key-worker/${journeyId}/update-capacity-status-and-working-pattern/update-status-annual-leave-return`)
   }
 })
