@@ -3,15 +3,15 @@ export const formatNumber = (value: string | number, type?: string): number => {
   return Number(value)
 }
 
-export const formatValue = (value: number, type: string = 'number'): string | number => {
+export const formatValue = (value?: number | null, type: string = 'number'): string | number => {
+  if (value === undefined || value === null) return '-'
+
   if (type === 'percentage') {
     const roundedValue = value !== 0 ? value.toFixed(2) : 0
     return `${roundedValue} %`
   }
   if (type === 'day') return `${value} day${value === 1 ? '' : 's'}`
-  if (value === 0) return 0
-  if (!value) return '-'
-  return Number(value)
+  return value
 }
 
 export const formatChange = (change: number, type: string = 'number'): string | number => {
