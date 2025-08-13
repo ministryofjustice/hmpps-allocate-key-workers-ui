@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import { components } from '../../@types/keyWorker'
-import { POLICIES } from '../../utils/constants'
+import { POLICIES } from '../../middleware/policyMiddleware'
 
 export class PrisonerAllocationHistoryController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}

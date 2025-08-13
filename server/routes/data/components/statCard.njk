@@ -2,7 +2,7 @@
 
 {% macro statCard(stat, policyStaff) %}
   {% set title = stat.heading | policyAware(policyStaff) %}
-  {% set currentValue = stat.currentValue %}
+  {% set currentValue = stat.currentValue or 0 %}
   {% set previousValue = stat.previousValue %}
   {% set calculationMethod = stat.calculationMethod | policyAware(policyStaff) %}
   {% set format = stat.type or 'number' %}

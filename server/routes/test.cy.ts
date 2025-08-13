@@ -123,7 +123,7 @@ context('test / homepage', () => {
       validateTiles(false)
     })
 
-    it('should show correct services when user has admin permission', () => {
+    it('should show correct services when user has admin permission (service enabled and policy enabled)', () => {
       cy.task('stubSignIn', {
         roles: [AuthorisedRoles.KW_MIGRATION],
         hasAllocationJobResponsibilities: false,
@@ -133,6 +133,50 @@ context('test / homepage', () => {
       navigateToTestPage()
       cy.title().should('equal', 'Key workers - DPS')
       validateTiles(false)
+    })
+
+    it('should show correct services when user has admin permission (service enabled and policy disabled)', () => {
+      cy.task('stubSignIn', {
+        roles: [AuthorisedRoles.KW_MIGRATION],
+        hasAllocationJobResponsibilities: false,
+      })
+      cy.task('stubPrisonNotEnabled')
+
+      navigateToTestPage()
+      cy.title().should('equal', 'Key workers - DPS')
+      cy.get('h2 > .card__link').should('have.length', 1)
+      cy.get('h2 > .card__link')
+        .should('contain.text', 'Manage your establishment’s key worker settings')
+        .and('have.attr', 'href', '/key-worker/establishment-settings')
+    })
+
+    it('should show correct services when user has admin permission (service disabled and policy enabled)', () => {
+      cy.task('stubSignIn', {
+        roles: [AuthorisedRoles.KW_MIGRATION],
+        hasAllocationJobResponsibilities: false,
+      })
+      cy.task('stubEnabledPrison')
+      cy.task('stubComponentsNoService')
+
+      navigateToTestPage()
+      cy.title().should('equal', 'Key workers - DPS')
+      validateTiles(false)
+    })
+
+    it('should show correct services when user has admin permission (service disabled and policy disabled)', () => {
+      cy.task('stubSignIn', {
+        roles: [AuthorisedRoles.KW_MIGRATION],
+        hasAllocationJobResponsibilities: false,
+      })
+      cy.task('stubPrisonNotEnabled')
+      cy.task('stubComponentsNoService')
+
+      navigateToTestPage()
+      cy.title().should('equal', 'Key workers - DPS')
+      cy.get('h2 > .card__link').should('have.length', 1)
+      cy.get('h2 > .card__link')
+        .should('contain.text', 'Manage your establishment’s key worker settings')
+        .and('have.attr', 'href', '/key-worker/establishment-settings')
     })
   })
 
