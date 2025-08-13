@@ -13,7 +13,6 @@ function serialiseHistory(history: string[]) {
 
 export function historyMiddlware(...excludeUrls: RegExp[]): RequestHandler {
   return (req, res, next) => {
-    console.error(`Got call to historyMiddleware with url ${req.originalUrl}`)
     if (req.method !== 'GET') {
       return next()
     }
@@ -138,10 +137,10 @@ export function getLast(res: Response) {
 }
 
 function getHistoryBefore(history: string[], url: string) {
-  const urlNoHistory = noHistoryParam(url)
+  const urlNoHistory = url.split('?')[0]
   const newHistory = [...history]
   for (let i = history.length - 1; i >= 0; i -= 1) {
-    if (noHistoryParam(history[i]!) === urlNoHistory) {
+    if (history[i]!.split('?')[0] === urlNoHistory) {
       newHistory.splice(i, 1)
     } else {
       break

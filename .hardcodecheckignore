@@ -3,5 +3,6 @@
 'HMPPS Allocate Key Workers Ui'
 res.locals.policyStaff
 server/utils/constants.ts
+^.+.test.ts$
 text: 'Personal officer allocation history'
 text: 'Key worker allocation history'
