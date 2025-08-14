@@ -7,6 +7,7 @@ context('/manage-roles/assign/role', () => {
   const continueButton = () => cy.findByRole('button', { name: 'Continue' })
 
   const journeyId = uuidV4()
+  const history = Buffer.from(JSON.stringify(['/key-worker', '/key-worker/manage-roles'])).toString('base64')
 
   beforeEach(() => {
     cy.task('reset')
@@ -52,7 +53,7 @@ context('/manage-roles/assign/role', () => {
     cy.findByRole('link', { name: 'Back' })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('match', /assign$/)
+      .and('match', new RegExp(`assign\\?history=${history}`))
   }
 
   const verifyValidationErrors = () => {
@@ -82,6 +83,7 @@ context('/manage-roles/assign/role', () => {
     })
 
     cy.injectJourneyDataAndReload<PartialJourneyData>(journeyId, {
+      b64History: history,
       assignStaffRole: {
         staff: {
           staffId: 1001,

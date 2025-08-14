@@ -34,7 +34,7 @@ export default function routes(services: Services) {
   const permissionSelf = { requirePrisonEnabled: true, minimumPermission: UserPermissionLevel.SELF_PROFILE_ONLY }
 
   const uuidMatcher = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/
-  router.use(historyMiddlware(/start-update-staff/, uuidMatcher))
+  router.use(historyMiddlware(uuidMatcher))
   get('/', Page.HOMEPAGE, requirePermissionsAndConfig(permissionAdmin, permissionSelf), controller.GET)
 
   router.use(removeTrailingSlashMiddleware)

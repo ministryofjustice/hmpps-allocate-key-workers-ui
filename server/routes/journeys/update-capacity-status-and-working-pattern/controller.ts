@@ -9,7 +9,7 @@ export class UpdateCapacityAndStatusController {
     res.render('journeys/update-capacity-status-and-working-pattern/view', {
       ...req.journeyData.staffDetails!,
       backLabel: `Back to ${res.locals.policyStaff} profile`,
-      backUrl: `/${res.locals.policyPath}/staff-profile/${staffDetails.staffId}`,
+      backUrl: `/${res.locals.policyPath}/staff-profile/${staffDetails.staffId}?history=${req.journeyData.b64History}`,
       successMessage: req.flash(FLASH_KEY__SUCCESS_MESSAGE)[0],
     })
   }

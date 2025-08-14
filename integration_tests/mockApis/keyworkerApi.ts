@@ -226,9 +226,6 @@ const stubSearchAllocatableStaffStatusActive = () =>
 const stubKeyworkerDetails = (details: components['schemas']['StaffDetails'] = defaultKeyworkerDetails) =>
   createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/staff/488095.*', 200, details)
 
-const stubKeyworkerDetailsForStaffId = ([staffId, details]: [string, components['schemas']['StaffDetails']]) =>
-  createBasicHttpStub('GET', `/keyworker-api/prisons/LEI/staff/${staffId}.*`, 200, details)
-
 const stubKeyworkerDetailsWithoutStats = (details: components['schemas']['StaffDetails'] = defaultKeyworkerDetails) =>
   createBasicHttpStub('GET', '/keyworker-api/prisons/LEI/staff/488095.*', 200, {
     ...details,
@@ -775,5 +772,4 @@ export default {
   stubPutAllocationRecommendationSuccess,
   stubKeyworkerPrisonConfigNoAutoAllocation: () => stubKeyworkerPrisonConfig(true, false, false),
   stubUpsertStaffDetails,
-  stubKeyworkerDetailsForStaffId,
 }

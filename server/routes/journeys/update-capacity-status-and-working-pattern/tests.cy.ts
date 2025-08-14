@@ -6,6 +6,9 @@ import { UserPermissionLevel } from '../../../interfaces/hmppsUser'
 
 context('Update capacity, status and working pattern', () => {
   const journeyId = uuidV4()
+  const history = Buffer.from(
+    JSON.stringify(['/key-worker', '/key-worker/manage', '/key-worker/staff-profile/488095']),
+  ).toString('base64')
 
   beforeEach(() => {
     cy.task('reset')
@@ -36,7 +39,7 @@ context('Update capacity, status and working pattern', () => {
     cy.findByRole('link', { name: 'Back to key worker profile' })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('match', /\/key-worker\/staff-profile\/488095$/)
+      .and('match', new RegExp(`/key-worker/staff-profile/488095\\?history=${history}`))
 
     cy.contains('dt', 'Status').next().should('include.text', 'Inactive')
     cy.contains('dt', 'Maximum capacity').next().should('include.text', '6')
@@ -59,7 +62,7 @@ context('Update capacity, status and working pattern', () => {
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(
-      `/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern`,
+      `/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern&history=${history}`,
       {
         failOnStatusCode: false,
       },

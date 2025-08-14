@@ -28,12 +28,9 @@ export function historyMiddlware(...excludeUrls: RegExp[]): RequestHandler {
 
     const queryHistory: string[] = deserialiseHistory(req.query['history'] as string)
 
-    // Disable for journey pages
-    const journeyRegex = new RegExp(
-      `${res.locals.policyPath}/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}`,
-    )
-    if (req.originalUrl.match(journeyRegex)) {
+    if (shouldExcludeUrl(req.originalUrl)) {
       res.locals.history = queryHistory
+      res.locals.b64History = serialiseHistory(queryHistory)
       res.locals.breadcrumbs = new Breadcrumbs(res)
       res.locals.breadcrumbs.addItems(...getBreadcrumbs(req, res))
       return next()
@@ -43,12 +40,9 @@ export function historyMiddlware(...excludeUrls: RegExp[]): RequestHandler {
 
     if (!queryHistory.length) {
       const refererHistory = getHistoryFromReferrer(req)
-      const jointHistory = [...refererHistory, req.originalUrl]
-      const history = pruneHistory(req.originalUrl, jointHistory)
+      const history = pruneHistory(req.originalUrl, refererHistory)
+      history.push(noHistoryParam(req.originalUrl))
 
-      if (!shouldExcludeUrl(req.originalUrl)) {
-        history.push(noHistoryParam(req.originalUrl))
-      }
       res.locals.history = history
 
       searchParams.set('history', serialiseHistory(history))
@@ -57,18 +51,10 @@ export function historyMiddlware(...excludeUrls: RegExp[]): RequestHandler {
     }
 
     const history = pruneHistory(req.originalUrl, queryHistory)
+    history.push(noHistoryParam(req.originalUrl))
 
-    const prevUrl = history[history.length - 1]
-
-    if (!shouldExcludeUrl(req.originalUrl) && prevUrl !== noHistoryParam(req.originalUrl)) {
-      history.push(noHistoryParam(req.originalUrl))
-    }
-
-    // Remove exclude Urls again
-    const finalHistory = history.filter(itm => !excludeUrls.some(url => url.test(itm)))
-
-    res.locals.history = finalHistory
-    res.locals.b64History = serialiseHistory(finalHistory)
+    res.locals.history = history
+    res.locals.b64History = serialiseHistory(history)
 
     res.locals.historyBackUrl =
       getLastDifferentPage(req, res) || req.headers?.['referer'] || `/${res.locals.policyPath || ''}`

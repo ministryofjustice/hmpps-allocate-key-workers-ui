@@ -10,22 +10,12 @@ context('historyMiddleware', () => {
     cy.task('stubSignIn')
     cy.task('stubEnabledPrison')
     cy.task('stubSearchAllocatableStaffStatusActive')
-    cy.task('stubPutAllocationSuccess')
-    cy.task('stubPutDeallocationSuccess')
-
     cy.task('stubResidentialHierarchy')
-    cy.task('stubSearchPrisonersWithQuery')
-    cy.task('stubSearchPrisonersWithLocation')
     cy.task('stubSearchPrisoner')
     cy.task('stubSearchAllocatableStaffAll')
     cy.task('stubSearchPrisonersWithExcludeAllocations')
-    cy.task('stubSearchAllocatableStaffStatusActive')
-    cy.task('stubPutAllocationSuccess')
-    cy.task('stubPutDeallocationSuccess')
     cy.task('stubPrisonerAllocations')
-
     cy.task('stubGetPrisonerDetails', 'A2504EA')
-
     cy.task('stubAllocationRecommendations', {
       allocations: [
         {
@@ -55,7 +45,6 @@ context('historyMiddleware', () => {
         },
       ],
     })
-
     cy.task('stubKeyworkerStatuses')
     cy.task('stubSearchAllocatableStaff', [
       {
@@ -80,10 +69,6 @@ context('historyMiddleware', () => {
     ])
 
     cy.task('stubKeyworkerDetails')
-
-    cy.task('stubSearchAllocatableStaffStatusActive')
-    cy.task('stubPutAllocationSuccess')
-    cy.task('stubPutDeallocationSuccess')
   })
 
   it('should show correct breadcrumbs when prisoner-allocation-history accessed from allocate route', () => {

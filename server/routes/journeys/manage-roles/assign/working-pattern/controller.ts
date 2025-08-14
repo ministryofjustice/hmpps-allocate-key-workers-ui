@@ -1,10 +1,11 @@
 import { Request, Response } from 'express'
 import { SchemaType } from './schema'
+import { POLICIES } from '../../../../../middleware/policyMiddleware'
 
 export class WorkingPatternController {
   GET = async (req: Request, res: Response) => {
     res.render('manage-roles/assign/working-pattern/view', {
-      backUrl: 'role',
+      backUrl: `${POLICIES[res.locals.policyPath!]?.name === 'Personal officer' ? '../assign' : 'role'}?history=${req.journeyData.b64History}`,
       scheduleType: req.journeyData.assignStaffRole!.scheduleType?.code,
     })
   }
