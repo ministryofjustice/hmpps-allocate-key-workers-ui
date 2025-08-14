@@ -6,7 +6,7 @@ import { Page } from '../services/auditService'
 function deserialiseHistory(b64String: string = '') {
   try {
     return JSON.parse(Buffer.from(b64String || '', 'base64').toString() || '[]')
-  } catch (e) {
+  } catch (_) {
     return []
   }
 }
