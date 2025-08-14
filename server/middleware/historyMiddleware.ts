@@ -20,9 +20,10 @@ export function getHistoryParamForPOST(
   targetPage?: string,
   newSearchParams: URLSearchParams = new URLSearchParams(),
 ) {
-  const refererHistory = getHistoryFromReferrer(req)
+  const refererHistory = getHistoryFromReferer(req)
   if (targetPage) {
-    const history = pruneHistory(req.headers?.['referer'] || req.originalUrl, refererHistory)
+    const refererUrl = new URL(req.headers['referer'] || `http://0.0.0.0${req.originalUrl}`)
+    const history = pruneHistory(refererUrl.pathname, refererHistory)
     const destUrl = `${targetPage}?${newSearchParams.toString()}`.replace(/\?$/g, '')
     history.push(destUrl)
     return serialiseHistory(history)
@@ -53,7 +54,7 @@ export function historyMiddleware(...excludeUrls: RegExp[]): RequestHandler {
     const searchParams = new URLSearchParams(req.originalUrl.split('?')[1] || '')
 
     if (!queryHistory.length) {
-      const refererHistory = getHistoryFromReferrer(req)
+      const refererHistory = getHistoryFromReferer(req)
       const history = pruneHistory(req.originalUrl, refererHistory)
       history.push(noHistoryParam(req.originalUrl))
 
@@ -171,9 +172,15 @@ export function getLastDifferentPage(req: Request, res: Response) {
   return [...res.locals.history].reverse().find(url => url.split('?')[0] !== req.originalUrl.split('?')[0])
 }
 
-function getHistoryFromReferrer(req: Request) {
+function getHistoryFromReferer(req: Request) {
   const refererStr = (req.headers?.['referer'] as string) || ''
   const refererSearchParams = new URLSearchParams(refererStr.split('?')[1] || '')
   const refererHistory = deserialiseHistory(refererSearchParams.get('history') as string)
+
+  if (req.headers['referer']) {
+    const refererUrl = new URL(req.headers['referer'])
+    refererHistory.push(noHistoryParam(refererUrl.pathname + refererUrl.search))
+  }
+
   return refererHistory
 }

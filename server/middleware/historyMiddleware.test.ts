@@ -30,6 +30,7 @@ describe('historyMiddleware', () => {
   it('should redirect to the same page with a history query param added when called with no history', () => {
     const res = createRes()
 
+    req.headers = { referer: 'http://0.0.0.0:3000/key-worker' }
     req.query = {}
     req.originalUrl = '/key-worker'
     req.method = 'GET'
@@ -127,7 +128,7 @@ describe('historyMiddleware', () => {
     const res = createRes()
 
     req.headers = {
-      referer: `/key-worker/allocate?history=${historyToBase64(['/key-worker', '/key-worker/allocate'])}`,
+      referer: `http://0.0.0.0:3000/key-worker/allocate?history=${historyToBase64(['/key-worker', '/key-worker/allocate'])}`,
     }
     req.query = {} // Empty query where a POST request just redirects to a page without preserving history
     req.originalUrl = `/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true`
@@ -141,7 +142,7 @@ describe('historyMiddleware', () => {
 
   it('should return base64 history using referer header when no target page is provided', () => {
     req.headers = {
-      referer: `/key-worker/allocate?history=${historyToBase64(['/key-worker', '/key-worker/allocate'])}`,
+      referer: `http://0.0.0.0:3000/key-worker/allocate?history=${historyToBase64(['/key-worker', '/key-worker/allocate'])}`,
     }
     req.query = {}
     req.originalUrl = `/key-worker/allocate/filter`
@@ -152,7 +153,7 @@ describe('historyMiddleware', () => {
 
   it('should return base64 history for POST redirect when target page is provided', () => {
     req.headers = {
-      referer: `/key-worker/allocate?history=${historyToBase64(['/key-worker', '/key-worker/allocate'])}`,
+      referer: `http://0.0.0.0:3000/key-worker/allocate?history=${historyToBase64(['/key-worker', '/key-worker/allocate'])}`,
     }
     req.query = {}
     req.originalUrl = `/key-worker/allocate/filter`
