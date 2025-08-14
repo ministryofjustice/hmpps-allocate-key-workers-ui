@@ -79,8 +79,8 @@ export class AllocateStaffController extends ChangeStaffController {
       query: req.body.query || '',
       cellLocationPrefix: req.body.cellLocationPrefix || '',
       excludeActiveAllocations: req.body.excludeActiveAllocations || false,
-      history: getHistoryParamForPOST(req),
     })
+    params.set('history', getHistoryParamForPOST(req, `/${res.locals.policyPath}/allocate`, params))
     return res.redirect(`/${res.locals.policyPath}/allocate?${params.toString()}`)
   }
 }
