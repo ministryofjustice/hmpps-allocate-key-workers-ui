@@ -53,8 +53,8 @@ export class ManageController {
     const queryParams = new URLSearchParams({
       query: req.body.query,
       status: req.body.status,
-      history: getHistoryParamForPOST(req),
     })
+    queryParams.set('history', getHistoryParamForPOST(req, `/${res.locals.policyPath}/manage`, queryParams))
     res.redirect(`manage?${queryParams.toString()}`)
   }
 }

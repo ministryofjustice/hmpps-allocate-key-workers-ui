@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express'
 
-import { getBreadcrumbs, historyMiddleware } from './historyMiddleware'
+import { getBreadcrumbs, getHistoryParamForPOST, historyMiddleware } from './historyMiddleware'
 
 describe('historyMiddleware', () => {
   const req: Request = {} as jest.Mocked<Request>
@@ -137,5 +137,27 @@ describe('historyMiddleware', () => {
     expect(res.redirect).toHaveBeenCalledWith(
       `/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true'], true)}`,
     )
+  })
+
+  it('should return base64 history using referer header when no target page is provided', () => {
+    req.headers = {
+      referer: `/key-worker/allocate?history=${historyToBase64(['/key-worker', '/key-worker/allocate'])}`,
+    }
+    req.query = {}
+    req.originalUrl = `/key-worker/allocate/filter`
+    const history = getHistoryParamForPOST(req)
+
+    expect(history).toBe(historyToBase64(['/key-worker', '/key-worker/allocate']))
+  })
+
+  it('should return base64 history for POST redirect when target page is provided', () => {
+    req.headers = {
+      referer: `/key-worker/allocate?history=${historyToBase64(['/key-worker', '/key-worker/allocate'])}`,
+    }
+    req.query = {}
+    req.originalUrl = `/key-worker/allocate/filter`
+    const history = getHistoryParamForPOST(req, '/key-worker/allocate', new URLSearchParams({ query: 'test' }))
+
+    expect(history).toBe(historyToBase64(['/key-worker', '/key-worker/allocate?query=test']))
   })
 })

@@ -15,8 +15,18 @@ function serialiseHistory(history: string[]) {
   return Buffer.from(JSON.stringify(history)).toString('base64')
 }
 
-export function getHistoryParamForPOST(req: Request) {
+export function getHistoryParamForPOST(
+  req: Request,
+  targetPage?: string,
+  newSearchParams: URLSearchParams = new URLSearchParams(),
+) {
   const refererHistory = getHistoryFromReferrer(req)
+  if (targetPage) {
+    const history = pruneHistory(req.headers?.['referer'] || req.originalUrl, refererHistory)
+    const destUrl = `${targetPage}?${newSearchParams.toString()}`.replace(/\?$/g, '')
+    history.push(destUrl)
+    return serialiseHistory(history)
+  }
   refererHistory.push(noHistoryParam(req.originalUrl))
   const history = pruneHistory(req.originalUrl, refererHistory)
   return serialiseHistory(history)
