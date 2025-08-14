@@ -11,7 +11,7 @@ function serialiseHistory(history: string[]) {
   return Buffer.from(JSON.stringify(history)).toString('base64')
 }
 
-export function getHistoryParam(req: Request) {
+export function getHistoryParamForPOST(req: Request) {
   const refererHistory = getHistoryFromReferrer(req)
   refererHistory.push(noHistoryParam(req.originalUrl))
   const history = pruneHistory(req.originalUrl, refererHistory)
@@ -138,10 +138,6 @@ function noHistoryParam(url: string) {
   return noHistoryUrl.replace(/\?$/g, '')
 }
 
-export function getLast(res: Response) {
-  return res.locals.history?.[res.locals.history.length - 2]
-}
-
 function getHistoryBefore(history: string[], url: string) {
   const urlNoHistory = url.split('?')[0]
   const newHistory = [...history]
@@ -161,21 +157,9 @@ export function getLastDifferentPage(req: Request, res: Response) {
   return [...res.locals.history].reverse().find(url => url.split('?')[0] !== req.originalUrl.split('?')[0])
 }
 
-export function getLastDifferentPageNotMatching(req: Request, res: Response, urlRegex: RegExp) {
-  if (!res.locals.history) return ''
-  return [...res.locals.history]
-    .reverse()
-    .find(url => !urlRegex.test(url) && url.split('?')[0] !== req.originalUrl.split('?')[0])
-}
-
 function getHistoryFromReferrer(req: Request) {
   const refererStr = (req.headers?.['referer'] as string) || ''
   const refererSearchParams = new URLSearchParams(refererStr.split('?')[1] || '')
   const refererHistory = deserialiseHistory(refererSearchParams.get('history') as string)
   return refererHistory
-}
-
-export function getSerialisedHistoryFromReferrer(req: Request) {
-  const refererHistory = getHistoryFromReferrer(req)
-  return serialiseHistory(refererHistory)
 }

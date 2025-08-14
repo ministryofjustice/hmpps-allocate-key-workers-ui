@@ -5,7 +5,7 @@ import { ChangeStaffController } from '../base/changeStaffController'
 import { schemaFactory } from './schema'
 import { FLASH_KEY__ALLOCATE_RESULT } from '../../utils/constants'
 import { deduplicateFieldErrors } from '../../middleware/validationMiddleware'
-import { getHistoryParam } from '../../middleware/historyMiddleware'
+import { getHistoryParamForPOST } from '../../middleware/historyMiddleware'
 
 export class AllocateStaffController extends ChangeStaffController {
   constructor(
@@ -79,7 +79,7 @@ export class AllocateStaffController extends ChangeStaffController {
       query: req.body.query || '',
       cellLocationPrefix: req.body.cellLocationPrefix || '',
       excludeActiveAllocations: req.body.excludeActiveAllocations || false,
-      history: getHistoryParam(req),
+      history: getHistoryParamForPOST(req),
     })
     return res.redirect(`/${res.locals.policyPath}/allocate?${params.toString()}`)
   }
