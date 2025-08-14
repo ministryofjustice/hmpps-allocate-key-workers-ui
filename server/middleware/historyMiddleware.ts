@@ -136,10 +136,10 @@ export function getBreadcrumbs(req: Request, res: Response) {
 }
 
 export function noHistoryParam(url: string) {
-  const noHistorySearchParams = new URLSearchParams(url.split('?')[1] || '')
+  const [baseUrl, query] = url.split('?')
+  const noHistorySearchParams = new URLSearchParams(query)
   noHistorySearchParams.delete('history')
-  const noHistoryUrl = `${url.split('?')[0]}?${noHistorySearchParams.toString()}`
-  return noHistoryUrl.replace(/\?$/g, '')
+  return noHistorySearchParams.size ? `${baseUrl}?${noHistorySearchParams.toString()}` : baseUrl
 }
 
 function getHistoryBefore(history: string[], url: string) {
