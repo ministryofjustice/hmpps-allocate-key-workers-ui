@@ -32,7 +32,7 @@ export class StaffDataController {
                   currentValue: stats.current?.recordedEvents?.find(o => o.type === 'SESSION')?.count || 0,
                   previousValue: stats.previous?.recordedEvents?.find(o => o.type === 'SESSION')?.count || 0,
                   calculationMethod:
-                    'This figure is calculated by taking the total number of [staff] session case notes created in the selected date range.',
+                    'This figure displays the total number of [staff] sessions that happened in the selected date range. It is calculated using the date recorded in [staff] session case notes.',
                 },
               ]
             : []),
@@ -42,7 +42,7 @@ export class StaffDataController {
             currentValue: stats.current?.recordedEvents?.find(o => o.type === 'ENTRY')?.count || 0,
             previousValue: stats.previous?.recordedEvents?.find(o => o.type === 'ENTRY')?.count || 0,
             calculationMethod:
-              'This figure is calculated by taking the total number of [staff] entry case notes created in the selected date range.',
+              'This figure displays the total number of [staff] entries that happened in the selected date range. It is calculated using the date recorded in [staff] entry case notes.',
           },
           {
             heading: 'Total number of prisoners',
@@ -50,7 +50,7 @@ export class StaffDataController {
             currentValue: stats.current?.totalPrisoners,
             previousValue: stats.previous?.totalPrisoners,
             calculationMethod:
-              'This figure displays the average number of prisoners in the establishment during the date range selected.',
+              'This figure displays the average number of prisoners in the establishment during the selected date range.',
           },
           ...(prison.hasPrisonersWithHighComplexityNeeds
             ? [
@@ -60,7 +60,7 @@ export class StaffDataController {
                   currentValue: stats.current?.highComplexityOfNeedPrisoners,
                   previousValue: stats.previous?.highComplexityOfNeedPrisoners,
                   calculationMethod:
-                    'This figure displays the average number of high complexity prisoners in the establishment during the date range selected.',
+                    'This figure displays the average number of high complexity prisoners in the establishment during the selected date range.',
                 },
               ]
             : []),
@@ -70,7 +70,7 @@ export class StaffDataController {
             currentValue: stats.current?.percentageAssigned,
             previousValue: stats.previous?.percentageAssigned,
             calculationMethod:
-              'This figure is created by dividing the total number of prisoners in the establishment with the total number of prisoners who have been allocated a [staff].',
+              'This figure is calculated by dividing the total number of prisoners in the establishment by the total number of prisoners who have been allocated a [staff].',
           },
           {
             heading: 'Total number of active [staffs]',
@@ -78,25 +78,40 @@ export class StaffDataController {
             currentValue: stats.current?.eligibleStaff,
             previousValue: stats.previous?.eligibleStaff,
             calculationMethod:
-              'This figure displays the average total number of active [staffs] in the establishment during the date range selected. This does not include [staffs] with an unavailable or inactive status.',
+              'This figure displays the average total number of active [staffs] in the establishment during the selected date range. This does not include [staffs] with an unavailable or inactive status.',
           },
-          {
-            heading: 'Average time from reception to first [staff] session',
-            type: 'day',
-            currentValue: stats.current?.avgReceptionToRecordedEventDays,
-            previousValue: stats.previous?.avgReceptionToRecordedEventDays,
-            calculationMethod:
-              'The reception date is calculated by taking the date from the latest instance of a transfer case note for the prisoner within the last 6 months. <br /> <br />' +
-              'The first [staff] session is taken from the date of the first [staff] session case note added in the prison in the last 6 months. ',
-          },
-          {
-            heading: 'Average time from reception to [staff] allocation',
-            type: 'day',
-            currentValue: stats.current?.avgReceptionToAllocationDays,
-            previousValue: stats.previous?.avgReceptionToAllocationDays,
-            calculationMethod:
-              'The reception date is calculated by taking the date from the latest instance of a transfer case note for the prisoner within the last 6 months.',
-          },
+          prison.hasPrisonersWithHighComplexityNeeds
+            ? {
+                heading: 'Average time from eligibility to first [staff] session',
+                type: 'day',
+                currentValue: stats.current?.avgReceptionToRecordedEventDays,
+                previousValue: stats.previous?.avgReceptionToRecordedEventDays,
+                calculationMethod: `This figure displays the average time between prisoners becoming eligible for ${req.middleware?.policy === 'KEY_WORKER' ? 'key work' : '[staff] sessions'} and the first recorded [staff] session for sessions recorded in the selected date range.`,
+              }
+            : {
+                heading: 'Average time from reception to first [staff] session',
+                type: 'day',
+                currentValue: stats.current?.avgReceptionToRecordedEventDays,
+                previousValue: stats.previous?.avgReceptionToRecordedEventDays,
+                calculationMethod:
+                  'This figure displays the average time between reception and the first recorded [staff] session for sessions recorded in the selected date range.',
+              },
+          prison.hasPrisonersWithHighComplexityNeeds
+            ? {
+                heading: 'Average time from eligibility to [staff] allocation',
+                type: 'day',
+                currentValue: stats.current?.avgReceptionToAllocationDays,
+                previousValue: stats.previous?.avgReceptionToAllocationDays,
+                calculationMethod: `This figure displays the average time between prisoners becoming eligible for ${req.middleware?.policy === 'KEY_WORKER' ? 'key work' : '[staff] sessions'} and [staff] allocation for allocations made in the selected date range.`,
+              }
+            : {
+                heading: 'Average time from reception to [staff] allocation',
+                type: 'day',
+                currentValue: stats.current?.avgReceptionToAllocationDays,
+                previousValue: stats.previous?.avgReceptionToAllocationDays,
+                calculationMethod:
+                  'This figure displays the average time between reception and [staff] allocation for allocations made in the selected date range.',
+              },
           {
             heading: `Delivery rate against frequency of a session every ${prison.frequencyInWeeks === 1 ? 'week' : `${prison.frequencyInWeeks} weeks`}`,
             type: 'percentage',
@@ -104,7 +119,7 @@ export class StaffDataController {
             previousValue: stats.previous?.recordedEventComplianceRate,
             calculationMethod:
               'This figure is calculated by comparing the number of recorded [staff] sessions against the number of projected [staff] sessions. <br /> <br />' +
-              'The number of projected [staff] sessions is calculated by taking the total number of prisoners with an allocated [staff] and comparing it to the expected frequency of [staff] sessions in the establishment.',
+              'The number of projected [staff] sessions is calculated by taking the total number of prisoners with an allocated [staff] and comparing it to the expected frequency of [staff] sessions.',
           },
           {
             heading: 'Number of projected [staff] sessions',
@@ -112,7 +127,7 @@ export class StaffDataController {
             currentValue: stats.current?.projectedRecordedEvents,
             previousValue: stats.previous?.projectedRecordedEvents,
             calculationMethod:
-              'This figure is calculated by taking the total number of prisoners with an allocated [staff] and comparing it to the expected frequency of [staff] sessions in the establishment.',
+              'This figure is calculated by taking the total number of prisoners with an allocated [staff] and comparing it to the expected frequency of [staff] sessions.',
           },
         ]
       : []
