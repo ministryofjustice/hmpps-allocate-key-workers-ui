@@ -139,7 +139,7 @@ export function noHistoryParam(url: string) {
   const [baseUrl, query] = url.split('?')
   const noHistorySearchParams = new URLSearchParams(query)
   noHistorySearchParams.delete('history')
-  return noHistorySearchParams.size ? `${baseUrl}?${noHistorySearchParams.toString()}` : baseUrl
+  return `${baseUrl}?${noHistorySearchParams.toString()}`.replace(/\?$/g, '')
 }
 
 function getHistoryBefore(history: string[], url: string) {
