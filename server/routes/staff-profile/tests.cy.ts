@@ -50,6 +50,13 @@ context('Profile Info', () => {
     cy.verifyAuditEvents([
       {
         who: 'USER1',
+        subjectType: 'NOT_APPLICABLE',
+        details: '{"pageUrl":"/key-worker","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+        what: 'PAGE_VIEW_ACCESS_ATTEMPT',
+        service: 'DPS023',
+      },
+      {
+        who: 'USER1',
         subjectType: 'SEARCH_TERM',
         details:
           '{"pageUrl":"/key-worker/staff-profile/488095","pageName":"STAFF_ALLOCATIONS","staffId":"488095","query":"488095","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
@@ -190,16 +197,19 @@ context('Profile Info', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-worker/staff-profile/488095', { failOnStatusCode: false })
+    cy.visit(
+      '/key-worker/staff-profile/488095?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL21hbmFnZSIsIi9rZXktd29ya2VyL3N0YWZmLXByb2ZpbGUvMzQzNTMiXQ%3D%3D',
+      { failOnStatusCode: false },
+    )
   }
 
   const validatePageContents = (readonly = false) => {
     cy.title().should('equal', 'Key worker profile - Key workers - DPS')
     cy.findByRole('heading', { name: /^AVAILABLE-ACTIVE KEY-WORKER$/i }).should('be.visible')
 
-    cy.findByRole('link', { name: 'Manage key workers' })
-      .should('be.visible')
-      .and('have.attr', 'href', '/key-worker/manage')
+    cy.get('.govuk-breadcrumbs__list-item').eq(0).should('include.text', 'Digital Prison Services')
+    cy.get('.govuk-breadcrumbs__list-item').eq(1).should('include.text', 'Key worker')
+    cy.get('.govuk-breadcrumbs__list-item').eq(2).should('include.text', 'Manage key workers')
 
     cy.get('.status-tag').eq(0).should('have.text', 'Active')
 

@@ -12,10 +12,35 @@
   {% for css in feComponents.cssIncludes %}
     <link href="{{ css }}" nonce="{{ cspNonce }}" rel="stylesheet"/>
   {% endfor %}
+
+  <script nonce="{{ cspNonce }}">
+    document.addEventListener('DOMContentLoaded', function () {
+      try { const history = JSON.parse(atob("{{ b64History }}") || '[]');
+      if (!history.length) {
+        return
+      }
+
+      document.querySelectorAll('a[href]')
+        .forEach(function (link) {
+          if (link.href.startsWith(window.location.origin)) {
+            const url = new URL(link.href, window.location.origin);
+            if (!url.searchParams.get('history')) {
+              const urlHistory = [...history, link.href.replace(window.location.origin, '')]
+              url.searchParams.set('history', btoa(JSON.stringify(urlHistory)))
+              link.href = url.pathname + url.search + url.hash;
+            }
+          }
+        });
+      } catch(e) {
+        console.error(`Error decoding history: ${e}`)
+      }
+    });
+  </script>
 {% endblock %}
 
 {% block pageTitle %}
-  {% set policyNameAlias = (policyStaff | sentenceCase + 's') if policyStaff else undefined %}
+  {% set policyNameAlias = (policyStaff | sentenceCase + 's')if policyStaff else 
+    undefined %}
   {{[pageTitle, policyNameAlias, 'DPS'] | removeNullish | join(' - ')}}
 {% endblock %}
 
@@ -32,7 +57,7 @@
   {% elseif backUrl %}
     {{ govukBackLink({
       text: backLabel or "Back",
-      href: backUrl
+      href: historyBackUrl if backUrl == 'back' else backUrl
     }) }}
   {% endif %}
 
@@ -90,7 +115,9 @@
     window.onload = function () {
       const backLink = document.querySelector('.js-back-link')
       if (backLink) {
-        backLink.classList.remove('govuk-!-display-none')
+        backLink
+          .classList
+          .remove('govuk-!-display-none')
         backLink.addEventListener('click', () => {
           history.back()
         })

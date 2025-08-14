@@ -39,9 +39,23 @@ context('Manage key workers', () => {
     cy.verifyAuditEvents([
       {
         who: 'USER1',
+        subjectType: 'NOT_APPLICABLE',
+        details: '{"pageUrl":"/key-worker","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+        what: 'PAGE_VIEW_ACCESS_ATTEMPT',
+        service: 'DPS023',
+      },
+      {
+        who: 'USER1',
+        subjectType: 'NOT_APPLICABLE',
+        details: '{"pageUrl":"/key-worker/manage?query=test+term+","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+        what: 'PAGE_VIEW_ACCESS_ATTEMPT',
+        service: 'DPS023',
+      },
+      {
+        who: 'USER1',
         subjectType: 'SEARCH_TERM',
         details:
-          '{"pageUrl":"/key-worker/manage?query=test%20term%20","pageName":"MANAGE_ALLOCATABLE_STAFF","query":"test term","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          '{"pageUrl":"/key-worker/manage?query=test+term+","pageName":"MANAGE_ALLOCATABLE_STAFF","query":"test term","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
         subjectId: 'test term',
         what: 'PAGE_VIEW',
         service: 'DPS023',
@@ -50,7 +64,7 @@ context('Manage key workers', () => {
         who: 'USER1',
         subjectType: 'SEARCH_TERM',
         details:
-          '{"pageUrl":"/key-worker/manage?query=test%20term%20","pageName":"MANAGE_ALLOCATABLE_STAFF","query":"test term","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          '{"pageUrl":"/key-worker/manage?query=test+term+","pageName":"MANAGE_ALLOCATABLE_STAFF","query":"test term","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
         subjectId: 'test term',
         what: 'PAGE_VIEW_ACCESS_ATTEMPT',
         service: 'DPS023',

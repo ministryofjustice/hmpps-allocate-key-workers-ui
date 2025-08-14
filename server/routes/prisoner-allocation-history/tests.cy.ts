@@ -19,15 +19,6 @@ context('Prisoner Allocation History', () => {
     verifyRoleBasedAccess('/key-worker/prisoner-allocation-history/A9965EA', UserPermissionLevel.SELF_PROFILE_ONLY)
   })
 
-  it('can go to previous page with query strings preserved', () => {
-    navigateToTestPage()
-    cy.findByRole('link', { name: /back/i }).click()
-    cy.url().should(
-      'equal',
-      'http://localhost:3007/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true',
-    )
-  })
-
   it('happy path', () => {
     navigateToTestPage()
 
@@ -41,7 +32,11 @@ context('Prisoner Allocation History', () => {
     )
 
     cy.title().should('equal', 'Prisoner key worker allocation history - Key workers - DPS')
-    cy.findByRole('link', { name: /back/i }).should('be.visible')
+
+    cy.get('.govuk-breadcrumbs__list-item').eq(0).should('include.text', 'Digital Prison Services')
+    cy.get('.govuk-breadcrumbs__list-item').eq(1).should('include.text', 'Key worker')
+    cy.get('.govuk-breadcrumbs__list-item').eq(2).should('include.text', 'Manage key workers')
+    cy.get('.govuk-breadcrumbs__list-item').eq(3).should('include.text', 'Profile')
 
     cy.get('h1').should('have.text', 'Cat, Tabby (A9965EA)')
 
@@ -79,9 +74,16 @@ context('Prisoner Allocation History', () => {
     cy.verifyAuditEvents([
       {
         who: 'USER1',
+        subjectType: 'NOT_APPLICABLE',
+        details: '{"pageUrl":"/key-worker","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+        what: 'PAGE_VIEW_ACCESS_ATTEMPT',
+        service: 'DPS023',
+      },
+      {
+        who: 'USER1',
         subjectType: 'PRISONER_ID',
         details:
-          '{"pageUrl":"/key-worker/prisoner-allocation-history/A9965EA?backTo=%2Fkey-worker%2Fallocate%3Fquery%3D%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dtrue","pageName":"PRISONER_ALLOCATION_HISTORY","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          '{"pageUrl":"/key-worker/prisoner-allocation-history/A9965EA","pageName":"PRISONER_ALLOCATION_HISTORY","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
         subjectId: 'A9965EA',
         what: 'PAGE_VIEW',
         service: 'DPS023',
@@ -90,7 +92,7 @@ context('Prisoner Allocation History', () => {
         who: 'USER1',
         subjectType: 'PRISONER_ID',
         details:
-          '{"pageUrl":"/key-worker/prisoner-allocation-history/A9965EA?backTo=%2Fkey-worker%2Fallocate%3Fquery%3D%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dtrue","pageName":"PRISONER_ALLOCATION_HISTORY","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          '{"pageUrl":"/key-worker/prisoner-allocation-history/A9965EA","pageName":"PRISONER_ALLOCATION_HISTORY","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
         subjectId: 'A9965EA',
         what: 'PAGE_VIEW_ACCESS_ATTEMPT',
         service: 'DPS023',
@@ -176,7 +178,11 @@ context('Prisoner Allocation History', () => {
 
   describe('Personal officer', () => {
     it('happy path', () => {
-      navigateToTestPage('personal-officer')
+      cy.signIn({ failOnStatusCode: false })
+      cy.visit(
+        `/personal-officer/prisoner-allocation-history/A9965EA?history=WyIvcGVyc29uYWwtb2ZmaWNlciIsIi9wZXJzb25hbC1vZmZpY2VyL21hbmFnZT9xdWVyeT1Eb20mc3RhdHVzPUFDVElWRSIsIi9wZXJzb25hbC1vZmZpY2VyL3N0YWZmLXByb2ZpbGUvNDg1NTcyIl0=`,
+        { failOnStatusCode: false },
+      )
 
       cy.verifyLastAPICall(
         {
@@ -188,7 +194,11 @@ context('Prisoner Allocation History', () => {
       )
 
       cy.title().should('equal', 'Prisoner personal officer allocation history - Personal officers - DPS')
-      cy.findByRole('link', { name: /back/i }).should('be.visible')
+
+      cy.get('.govuk-breadcrumbs__list-item').eq(0).should('include.text', 'Digital Prison Services')
+      cy.get('.govuk-breadcrumbs__list-item').eq(1).should('include.text', 'Personal officer')
+      cy.get('.govuk-breadcrumbs__list-item').eq(2).should('include.text', 'Manage personal officers')
+      cy.get('.govuk-breadcrumbs__list-item').eq(3).should('include.text', 'Profile')
 
       cy.get('h1').should('have.text', 'Cat, Tabby (A9965EA)')
 
@@ -219,10 +229,10 @@ context('Prisoner Allocation History', () => {
     })
   })
 
-  const navigateToTestPage = (policy: string = 'key-worker') => {
+  const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(
-      `/${policy}/prisoner-allocation-history/A9965EA?backTo=%2Fkey-worker%2Fallocate%3Fquery%3D%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dtrue`,
+      `/key-worker/prisoner-allocation-history/A9965EA?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL21hbmFnZT9xdWVyeT1Eb20mc3RhdHVzPUFDVElWRSIsIi9rZXktd29ya2VyL3N0YWZmLXByb2ZpbGUvNDg1NTcyIl0=`,
       { failOnStatusCode: false },
     )
   }

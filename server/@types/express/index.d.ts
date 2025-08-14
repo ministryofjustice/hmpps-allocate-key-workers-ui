@@ -27,6 +27,7 @@ export type JourneyData = {
   updateStaffDetails?: UpdateStaffDetailsJourney
   assignStaffRole?: AssignStaffRoleJourney
   removeStaffRole?: RemoveStaffRoleJourney
+  b64History?: string | undefined
 }
 
 export type UpdateStaffDetailsJourney = Partial<{
@@ -149,6 +150,9 @@ export declare global {
           [key: string]: unknown
         }
       }
+      historyBackUrl?: string
+      history?: string[]
+      b64History?: string
     }
   }
 }

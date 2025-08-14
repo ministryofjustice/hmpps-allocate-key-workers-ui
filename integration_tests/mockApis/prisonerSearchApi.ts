@@ -37,8 +37,8 @@ const stubPrisonerSearchApiHealth = () =>
     },
   })
 
-const stubGetPrisonerDetails = () =>
-  createBasicHttpStub('GET', '/prisoner-search-api/prisoner/A9965EA', 200, prisonerDetailsResponse)
+const stubGetPrisonerDetails = (prisonerId: string = 'A9965EA') =>
+  createBasicHttpStub('GET', `/prisoner-search-api/prisoner/${prisonerId}`, 200, prisonerDetailsResponse)
 
 const stubGetPrisonerDetailsMDI = () =>
   createBasicHttpStub('GET', '/prisoner-search-api/prisoner/A9965EB', 200, {

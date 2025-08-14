@@ -5,6 +5,7 @@ import { ChangeStaffController } from '../base/changeStaffController'
 import { schemaFactory } from './schema'
 import { FLASH_KEY__ALLOCATE_RESULT } from '../../utils/constants'
 import { deduplicateFieldErrors } from '../../middleware/validationMiddleware'
+import { getHistoryParamForPOST } from '../../middleware/historyMiddleware'
 
 export class AllocateStaffController extends ChangeStaffController {
   constructor(
@@ -37,18 +38,12 @@ export class AllocateStaffController extends ChangeStaffController {
       Object.entries(sanitisedQuery).reduce((acc, [key, value]) => ({ ...acc, [key]: String(value) }), {}),
     ).toString()
 
-    const hasMeaningfulQuery = Object.values(sanitisedQuery).some(val => val)
-    const backTo = encodeURIComponent(
-      `/${res.locals.policyPath}/allocate${hasMeaningfulQuery ? `?${searchQuery}` : ''}`,
-    )
-
-    if (!Object.keys(req.query).length) {
+    if (!Object.keys(req.query).filter(o => o !== 'history').length) {
       return res.render('allocate/view', {
         locations: locationsValues,
         showBreadcrumbs: true,
         allowAutoAllocation,
         allocationResult,
-        backTo,
       })
     }
 
@@ -61,7 +56,6 @@ export class AllocateStaffController extends ChangeStaffController {
         showBreadcrumbs: true,
         allowAutoAllocation,
         allocationResult,
-        backTo,
       })
     }
 
@@ -70,7 +64,6 @@ export class AllocateStaffController extends ChangeStaffController {
       ...sanitisedQuery,
       records,
       searchQuery,
-      backTo,
       locations: locationsValues,
       ...(await this.getChangeData(req, res)),
       showBreadcrumbs: true,
@@ -86,6 +79,7 @@ export class AllocateStaffController extends ChangeStaffController {
       query: req.body.query || '',
       cellLocationPrefix: req.body.cellLocationPrefix || '',
       excludeActiveAllocations: req.body.excludeActiveAllocations || false,
+      history: getHistoryParamForPOST(req),
     })
     return res.redirect(`/${res.locals.policyPath}/allocate?${params.toString()}`)
   }

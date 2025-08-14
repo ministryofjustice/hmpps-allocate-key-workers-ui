@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import AuditService from '../../services/auditService'
+import { noHistoryParam } from '../historyMiddleware'
 
 export const auditPageViewMiddleware =
   (auditService: AuditService) => async (req: Request, res: Response, next: NextFunction) => {
@@ -9,7 +10,7 @@ export const auditPageViewMiddleware =
       correlationId: req.id,
       subjectType: 'NOT_APPLICABLE',
       details: {
-        pageUrl: req.originalUrl,
+        pageUrl: noHistoryParam(req.originalUrl),
       },
     }
 

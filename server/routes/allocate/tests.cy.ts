@@ -254,7 +254,7 @@ context('/allocate', () => {
     cy.findByRole('button', { name: /Save changes/i }).click()
     cy.findByRole('link', { name: /Select key workers from the dropdown lists/ }).should('be.visible')
 
-    cy.url().should('match', /\/key-worker\/allocate\?excludeActiveAllocations=true#$/)
+    cy.url().should('match', /\/key-worker\/allocate\?excludeActiveAllocations=true/)
   })
 
   it('should show error on de/allocation failure (500)', () => {
@@ -431,11 +431,9 @@ context('/allocate', () => {
     cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'John, Doe')
     cy.get('.govuk-table__row').eq(3).children().eq(1).should('contain.text', '1-1-035')
     cy.get('.govuk-table__row').eq(3).children().eq(3).should('contain.text', 'Key-Worker, Available-Active')
-    cy.findByRole('link', { name: 'Key-Worker, Available-Active (allocations: 1)' }).should(
-      'have.attr',
-      'href',
-      'staff-profile/488095',
-    )
+    cy.findByRole('link', { name: 'Key-Worker, Available-Active (allocations: 1)' })
+      .should('have.attr', 'href')
+      .should('match', /staff-profile\/488095/)
 
     cy.get('.govuk-table__row')
       .eq(3)
@@ -444,11 +442,8 @@ context('/allocate', () => {
       .should('contain.text', 'View allocation history')
       .children()
       .eq(0)
-      .should(
-        'have.attr',
-        'href',
-        '/key-worker/prisoner-allocation-history/A4288DZ?backTo=%2Fkey-worker%2Fallocate%3Fquery%3DALL%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dfalse',
-      )
+      .should('have.attr', 'href')
+      .should('match', /key-worker\/prisoner-allocation-history\/A4288DZ/)
 
     if (!readonly) {
       cy.get('.govuk-table__row')
@@ -475,11 +470,9 @@ context('/allocate', () => {
     autoAllocateButton().should(readonly || !allowAutoAllocation ? 'not.exist' : 'exist')
 
     if (!readonly && allowAutoAllocation) {
-      autoAllocateButton().should(
-        'have.attr',
-        'href',
-        '/key-worker/recommend-allocations?backTo=%2Fkey-worker%2Fallocate%3Fquery%3DALL%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dfalse',
-      )
+      autoAllocateButton()
+        .should('have.attr', 'href')
+        .should('match', /key-worker\/recommend-allocations/)
     }
 
     cy.findByRole('button', { name: 'Save changes' }).should(readonly ? 'not.exist' : 'exist')
@@ -516,11 +509,8 @@ context('/allocate', () => {
       .should('contain.text', 'View allocation history')
       .children()
       .eq(0)
-      .should(
-        'have.attr',
-        'href',
-        '/key-worker/prisoner-allocation-history/A2504EA?backTo=%2Fkey-worker%2Fallocate%3Fquery%3D%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dtrue',
-      )
+      .should('have.attr', 'href')
+      .should('match', /key-worker\/prisoner-allocation-history\/A2504EA/)
 
     cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'Tester, Jane')
     cy.get('.govuk-table__row').eq(3).children().eq(1).should('contain.text', '4-2-031')
@@ -571,11 +561,8 @@ context('/allocate', () => {
       .eq(readonly ? 4 : 5)
       .children()
       .eq(0)
-      .should(
-        'have.attr',
-        'href',
-        '/key-worker/prisoner-allocation-history/A2504EA?backTo=%2Fkey-worker%2Fallocate%3Fquery%3D%26cellLocationPrefix%3D3%26excludeActiveAllocations%3Dfalse',
-      )
+      .should('have.attr', 'href')
+      .should('match', /key-worker\/prisoner-allocation-history\/A2504EA/)
   }
 
   const checkNameOrPrisonNumberFilter = (readonly = false) => {
@@ -593,11 +580,8 @@ context('/allocate', () => {
       .eq(readonly ? 4 : 5)
       .children()
       .eq(0)
-      .should(
-        'have.attr',
-        'href',
-        '/key-worker/prisoner-allocation-history/A4288DZ?backTo=%2Fkey-worker%2Fallocate%3Fquery%3DJohn%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dfalse',
-      )
+      .should('have.attr', 'href')
+      .should('match', /key-worker\/prisoner-allocation-history\/A4288DZ/)
   }
 
   const navigateToTestPage = () => {

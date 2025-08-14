@@ -22,7 +22,7 @@ context('/manage-roles/assign', () => {
 
   it('should search staff members', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/manage-roles\/assign$/)
+    cy.url().should('match', /\/manage-roles\/assign/)
 
     cy.title().should('equal', 'Search for staff member - Key workers - DPS')
     cy.findByRole('heading', { name: 'Make someone a key worker' }).should('be.visible')
@@ -30,9 +30,10 @@ context('/manage-roles/assign', () => {
     cy.findByRole('link', { name: 'Digital Prison Services' })
       .should('be.visible')
       .and('have.attr', 'href', 'http://localhost:3001')
-    cy.findByRole('link', { name: /^Key workers$/ })
+    cy.findByRole('link', { name: /^Key workers/ })
       .should('be.visible')
-      .and('have.attr', 'href', '/key-worker')
+      .and('have.attr', 'href')
+      .should('match', /\/key-worker/)
 
     getSearchInput().should('be.visible')
     getSearchButton().should('be.visible')
@@ -66,7 +67,7 @@ context('/manage-roles/assign', () => {
 
   it('should show no results when there is no match', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/manage-roles\/assign$/)
+    cy.url().should('match', /\/manage-roles\/assign/)
 
     cy.task('stubSearchStaff', [])
     getSearchInput().type('Joe')
@@ -77,8 +78,11 @@ context('/manage-roles/assign', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/key-worker/${journeyId}/manage-roles/assign`, {
-      failOnStatusCode: false,
-    })
+    cy.visit(
+      `/key-worker/${journeyId}/manage-roles/assign?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL21hbmFnZS1yb2xlcyIsIi9rZXktd29ya2VyL21hbmFnZS1yb2xlcy9hc3NpZ24iXQ%3D%3D`,
+      {
+        failOnStatusCode: false,
+      },
+    )
   }
 })

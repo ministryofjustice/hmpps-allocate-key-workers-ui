@@ -22,16 +22,17 @@ context('/manage-roles/remove', () => {
 
   it('should search staff members', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/manage-roles\/remove$/)
+    cy.url().should('match', /\/manage-roles\/remove/)
 
     cy.title().should('equal', 'Search for staff member - Key workers - DPS')
     cy.findByRole('heading', { name: 'Remove the key worker role from someone' }).should('be.visible')
     cy.findByRole('link', { name: 'Digital Prison Services' })
       .should('be.visible')
       .and('have.attr', 'href', 'http://localhost:3001')
-    cy.findByRole('link', { name: /^Key workers$/ })
+    cy.findByRole('link', { name: /^Key workers/ })
       .should('be.visible')
-      .and('have.attr', 'href', '/key-worker')
+      .and('have.attr', 'href')
+      .should('match', /\/key-worker/)
 
     getSearchInput().should('be.visible')
     getSearchButton().should('be.visible')
@@ -65,7 +66,7 @@ context('/manage-roles/remove', () => {
 
   it('should show no results when there is no match', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/manage-roles\/remove$/)
+    cy.url().should('match', /\/manage-roles\/remove/)
 
     cy.task('stubSearchStaff', [])
     getSearchInput().type('Joe')
@@ -76,8 +77,11 @@ context('/manage-roles/remove', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/key-worker/${journeyId}/manage-roles/remove`, {
-      failOnStatusCode: false,
-    })
+    cy.visit(
+      `/key-worker/${journeyId}/manage-roles/remove?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL21hbmFnZS1yb2xlcyIsIi9rZXktd29ya2VyL21hbmFnZS1yb2xlcy9hc3NpZ24iXQ%3D%3De`,
+      {
+        failOnStatusCode: false,
+      },
+    )
   }
 })
