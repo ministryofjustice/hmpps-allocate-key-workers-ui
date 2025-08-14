@@ -8,6 +8,7 @@ import {
   FLASH_KEY__COUNT,
 } from '../../utils/constants'
 import { lastNameCommaFirstName } from '../../utils/formatUtils'
+import { Page } from '../../services/auditService'
 
 export class RecommendStaffAutomaticallyController extends ChangeStaffController {
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -19,7 +20,7 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
 
     if (!recommendations.allocations.length && !recommendations.noAvailableStaffFor?.length) {
       return res.render('recommend-allocations/view', {
-        backUrl: req.query['backTo'],
+        showBreadcrumbs: true,
         records: [],
         count: req.flash(FLASH_KEY__COUNT)[0],
         apiError: req.flash(FLASH_KEY__API_ERROR)[0],
@@ -53,11 +54,13 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
     if (missingAllocation) {
       const searchQuery = req.url.split('?')[1] || ''
       return res.render('recommend-allocations/not-enough-available-capacity/view', {
-        backUrl: req.query['backTo'],
-        encodedBackUrl: encodeURIComponent(req.query['backTo']?.toString() || ''),
+        goBackUrl:
+          res.locals.breadcrumbs.fromAlias(Page.ALLOCATE)?.href ||
+          req.headers?.['referer'] ||
+          `/${res.locals.policyPath || ''}`,
+        showBreadcrumbs: true,
         missingAllocation,
         searchQuery,
-        backTo: encodeURIComponent(`/${res.locals.policyPath}/recommend-allocations?allowPartialAllocation=true`),
         totalPrisoners: records.length,
       })
     }
@@ -85,11 +88,8 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
     })
 
     return res.render('recommend-allocations/view', {
-      backUrl: req.query['backTo'],
+      showBreadcrumbs: true,
       records: matchedPrisoners,
-      backTo: encodeURIComponent(
-        `/${res.locals.policyPath}/recommend-allocations?allowPartialAllocation=true&backTo=${encodeURIComponent(req.query['backTo']?.toString() || '')}`,
-      ),
       count: req.flash(FLASH_KEY__COUNT)[0],
       apiError: req.flash(FLASH_KEY__API_ERROR)[0],
     })

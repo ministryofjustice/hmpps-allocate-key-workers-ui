@@ -12,6 +12,8 @@ export class StartUpdateStaffController {
       false,
     )
 
+    req.journeyData.b64History = res.locals.b64History
+
     res.redirect(`../${req.query.proceedTo}`)
   }
 }

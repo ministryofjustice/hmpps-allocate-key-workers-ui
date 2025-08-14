@@ -62,7 +62,7 @@ context('/recommend-allocations', () => {
     cy.task('stubKeyworkerPrisonConfigNoAutoAllocation')
     navigateToTestPage()
 
-    cy.url().should('match', /\/key-worker$/)
+    cy.url().should('match', /\/key-worker\?history/)
   })
 
   it('should show an "All prisoners assigned" message when there are no prisoners to allocate', () => {
@@ -136,7 +136,7 @@ context('/recommend-allocations', () => {
 
     cy.get('.moj-alert').should('contain.text', 'Changes made successfully')
 
-    cy.url().should('match', /\/allocate$/)
+    cy.url().should('match', /\/allocate/)
     cy.findByText('You have successfully allocated key workers to 2 prisoners.').should('exist')
   })
 
@@ -175,7 +175,7 @@ context('/recommend-allocations', () => {
     cy.get('select').eq(1).select('Active, Available (allocations: 0)')
     cy.findByRole('button', { name: /Save changes/i }).click()
 
-    cy.url().should('match', /\/allocate$/)
+    cy.url().should('match', /\/allocate/)
     cy.findByText('You have successfully allocated a key worker to 2 prisoners.').should('exist')
   })
 
@@ -185,7 +185,7 @@ context('/recommend-allocations', () => {
 
     cy.findByRole('button', { name: /Save changes/i }).click()
 
-    cy.url().should('match', /\/allocate$/)
+    cy.url().should('match', /\/allocate/)
     cy.findByText('You have successfully allocated a key worker to 1 prisoner.').should('exist')
   })
 
@@ -196,7 +196,7 @@ context('/recommend-allocations', () => {
       staff: [],
     })
     navigateToTestPage()
-    cy.url().should('match', /\/allocate$/)
+    cy.url().should('match', /\/allocate/)
     cy.findByRole('heading', { name: 'Not enough available capacity to assign any key workers' }).should('be.visible')
     cy.findByText(
       'Key workers could not be recommended for any prisoners who do not currently have a key worker. This is because none of your key workers have available capacity.',
@@ -262,11 +262,8 @@ context('/recommend-allocations', () => {
       .should('contain.text', 'View allocation history')
       .children()
       .eq(0)
-      .should(
-        'have.attr',
-        'href',
-        '/key-worker/prisoner-allocation-history/A2504EA?backTo=%2Fkey-worker%2Frecommend-allocations%3FallowPartialAllocation%3Dtrue%26backTo%3D',
-      )
+      .should('have.attr', 'href')
+      .should('match', /\/key-worker\/prisoner-allocation-history\/A2504EA/)
 
     cy.get('.govuk-table__row')
       .eq(1)
@@ -322,8 +319,11 @@ context('/recommend-allocations', () => {
 
   const navigateToTestPage = (allowPartialAllocation: boolean = true) => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/key-worker/recommend-allocations?allowPartialAllocation=${allowPartialAllocation}`, {
-      failOnStatusCode: false,
-    })
+    cy.visit(
+      `/key-worker/recommend-allocations?allowPartialAllocation=${allowPartialAllocation}&history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL2FsbG9jYXRlIiwiL2tleS13b3JrZXIvYWxsb2NhdGU%2FcXVlcnk9JmNlbGxMb2NhdGlvblByZWZpeD0xJmV4Y2x1ZGVBY3RpdmVBbGxvY2F0aW9ucz10cnVlIiwiL2tleS13b3JrZXIvcmVjb21tZW5kLWFsbG9jYXRpb25zIl0%3D`,
+      {
+        failOnStatusCode: false,
+      },
+    )
   }
 })

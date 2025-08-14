@@ -7,6 +7,7 @@ context('/manage-roles/assign/working-pattern', () => {
   const continueButton = () => cy.findByRole('button', { name: 'Continue' })
 
   const journeyId = uuidV4()
+  const history = Buffer.from(JSON.stringify(['/key-worker', '/key-worker/manage-roles'])).toString('base64')
 
   beforeEach(() => {
     cy.task('reset')
@@ -39,7 +40,10 @@ context('/manage-roles/assign/working-pattern', () => {
     partTimeRadio().should('exist')
     continueButton().should('be.visible')
 
-    cy.findByRole('link', { name: 'Back' }).should('be.visible').and('have.attr', 'href').and('match', /role$/)
+    cy.findByRole('link', { name: 'Back' })
+      .should('be.visible')
+      .and('have.attr', 'href')
+      .and('match', new RegExp(`role\\?history=${history}`))
   }
 
   const verifyValidationErrors = () => {
@@ -69,6 +73,7 @@ context('/manage-roles/assign/working-pattern', () => {
     })
 
     cy.injectJourneyDataAndReload<PartialJourneyData>(journeyId, {
+      b64History: history,
       assignStaffRole: {
         staff: {
           staffId: 1001,
