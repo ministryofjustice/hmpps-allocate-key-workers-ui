@@ -1,4 +1,5 @@
 import { CaseLoad } from './caseLoad'
+import { PolicyType } from '../@types/policyType'
 
 export type AuthSource = 'nomis' | 'delius' | 'external' | 'azuread'
 
@@ -68,7 +69,7 @@ export enum UserPermissionLevel {
 export type HmppsUser = (PrisonUser | ProbationUser | ExternalUser | AzureADUser) & {
   caseLoads: CaseLoad[] | undefined
   activeCaseLoad?: CaseLoad | undefined
-  allocationJobResponsibilities?: ('KEY_WORKER' | 'PERSONAL_OFFICER')[]
+  allocationJobResponsibilities?: PolicyType[]
   permissions: UserPermissionLevel
   getActiveCaseloadId: () => string | undefined
   hasJobResponsibility?: boolean

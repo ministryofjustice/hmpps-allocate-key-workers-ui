@@ -20,9 +20,10 @@ import breadcrumbs from '../middleware/breadcrumbs'
 import { UserPermissionLevel } from '../interfaces/hmppsUser'
 import { ManageRolesRoutes } from './manage-roles/routes'
 import { Page } from '../services/auditService'
+import { POStaffDataRoutes } from './data-personal-officer/routes'
 
 export default function routes(services: Services) {
-  const { router, get } = JourneyRouter()
+  const { router, get, useForPolicies } = JourneyRouter()
   const controller = new HomePageController()
 
   router.use(populateUserPermissionsAndPrisonConfig())
@@ -48,7 +49,10 @@ export default function routes(services: Services) {
 
   router.use(requirePermissionsAndConfig({ requirePrisonEnabled: true, minimumPermission: UserPermissionLevel.VIEW }))
   router.use('/allocate', AllocateStaffRoutes(services))
-  router.use('/data', StaffDataRoutes(services))
+  useForPolicies('/data', {
+    KEY_WORKER: StaffDataRoutes(services),
+    PERSONAL_OFFICER: POStaffDataRoutes(services),
+  })
   router.use('/manage', StaffMembersRoutes(services))
 
   router.use(requirePermissionsAndConfig(permissionAllocate))

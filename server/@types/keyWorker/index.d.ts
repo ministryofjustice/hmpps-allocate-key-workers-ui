@@ -48,6 +48,30 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/prisons/{prisonCode}/policies': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
+    get: operations['getPrisonPolicies']
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
+    put: operations['setPrisonPolicies']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/prisons/{prisonCode}/configurations': {
     parameters: {
       query?: never
@@ -149,6 +173,26 @@ export interface paths {
      *     Requires one of the following roles:
      *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
     post: operations['searchPeople']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/prisons/{prisonCode}/personal-officer/migrate': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
+    post: operations['initiateMigration']
     delete?: never
     options?: never
     head?: never
@@ -699,6 +743,14 @@ export interface components {
       staffId: number
       deallocationReason: string
     }
+    PolicyEnabled: {
+      /** @enum {string} */
+      policy: 'KEY_WORKER' | 'PERSONAL_OFFICER'
+      enabled: boolean
+    }
+    PrisonPolicies: {
+      policies: components['schemas']['PolicyEnabled'][]
+    }
     PrisonConfigRequest: {
       isEnabled: boolean
       allowAutoAllocation: boolean
@@ -832,16 +884,18 @@ export interface components {
       location?: string
       hasHighComplexityOfNeeds: boolean
       hasAllocationHistory: boolean
-      staffMember?: components['schemas']['StaffSummary']
+      staffMember?: components['schemas']['StaffAllocationCount']
       relevantAlertCodes: string[]
       /** Format: int32 */
       remainingAlertCount: number
     }
-    StaffSummary: {
+    StaffAllocationCount: {
       /** Format: int64 */
       staffId: number
       firstName: string
       lastName: string
+      /** Format: int32 */
+      allocationCount: number
     }
     /** @description New keyworker details. */
     KeyworkerUpdateDto: {
@@ -1122,6 +1176,12 @@ export interface components {
     StaffAllocationHistory: {
       prisonNumber: string
       allocations: components['schemas']['StaffAllocation'][]
+    }
+    StaffSummary: {
+      /** Format: int64 */
+      staffId: number
+      firstName: string
+      lastName: string
     }
     CurrentAllocation: {
       policy: components['schemas']['CodedDescription']
@@ -1568,6 +1628,8 @@ export interface operations {
       query?: {
         from?: string
         to?: string
+        comparisonFrom?: string
+        comparisonTo?: string
         includeStats?: boolean
       }
       header: {
@@ -1659,6 +1721,59 @@ export interface operations {
           [name: string]: unknown
         }
         content?: never
+      }
+    }
+  }
+  getPrisonPolicies: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        prisonCode: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['PrisonPolicies']
+        }
+      }
+    }
+  }
+  setPrisonPolicies: {
+    parameters: {
+      query?: never
+      header?: {
+        /** @description
+         *         Relevant caseload id for the client identity in context e.g. the active caseload id of the logged in user.
+         *          */
+        CaseloadId?: string
+      }
+      path: {
+        prisonCode: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PrisonPolicies']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['PrisonPolicies']
+        }
       }
     }
   }
@@ -1863,6 +1978,26 @@ export interface operations {
         content: {
           '*/*': components['schemas']['PersonSearchResponse']
         }
+      }
+    }
+  }
+  initiateMigration: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        prisonCode: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Accepted */
+      202: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
       }
     }
   }
@@ -2389,6 +2524,8 @@ export interface operations {
       query: {
         from: string
         to: string
+        comparisonFrom?: string
+        comparisonTo?: string
       }
       header: {
         /** @description

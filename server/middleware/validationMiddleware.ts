@@ -70,8 +70,7 @@ export const validateOnGET =
       if (result.success) {
         res.locals['query'].validated = result.data
       } else {
-        const deduplicatedFieldErrors = deduplicateFieldErrors(result.error)
-        res.locals['validationErrors'] = deduplicatedFieldErrors
+        res.locals['validationErrors'] = deduplicateFieldErrors(result.error)
       }
     }
     next()

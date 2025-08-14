@@ -5,6 +5,7 @@ import Prisoner from '../../services/prisonerSearch/prisoner'
 import { Breadcrumbs } from '../../middleware/breadcrumbs'
 import { AuditEvent } from '../../data/hmppsAuditClient'
 import { Page } from '../../services/auditService'
+import { PolicyType } from '../policyType'
 
 export declare module 'express-session' {
   // Declare that the session will potentially contain these additional fields
@@ -88,7 +89,7 @@ export declare global {
 
       middleware?: {
         prisonerData?: Prisoner
-        policy?: 'KEY_WORKER' | 'PERSONAL_OFFICER'
+        policy?: PolicyType
         prisonConfiguration?: components['schemas']['PrisonConfigResponse']
       }
     }
@@ -143,7 +144,7 @@ export declare global {
           activeCaseLoadId?: string
           pageUrl: string
           pageName?: Page
-          policy?: 'KEY_WORKER' | 'PERSONAL_OFFICER' | 'CuSP'
+          policy?: PolicyType
           staffId?: string
           query?: string
           [key: string]: unknown

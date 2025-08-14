@@ -62,12 +62,12 @@ export default class KeyworkerApiClient {
     prisonId: string,
     fromDate: string,
     toDate: string,
+    comparisonFrom: string,
+    comparisonTo: string,
   ): Promise<components['schemas']['PrisonStats']> {
-    const response = await this.restClient.get<components['schemas']['PrisonStats']>({
-      path: `/prisons/${prisonId}/statistics?from=${fromDate}&to=${toDate}`,
+    return this.restClient.get<components['schemas']['PrisonStats']>({
+      path: `/prisons/${prisonId}/statistics?from=${fromDate}&to=${toDate}&comparisonFrom=${comparisonFrom}&comparisonTo=${comparisonTo}`,
     })
-
-    return response
   }
 
   async getPrisonConfig(prisonCode: string): Promise<components['schemas']['PrisonConfigResponse']> {
