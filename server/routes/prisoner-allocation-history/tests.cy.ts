@@ -75,8 +75,7 @@ context('Prisoner Allocation History', () => {
       {
         who: 'USER1',
         subjectType: 'NOT_APPLICABLE',
-        details:
-          '{"pageUrl":"/key-worker?history=WyIva2V5LXdvcmtlciJd","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+        details: '{"pageUrl":"/key-worker","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
         what: 'PAGE_VIEW_ACCESS_ATTEMPT',
         service: 'DPS023',
       },
@@ -84,7 +83,7 @@ context('Prisoner Allocation History', () => {
         who: 'USER1',
         subjectType: 'PRISONER_ID',
         details:
-          '{"pageUrl":"/key-worker/prisoner-allocation-history/A9965EA?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL21hbmFnZT9xdWVyeT1Eb20mc3RhdHVzPUFDVElWRSIsIi9rZXktd29ya2VyL3N0YWZmLXByb2ZpbGUvNDg1NTcyIl0=","pageName":"PRISONER_ALLOCATION_HISTORY","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          '{"pageUrl":"/key-worker/prisoner-allocation-history/A9965EA","pageName":"PRISONER_ALLOCATION_HISTORY","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
         subjectId: 'A9965EA',
         what: 'PAGE_VIEW',
         service: 'DPS023',
@@ -93,7 +92,7 @@ context('Prisoner Allocation History', () => {
         who: 'USER1',
         subjectType: 'PRISONER_ID',
         details:
-          '{"pageUrl":"/key-worker/prisoner-allocation-history/A9965EA?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL21hbmFnZT9xdWVyeT1Eb20mc3RhdHVzPUFDVElWRSIsIi9rZXktd29ya2VyL3N0YWZmLXByb2ZpbGUvNDg1NTcyIl0=","pageName":"PRISONER_ALLOCATION_HISTORY","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          '{"pageUrl":"/key-worker/prisoner-allocation-history/A9965EA","pageName":"PRISONER_ALLOCATION_HISTORY","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
         subjectId: 'A9965EA',
         what: 'PAGE_VIEW_ACCESS_ATTEMPT',
         service: 'DPS023',

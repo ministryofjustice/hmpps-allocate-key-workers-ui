@@ -135,10 +135,10 @@ export function getBreadcrumbs(req: Request, res: Response) {
   return breadcrumbs
 }
 
-function noHistoryParam(url: string) {
-  const noHistoreySearchParams = new URLSearchParams(url.split('?')[1] || '')
-  noHistoreySearchParams.delete('history')
-  const noHistoryUrl = `${url.split('?')[0]}?${noHistoreySearchParams.toString()}`
+export function noHistoryParam(url: string) {
+  const noHistorySearchParams = new URLSearchParams(url.split('?')[1] || '')
+  noHistorySearchParams.delete('history')
+  const noHistoryUrl = `${url.split('?')[0]}?${noHistorySearchParams.toString()}`
   return noHistoryUrl.replace(/\?$/g, '')
 }
 
