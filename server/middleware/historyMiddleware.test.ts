@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express'
 
-import { getBreadcrumbs, historyMiddlware } from './historyMiddleware'
+import { getBreadcrumbs, historyMiddleware } from './historyMiddleware'
 
 describe('historyMiddleware', () => {
   const req: Request = {} as jest.Mocked<Request>
@@ -33,7 +33,7 @@ describe('historyMiddleware', () => {
     req.query = {}
     req.originalUrl = '/key-worker'
     req.method = 'GET'
-    historyMiddlware()(req, res, next)
+    historyMiddleware()(req, res, next)
 
     expect(res.redirect).toHaveBeenCalledWith(`/key-worker?history=${historyToBase64(['/key-worker'])}`)
   })
@@ -44,7 +44,7 @@ describe('historyMiddleware', () => {
     req.query = { history: historyToBase64(['/key-worker']) }
     req.originalUrl = `/key-worker/allocate?history=${historyToBase64(['/key-worker'])}`
     req.method = 'GET'
-    historyMiddlware()(req, res, next)
+    historyMiddleware()(req, res, next)
 
     expect(next).toHaveBeenCalled()
     expect(res.locals.history).toEqual(['/key-worker', '/key-worker/allocate'])
@@ -56,7 +56,7 @@ describe('historyMiddleware', () => {
     req.query = { history: historyToBase64(['/key-worker']) }
     req.originalUrl = `/key-worker/allocate?history=${historyToBase64(['/key-worker'])}`
     req.method = 'POST'
-    historyMiddlware()(req, res, next)
+    historyMiddleware()(req, res, next)
 
     expect(next).toHaveBeenCalled()
     expect(res.locals.history).toEqual([])
@@ -68,7 +68,7 @@ describe('historyMiddleware', () => {
     req.query = { history: historyToBase64(['/key-worker']) }
     req.originalUrl = `/key-worker/allocate?history=${historyToBase64(['/key-worker'])}`
     req.method = 'GET'
-    historyMiddlware(/\/key-worker\/allocate/)(req, res, next)
+    historyMiddleware(/\/key-worker\/allocate/)(req, res, next)
 
     expect(next).toHaveBeenCalled()
     expect(res.locals.history).toEqual(['/key-worker'])
@@ -81,7 +81,7 @@ describe('historyMiddleware', () => {
     req.query = { history: historyToBase64(['/key-worker']) }
     req.originalUrl = `/key-worker/allocate`
     req.method = 'GET'
-    historyMiddlware()(req, res, next)
+    historyMiddleware()(req, res, next)
 
     expect(next).toHaveBeenCalled()
     expect(res.locals.history).toEqual(['/key-worker', '/key-worker/allocate'])
@@ -100,7 +100,7 @@ describe('historyMiddleware', () => {
     }
     req.originalUrl = `/key-worker/prisoner-allocation-history/A0262EA?history=${req.query['history']}}`
     req.method = 'GET'
-    historyMiddlware()(req, res, next)
+    historyMiddleware()(req, res, next)
 
     expect(next).toHaveBeenCalled()
 
@@ -132,7 +132,7 @@ describe('historyMiddleware', () => {
     req.query = {} // Empty query where a POST request just redirects to a page without preserving history
     req.originalUrl = `/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true`
     req.method = 'GET'
-    historyMiddlware()(req, res, next)
+    historyMiddleware()(req, res, next)
 
     expect(res.redirect).toHaveBeenCalledWith(
       `/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true'], true)}`,

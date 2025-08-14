@@ -4,7 +4,11 @@ import { Breadcrumbs, type Breadcrumb } from './breadcrumbs'
 import { Page } from '../services/auditService'
 
 function deserialiseHistory(b64String: string = '') {
-  return JSON.parse(Buffer.from(b64String || '', 'base64').toString() || '[]')
+  try {
+    return JSON.parse(Buffer.from(b64String || '', 'base64').toString() || '[]')
+  } catch (e) {
+    return []
+  }
 }
 
 function serialiseHistory(history: string[]) {
@@ -18,7 +22,7 @@ export function getHistoryParamForPOST(req: Request) {
   return serialiseHistory(history)
 }
 
-export function historyMiddlware(...excludeUrls: RegExp[]): RequestHandler {
+export function historyMiddleware(...excludeUrls: RegExp[]): RequestHandler {
   return (req, res, next) => {
     if (req.method !== 'GET') {
       return next()

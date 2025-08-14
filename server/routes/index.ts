@@ -20,7 +20,7 @@ import breadcrumbs from '../middleware/breadcrumbs'
 import { UserPermissionLevel } from '../interfaces/hmppsUser'
 import { ManageRolesRoutes } from './manage-roles/routes'
 import { Page } from '../services/auditService'
-import { historyMiddlware } from '../middleware/historyMiddleware'
+import { historyMiddleware } from '../middleware/historyMiddleware'
 
 export default function routes(services: Services) {
   const { router, get } = JourneyRouter()
@@ -33,8 +33,8 @@ export default function routes(services: Services) {
   const permissionAllocate = { requirePrisonEnabled: true, minimumPermission: UserPermissionLevel.ALLOCATE }
   const permissionSelf = { requirePrisonEnabled: true, minimumPermission: UserPermissionLevel.SELF_PROFILE_ONLY }
 
-  const uuidMatcher = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/
-  router.use(historyMiddlware(uuidMatcher))
+  const uuidMatcher = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}i/
+  router.use(historyMiddleware(uuidMatcher))
   get('/', Page.HOMEPAGE, requirePermissionsAndConfig(permissionAdmin, permissionSelf), controller.GET)
 
   router.use(removeTrailingSlashMiddleware)
