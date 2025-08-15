@@ -28,7 +28,8 @@ export const customErrorOrderBuilder = (errorSummaryList: { href: string }[], or
 
 export const createSchema = <T = object>(shape: T) => zodAlwaysRefine(zObjectStrict(shape))
 
-const zObjectStrict = <T = object>(shape: T) => z.object({ _csrf: z.string().optional(), ...shape }).strict()
+const zObjectStrict = <T = object>(shape: T) =>
+  z.object({ _csrf: z.string().optional(), history: z.string().optional(), ...shape }).strict()
 
 /*
  * Ensure that all parts of the schema get tried and can fail before exiting schema checks - this ensures we don't have to

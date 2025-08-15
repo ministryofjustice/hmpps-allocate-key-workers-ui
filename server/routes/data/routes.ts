@@ -9,12 +9,7 @@ export const StaffDataRoutes = ({ keyworkerApiService }: Services) => {
   const { router, get, post } = JourneyRouter()
   const controller = new StaffDataController(keyworkerApiService)
 
-  get(
-    '/',
-    Page.PRISON_STATISTICS,
-    validateOnGET(schema, 'dateFrom', 'dateTo', 'compareDateFrom', 'compareDateTo'),
-    controller.GET,
-  )
+  get('/', Page.PRISON_STATISTICS, validateOnGET(schema, 'dateFrom', 'dateTo'), controller.GET)
   post('/', controller.POST)
 
   return router
