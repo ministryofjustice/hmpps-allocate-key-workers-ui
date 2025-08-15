@@ -76,7 +76,7 @@
             }
           }) }}
 
-          {% if isAdmin %}
+          {% if isAdmin and policyPath == 'key-worker' %}
             {{ govukSelect({
               id: "frequencyInWeeks",
               name: "frequencyInWeeks",
