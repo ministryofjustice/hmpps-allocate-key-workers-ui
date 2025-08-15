@@ -4,7 +4,7 @@
   {% set title = stat.heading | policyAware(policyStaff) %}
   {% set currentValue = stat.currentValue %}
   {% set previousValue = stat.previousValue %}
-  {% set calculationMethod = stat.calculationMethod | policyAware(policyStaff) %}
+  {% set calculationMethod = stat.calculationMethod | replace('[staff]', policyStaff) | replace('[staffs]', policyStaffs) %}
   {% set format = stat.type or 'number' %}
 
   <div class="key-worker-data-stat-card left-aligned govuk-!-margin-bottom-4 govuk-!-margin-top-4">
