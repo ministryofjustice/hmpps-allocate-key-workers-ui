@@ -57,6 +57,42 @@ context('/establishment-settings', () => {
     )
   })
 
+  it('should test personal-officer admin view', () => {
+    cy.task('stubEnabledPrison')
+    cy.task('stubSignIn', {
+      roles: [AuthorisedRoles.KW_MIGRATION],
+    })
+
+    navigateToTestPage('personal-officer')
+    cy.url().should('match', /\/establishment-settings/)
+
+    verifyPageCommonContent('personal officer', 'personal-officer', 'Personal officers')
+
+    cy.get('select').should('have.length', 0)
+
+    verifyValidationErrors('personal officer')
+
+    cy.findByRole('radio', { name: 'No' }).click()
+    getCapacityInput('personal officer').clear().type('12')
+
+    cy.findByRole('button', { name: 'Save' }).click()
+
+    cy.get('.govuk-notification-banner__heading')
+      .should('be.visible')
+      .and('contain.text', 'Establishment settings updated')
+
+    cy.verifyLastAPICall(
+      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/configurations' },
+      {
+        isEnabled: true,
+        hasPrisonersWithHighComplexityNeeds: false,
+        allowAutoAllocation: false,
+        capacity: 12,
+        frequencyInWeeks: 1,
+      },
+    )
+  })
+
   it('should send API Call audit event', () => {
     cy.task('stubEnabledPrison')
     cy.task('stubSignIn', {
@@ -179,10 +215,6 @@ context('/establishment-settings', () => {
       .and('have.attr', 'href')
       .should('match', /\/personal-officer/)
 
-    cy.findByRole('combobox', { name: 'How often should personal officer sessions take place?' })
-      .should('be.visible')
-      .and('have.value', '1WK')
-
     getCapacityInput('personal officer').clear().type('-1')
     cy.findByRole('button', { name: 'Save' }).click()
 
@@ -193,9 +225,6 @@ context('/establishment-settings', () => {
 
     cy.findByRole('radio', { name: 'No' }).click()
     getCapacityInput('personal officer').clear().type('12')
-    cy.findByRole('combobox', { name: 'How often should personal officer sessions take place?' }).select(
-      'Every 3 weeks',
-    )
 
     cy.findByRole('button', { name: 'Save' }).click()
 
@@ -210,31 +239,35 @@ context('/establishment-settings', () => {
         hasPrisonersWithHighComplexityNeeds: false,
         allowAutoAllocation: false,
         capacity: 12,
-        frequencyInWeeks: 3,
+        frequencyInWeeks: 1,
       },
     )
   })
 
-  const verifyPageCommonContent = () => {
-    cy.title().should('equal', 'Manage your establishment’s key worker settings - Key workers - DPS')
+  const verifyPageCommonContent = (
+    policyStaff: string = 'key worker',
+    policyUrl: string = 'key-worker',
+    policyName: string = 'Key workers',
+  ) => {
+    cy.title().should('equal', `Manage your establishment’s ${policyStaff} settings - ${policyName} - DPS`)
     cy.findByRole('heading', { name: 'Establishment settings for Leeds (HMP)' }).should('be.visible')
     cy.findByRole('radio', { name: 'Yes' }).should('exist').and('be.checked')
-    getCapacityInput().should('be.visible').and('have.value', '6')
+    getCapacityInput(policyStaff).should('be.visible').and('have.value', '6')
     cy.findByRole('button', { name: 'Save' }).should('be.visible')
     cy.findByRole('button', { name: 'Cancel' })
       .should('be.visible')
       .and('have.attr', 'href')
-      .should('match', /\/key-worker/)
+      .should('match', new RegExp(`/${policyUrl}`))
   }
 
-  const verifyValidationErrors = () => {
-    getCapacityInput().clear().type('-1')
+  const verifyValidationErrors = (policyStaff: string = 'key worker') => {
+    getCapacityInput(policyStaff).clear().type('-1')
     cy.findByRole('button', { name: 'Save' }).click()
 
     cy.findByRole('link', { name: /Enter a number between 1 and 999$/i })
       .should('be.visible')
       .click()
-    getCapacityInput().should('be.focused')
+    getCapacityInput(policyStaff).should('be.focused')
   }
 
   const navigateToTestPage = (policy: string = 'key-worker') => {
