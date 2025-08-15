@@ -22,6 +22,7 @@ import { ManageRolesRoutes } from './manage-roles/routes'
 import { Page } from '../services/auditService'
 import { POStaffDataRoutes } from './data-personal-officer/routes'
 import { historyMiddleware } from '../middleware/historyMiddleware'
+import { POStaffProfileRoutes } from './staff-profile-personal-officer/routes'
 
 export default function routes(services: Services) {
   const { router, get, useForPolicies } = JourneyRouter()
@@ -48,7 +49,10 @@ export default function routes(services: Services) {
 
   router.use(requirePermissionsAndConfig(permissionSelf))
   router.use('/prisoner-allocation-history', PrisonerAllocationHistoryRoutes(services))
-  router.use('/staff-profile/:staffId', StaffProfileRoutes(services))
+  useForPolicies('/staff-profile/:staffId', {
+    KEY_WORKER: StaffProfileRoutes(services),
+    PERSONAL_OFFICER: POStaffProfileRoutes(services),
+  })
 
   router.use(requirePermissionsAndConfig({ requirePrisonEnabled: true, minimumPermission: UserPermissionLevel.VIEW }))
   router.use('/allocate', AllocateStaffRoutes(services))

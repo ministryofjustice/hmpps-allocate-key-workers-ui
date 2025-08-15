@@ -49,3 +49,6 @@
 .remove-width-limit {
   width: unset;
 }
+
+div.moj-action-bar__filter::after { content: none !important; }
+.moj-action-bar-indent { padding-left: 12px; }
