@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { subMonths, subDays, differenceInDays, format } from 'date-fns'
 import { ChangeStaffController } from '../base/changeStaffController'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 
@@ -13,11 +14,30 @@ export class StaffProfileController extends ChangeStaffController {
     ) {
       return res.redirect(`/${res.locals.policyPath}/not-authorised`)
     }
-    const prisonCode = res.locals.user.getActiveCaseloadId()!
-    const Data = await this.keyworkerApiService.getStaffDetails(req, prisonCode, req.params.staffId, true)
+
+    const to = new Date()
+    const from = subMonths(to, 1)
+    const comparisonTo = subDays(from, 1)
+    const comparisonFrom = subDays(comparisonTo, differenceInDays(to, from))
+
+    const dateRange = {
+      to: format(to, 'yyyy-MM-dd'),
+      from: format(from, 'yyyy-MM-dd'),
+      comparisonTo: format(comparisonTo, 'yyyy-MM-dd'),
+      comparisonFrom: format(comparisonFrom, 'yyyy-MM-dd'),
+    }
+
+    const staffDetails = await this.keyworkerApiService.getStaffDetails(
+      req,
+      res.locals.user.getActiveCaseloadId()!,
+      req.params.staffId,
+      true,
+      dateRange,
+    )
 
     return res.render('staff-profile/view', {
-      ...{ ...Data, staffMember: { firstName: Data.firstName, lastName: Data.lastName } },
+      ...staffDetails,
+      staffMember: { firstName: staffDetails.firstName, lastName: staffDetails.lastName },
       ...(await this.getChangeData(req, res)),
       showBreadcrumbs: true,
     })

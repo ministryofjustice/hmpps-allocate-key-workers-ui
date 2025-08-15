@@ -5,6 +5,7 @@ import { nodeListForEach } from './utils'
 
 govukFrontend.initAll()
 mojFrontend.initAll()
+window.MojFrontend = mojFrontend
 
 var $cards = document.querySelectorAll('.card--clickable')
 nodeListForEach($cards, function ($card) {

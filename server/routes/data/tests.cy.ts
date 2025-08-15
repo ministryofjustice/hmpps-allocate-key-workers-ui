@@ -360,8 +360,8 @@ context('Key workers data', () => {
 
     cy.findByRole('button', { name: /View/ }).click()
 
-    cy.findAllByText('From date must be a real date').should('have.length', 1)
-    cy.findAllByText('To date must be a real date').should('have.length', 1)
+    cy.findAllByText('From date must be a real date').should('have.length', 2)
+    cy.findAllByText('To date must be a real date').should('have.length', 2)
   }
 
   const navigateToTestPage = () => {

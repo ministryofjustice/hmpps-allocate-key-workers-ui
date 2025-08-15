@@ -76,8 +76,14 @@ export default class KeyworkerApiService {
     prisonCode: string,
     staffId: string | number,
     includeStats: boolean,
+    dateRange?: { from: string; to: string; comparisonFrom: string; comparisonTo: string },
   ): Promise<components['schemas']['StaffDetails'] & { staff: { firstName: string; lastName: string } }> {
-    const response = await this.keyworkerApiClientBuilder(req).getStaffDetails(prisonCode, staffId, includeStats)
+    const response = await this.keyworkerApiClientBuilder(req).getStaffDetails(
+      prisonCode,
+      staffId,
+      includeStats,
+      dateRange,
+    )
 
     return { ...response, staff: { firstName: response.firstName, lastName: response.lastName } }
   }

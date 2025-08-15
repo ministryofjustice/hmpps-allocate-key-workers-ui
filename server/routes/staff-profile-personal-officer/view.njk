@@ -1,0 +1,316 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/statusTag/macro.njk" import statusTag %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "partials/submitButton/macro.njk" import submitButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "staff-profile/components/statCard.njk" import statCard %}
+{% from "partials/mojPagination/macro.njk" import mojPagination %}
+{% from "partials/deallocateSuccessError/macro.njk" import deallocateSuccessError %}
+{% from "partials/alertFlags/macro.njk" import alertFlags %}
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
+{% from "moj/components/filter/macro.njk" import mojFilter %}
+{% from "moj/components/date-picker/macro.njk" import mojDatePicker %}
+
+{% set fullWidth = true %}
+{% set pageTitle -%}
+  {{ policyStaff | sentenceCase }} profile
+{%- endset %}
+
+{% block pageHeader %}
+  {{ deallocateSuccessError(apiError, count) }}
+{% endblock %}
+
+{% block innerContent %}
+
+  <div class="govuk-width-container">
+
+    <div class="govuk-grid-row govuk-!-margin-0">
+      <h1 class="govuk-heading-l govuk-!-display-inline-block govuk-!-margin-0">{{ staffMember | firstNameSpaceLastName }}</h1>
+      <p class="govuk-!-margin-left-2 govuk-!-display-inline-block govuk-!-margin-0 ">
+        {{ statusTag({ text: status.description, fullText: true }) }}
+      </p>
+      {% if user | hasPermission('allocate') %}
+        <a class="govuk-!-margin-left-2 govuk-link govuk-link--no-visited-state govuk-!-display-inline-block " href="../start-update-staff/{{ staffId }}?proceedTo=update-capacity-status-and-working-pattern">Update capacity, status or working pattern</a>
+      {% endif %}
+    </div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-quarter left-aligned">
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Establishment</h2>
+        <p class="govuk-!-margin-bottom-2">{{ user.activeCaseLoad.description }}</p>
+      </div>
+
+      <div class="govuk-grid-column-one-quarter left-aligned">
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Working pattern</h2>
+        <p class="govuk-!-margin-bottom-2">{{ staffRole.scheduleType.description }}</p>
+      </div>
+
+      <div class="govuk-grid-column-one-quarter left-aligned">
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Prisoners allocated</h2>
+        <p class="govuk-!-margin-bottom-2">{{ allocated }}</p>
+      </div>
+
+      <div class="govuk-grid-column-one-quarter left-aligned">
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Maximum capacity</h2>
+        <p class="govuk-!-margin-bottom-2">{{ capacity }}</p>
+      </div>
+    </div>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
+
+    {%- set filterOptionsHtml %}
+      <h2 class="govuk-heading-m">Select a date range to view</h2>
+      <div class="date-search-form govuk-!-margin-bottom-5">
+        {{ mojDatePicker({
+          id: "dateFrom",
+          name: "dateFrom",
+          label: {
+            text: "From"
+          },
+          errorMessage: validationErrors | findError('dateFrom'),
+          value: dateFrom,
+          maxDate: todayStringGBFormat()
+        }) }}
+
+        {{ mojDatePicker({
+          id: "dateTo",
+          name: "dateTo",
+          label: {
+            text: "To"
+          },
+          errorMessage: validationErrors | findError('dateTo'),
+          value: dateTo,
+          maxDate: todayStringGBFormat()
+        }) }}
+      </div>
+
+      <h2 class="govuk-heading-m">Select a custom date range to compare against (optional)</h2>
+      <div class="date-search-form">
+        {{ mojDatePicker({
+          id: "compareDateFrom",
+          name: "compareDateFrom",
+          label: {
+            text: "From"
+          },
+          errorMessage: validationErrors | findError('compareDateFrom'),
+          value: compareDateFrom,
+          maxDate: todayStringGBFormat()
+        }) }}
+
+        {{ mojDatePicker({
+          id: "compareDateTo",
+          name: "compareDateTo",
+          label: {
+            text: "To"
+          },
+          errorMessage: validationErrors | findError('compareDateTo'),
+          value: compareDateTo,
+          maxDate: todayStringGBFormat()
+        }) }}
+      </div>
+    {% endset -%}
+
+    <div class="govuk-grid-column-full-width govuk-grid-row">
+      <div class="moj-action-bar moj-action-bar-indent"><div class="moj-action-bar__filter"></div></div>
+      <form id="filter-form" method='POST' action='{{ filterUrl }}' class="govuk-grid-column-two-thirds govuk-!-margin-bottom-6">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        {{ mojFilter({
+          heading: { text: "Filter" },
+          submit:{
+            text: "Apply filter",
+            attributes: {
+              form: "filter-form"
+            }
+          },
+          selectedFilters: {
+            heading: {
+              text: "Selected filters"
+            },
+            clearLink: {
+              text: "Clear filters",
+              href: clearFilterUrl
+            },
+            categories: [
+              {
+                heading: {
+                text: "Date range to view"
+              },
+                items: [{
+                href: clearDateRangeUrl,
+                text: dateFrom + " to " + dateTo
+              }]
+              } if validated.dateFrom and validated.dateTo,
+              {
+                heading: {
+                text: "Date range to compare against"
+              },
+                items: [{
+                href: clearCompareDateRangeUrl,
+                text: compareDateFrom + " to " + compareDateTo
+              }]
+              } if validated.compareDateFrom and validated.compareDateTo
+            ] | removeNullish
+          },
+          optionsHtml: filterOptionsHtml
+        }) }}
+      </form>
+    </div>
+
+    <h2 class="govuk-body-l">
+      <strong>Statistics for period:</strong>
+      Displaying statistics from {{ stats.current.from | dateString }} to {{ stats.current.to | dateString }}. Comparing against statistics from {{ stats.previous.from | dateString }} to {{ stats.previous.to | dateString }}.
+    </h2>
+    <div class="govuk-grid-row">
+      {{ statCard('Recorded case note entries', stats.current.recordedEvents | mapProperty('count') | sum, stats.previous.recordedEvents | mapProperty('count') | sum) }}
+    </div>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
+
+    <hr class="govuk-section-break govuk-section-break--m"/>
+
+    {% if user | hasPermission('allocate') %}
+      <p>Select {{ policyStaffs }} from the dropdown lists to reallocate or deallocate prisoners.</p>
+      <p>{{ policyStaffs | sentenceCase }} will only be allocated when you save your changes.</p>
+
+      <br/>
+    {% endif %}
+
+    <h2 class="govuk-heading-m govuk-!-display-inline">Current allocations</h2>
+
+    {% set rows = [] %}
+    {% for item in allocations %}
+      {% set rows = (rows.push([
+          {
+            html: '<a class="govuk-link--no-visited-state" target="_blank" href="' + prisonerProfileUrl + '/prisoner/' + item.prisoner.prisonNumber + '">' + item.prisoner | lastNameCommaFirstName + "</a><br/>" + item.prisoner.prisonNumber,
+            attributes: {
+            "data-sort-value": item.prisoner | lastNameCommaFirstName
+          }
+          },
+          {
+            text: item.prisoner.cellLocation
+          },
+          {
+            html: alertFlags(prisonerProfileUrl + '/prisoner/' + item.prisoner.prisonNumber + '/alerts/active', item.prisoner.relevantAlertCodes, item.prisoner.remainingAlertCount),
+            attributes: {
+            "data-sort-value": item.prisoner | alertsSortValue
+          }
+          },
+          {
+            text: item.latestSession.occurredAt | formatDateConcise | default('None', true) if item.latestSession else 'None'
+          },
+          {
+            text: item.stats.recordedComplianceEvents or '0',
+            attributes: {
+            "data-sort-value": item.stats.recordedComplianceEvents
+          }
+          },
+          {
+            html: govukSelect({
+              id: "selectStaffMember",
+              name: "selectStaffMember",
+              text: 'Select ' + policyStaff,
+              formGroup: {
+                classes: "govuk-!-margin-0"
+              },
+              items: staff | excludeCurrentStaffMember({staffId: staffId}) | conditionallyAddDeallocate(staffId) | mergePrisonerKeyworkerIds(item.prisoner.prisonNumber) | addSelectValue('Select ' + policyStaff)
+            })
+          } if user | hasPermission('allocate') else undefined,
+          {
+            html: '<a class="govuk-link govuk-link--no-visited-state" href="/' + policyPath + '/prisoner-allocation-history/' + item.prisoner.prisonNumber + '">View allocation history</a>'
+          }
+        ] | removeNullish), rows) %}
+    {% endfor %}
+
+    <form method="post" >
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+      {% if allocations.length %}
+        {{ mojPagination(allocations.length) }}
+
+        {{ govukTable({
+          attributes: {
+            "data-module": "moj-sortable-table"
+          },
+          classes: 'table-vertical-align-middle govuk-!-margin-top-6 center-align-content',
+          head: [
+            {
+              text: 'Name and prisoner number',
+              key: 'name',
+              attributes: {
+                "aria-sort": "ascending"
+              }
+            },
+            {
+              text: "Residential location",
+              key: 'location',
+              attributes: {
+                "aria-sort": "none"
+              }
+            },
+            {
+              text: "Relevant alerts",
+              key: 'alerts',
+              attributes: {
+              "aria-sort": "none"
+            }
+            },
+            {
+              text: "Most recent session",
+              key: 'recentSession',
+              attributes: {
+                "aria-sort": "none"
+              }
+            },
+            {
+              text: "Sessions in last month",
+              key: 'sessionCount',
+              attributes: {
+              "aria-sort": "none"
+            }
+            },
+            {
+              text: "Change " + policyStaff
+            } if user | hasPermission('allocate') else undefined,
+            {
+              text: ''
+            }
+          ] | removeNullish,
+          rows: rows
+        }) }}
+
+        {{ mojPagination(allocations.length) }}
+
+        {% if user | hasPermission('allocate') %}
+          {{ submitButton({
+            text: "Save changes",
+            preventDoubleClick: true
+          }) }}
+        {% endif %}
+
+      {% else %}
+        <p class="govuk-!-margin-bottom-6">There are no allocations for this {{ policyStaff }}.</p>
+      {% endif %}
+    </form>
+  </div>
+
+{% endblock %}
+
+{% block pageScripts %}
+  <script nonce="{{ cspNonce }}">
+    window.onload = function () {
+      const filter = document.querySelector('[data-module="moj-filter"]')
+      filter && new window.MojFrontend.FilterToggleButton(filter, {
+        bigModeMediaQuery: '(min-width: 48.063em)',
+        startHidden: {{ not showFilter }},
+        toggleButton: {
+          showText: 'Show date filter',
+          hideText: 'Hide date filter',
+          classes: 'govuk-button--primary'
+        },
+        toggleButtonContainer: { selector: '.moj-action-bar__filter' },
+        closeButton: { text: 'Close' },
+        closeButtonContainer: { selector: '.moj-filter__header-action' }
+      })
+    }
+  </script>
+{% endblock %}

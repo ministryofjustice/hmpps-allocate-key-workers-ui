@@ -39,7 +39,7 @@
 {% endblock %}
 
 {% block pageTitle %}
-  {% set policyNameAlias = (policyStaff | sentenceCase + 's')if policyStaff else 
+  {% set policyNameAlias = (policyStaff | sentenceCase + 's')if policyStaff else
     undefined %}
   {{[pageTitle, policyNameAlias, 'DPS'] | removeNullish | join(' - ')}}
 {% endblock %}
@@ -124,4 +124,5 @@
       }
     }
   </script>
+  {% block pageScripts %}{% endblock %}
 {% endblock %}
