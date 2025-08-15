@@ -32,7 +32,7 @@ export const schemaFactory = async (_req: Request, res: Response) =>
       999,
     ),
     frequencyInWeeks:
-      res.locals.user.permissions >= UserPermissionLevel.ADMIN
+      res.locals.user.permissions >= UserPermissionLevel.ADMIN && res.locals.policyPath === 'key-worker'
         ? z
             .enum(['1WK', '2WK', '3WK', '4WK'], { message: 'Select how often sessions should take place' })
             .transform(parseFrequencyInWeeks)
