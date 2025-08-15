@@ -104,9 +104,14 @@ export default class KeyworkerApiClient {
     prisonCode: string,
     staffId: string | number,
     includeStats: boolean,
+    dateRange?: { from: string; to: string; comparisonFrom: string; comparisonTo: string },
   ): Promise<components['schemas']['StaffDetails']> {
+    const dateRangeQuery = dateRange
+      ? `&to=${dateRange.to}&from=${dateRange.from}&comparisonTo=${dateRange.comparisonTo}&comparisonFrom=${dateRange.comparisonFrom}`
+      : ''
+
     return this.restClient.get<components['schemas']['StaffDetails']>({
-      path: `/prisons/${prisonCode}/staff/${staffId}?includeStats=${includeStats}`,
+      path: `/prisons/${prisonCode}/staff/${staffId}?includeStats=${includeStats}${dateRangeQuery}`,
     })
   }
 
