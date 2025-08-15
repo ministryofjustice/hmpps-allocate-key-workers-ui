@@ -1,22 +1,23 @@
 import { Request, Response } from 'express'
-import { format, lastDayOfMonth, startOfMonth, subMonths, isLastDayOfMonth, differenceInDays, subDays } from 'date-fns'
+import { format, startOfMonth, subDays, endOfMonth, subMonths, differenceInDays } from 'date-fns'
 import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
 import { formatDateConcise } from '../../utils/datetimeUtils'
 import { ResQuerySchemaType } from './schema'
-import { getEstablishmentData } from './utils'
-import { getHistoryParamForPOST } from '../../middleware/historyMiddleware'
+import { getEstablishmentData } from '../data/utils'
 
-export class StaffDataController {
+export class POStaffDataController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
 
   private getDateAsIsoString = () => {
-    const today = new Date()
-    const lastDay = isLastDayOfMonth(today) ? today : lastDayOfMonth(subMonths(today, 1))
+    const lastDay = subDays(new Date(), 1)
     const firstDay = startOfMonth(lastDay)
+    const previousMonth = subMonths(firstDay, 1)
 
     return {
       dateFrom: format(firstDay, 'yyyy-MM-dd'),
       dateTo: format(lastDay, 'yyyy-MM-dd'),
+      compareDateFrom: format(startOfMonth(previousMonth), 'yyyy-MM-dd'),
+      compareDateTo: format(endOfMonth(previousMonth), 'yyyy-MM-dd'),
     }
   }
 
@@ -37,7 +38,7 @@ export class StaffDataController {
 
   GET = async (req: Request, res: Response) => {
     const resQuery = res.locals['query'] as ResQuerySchemaType
-    const dateRange = this.addComparisonDates(resQuery?.validated ?? this.getDateAsIsoString())
+    const dateRange = resQuery?.validated ? this.addComparisonDates(resQuery.validated) : this.getDateAsIsoString()
     const prisonCode = res.locals.user.getActiveCaseloadId()!
     const stats = await this.keyworkerApiService.getPrisonStats(
       req,
@@ -48,22 +49,21 @@ export class StaffDataController {
       dateRange.compareDateTo,
     )
 
-    res.render('data/view', {
+    res.render('data-personal-officer/view', {
       showBreadcrumbs: true,
       stats,
       data: getEstablishmentData(stats, req),
       dateFrom: resQuery?.dateFrom ?? formatDateConcise(stats.current?.from),
       dateTo: resQuery?.dateTo ?? formatDateConcise(stats.current?.to),
+      compareDateFrom: resQuery?.compareDateFrom,
+      compareDateTo: resQuery?.compareDateTo,
       dateUpdated: new Date().toISOString(),
     })
   }
 
   POST = async (req: Request, res: Response) => {
-    const searchParams = new URLSearchParams({
-      dateFrom: req.body.dateFrom,
-      dateTo: req.body.dateTo,
-      history: getHistoryParamForPOST(req),
-    })
-    res.redirect(`data?${searchParams.toString()}`)
+    res.redirect(
+      `data?dateFrom=${req.body.dateFrom ?? ''}&dateTo=${req.body.dateTo ?? ''}&compareDateFrom=${req.body.compareDateFrom ?? ''}&compareDateTo=${req.body.compareDateTo ?? ''}`,
+    )
   }
 }

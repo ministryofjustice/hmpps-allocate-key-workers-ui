@@ -28,7 +28,8 @@ export const customErrorOrderBuilder = (errorSummaryList: { href: string }[], or
 
 export const createSchema = <T = object>(shape: T) => zodAlwaysRefine(zObjectStrict(shape))
 
-const zObjectStrict = <T = object>(shape: T) => z.object({ _csrf: z.string().optional(), ...shape }).strict()
+const zObjectStrict = <T = object>(shape: T) =>
+  z.object({ _csrf: z.string().optional(), history: z.string().optional(), ...shape }).strict()
 
 /*
  * Ensure that all parts of the schema get tried and can fail before exiting schema checks - this ensures we don't have to
@@ -70,8 +71,7 @@ export const validateOnGET =
       if (result.success) {
         res.locals['query'].validated = result.data
       } else {
-        const deduplicatedFieldErrors = deduplicateFieldErrors(result.error)
-        res.locals['validationErrors'] = deduplicatedFieldErrors
+        res.locals['validationErrors'] = deduplicateFieldErrors(result.error)
       }
     }
     next()

@@ -1,13 +1,14 @@
 import { Response } from 'express'
 import AuthorisedRoles from '../authentication/authorisedRoles'
 import { UserPermissionLevel } from '../interfaces/hmppsUser'
+import { PolicyType } from '../@types/policyType'
 
 export type Policy = {
   staff: string
   staffs: string
   path: string
   name: string
-  jobResponsibility: 'KEY_WORKER' | 'PERSONAL_OFFICER'
+  jobResponsibility: PolicyType
   serviceNames: string[]
   permissionMapper: (res: Response) => void
 }

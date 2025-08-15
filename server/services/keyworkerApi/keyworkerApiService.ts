@@ -26,8 +26,10 @@ export default class KeyworkerApiService {
     prisonId: string,
     fromDate: string,
     toDate: string,
+    comparisonFrom: string,
+    comparisonTo: string,
   ): ReturnType<KeyworkerApiClient['getPrisonStats']> {
-    return this.keyworkerApiClientBuilder(req).getPrisonStats(prisonId, fromDate, toDate)
+    return this.keyworkerApiClientBuilder(req).getPrisonStats(prisonId, fromDate, toDate, comparisonFrom, comparisonTo)
   }
 
   async getPrisonConfig(req: Request, prisonId: string): Promise<ReturnType<KeyworkerApiClient['getPrisonConfig']>> {
