@@ -25,6 +25,7 @@
           label: {
             text: "From"
           },
+          errorMessage: validationErrors | findError('dateFrom'),
           value: dateFrom,
           maxDate: yesterdayStringGBFormat()
         }) }}
@@ -35,6 +36,7 @@
           label: {
             text: "To"
           },
+          errorMessage: validationErrors | findError('dateTo'),
           value: dateTo,
           maxDate: yesterdayStringGBFormat()
         }) }}
