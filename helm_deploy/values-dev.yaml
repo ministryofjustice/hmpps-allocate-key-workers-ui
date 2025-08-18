@@ -21,6 +21,14 @@ generic-service:
     SENTRY_ENVIRONMENT: DEV
     PRISON_CONFIG_CACHE_TIMEOUT: 60
 
+  allowlist:
+    groups:
+      - digital_staff_and_mojo
+      - moj_cloud_platform
+      - prisons
+      - private_prisons
+      - accessibility-testing-1
+
 generic-prometheus-alerts:
   alertSeverity: hmpps-alerts-api-non-prod
   businessHoursOnly: true
