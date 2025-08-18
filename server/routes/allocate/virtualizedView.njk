@@ -50,6 +50,45 @@
   {% endif %}
 {% endblock %}
 
+{% set rows = [] %}
+{% for item in records %}
+  {% set rows = (rows.push([
+    {
+      html: '<a class="govuk-link--no-visited-state" target="_blank" href="' + prisonerProfileUrl + '/prisoner/' + item.personIdentifier + '">' + item | lastNameCommaFirstName + "</a><br/>" + item.personIdentifier,
+      attributes: {
+      "data-sort-value": item | lastNameCommaFirstName
+    }
+    },
+    {
+      text: item.location
+    },
+    {
+      html: alertFlags(prisonerProfileUrl + '/prisoner/' + item.personIdentifier + '/alerts/active', item.relevantAlertCodes, item.remainingAlertCount),
+      attributes: {
+      "data-sort-value": item | alertsSortValue
+    }
+    },
+    {
+      html: ('<a class="govuk-link--no-visited-state" href="staff-profile/' + item.staffMember.staffId + '">' + item.staffMember | lastNameCommaFirstName + " (allocations: " + (item.staffMember.allocationCount or 0) + ") </a>") if item.staffMember else 'None'
+    },
+    {
+      isSelect: not item.hasHighComplexityOfNeeds,
+      html: 'Not applicable - high complexity of need' if item.hasHighComplexityOfNeeds else govukSelect({
+      id: "selectStaffMember-" + loop.index0,
+      name: "selectStaffMember",
+      text: 'Select ' + policyStaff,
+      formGroup: {
+        classes: "govuk-!-margin-0"
+      },
+      items: staff | excludeCurrentStaffMember(item.staffMember) | conditionallyAddDeallocate(item.staffMember.staffId) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select ' + policyStaff)
+    })
+    } if user | hasPermission('allocate') else undefined,
+    {
+      html: '<a class="govuk-link govuk-link--no-visited-state" href="/' + policyPath + '/prisoner-allocation-history/' + item.personIdentifier + '">View allocation history</a>' if item.hasAllocationHistory else ''
+    }
+  ] | removeNullish), rows) %}
+{% endfor %}
+
 {% block innerContent %}
   <h1 class="govuk-heading-l govuk-!-margin-bottom-6">{{ pageTitle }}</h1>
 
@@ -61,7 +100,7 @@
 
         <form method="post" action="/{{ policyPath }}/allocate/filter" class="govuk-grid-row govuk-!-margin-right-0 govuk-!-margin-left-0 govuk-!-margin-bottom-7 govuk-!-padding-top-4 govuk-!-padding-bottom-2 govuk-!-padding-left-4 govuk-!-padding-right-4 search-form">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-          <input type="hidden" name="js" value="false"/>
+          <input type="hidden" name="js" value="true"/>
           <h2 id="searchBy" class="govuk-heading-m">Search by</h2>
           <div class="horizontal-form">
             {{ govukInput({
@@ -139,90 +178,53 @@
     {% elif records.length > 0 %}
       <form method="post">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-        {% set rows = [] %}
-        {% for item in records %}
-          {% set rows = (rows.push([
-            {
-              html: '<a class="govuk-link--no-visited-state" target="_blank" href="' + prisonerProfileUrl + '/prisoner/' + item.personIdentifier + '">' + item | lastNameCommaFirstName + "</a><br/>" + item.personIdentifier,
-              attributes: {
-                "data-sort-value": item | lastNameCommaFirstName
-              }
-            },
-            {
-              text: item.location
-            },
-            {
-              html: alertFlags(prisonerProfileUrl + '/prisoner/' + item.personIdentifier + '/alerts/active', item.relevantAlertCodes, item.remainingAlertCount),
-              attributes: {
-                "data-sort-value": item | alertsSortValue
-              }
-            },
-            {
-              html: ('<a class="govuk-link--no-visited-state" href="staff-profile/' + item.staffMember.staffId + '">' + item.staffMember | lastNameCommaFirstName + " (allocations: " + (item.staffMember.allocationCount or 0) + ") </a>") if item.staffMember else 'None'
-            },
-            {
-              html: 'Not applicable - high complexity of need' if item.hasHighComplexityOfNeeds else govukSelect({
-                id: "selectStaffMember",
-                name: "selectStaffMember",
-                text: 'Select ' + policyStaff,
-                formGroup: {
-                  classes: "govuk-!-margin-0"
-                },
-                items: staff | excludeCurrentStaffMember(item.staffMember) | conditionallyAddDeallocate(item.staffMember.staffId) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select ' + policyStaff)
-              })
-            } if user | hasPermission('allocate') else undefined,
-            {
-              html: '<a class="govuk-link govuk-link--no-visited-state" href="/' + policyPath + '/prisoner-allocation-history/' + item.personIdentifier + '">View allocation history</a>' if item.hasAllocationHistory else ''
-            }
-          ] | removeNullish), rows) %}
-        {% endfor %}
-
         {{ mojPagination(records.length) }}
 
-        {{ govukTable({
+      <div name="tableWrapper">
+      {{ govukTable({
+        classes: 'table-vertical-align-middle govuk-!-margin-top-6 center-align-content',
+        head: [
+          {
+            text: 'Name and prisoner number',
+            key: 'name',
             attributes: {
-              "data-module": "moj-sortable-table"
-            },
-            classes: 'table-vertical-align-middle govuk-!-margin-top-6 center-align-content',
-            head: [
-              {
-                text: 'Name and prisoner number',
-                key: 'name',
-                attributes: {
-                  "aria-sort": "ascending"
-                }
-              },
-              {
-                text: "Residential location",
-                key: 'location',
-                attributes: {
-                  "aria-sort": "none"
-                }
-              },
-              {
-                text: "Relevant alerts",
-                key: 'alerts',
-                attributes: {
-                  "aria-sort": "none"
-                }
-              },
-              {
-                text: policyStaff | sentenceCase,
-                key: policyStaff,
-                attributes: {
-                  "aria-sort": "none"
-                }
-              },
-              {
-                text: "Change " + policyStaff,
-                key: 'change'
-              } if user | hasPermission('allocate') else undefined,
-              {
-                text: ""
-              }
-            ] | removeNullish,
-            rows: rows
-          }) }}
+            "aria-sort": "ascending"
+          }
+          },
+          {
+            text: "Residential location",
+            key: 'location',
+            attributes: {
+            "aria-sort": "none"
+          }
+          },
+          {
+            text: "Relevant alerts",
+            key: 'alerts',
+            attributes: {
+            "aria-sort": "none"
+          }
+          },
+          {
+            text: policyStaff | sentenceCase,
+            key: policyStaff,
+            attributes: {
+            "aria-sort": "none"
+          }
+          },
+          {
+            text: "Change " + policyStaff,
+            key: 'change'
+          } if user | hasPermission('allocate') else undefined,
+          {
+            text: ""
+          }
+        ] | removeNullish,
+        rows: []
+      }) }}
+      </div>
+
+      <div name="test"></div>
 
         {{ mojPagination(records.length) }}
 
@@ -239,11 +241,87 @@
 
 {% block pageScripts %}
   <script nonce="{{ cspNonce }}">
+
     window.onload = function () {
-      const jsInput = document.querySelector('input[name="js"]')
-      if (jsInput) {
-        jsInput.value = 'true'
+      const rowData = {{ rows | dump | safe }}
+      const selected = []
+
+      const ROW_HEIGHT = 130
+      const ROWS_TO_SHOW = 9
+      const BUFFER_ROWS = 5
+
+      const RECORD_COUNT = {{ records.length }}
+
+      let startRow = 0
+
+      const table = document.querySelector('div[name="tableWrapper"]')
+      table.style.height = '600px'
+      table.style.overflowY = 'auto'
+
+      const container = document.querySelector('tbody')
+      container.style.height = ROW_HEIGHT * RECORD_COUNT + 'px'
+
+
+
+      const renderRows = (start) => {
+        const renderFrom = Math.max(0, start - BUFFER_ROWS)
+        const renderTo = Math.min(RECORD_COUNT - 1, start + ROWS_TO_SHOW + BUFFER_ROWS )
+        container.innerHTML = ''
+        if (renderFrom > 0) {
+          const placeHolderRow = document.createElement('tr')
+          placeHolderRow.classList = "govuk-table__row"
+          placeHolderRow.style.height = renderFrom * ROW_HEIGHT + 'px'
+          container.appendChild(placeHolderRow)
+        }
+
+        for (let index = renderFrom; index <= renderTo; index++) {
+          const row = document.createElement('tr')
+          row.classList = "govuk-table__row"
+          row.style.height = ROW_HEIGHT + 'px'
+          row.innerHTML = rowData[index].map(val => `<td class="govuk-table__cell">${val?.html?.val ?? val.html ?? val.text}</td>`).join('')
+          if (rowData[index][4].isSelect) {
+            const select = row.querySelector('.govuk-select')
+            if (selected[index]) {
+              select.value = selected[index]
+            }
+            select.addEventListener('change', (e)=>{
+              selected[index] = e.target.value
+            })
+          }
+          container.appendChild(row)
+        }
+
+        if (renderTo < RECORD_COUNT - 1) {
+          const placeHolderRow = document.createElement('tr')
+          placeHolderRow.classList = "govuk-table__row"
+          placeHolderRow.style.height = (RECORD_COUNT - 1 - renderTo) * ROW_HEIGHT + 'px'
+          container.appendChild(placeHolderRow)
+        }
+
+        selected.forEach((val, idx) => {
+          if (val && (idx < renderFrom || idx > renderTo)) {
+            const hiddenInput = document.createElement('input')
+            hiddenInput.id = 'selectStaffMember-' + idx
+            hiddenInput.name = 'selectStaffMember'
+            hiddenInput.setAttribute('hidden', true)
+            hiddenInput.value = val
+            container.appendChild(hiddenInput)
+          }
+        })
       }
+
+      renderRows(startRow)
+
+      table.addEventListener('scroll', (e) => {
+        const scrollTop = e.target.scrollTop;
+        const newStartRow = Math.floor(scrollTop / ROW_HEIGHT)
+        if (Math.abs(newStartRow - startRow) > BUFFER_ROWS) {
+          startRow = newStartRow
+          renderRows(startRow)
+        }
+        e.preventDefault && e.preventDefault();
+      });
+
     }
   </script>
 {% endblock %}
