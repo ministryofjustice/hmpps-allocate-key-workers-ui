@@ -102,7 +102,7 @@ context('historyMiddleware', () => {
       .and('have.attr', 'href')
       .should(
         'equal',
-        `/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true'], true)}`,
+        `/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true'], true)}`,
       )
   })
 
@@ -138,7 +138,7 @@ context('historyMiddleware', () => {
       .and('have.attr', 'href')
       .should(
         'equal',
-        `/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true'], true)}`,
+        `/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true'], true)}`,
       )
 
     cy.findByRole('button', { name: 'Continue' }).click()
@@ -162,7 +162,7 @@ context('historyMiddleware', () => {
       .and('have.attr', 'href')
       .should(
         'equal',
-        `/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true'], true)}`,
+        `/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true'], true)}`,
       )
     cy.get('.govuk-breadcrumbs__link')
       .eq(3)
@@ -170,7 +170,7 @@ context('historyMiddleware', () => {
       .and('have.attr', 'href')
       .should(
         'equal',
-        `/key-worker/recommend-allocations?allowPartialAllocation=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true', '/key-worker/recommend-allocations?allowPartialAllocation=true'], true)}`,
+        `/key-worker/recommend-allocations?allowPartialAllocation=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true', '/key-worker/recommend-allocations?allowPartialAllocation=true'], true)}`,
       )
   })
 

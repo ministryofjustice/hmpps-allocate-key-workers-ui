@@ -69,7 +69,10 @@
     }
     },
     {
-      html: ('<a class="govuk-link--no-visited-state" href="staff-profile/' + item.staffMember.staffId + '">' + item.staffMember | lastNameCommaFirstName + " (allocations: " + (item.staffMember.allocationCount or 0) + ") </a>") if item.staffMember else 'None'
+      html: ('<a class="govuk-link--no-visited-state" href="staff-profile/' + item.staffMember.staffId + '">' + item.staffMember | lastNameCommaFirstName + " (allocations: " + (item.staffMember.allocationCount or 0) + ") </a>") if item.staffMember else 'None',
+      attributes: {
+      "data-sort-value": item.staffMember | lastNameCommaFirstName
+    }
     },
     {
       isSelect: not item.hasHighComplexityOfNeeds,
@@ -185,28 +188,28 @@
         classes: 'table-vertical-align-middle govuk-!-margin-top-6 center-align-content',
         head: [
           {
-            text: 'Name and prisoner number',
+            html: '<button>Name and prisoner number</button>',
             key: 'name',
             attributes: {
             "aria-sort": "ascending"
           }
           },
           {
-            text: "Residential location",
+            html: "<button>Residential location</button>",
             key: 'location',
             attributes: {
             "aria-sort": "none"
           }
           },
           {
-            text: "Relevant alerts",
+            html: "<button>Relevant alerts</button>",
             key: 'alerts',
             attributes: {
             "aria-sort": "none"
           }
           },
           {
-            text: policyStaff | sentenceCase,
+            html: "<button>" + policyStaff | sentenceCase + "</button>",
             key: policyStaff,
             attributes: {
             "aria-sort": "none"
@@ -241,10 +244,43 @@
 
 {% block pageScripts %}
   <script nonce="{{ cspNonce }}">
+    const $upArrow = `<svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M6.5625 15.5L11 6.63125L15.4375 15.5H6.5625Z" fill="currentColor"/>
+</svg>`
+    const $downArrow = `<svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M15.4375 7L11 15.8687L6.5625 7L15.4375 7Z" fill="currentColor"/>
+</svg>`
+    const $upDownArrow = `<svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"/>
+<path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor"/>
+</svg>`
+
+    const updateSortableHeaderStyle = ($headings) => {
+      for (const $heading of $headings) {
+        const $button = $heading.querySelector('button')
+        if ($heading.hasAttribute('aria-sort') && $button) {
+          var _$button$querySelector
+          const direction = $heading.getAttribute('aria-sort')
+          ;(_$button$querySelector = $button.querySelector('svg')) == null || _$button$querySelector.remove()
+          switch (direction) {
+            case 'ascending':
+              $button.insertAdjacentHTML('beforeend', $upArrow)
+              break
+            case 'descending':
+              $button.insertAdjacentHTML('beforeend', $downArrow)
+              break
+            default:
+              $button.insertAdjacentHTML('beforeend', $upDownArrow)
+          }
+        }
+      }
+    }
 
     window.onload = function () {
+      const $headings = Array.from(document.querySelectorAll('th')).filter($heading => $heading.hasAttribute('aria-sort') && $heading.querySelector('button'))
+      updateSortableHeaderStyle($headings)
+
       const rowData = {{ rows | dump | safe }}
-      const selected = []
 
       const ROW_HEIGHT = 130
       const ROWS_TO_SHOW = 9
@@ -281,11 +317,11 @@
           row.innerHTML = rowData[index].map(val => `<td class="govuk-table__cell">${val?.html?.val ?? val.html ?? val.text}</td>`).join('')
           if (rowData[index][4].isSelect) {
             const select = row.querySelector('.govuk-select')
-            if (selected[index]) {
-              select.value = selected[index]
+            if (rowData[index][4].selected) {
+              select.value = rowData[index][4].selected
             }
             select.addEventListener('change', (e)=>{
-              selected[index] = e.target.value
+              rowData[index][4].selected = e.target.value
             })
           }
           container.appendChild(row)
@@ -298,13 +334,13 @@
           container.appendChild(placeHolderRow)
         }
 
-        selected.forEach((val, idx) => {
-          if (val && (idx < renderFrom || idx > renderTo)) {
+        rowData.forEach((val, idx) => {
+          if (val[4].selected && (idx < renderFrom || idx > renderTo)) {
             const hiddenInput = document.createElement('input')
             hiddenInput.id = 'selectStaffMember-' + idx
             hiddenInput.name = 'selectStaffMember'
             hiddenInput.setAttribute('hidden', true)
-            hiddenInput.value = val
+            hiddenInput.value = val[4].selected
             container.appendChild(hiddenInput)
           }
         })
@@ -321,6 +357,38 @@
         }
         e.preventDefault && e.preventDefault();
       });
+
+      const sortData = (headingIdx, direction = 1) => {
+        rowData.sort((a, b) => {
+          const aVal = a[headingIdx].attributes?.['data-sort-value'] ?? a[headingIdx].text
+          const bVal = b[headingIdx].attributes?.['data-sort-value'] ?? b[headingIdx].text
+          return aVal.localeCompare(bVal) * direction
+        })
+        renderRows(startRow)
+      }
+
+      $headings.forEach(($heading, idx) => {
+        $heading.querySelector('button').addEventListener('click', (e) => {
+          e.preventDefault && e.preventDefault()
+          const clickedHeading = e.target.parentElement
+          switch (clickedHeading.getAttribute('aria-sort')) {
+            case 'ascending':
+              clickedHeading.setAttribute('aria-sort', 'descending')
+              sortData(idx, -1)
+              break
+            case 'descending':
+              clickedHeading.setAttribute('aria-sort', 'ascending')
+              sortData(idx)
+              break
+            default:
+              $headings.forEach(itm => itm !== clickedHeading && itm.setAttribute('aria-sort', 'none'))
+              clickedHeading.setAttribute('aria-sort', 'ascending')
+              sortData(idx)
+          }
+          console.log(idx)
+          updateSortableHeaderStyle($headings)
+        })
+      })
 
     }
   </script>
