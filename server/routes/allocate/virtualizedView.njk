@@ -183,9 +183,9 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
         {{ mojPagination(records.length) }}
 
-      <div name="tableWrapper">
+      <div class="virtualizedTableContainer">
       {{ govukTable({
-        classes: 'table-vertical-align-middle govuk-!-margin-top-6 center-align-content',
+        classes: 'table-vertical-align-middle govuk-!-margin-top-6 center-align-content sticky-table-heading',
         head: [
           {
             html: '<button>Name and prisoner number</button>',
@@ -290,7 +290,7 @@
 
       let startRow = 0
 
-      const table = document.querySelector('div[name="tableWrapper"]')
+      const table = document.querySelector('.virtualizedTableContainer')
       table.style.height = '600px'
       table.style.overflowY = 'auto'
 
