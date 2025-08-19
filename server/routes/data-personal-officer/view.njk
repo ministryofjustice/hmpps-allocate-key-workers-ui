@@ -78,9 +78,8 @@
 
   {% if data.length %}
 
-    <p>Displaying statistics from {{ stats.current.from | dateString }} to {{ stats.current.to | dateString }}.
-      {% if stats.previous %}Comparing against statistics from {{ stats.previous.from | dateString }} to {{ stats.previous.to | dateString }}. {% endif %}</p>
-
+    <p>Displaying statistics from {{ dateRange.dateFrom | dateString }} to {{ dateRange.dateTo | dateString }}.
+      {% if stats.previous %}Comparing against statistics from {{ dateRange.compareDateFrom | dateString }} to {{ dateRange.compareDateTo | dateString }}. {% endif %}</p>
     <p class="govuk-!-margin-top-6">Date updated: {{ dateUpdated | dateString }}</p>
 
     <div class="govuk-grid-row stat-card-grid">
