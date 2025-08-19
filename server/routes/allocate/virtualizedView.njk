@@ -52,7 +52,9 @@
 
 {% set rows = [] %}
 {% for item in records %}
-  {% set rows = (rows.push([
+  {% set rows = (rows.push({
+    height: (130 if item.remainingAlertCount > 0 else 105 ) if item.relevantAlertCodes.length === 2 else 96,
+    cols: [
     {
       html: '<a class="govuk-link--no-visited-state" target="_blank" href="' + prisonerProfileUrl + '/prisoner/' + item.personIdentifier + '">' + item | lastNameCommaFirstName + "</a><br/>" + item.personIdentifier,
       attributes: {
@@ -89,7 +91,8 @@
     {
       html: '<a class="govuk-link govuk-link--no-visited-state" href="/' + policyPath + '/prisoner-allocation-history/' + item.personIdentifier + '">View allocation history</a>' if item.hasAllocationHistory else ''
     }
-  ] | removeNullish), rows) %}
+  ] | removeNullish
+  }), rows) %}
 {% endfor %}
 
 {% block innerContent %}
@@ -183,7 +186,6 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
         {{ mojPagination(records.length) }}
 
-      <div class="virtualizedTableContainer">
       {{ govukTable({
         classes: 'table-vertical-align-middle govuk-!-margin-top-6 center-align-content sticky-table-heading',
         head: [
@@ -225,9 +227,6 @@
         ] | removeNullish,
         rows: []
       }) }}
-      </div>
-
-      <div name="test"></div>
 
         {{ mojPagination(records.length) }}
 
@@ -283,20 +282,15 @@
       const rowData = {{ rows | dump | safe }}
 
       const ROW_HEIGHT = 130
-      const ROWS_TO_SHOW = 9
+      const ROWS_TO_SHOW = 13
       const BUFFER_ROWS = 5
 
       const RECORD_COUNT = {{ records.length }}
 
       let startRow = 0
 
-      const table = document.querySelector('.virtualizedTableContainer')
-      table.style.height = '600px'
-      table.style.overflowY = 'auto'
-
       const container = document.querySelector('tbody')
       container.style.height = ROW_HEIGHT * RECORD_COUNT + 'px'
-
 
 
       const renderRows = (start) => {
@@ -314,14 +308,14 @@
           const row = document.createElement('tr')
           row.classList = "govuk-table__row"
           row.style.height = ROW_HEIGHT + 'px'
-          row.innerHTML = rowData[index].map(val => `<td class="govuk-table__cell">${val?.html?.val ?? val.html ?? val.text}</td>`).join('')
-          if (rowData[index][4].isSelect) {
+          row.innerHTML = rowData[index].cols.map(val => `<td class="govuk-table__cell">${val?.html?.val ?? val.html ?? val.text}</td>`).join('')
+          if (rowData[index].cols[4].isSelect) {
             const select = row.querySelector('.govuk-select')
-            if (rowData[index][4].selected) {
-              select.value = rowData[index][4].selected
+            if (rowData[index].selected) {
+              select.value = rowData[index].selected
             }
             select.addEventListener('change', (e)=>{
-              rowData[index][4].selected = e.target.value
+              rowData[index].selected = e.target.value
             })
           }
           container.appendChild(row)
@@ -335,12 +329,12 @@
         }
 
         rowData.forEach((val, idx) => {
-          if (val[4].selected && (idx < renderFrom || idx > renderTo)) {
+          if (val.selected && (idx < renderFrom || idx > renderTo)) {
             const hiddenInput = document.createElement('input')
             hiddenInput.id = 'selectStaffMember-' + idx
             hiddenInput.name = 'selectStaffMember'
             hiddenInput.setAttribute('hidden', true)
-            hiddenInput.value = val[4].selected
+            hiddenInput.value = val.selected
             container.appendChild(hiddenInput)
           }
         })
@@ -348,8 +342,8 @@
 
       renderRows(startRow)
 
-      table.addEventListener('scroll', (e) => {
-        const scrollTop = e.target.scrollTop;
+      window.addEventListener('scroll', (e) => {
+        const scrollTop = -container.getBoundingClientRect().y;
         const newStartRow = Math.floor(scrollTop / ROW_HEIGHT)
         if (Math.abs(newStartRow - startRow) > BUFFER_ROWS) {
           startRow = newStartRow
@@ -360,8 +354,8 @@
 
       const sortData = (headingIdx, direction = 1) => {
         rowData.sort((a, b) => {
-          const aVal = a[headingIdx].attributes?.['data-sort-value'] ?? a[headingIdx].text
-          const bVal = b[headingIdx].attributes?.['data-sort-value'] ?? b[headingIdx].text
+          const aVal = a.cols[headingIdx].attributes?.['data-sort-value'] ?? a.cols[headingIdx].text ?? ''
+          const bVal = b.cols[headingIdx].attributes?.['data-sort-value'] ?? b.cols[headingIdx].text ?? ''
           return aVal.localeCompare(bVal) * direction
         })
         renderRows(startRow)
@@ -385,11 +379,9 @@
               clickedHeading.setAttribute('aria-sort', 'ascending')
               sortData(idx)
           }
-          console.log(idx)
           updateSortableHeaderStyle($headings)
         })
       })
-
     }
   </script>
 {% endblock %}
