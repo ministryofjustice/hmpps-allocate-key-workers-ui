@@ -8,3 +8,4 @@ text: 'Personal officer allocation history'
 text: 'Key worker allocation history'
 ^.+.test.ts$
 POLICIES\[res.locals.policyPath!\]\?\.name === 'Personal officer'
+server/routes/establishment-settings/view.njk

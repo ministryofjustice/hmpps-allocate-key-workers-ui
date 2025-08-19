@@ -160,4 +160,12 @@ export default class KeyworkerApiService {
   searchStaff(req: Request, prisonCode: string, query: components['schemas']['StaffSearchRequest']) {
     return this.keyworkerApiClientBuilder(req).searchStaff(prisonCode, query)
   }
+
+  getPolicies(req: Request, prisonCode: string) {
+    return this.keyworkerApiClientBuilder(req).getPolicies(prisonCode)
+  }
+
+  putPolicies(req: Request, res: Response, request: components['schemas']['PrisonPolicies']) {
+    return this.keyworkerApiClientBuilder(req, res).putPolicies(res.locals.user.getActiveCaseloadId()!, request)
+  }
 }
