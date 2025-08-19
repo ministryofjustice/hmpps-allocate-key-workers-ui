@@ -204,6 +204,7 @@
           }
           },
           {
+            classes: 'alert-badge-column',
             html: "<button>Relevant alerts</button>",
             key: 'alerts',
             attributes: {
@@ -281,7 +282,6 @@
 
       const rowData = {{ rows | dump | safe }}
 
-      const ROW_HEIGHT = 130
       const ROWS_TO_SHOW = 13
       const BUFFER_ROWS = 5
 
@@ -290,8 +290,7 @@
       let startRow = 0
 
       const container = document.querySelector('tbody')
-      container.style.height = ROW_HEIGHT * RECORD_COUNT + 'px'
-
+      container.style.height = rowData.map(row => row.height).reduce((a, b) => a + b, 0) + 'px'
 
       const renderRows = (start) => {
         const renderFrom = Math.max(0, start - BUFFER_ROWS)
@@ -300,14 +299,14 @@
         if (renderFrom > 0) {
           const placeHolderRow = document.createElement('tr')
           placeHolderRow.classList = "govuk-table__row"
-          placeHolderRow.style.height = renderFrom * ROW_HEIGHT + 'px'
+          placeHolderRow.style.height = Array(renderFrom).fill().map((_,i) => rowData[i].height).reduce((a, b) => a + b, 0) + 'px'
           container.appendChild(placeHolderRow)
         }
 
         for (let index = renderFrom; index <= renderTo; index++) {
           const row = document.createElement('tr')
           row.classList = "govuk-table__row"
-          row.style.height = ROW_HEIGHT + 'px'
+          row.style.height = rowData[index].height + 'px'
           row.innerHTML = rowData[index].cols.map(val => `<td class="govuk-table__cell">${val?.html?.val ?? val.html ?? val.text}</td>`).join('')
           if (rowData[index].cols[4].isSelect) {
             const select = row.querySelector('.govuk-select')
@@ -324,7 +323,7 @@
         if (renderTo < RECORD_COUNT - 1) {
           const placeHolderRow = document.createElement('tr')
           placeHolderRow.classList = "govuk-table__row"
-          placeHolderRow.style.height = (RECORD_COUNT - 1 - renderTo) * ROW_HEIGHT + 'px'
+          placeHolderRow.style.height = Array(RECORD_COUNT - 1 - renderTo).fill().map((_,i) => rowData[renderTo + 1 + i].height).reduce((a, b) => a + b, 0) + 'px' + 'px'
           container.appendChild(placeHolderRow)
         }
 
@@ -342,9 +341,22 @@
 
       renderRows(startRow)
 
+      const getStartRow = (scrollTop) => {
+        let top = scrollTop
+        let result = 0
+        for (const idx in rowData) {
+          if (top < rowData[idx].height) {
+            return result
+          }
+          result++
+          top -= rowData[idx].height
+        }
+        return result
+      }
+
       window.addEventListener('scroll', (e) => {
-        const scrollTop = -container.getBoundingClientRect().y;
-        const newStartRow = Math.floor(scrollTop / ROW_HEIGHT)
+        const scrollTop = Math.max(-container.getBoundingClientRect().y, 0);
+        const newStartRow = getStartRow(scrollTop)
         if (Math.abs(newStartRow - startRow) > BUFFER_ROWS) {
           startRow = newStartRow
           renderRows(startRow)
