@@ -21,7 +21,21 @@ export class POStaffDataController {
     }
   }
 
-  private addComparisonDates = ({ dateFrom, dateTo }: { dateFrom: string; dateTo: string }) => {
+  private addComparisonDates = ({
+    dateFrom,
+    dateTo,
+    compareDateFrom,
+    compareDateTo,
+  }: {
+    dateFrom: string
+    dateTo: string
+    compareDateFrom: string | undefined
+    compareDateTo: string | undefined
+  }) => {
+    if (compareDateFrom && compareDateTo) {
+      return { dateFrom, dateTo, compareDateFrom, compareDateTo }
+    }
+
     const lastDay = new Date(dateTo)
     const firstDay = new Date(dateFrom)
 
