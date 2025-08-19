@@ -53,6 +53,7 @@ export class POStaffDataController {
       showBreadcrumbs: true,
       stats,
       data: getEstablishmentData(stats, req),
+      dateRange,
       dateFrom: resQuery?.dateFrom ?? formatDateConcise(stats.current?.from),
       dateTo: resQuery?.dateTo ?? formatDateConcise(stats.current?.to),
       compareDateFrom: resQuery?.compareDateFrom,
