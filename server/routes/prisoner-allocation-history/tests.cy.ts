@@ -198,7 +198,7 @@ context('Prisoner Allocation History', () => {
       cy.get('.govuk-breadcrumbs__list-item').eq(0).should('include.text', 'Digital Prison Services')
       cy.get('.govuk-breadcrumbs__list-item').eq(1).should('include.text', 'Personal officer')
       cy.get('.govuk-breadcrumbs__list-item').eq(2).should('include.text', 'Manage personal officers')
-      cy.get('.govuk-breadcrumbs__list-item').eq(3).should('include.text', 'Key worker profile')
+      cy.get('.govuk-breadcrumbs__list-item').eq(3).should('include.text', 'Personal officer profile')
 
       cy.get('h1').should('have.text', 'Cat, Tabby (A9965EA)')
 
