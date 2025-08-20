@@ -117,7 +117,11 @@ export function getBreadcrumbs(req: Request, res: Response) {
       alias: Page.HOMEPAGE,
     },
     { matcher: /\/allocate/g, text: `Allocate ${res.locals.policyStaffs!}`, alias: Page.ALLOCATE },
-    { matcher: /recommend-allocations/g, text: 'Recommend allocations', alias: Page.RECOMMENDED_ALLOCATIONS },
+    {
+      matcher: /recommend-allocations/g,
+      text: `Allocate ${res.locals.policyStaffs!} automatically`,
+      alias: Page.RECOMMENDED_ALLOCATIONS,
+    },
     {
       matcher: /prisoner-allocation-history/g,
       text: 'Prisoner allocation history',
