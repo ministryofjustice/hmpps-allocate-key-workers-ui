@@ -166,7 +166,7 @@ context('historyMiddleware', () => {
       )
     cy.get('.govuk-breadcrumbs__link')
       .eq(3)
-      .should('include.text', 'Recommend allocations')
+      .should('include.text', 'Allocate key workers automatically')
       .and('have.attr', 'href')
       .should(
         'equal',
@@ -228,7 +228,7 @@ context('historyMiddleware', () => {
       )
     cy.get('.govuk-breadcrumbs__link')
       .eq(3)
-      .should('include.text', 'Profile')
+      .should('include.text', 'Key worker profile')
       .and('have.attr', 'href')
       .should(
         'equal',
