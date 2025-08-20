@@ -59,7 +59,7 @@ div.moj-action-bar__filter::after { content: none !important; }
 }
 .sticky-action-bar {
   justify-content: space-between;
-  display: flex;
+  display: none;
   position: sticky;
   z-index: 1000;
   bottom: -1px;
@@ -70,6 +70,14 @@ div.moj-action-bar__filter::after { content: none !important; }
 
   .sticky-action-bar--label {
     color: white;
+    position: relative;
+    top: 10px;
+
+    .clear-select {
+      text-decoration: underline;
+      cursor: pointer;
+      margin-left: 10px;
+    }
   }
 }
 .alert-badge-column { min-width: 136px; }

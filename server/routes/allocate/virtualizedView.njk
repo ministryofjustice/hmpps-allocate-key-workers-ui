@@ -238,7 +238,7 @@
         {% if user | hasPermission('allocate') %}
           <div class="sticky-action-bar">
             <div class="govuk-body sticky-action-bar--label">
-              <strong> </strong>
+              <strong class="change-count"></strong> <span class="clear-select">Clear</span>
             </div>
             {{ govukButton({
               classes: "govuk-!-margin-bottom-0 govuk-button--secondary",
@@ -286,6 +286,8 @@
       }
     }
 
+    const rowData = {{ rows | dump | safe }}
+
     const staff = {{ staff | dump | safe }}
 
     const createOption = (text, value, selected) => {
@@ -327,11 +329,19 @@
       })
     }
 
+    const updateActionBar = () => {
+      const changeCount = rowData.filter(row => row.selected).length
+      if (changeCount) {
+        document.querySelector('.sticky-action-bar').style.display = 'flex'
+        document.querySelector('.change-count').innerHTML = `${changeCount} change${ changeCount === 1 ? '' : 's' } selected`
+      } else {
+        document.querySelector('.sticky-action-bar').style.display = 'none'
+      }
+    }
+
     window.onload = function () {
       const $headings = Array.from(document.querySelectorAll('th')).filter($heading => $heading.hasAttribute('aria-sort') && $heading.querySelector('button'))
       updateSortableHeaderStyle($headings)
-
-      const rowData = {{ rows | dump | safe }}
 
       const ROWS_TO_SHOW = 13
       const BUFFER_ROWS = 5
@@ -370,6 +380,7 @@
 
             select.addEventListener('change', (e)=>{
               rowData[index].selected = e.target.value
+              updateActionBar()
             })
           }
           container.appendChild(row)
@@ -427,6 +438,12 @@
         })
         renderRows(startRow)
       }
+
+      document.querySelector('.clear-select').addEventListener('click', e => {
+        rowData.forEach(row => { delete row.selected })
+        updateActionBar()
+        renderRows(startRow)
+      })
 
       $headings.forEach(($heading, idx) => {
         $heading.querySelector('button').addEventListener('click', (e) => {
