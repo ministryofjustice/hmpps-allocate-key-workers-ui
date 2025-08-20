@@ -51,10 +51,3 @@ export const policyString = (policyPath: keyof typeof POLICIES, key: keyof Polic
 
 // @ts-expect-error T[P] index error
 export type MakeNullable<T, K extends PropertyKey> = Pick<T, Exclude<keyof T, K>> & { [P in K]?: T[P] | null }
-
-export const addB64History = (link: string, b64History: string) => {
-  const searchParams = new URLSearchParams(link)
-  searchParams.set('history', b64History)
-
-  return `${link.split('?')[0]}?${searchParams.toString()}`
-}
