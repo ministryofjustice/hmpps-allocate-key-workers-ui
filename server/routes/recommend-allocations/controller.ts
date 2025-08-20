@@ -76,20 +76,19 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
       return {
         ...o,
         recommendation: match?.staff.staffId,
-        kwDropdown: staff
-          .sort((a, b) => (a.allocated > b.allocated ? 1 : -1))
-          .map(s => {
-            return {
-              text: `${lastNameCommaFirstName(s)} (allocations: ${s.allocated})`,
-              value: `allocate:${s.staffId}${s.staffId === match?.staff.staffId ? ':auto' : ''}`,
-            }
-          }),
+        recommendedText: match
+          ? `${lastNameCommaFirstName(match!.staff)} (allocations: ${match!.staff.allocated})`
+          : '',
       }
     })
+
+    const dropdownOptions = this.getDropdownOptions(recommendations.staff)
 
     return res.render('recommend-allocations/view', {
       showBreadcrumbs: true,
       records: matchedPrisoners,
+      staff: dropdownOptions,
+      longestOption: dropdownOptions.reduce((acc, obj) => (acc.length > obj.text.length ? acc : obj.text), ''),
       count: req.flash(FLASH_KEY__COUNT)[0],
       apiError: req.flash(FLASH_KEY__API_ERROR)[0],
     })

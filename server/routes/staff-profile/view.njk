@@ -115,13 +115,18 @@
           },
           {
             html: govukSelect({
+              attributes: {
+                'staff-id': staffId or '',
+                'person-id': item.prisoner.prisonNumber
+              },
               id: "selectStaffMember",
+              classes: 'placeholder-select',
               name: "selectStaffMember",
               text: 'Select ' + policyStaff,
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: staff | excludeCurrentStaffMember({staffId: staffId}) | conditionallyAddDeallocate(staffId) | mergePrisonerKeyworkerIds(item.prisoner.prisonNumber) | addSelectValue('Select ' + policyStaff)
+              items: [] | addSelectValue('Select ' + policyStaff, true, '', true) | addSelectValue(longestOption, true)
             })
           } if user | hasPermission('allocate') else undefined,
           {
@@ -201,4 +206,63 @@
     </form>
   </div>
 
+{% endblock %}
+
+{% block pageScripts %}
+  <script nonce="{{ cspNonce }}">
+    const staff = {{ staff | dump | safe }}
+
+    function createOption(text, value, selected) {
+      const option = document.createElement('option')
+      option.text = text
+      option.value = value
+      if (selected) {
+        option.selected = selected
+      }
+      return option
+    }
+
+    window.onload = function () {
+      // const dropdown = document.getElementById('selectStaffMemberSingleton')
+      document.querySelectorAll('.placeholder-select').forEach(select => {
+        select.addEventListener('click', e => {
+          if (select.children.length > 2) return
+
+          // Delete all children after the first
+          select.innerHTML = ''
+
+          const staffId = select.attributes['staff-id']?.value || ''
+          const personId = select.attributes['person-id']?.value || '' 
+          const recommendedId = select.attributes['recommended-id']?.value || ''
+
+          // Insert Select (policyName) as first option always
+          select.appendChild(createOption(`Select {{policyStaff}}`, ''))
+
+          // Equal to conditionallyAddDeallocate
+          if (staffId) {
+            select.appendChild(createOption('Deallocate', `${personId}:deallocate:${staffId}`))
+          }
+
+          staff.forEach(option => {
+            let opt = createOption(option.text, option.value)
+
+            // Equal to excludeCurrentStaffMember
+            if (staffId && opt.value.includes(`:${staffId}`)) {
+              return
+            }
+
+            if (recommendedId && opt.value.includes(`:${recommendedId}`)) {
+              opt.selected = true
+            }
+
+            // Equal to mergePrisonerKeyworkerIds
+            opt.value = `${personId}:${opt.value}`
+            select.appendChild(opt)
+          })
+
+        })
+
+      })
+    }
+  </script>
 {% endblock %}

@@ -57,13 +57,19 @@
             },
             {
               html: govukSelect({
+                attributes: {
+                  'staff-id': item.staffMember.staffId or '',
+                  'person-id': item.personIdentifier,
+                  'recommended-id': item.recommendation
+                },
                 id: "selectStaffMember",
+                classes: 'placeholder-select',
                 name: "selectStaffMember",
                 text: 'Select ' + policyStaff,
                 formGroup: {
                   classes: "govuk-!-margin-0"
                 },
-                items: item.kwDropdown | mergePrisonerKeyworkerIds(item.personIdentifier, item.recommendation) | addSelectValue('Select ' + policyStaff, true, '', false) | setSelectedValue(item.personIdentifier+ ':allocate:' + item.recommendation + ':auto')
+                items: ([] | addSelectValue(item.recommendedText, true, item.personIdentifier+ ':allocate:' + item.recommendation + ':auto', true) | addSelectValue(longestOption, true, '', false)) if item.recommendedText else ([] | addSelectValue('Select ' + policyStaff, true, '', true) | addSelectValue(longestOption, true, '1', false))
               })
             },
             {
@@ -130,4 +136,63 @@
       <p class="govuk-!-margin-top-8">All prisoners currently have a {{ policyStaff }} assigned.</p>
     {% endif %}
   </div>
+{% endblock %}
+
+{% block pageScripts %}
+  <script nonce="{{ cspNonce }}">
+    const staff = {{ staff | dump | safe }}
+
+    function createOption(text, value, selected) {
+      const option = document.createElement('option')
+      option.text = text
+      option.value = value
+      if (selected) {
+        option.selected = selected
+      }
+      return option
+    }
+
+    window.onload = function () {
+      // const dropdown = document.getElementById('selectStaffMemberSingleton')
+      document.querySelectorAll('.placeholder-select').forEach(select => {
+        select.addEventListener('click', e => {
+          if (select.children.length > 2) return
+
+          // Delete all children after the first
+          select.innerHTML = ''
+
+          const staffId = select.attributes['staff-id']?.value || ''
+          const personId = select.attributes['person-id']?.value || '' 
+          const recommendedId = select.attributes['recommended-id']?.value || ''
+
+          // Insert Select (policyName) as first option always
+          select.appendChild(createOption(`Select {{policyStaff}}`, ''))
+
+          // Equal to conditionallyAddDeallocate
+          if (staffId) {
+            select.appendChild(createOption('Deallocate', `${personId}:deallocate:${staffId}`))
+          }
+
+          staff.forEach(option => {
+            let opt = createOption(option.text, option.value)
+
+            // Equal to excludeCurrentStaffMember
+            if (staffId && opt.value.includes(`:${staffId}`)) {
+              return
+            }
+
+            if (recommendedId && opt.value.includes(`:${recommendedId}`)) {
+              opt.selected = true
+            }
+
+            // Equal to mergePrisonerKeyworkerIds
+            opt.value = `${personId}:${opt.value}`
+            select.appendChild(opt)
+          })
+
+        })
+
+      })
+    }
+  </script>
 {% endblock %}

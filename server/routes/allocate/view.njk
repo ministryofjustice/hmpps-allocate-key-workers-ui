@@ -136,16 +136,6 @@
     {% if records.length == 0 %}
       <p> No results for this search criteria.
     {% elif records.length > 0 %}
-        {{ govukSelect({
-        id: "selectStaffMemberSingleton",
-        classes: 'govuk-visually-hidden',
-        name: "selectStaffMemberSingleton",
-        text: 'Select ' + policyStaff,
-        formGroup: {
-          classes: "govuk-!-margin-0"
-        },
-        items: staff | addSelectValue('Select ' + policyStaff)
-      }) }}
         <form method="post">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
           {% set rows = [] %}
@@ -182,7 +172,7 @@
                 formGroup: {
                   classes: "govuk-!-margin-0"
                 },
-                items: [] | addSelectValue('Select ' + policyStaff)
+                items: [] | addSelectValue('Select ' + policyStaff, true, '', true) | addSelectValue(longestOption, true)
               })
             } if user | hasPermission('allocate') else undefined,
             {
@@ -251,60 +241,61 @@
     </div>
   {% endblock %}
 
-  {% block pageScripts %}
-    <script nonce="{{ cspNonce }}">
-      window.onload = function () {
-        const dropdown = document.getElementById('selectStaffMemberSingleton')
-        // Get longest value in children
-        const longest = Array.from(dropdown.querySelectorAll('option')).reduce((acc, obj) => acc.length > obj.text.length? acc : obj.text, '')
+{% block pageScripts %}
+  <script nonce="{{ cspNonce }}">
+    const staff = {{ staff | dump | safe }}
 
-        document.querySelectorAll('.placeholder-select').forEach(select => {
-          // Insert longest to each placeholder to buffer the length
-          var longestOpt = document.createElement('option')
-          longestOpt.text = longest
-          select.appendChild(longestOpt)
+    function createOption(text, value, selected) {
+      const option = document.createElement('option')
+      option.text = text
+      option.value = value
+      if (selected) {
+        option.selected = selected
+      }
+      return option
+    }
 
-          select.addEventListener('click', e => {
-            if (select.children.length > 2) return
+    window.onload = function () {
+      // const dropdown = document.getElementById('selectStaffMemberSingleton')
+      document.querySelectorAll('.placeholder-select').forEach(select => {
+        select.addEventListener('click', e => {
+          if (select.children.length > 2) return
 
-            // Delete all children after the first
-            while(select.children.length) {
-              select.removeChild(select.children[0])
+          // Delete all children after the first
+          select.innerHTML = ''
+
+          const staffId = select.attributes['staff-id']?.value || ''
+          const personId = select.attributes['person-id']?.value || '' 
+          const recommendedId = select.attributes['recommended-id']?.value || ''
+
+          // Insert Select (policyName) as first option always
+          select.appendChild(createOption(`Select {{policyStaff}}`, ''))
+
+          // Equal to conditionallyAddDeallocate
+          if (staffId) {
+            select.appendChild(createOption('Deallocate', `${personId}:deallocate:${staffId}`))
+          }
+
+          staff.forEach(option => {
+            let opt = createOption(option.text, option.value)
+
+            // Equal to excludeCurrentStaffMember
+            if (staffId && opt.value.includes(`:${staffId}`)) {
+              return
             }
 
-            const staffId = select.attributes['staff-id'].value
-            const personId = select.attributes['person-id'].value
-
-            // Insert Select (policyName) as first option always
-            select.appendChild(dropdown.children[0].cloneNode(true))
-
-            // Equal to conditionallyAddDeallocate
-            if (staffId) {
-              const opt = document.createElement('option')
-              opt.text = 'Deallocate'
-              opt.value = `${personId}:deallocate:${staffId}`
-              select.appendChild(opt)
+            if (recommendedId && opt.value.includes(`:${recommendedId}`)) {
+              opt.selected = true
             }
 
-            dropdown.querySelectorAll('option').forEach((option, i) => {
-              if (i === 0) return
-              let opt = document.createElement('option')
-              opt.text = option.text
-              opt.value = option.value
-
-              // Equal to excludeCurrentStaffMember
-              if (staffId && opt.value.includes(`:${staffId}`)) {
-                return
-              }
-
-              // Equal to mergePrisonerKeyworkerIds
-              opt.value = `${personId}:${option.value}`
-              select.appendChild(opt)
-            })
-
+            // Equal to mergePrisonerKeyworkerIds
+            opt.value = `${personId}:${opt.value}`
+            select.appendChild(opt)
           })
 
         })
-      }
-    </script>
-  {% endblock %}
+
+      })
+    }
+  </script>
+{% endblock %}
