@@ -57,4 +57,19 @@ div.moj-action-bar__filter::after { content: none !important; }
     position: sticky; top: 0; background: white;
   }
 }
+.sticky-action-bar {
+  justify-content: space-between;
+  display: flex;
+  position: sticky;
+  z-index: 1000;
+  bottom: -1px;
+  background-color: #1d70b8;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 20px;
+
+  .sticky-action-bar--label {
+    color: white;
+  }
+}
 .alert-badge-column { min-width: 136px; }

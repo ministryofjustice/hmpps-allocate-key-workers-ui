@@ -232,10 +232,16 @@
         {{ mojPagination(records.length) }}
 
         {% if user | hasPermission('allocate') %}
-          {{ govukButton({
-            text: "Save changes",
-            preventDoubleClick: true
-          }) }}
+          <div class="sticky-action-bar">
+            <div class="govuk-body sticky-action-bar--label">
+              <strong> </strong>
+            </div>
+            {{ govukButton({
+              classes: "govuk-!-margin-bottom-0 govuk-button--secondary",
+              text: "Save changes",
+              preventDoubleClick: true
+            }) }}
+          </div>
         {% endif %}
       </form>
     {% endif %}
