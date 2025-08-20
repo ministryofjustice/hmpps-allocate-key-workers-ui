@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import KeyworkerApiService from '../../../../services/keyworkerApi/keyworkerApiService'
 import { components } from '../../../../@types/keyWorker'
+import { getHistoryParamForPOST } from '../../../../middleware/historyMiddleware'
 
 export class RemoveStaffRoleController {
   constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
@@ -50,12 +51,13 @@ export class RemoveStaffRoleController {
   POST = async (req: Request, res: Response) => {
     req.journeyData.removeStaffRole!.query = req.body.query
     delete req.journeyData.removeStaffRole!.searchResults
-    res.redirect('remove')
+    res.redirect(`remove?history=${getHistoryParamForPOST(req)}`)
   }
 
   selectStaff = async (req: Request<unknown, unknown, unknown, { staffId?: string }>, res: Response) => {
     const staffId = Number(req.query.staffId)
     const staff = req.journeyData.removeStaffRole!.searchResults?.find(item => item.staffId === staffId)
+    req.journeyData.b64History = getHistoryParamForPOST(req as Request)
     if (staff) {
       req.journeyData.removeStaffRole!.staff = staff
       res.redirect('remove-role')

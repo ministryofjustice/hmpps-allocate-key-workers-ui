@@ -15,6 +15,15 @@ function serialiseHistory(history: string[]) {
   return Buffer.from(JSON.stringify(history)).toString('base64')
 }
 
+export function restoreHistoryFromJourneyData(req: Request, res: Response) {
+  const history = deserialiseHistory(req.journeyData.b64History)
+  res.locals.history = history
+  res.locals.b64History = req.journeyData.b64History!
+
+  res.locals.breadcrumbs = new Breadcrumbs(res)
+  res.locals.breadcrumbs.addItems(...getBreadcrumbs(req, res))
+}
+
 export function getHistoryParamForPOST(
   req: Request,
   targetPage?: string,
