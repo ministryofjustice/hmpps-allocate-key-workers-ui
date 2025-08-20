@@ -11,18 +11,21 @@ import { dataAccess } from '../data'
 import { EstablishmentSettingsRoutes } from './establishment-settings/routes'
 import { RecommendStaffAutomaticallyRoutes } from './recommend-allocations/routes'
 import { StaffDataRoutes } from './data/routes'
-import {
-  populateUserPermissionsAndPrisonConfig,
-  requirePermissionsAndConfig,
-} from '../middleware/permissionsMiddleware'
+import { populateUserPermissionsAndPrisonConfig } from '../middleware/permissionsMiddleware'
 import { JourneyRouter } from './base/routes'
 import breadcrumbs from '../middleware/breadcrumbs'
-import { UserPermissionLevel } from '../interfaces/hmppsUser'
 import { ManageRolesRoutes } from './manage-roles/routes'
 import { Page } from '../services/auditService'
 import { POStaffDataRoutes } from './data-personal-officer/routes'
 import { historyMiddleware } from '../middleware/historyMiddleware'
 import { POStaffProfileRoutes } from './staff-profile-personal-officer/routes'
+import {
+  minRequireAdminOrAllocate,
+  minRequireAdminOrSelf,
+  minRequireAllocate,
+  minRequireSelfProfile,
+  minRequireView,
+} from './permissions'
 
 export default function routes(services: Services) {
   const { router, get, useForPolicies } = JourneyRouter()
@@ -31,40 +34,29 @@ export default function routes(services: Services) {
   router.use(populateUserPermissionsAndPrisonConfig())
   router.use(breadcrumbs())
 
-  const permissionAdmin = { requirePrisonEnabled: false, minimumPermission: UserPermissionLevel.ADMIN }
-  const permissionAllocate = { requirePrisonEnabled: true, minimumPermission: UserPermissionLevel.ALLOCATE }
-  const permissionSelf = { requirePrisonEnabled: true, minimumPermission: UserPermissionLevel.SELF_PROFILE_ONLY }
-
   const uuidMatcher = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i
   router.use(historyMiddleware(uuidMatcher))
-  get('/', Page.HOMEPAGE, requirePermissionsAndConfig(permissionAdmin, permissionSelf), controller.GET)
+  get('/', Page.HOMEPAGE, minRequireAdminOrSelf, controller.GET)
 
   router.use(removeTrailingSlashMiddleware)
 
-  router.use(
-    '/establishment-settings',
-    requirePermissionsAndConfig(permissionAdmin, permissionAllocate),
-    EstablishmentSettingsRoutes(services),
-  )
+  router.use('/establishment-settings', minRequireAdminOrAllocate, EstablishmentSettingsRoutes(services))
 
-  router.use(requirePermissionsAndConfig(permissionSelf))
-  router.use('/prisoner-allocation-history', PrisonerAllocationHistoryRoutes(services))
-  useForPolicies('/staff-profile/:staffId', {
+  router.use('/prisoner-allocation-history', minRequireSelfProfile, PrisonerAllocationHistoryRoutes(services))
+  useForPolicies('/staff-profile/:staffId', minRequireSelfProfile, {
     KEY_WORKER: StaffProfileRoutes(services),
     PERSONAL_OFFICER: POStaffProfileRoutes(services),
   })
 
-  router.use(requirePermissionsAndConfig({ requirePrisonEnabled: true, minimumPermission: UserPermissionLevel.VIEW }))
-  router.use('/allocate', AllocateStaffRoutes(services))
-  useForPolicies('/data', {
+  router.use('/allocate', minRequireView, AllocateStaffRoutes(services))
+  useForPolicies('/data', minRequireView, {
     KEY_WORKER: StaffDataRoutes(services),
     PERSONAL_OFFICER: POStaffDataRoutes(services),
   })
-  router.use('/manage', StaffMembersRoutes(services))
+  router.use('/manage', minRequireView, StaffMembersRoutes(services))
 
-  router.use(requirePermissionsAndConfig(permissionAllocate))
-  router.use('/manage-roles', ManageRolesRoutes())
-  router.use('/recommend-allocations', RecommendStaffAutomaticallyRoutes(services))
+  router.use('/manage-roles', minRequireAllocate, ManageRolesRoutes())
+  router.use('/recommend-allocations', minRequireAllocate, RecommendStaffAutomaticallyRoutes(services))
   router.use(insertJourneyIdentifier())
   router.use('/:journeyId', JourneyRoutes(dataAccess(), services))
 

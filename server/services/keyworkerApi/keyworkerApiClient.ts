@@ -190,4 +190,17 @@ export default class KeyworkerApiClient {
       path: `/prisons/${prisonCode}/prisoners/allocation-recommendations`,
     })
   }
+
+  async getPolicies(prisonCode: string) {
+    return this.restClient.get<components['schemas']['PrisonPolicies']>({
+      path: `/prisons/${prisonCode}/policies`,
+    })
+  }
+
+  async putPolicies(prisonCode: string, requestBody: components['schemas']['PrisonPolicies']) {
+    return this.restClient.put<components['schemas']['PrisonPolicies']>({
+      path: `/prisons/${prisonCode}/policies`,
+      data: requestBody,
+    })
+  }
 }
