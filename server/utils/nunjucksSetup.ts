@@ -27,6 +27,7 @@ import {
   conditionallyAddDeallocate,
   excludeCurrentStaffMember,
   mergePrisonerKeyworkerIds,
+  setCheckedValue,
   setSelectedValue,
 } from './dropdownUtils'
 import { formatValue, getHighlightedStatChange, getStatChange } from './statsUtils'
@@ -80,6 +81,7 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('lastNameCommaFirstName', lastNameCommaFirstName)
   njkEnv.addFilter('addSelectValue', addSelectValue)
   njkEnv.addFilter('setSelectedValue', setSelectedValue)
+  njkEnv.addFilter('setCheckedValue', setCheckedValue)
   njkEnv.addFilter('nameCase', nameCase)
   njkEnv.addFilter('sentenceCase', sentenceCase)
   njkEnv.addFilter('formatValue', formatValue)

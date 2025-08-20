@@ -8,6 +8,7 @@
 
 {% block innerContent %}
   <div class="govuk-width-container govuk-body">
+    {{ statusCode }}
     <form method="post">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
       {{ govukRadios({
@@ -20,7 +21,7 @@
             classes: "govuk-fieldset__legend--xl"
           }
         },
-        items: statuses | setSelectedValue(statusCode)
+        items: statuses | setCheckedValue(statusCode)
       }) }}
 
       <div class="govuk-button-group">
