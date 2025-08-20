@@ -47,7 +47,10 @@ export class AllocateStaffController extends ChangeStaffController {
       })
     }
 
-    const result = schemaFactory(locations).safeParse(sanitisedQuery)
+    const result = schemaFactory(locations).safeParse({
+      ...sanitisedQuery,
+      js: req.query['js'] || 'false',
+    })
     if (!result.success) {
       res.locals['validationErrors'] = deduplicateFieldErrors(result.error)
       return res.render('allocate/view', {
@@ -60,7 +63,7 @@ export class AllocateStaffController extends ChangeStaffController {
     }
 
     const records = await this.keyworkerApiService.searchPrisoners(req, prisonCode, sanitisedQuery)
-    return res.render('allocate/view', {
+    return res.render(result.data.js === 'true' && records.length > 20 ? 'allocate/virtualizedView' : 'allocate/view', {
       ...sanitisedQuery,
       records,
       searchQuery,
@@ -79,6 +82,7 @@ export class AllocateStaffController extends ChangeStaffController {
       query: req.body.query || '',
       cellLocationPrefix: req.body.cellLocationPrefix || '',
       excludeActiveAllocations: req.body.excludeActiveAllocations || false,
+      js: req.body.js,
     })
     params.set('history', getHistoryParamForPOST(req, `/${res.locals.policyPath}/allocate`, params))
     return res.redirect(`/${res.locals.policyPath}/allocate?${params.toString()}`)

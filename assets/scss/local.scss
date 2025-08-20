@@ -52,3 +52,9 @@
 
 div.moj-action-bar__filter::after { content: none !important; }
 .moj-action-bar-indent { padding-left: 12px; }
+.sticky-table-heading {
+  thead {
+    position: sticky; top: 0; background: white;
+  }
+}
+.alert-badge-column { min-width: 136px; }
