@@ -63,7 +63,19 @@ export class AllocateStaffController extends ChangeStaffController {
     }
 
     const records = await this.keyworkerApiService.searchPrisoners(req, prisonCode, sanitisedQuery)
-    return res.render(result.data.js === 'true' && records.length > 20 ? 'allocate/virtualizedView' : 'allocate/view', {
+    if (result.data.js === 'true') {
+      return res.render('allocate/virtualizedView', {
+        ...sanitisedQuery,
+        records,
+        searchQuery,
+        locations: locationsValues,
+        ...(await this.getMappedChangeData(req, res)),
+        showBreadcrumbs: true,
+        allowAutoAllocation,
+        allocationResult,
+      })
+    }
+    return res.render('allocate/view', {
       ...sanitisedQuery,
       records,
       searchQuery,

@@ -79,13 +79,17 @@
     {
       isSelect: not item.hasHighComplexityOfNeeds,
       html: 'Not applicable - high complexity of need' if item.hasHighComplexityOfNeeds else govukSelect({
+      attributes: {
+        'staff-id': item.staffMember.staffId or '',
+        'person-id': item.personIdentifier
+      },
       id: "selectStaffMember-" + loop.index0,
       name: "selectStaffMember",
       text: 'Select ' + policyStaff,
       formGroup: {
         classes: "govuk-!-margin-0"
       },
-      items: staff | excludeCurrentStaffMember(item.staffMember) | conditionallyAddDeallocate(item.staffMember.staffId) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select ' + policyStaff)
+      items: [] | addSelectValue('Select ' + policyStaff, true, '', true) | addSelectValue(longestOption, true)
     })
     } if user | hasPermission('allocate') else undefined,
     {
@@ -282,6 +286,47 @@
       }
     }
 
+    const staff = {{ staff | dump | safe }}
+
+    const createOption = (text, value, selected) => {
+      const option = document.createElement('option')
+      option.text = text
+      option.value = value
+      if (selected) {
+        option.selected = selected
+      }
+      return option
+    }
+
+    const dropdownListener = (e) => {
+      const select = e.target
+      if (select.children.length > 2) return
+      // Delete all children after the first
+      select.innerHTML = ''
+      const staffId = select.attributes['staff-id']?.value || ''
+      const personId = select.attributes['person-id']?.value || ''
+      const recommendedId = select.attributes['recommended-id']?.value || ''
+      // Insert Select (policyName) as first option always
+      select.appendChild(createOption(`Select {{ policyStaff }}`, ''))
+      // Equal to conditionallyAddDeallocate
+      if (staffId) {
+        select.appendChild(createOption('Deallocate', `${personId}:deallocate:${staffId}`))
+      }
+      staff.forEach(option => {
+        let opt = createOption(option.text, option.value)
+        // Equal to excludeCurrentStaffMember
+        if (staffId && opt.value.includes(`:${staffId}`)) {
+          return
+        }
+        if (recommendedId && opt.value.includes(`:${recommendedId}`)) {
+          opt.selected = true
+        }
+        // Equal to mergePrisonerKeyworkerIds
+        opt.value = `${personId}:${opt.value}`
+        select.appendChild(opt)
+      })
+    }
+
     window.onload = function () {
       const $headings = Array.from(document.querySelectorAll('th')).filter($heading => $heading.hasAttribute('aria-sort') && $heading.querySelector('button'))
       updateSortableHeaderStyle($headings)
@@ -317,8 +362,12 @@
           if (rowData[index].cols[4].isSelect) {
             const select = row.querySelector('.govuk-select')
             if (rowData[index].selected) {
+              dropdownListener({ target: select })
               select.value = rowData[index].selected
+            } else {
+              select.addEventListener('click', dropdownListener)
             }
+
             select.addEventListener('change', (e)=>{
               rowData[index].selected = e.target.value
             })
