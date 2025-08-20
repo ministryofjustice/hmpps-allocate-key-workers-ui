@@ -129,7 +129,11 @@ export function getBreadcrumbs(req: Request, res: Response) {
     },
     { matcher: /\/manage([^-]|$)/g, text: `Manage ${res.locals.policyStaffs!}`, alias: Page.MANAGE_ALLOCATABLE_STAFF },
     { matcher: /\/manage-roles([^/]|$)/g, text: `Manage roles`, alias: Page.MANAGE_ROLES },
-    { matcher: /\/staff-profile/g, text: 'Profile', alias: Page.STAFF_PROFILE },
+    {
+      matcher: /\/staff-profile/g,
+      text: `${sentenceCase(res.locals.policyStaff!)} profile`,
+      alias: Page.STAFF_PROFILE,
+    },
   ]
 
   const breadcrumbs: Breadcrumb[] = []
