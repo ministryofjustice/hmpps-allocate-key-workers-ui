@@ -22,6 +22,7 @@ export const schemaFactory = (locations: components['schemas']['PrisonHierarchyD
         return z.NEVER
       }),
     excludeActiveAllocations: z.boolean().optional(),
+    js: z.enum(['true', 'false']),
   }).refine(obj => obj.query || obj.cellLocationPrefix || obj.excludeActiveAllocations, {
     message: 'Select or enter text into at least one of the search options below',
     path: ['searchBy'],
