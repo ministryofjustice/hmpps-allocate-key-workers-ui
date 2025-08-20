@@ -14,24 +14,35 @@ import { SelectKeyworkerSchemaType } from './selectKeyworkerSchema'
 export class ChangeStaffController {
   constructor(readonly keyworkerApiService: KeyworkerApiService) {}
 
+  injectRandomStaff = (arr: { text: string; value: string }[]) => {
+    const numToAdd = 400
+    for (let i = 0; i < numToAdd; i += 1) {
+      const randomStaffId = Math.floor(Math.random() * 100000)
+      arr.push({ text: `Random staff ${randomStaffId}`, value: `allocate:${randomStaffId}` })
+    }
+    return arr
+  }
+
   getChangeData = async (req: Request, res: Response) => {
     const staff = await this.keyworkerApiService.searchAllocatableStaff(req, res, { status: 'ACTIVE' }, false)
 
     return {
       count: req.flash(FLASH_KEY__COUNT)[0],
       apiError: req.flash(FLASH_KEY__API_ERROR)[0],
-      staff: staff.content
-        .sort((a, b) =>
-          a.allocated === b.allocated
-            ? `${a.lastName},${a.firstName}`.localeCompare(`${b.lastName},${b.firstName}`)
-            : a.allocated - b.allocated,
-        )
-        .map(o => {
-          return {
-            text: `${lastNameCommaFirstName(o)} (allocations: ${o.allocated})`,
-            value: `allocate:${o.staffId}`,
-          }
-        }),
+      staff: this.injectRandomStaff(
+        staff.content
+          .sort((a, b) =>
+            a.allocated === b.allocated
+              ? `${a.lastName},${a.firstName}`.localeCompare(`${b.lastName},${b.firstName}`)
+              : a.allocated - b.allocated,
+          )
+          .map(o => {
+            return {
+              text: `${lastNameCommaFirstName(o)} (allocations: ${o.allocated})`,
+              value: `allocate:${o.staffId}`,
+            }
+          }),
+      ),
     }
   }
 
