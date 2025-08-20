@@ -11,6 +11,7 @@ context('/establishment-settings', () => {
     cy.task('stubComponents')
     cy.task('stubPutPrisonConfiguration')
     cy.task('stubEnabledPrison')
+    cy.task('stubGetPolicies')
   })
 
   describe('Role based access', () => {
@@ -32,6 +33,9 @@ context('/establishment-settings', () => {
       .should('be.visible')
       .and('have.value', '1WK')
     cy.findByText('Key worker sessions at Leeds (HMP) take place every 1 week.').should('not.exist')
+    cy.findByRole('link', {
+      name: 'Select if key worker, personal officer, both, or neither should be active in this establishment',
+    }).should('be.visible')
 
     verifyValidationErrors()
 
@@ -173,6 +177,9 @@ context('/establishment-settings', () => {
 
     cy.findByRole('combobox', { name: 'How often should key worker sessions take place?' }).should('not.exist')
     cy.findByText('Key worker sessions at Leeds (HMP) take place every 1 week.').should('be.visible')
+    cy.findByRole('link', {
+      name: 'Select if key worker, personal officer, both, or neither should be active in this establishment',
+    }).should('not.exist')
 
     verifyValidationErrors()
 

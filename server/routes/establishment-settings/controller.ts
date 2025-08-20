@@ -10,6 +10,8 @@ export class EstablishmentSettingsController {
   GET = async (req: Request, res: Response) => {
     const { allowAutoAllocation, capacity, frequencyInWeeks } = req.middleware!.prisonConfiguration!
 
+    const policyStatus = await this.keyworkerApiService.getPolicies(req, res.locals.user.getActiveCaseloadId()!)
+
     res.render('establishment-settings/view', {
       showBreadcrumbs: true,
       prisonName: res.locals.user.activeCaseLoad!.description,
@@ -24,6 +26,10 @@ export class EstablishmentSettingsController {
           : parseFrequencyInWeeks(res.locals.formResponses?.['frequencyInWeeks']),
       isAdmin: res.locals.user.permissions >= UserPermissionLevel.ADMIN,
       successMessage: req.flash(FLASH_KEY__SUCCESS_MESSAGE)[0],
+      keyWorkerEnabled: policyStatus.policies.find(({ enabled, policy }) => enabled && policy === 'KEY_WORKER'),
+      personalOfficerEnabled: policyStatus.policies.find(
+        ({ enabled, policy }) => enabled && policy === 'PERSONAL_OFFICER',
+      ),
     })
   }
 

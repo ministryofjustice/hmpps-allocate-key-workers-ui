@@ -1043,7 +1043,7 @@ export interface components {
         | 'MANUAL'
         | 'CHANGE_IN_COMPLEXITY_OF_NEED'
     }
-    SarKeyWorker: {
+    SarAllocation: {
       /** Format: date-time */
       allocatedAt: string
       /** Format: date-time */
@@ -1052,7 +1052,13 @@ export interface components {
       allocationType: string
       allocationReason: string
       deallocationReason?: string
+      /**
+       * @deprecated
+       * @description This field will be removed in a future release.
+       */
       keyworker: components['schemas']['StaffMember']
+      staffMember: components['schemas']['StaffMember']
+      policy: components['schemas']['CodedDescription']
       activeAllocation: boolean
     }
     StaffMember: {
@@ -1061,7 +1067,7 @@ export interface components {
     }
     SubjectAccessResponse: {
       prn: string
-      content: components['schemas']['SarKeyWorker'][]
+      content: components['schemas']['SarAllocation'][]
     }
     PrisonStatSummary: {
       /** Format: date */
@@ -1183,6 +1189,13 @@ export interface components {
       firstName: string
       lastName: string
     }
+    Author: {
+      /** Format: int64 */
+      staffId: number
+      firstName: string
+      lastName: string
+      username: string
+    }
     CurrentAllocation: {
       policy: components['schemas']['CodedDescription']
       prison: components['schemas']['CodedDescription']
@@ -1202,6 +1215,7 @@ export interface components {
       occurredAt: string
       /** @enum {string} */
       policy: 'KEY_WORKER' | 'PERSONAL_OFFICER'
+      author: components['schemas']['Author']
     }
     KeyworkerDto: {
       /**

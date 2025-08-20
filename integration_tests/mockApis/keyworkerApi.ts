@@ -636,6 +636,22 @@ const stubSearchStaffError = () =>
 const stubPutPrisonConfiguration = () =>
   createBasicHttpStub('PUT', '/keyworker-api/prisons/LEI/configurations', 200, {})
 
+const stubGetPolicies = () =>
+  createBasicHttpStub('GET', '/keyworker-api/prisons/.*/policies', 200, {
+    policies: [
+      { policy: 'KEY_WORKER', enabled: true },
+      { policy: 'PERSONAL_OFFICER', enabled: true },
+    ],
+  })
+
+const stubPutPolicies = () =>
+  createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/policies', 200, {
+    policies: [
+      { policy: 'KEY_WORKER', enabled: true },
+      { policy: 'PERSONAL_OFFICER', enabled: true },
+    ],
+  })
+
 const keyworkerSearchPrisoners = [
   {
     personIdentifier: 'A4288DZ',
@@ -772,4 +788,6 @@ export default {
   stubPutAllocationRecommendationSuccess,
   stubKeyworkerPrisonConfigNoAutoAllocation: () => stubKeyworkerPrisonConfig(true, false, false),
   stubUpsertStaffDetails,
+  stubGetPolicies,
+  stubPutPolicies,
 }
