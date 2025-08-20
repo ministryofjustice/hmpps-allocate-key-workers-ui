@@ -28,7 +28,7 @@ export class POStaffProfileController extends ChangeStaffController {
   }
 
   private defaultDateRange = () => {
-    const lastDay = subDays(new Date(), 1)
+    const lastDay = new Date()
     const firstDay = startOfMonth(lastDay)
     const previousMonth = subMonths(firstDay, 1)
 
