@@ -4,6 +4,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% set fullWidth = true %}
 {% set pageTitle -%}
@@ -26,7 +27,25 @@
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-        {% if not isAdmin %}
+        {% if isAdmin %}
+          {% set insetText %}
+            <p>
+              {% if keyWorkerEnabled and personalOfficerEnabled %}
+                Key worker and personal officer are currently both active in this establishment.
+              {% elseif keyWorkerEnabled %}
+                Key worker is currently active in this establishment. Personal officer is inactive.
+              {% elseif personalOfficerEnabled %}
+                Personal officer is currently active in this establishment. Key worker is inactive.
+              {% else %}
+                Key worker and personal officer are currently both inactive in this establishment.
+              {% endif %}
+            </p>
+            <p><a class="govuk-link--no-visited-state" href="/{{ policyPath }}/select-services">Select if key worker, personal officer, both, or neither should be active in this establishment</a></p>
+          {% endset %}
+          {{ govukInsetText({
+            html: insetText
+          }) }}
+        {% else %}
           <p>{{policyStaff | sentenceCase}} sessions at {{ prisonName }} take place every {{ frequencyInWeeks }} {{ "week" if frequencyInWeeks === 1 else "weeks" }}.</p>
           <p class="govuk-!-margin-bottom-7">If you think this is incorrect or have any questions about session frequency, please contact <a href="mailto:omicenquiries@justice.gov.uk">omicenquiries@justice.gov.uk</a>.</p>
         {% endif %}

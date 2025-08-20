@@ -1,0 +1,104 @@
+{% extends "partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% set pageTitle = "Check your answers" %}
+
+{% block innerContent %}
+  <div class="govuk-width-container govuk-body">
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-6">
+      Check this information before saving these changes
+    </h1>
+    {% if keyWorkerEnabled and personalOfficerEnabled and services === 'NONE' %}
+      {{ govukWarningText({
+        text: "Users in this establishment with no longer have access to key worker or personal officer.",
+        iconFallbackText: "Warning"
+      }) }}
+    {% elseif keyWorkerEnabled and services !== 'KW' and services !== 'KWPO' %}
+      {{ govukWarningText({
+        text: "Users in this establishment will no longer have access to key worker.",
+        iconFallbackText: "Warning"
+      }) }}
+    {% elseif personalOfficerEnabled and services !== 'PO' and services !== 'KWPO' %}
+      {{ govukWarningText({
+        text: "Users in this establishment will no longer have access to personal officer.",
+        iconFallbackText: "Warning"
+      }) }}
+    {% endif %}
+
+    {% switch services %}
+    {% case 'KWPO' %}
+      {% set active = "Key worker and personal officer" %}
+      {% set inactive = "None" %}
+    {% case 'KW' %}
+      {% set active = "Key worker" %}
+      {% set inactive = "Personal officer" %}
+    {% case 'PO' %}
+      {% set active = "Personal officer" %}
+      {% set inactive = "Key worker" %}
+    {% default %}
+      {% set active = "None" %}
+      {% set inactive = "Key worker and personal officer" %}
+    {% endswitch %}
+
+    {{ govukSummaryList({
+      classes: "govuk-!-margin-bottom-7",
+      rows: [
+        {
+          key: {
+            text: "Active services in " + user.activeCaseLoad.description
+          },
+          value: {
+            text: active
+          },
+          actions: {
+            items: [
+              {
+                href: "../select-services",
+                text: "Change",
+                visuallyHiddenText: "the services to be active",
+                classes: "govuk-link--no-visited-state"
+              }
+            ]
+          }
+        },
+        {
+          key: {
+            text: "Inactive services in " + user.activeCaseLoad.description
+          },
+          value: {
+            text: inactive
+          },
+            actions: {
+            items: [
+              {
+                href: "../select-services",
+                text: "Change",
+                visuallyHiddenText: "the services to be inactive",
+                classes: "govuk-link--no-visited-state"
+              }
+            ]
+          }
+        }
+      ]
+    }) }}
+
+    <form method="post">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+      <div class="govuk-button-group">
+        {{ govukButton({
+          text: "Save",
+          preventDoubleClick: true
+        }) }}
+
+        {{ govukButton({
+          text: "Cancel",
+          classes: "govuk-button--secondary",
+          href: "/" + policyPath + "/establishment-settings",
+          preventDoubleClick: true
+        }) }}
+      </div>
+    </form>
+  </div>
+{% endblock %}

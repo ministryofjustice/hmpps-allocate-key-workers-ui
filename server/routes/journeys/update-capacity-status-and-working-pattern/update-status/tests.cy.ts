@@ -87,7 +87,7 @@ context('/update-capacity-status-and-working-pattern/update-status', () => {
   }
 
   const verifyInputValuesArePersisted = () => {
-    cy.go('back')
+    cy.findByRole('link', { name: /Back$/ }).click()
     activeRadio().should('be.checked')
   }
 

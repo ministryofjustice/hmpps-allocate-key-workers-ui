@@ -28,6 +28,7 @@ export type JourneyData = {
   updateStaffDetails?: UpdateStaffDetailsJourney
   assignStaffRole?: AssignStaffRoleJourney
   removeStaffRole?: RemoveStaffRoleJourney
+  selectServices?: SelectServicesJourney
   b64History?: string | undefined
 }
 
@@ -70,6 +71,12 @@ export type RemoveStaffRoleJourney = Partial<{
   query: string
   searchResults: StaffSummaryWithRole[]
   staff: StaffSummaryWithRole
+}>
+
+export type SelectServicesJourney = Partial<{
+  keyWorkerEnabled: boolean
+  personalOfficerEnabled: boolean
+  services: 'KW' | 'PO' | 'KWPO' | 'NONE'
 }>
 
 export declare global {

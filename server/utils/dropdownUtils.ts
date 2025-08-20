@@ -32,6 +32,11 @@ export const setSelectedValue = (items: SelectOption[] | null, selected: string 
   return items.map(entry => ({ ...entry, selected: entry && entry.value === selected }))
 }
 
+export const setCheckedValue = (items: SelectOption[] | null, selected: string | number): SelectOption[] | null => {
+  if (!items) return null
+  return items.map(entry => ({ ...entry, checked: entry && entry.value === selected }))
+}
+
 export const excludeCurrentStaffMember = (
   items: SelectOption[],
   currentKeyworker: { staffId: string } | null,
