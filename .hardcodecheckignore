@@ -9,3 +9,6 @@ text: 'Key worker allocation history'
 ^.+.test.ts$
 POLICIES\[res.locals.policyPath!\]\?\.name === 'Personal officer'
 server/routes/establishment-settings/view.njk
+server/routes/journeys/select-services/view.njk
+server/routes/journeys/select-services/check-answers/view.njk
+server/routes/journeys/select-services/confirmation/view.njk
