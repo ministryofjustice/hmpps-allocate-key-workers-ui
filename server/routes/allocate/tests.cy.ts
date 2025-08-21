@@ -335,12 +335,12 @@ context('/allocate', () => {
     cy.get('.govuk-table__row').should('have.length', 5)
     cy.get('.govuk-table__row').eq(3).children().eq(0).should('contain.text', 'John, Doe')
 
-    cy.get('select').eq(2).should('contain', 'Deallocate')
+    cy.get('select').eq(2).focus().should('contain', 'Deallocate')
     cy.get('select').eq(2).should('not.contain', 'Key-Worker, Available-Active (allocations: 32)')
 
-    cy.get('select').eq(1).should('not.contain', 'Deallocate')
+    cy.get('select').eq(1).focus().should('not.contain', 'Deallocate')
     cy.get('select').eq(1).should('contain', 'Key-Worker2, Available-Active (allocations: 32)')
-    cy.get('select').eq(3).should('not.contain', 'Deallocate')
+    cy.get('select').eq(3).focus().should('not.contain', 'Deallocate')
     cy.get('select').eq(3).should('contain', 'Key-Worker2, Available-Active (allocations: 32)')
 
     cy.get('select').eq(1).select('Key-Worker, Available-Active2 (allocations: 32)')
