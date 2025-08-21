@@ -14,18 +14,9 @@ import { SelectKeyworkerSchemaType } from './selectKeyworkerSchema'
 export class ChangeStaffController {
   constructor(readonly keyworkerApiService: KeyworkerApiService) {}
 
-  injectRandomStaff = (arr: { text: string; value: string }[]) => {
-    const numToAdd = 400
-    for (let i = 0; i < numToAdd; i += 1) {
-      const randomStaffId = Math.floor(Math.random() * 100000)
-      arr.push({ text: `Random staff ${randomStaffId}`, value: `allocate:${randomStaffId}` })
-    }
-    return arr
-  }
-
   getChangeData = async (req: Request, res: Response) => {
     const staff = await this.keyworkerApiService.searchAllocatableStaff(req, res, { status: 'ACTIVE' }, false)
-    const mappedStaff = this.injectRandomStaff(this.getDropdownOptions(staff.content))
+    const mappedStaff = this.getDropdownOptions(staff.content)
 
     return {
       count: req.flash(FLASH_KEY__COUNT)[0],
