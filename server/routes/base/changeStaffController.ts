@@ -16,23 +16,30 @@ export class ChangeStaffController {
 
   getChangeData = async (req: Request, res: Response) => {
     const staff = await this.keyworkerApiService.searchAllocatableStaff(req, res, { status: 'ACTIVE' }, false)
+    const mappedStaff = this.getDropdownOptions(staff.content)
 
     return {
       count: req.flash(FLASH_KEY__COUNT)[0],
       apiError: req.flash(FLASH_KEY__API_ERROR)[0],
-      staff: staff.content
-        .sort((a, b) =>
-          a.allocated === b.allocated
-            ? `${a.lastName},${a.firstName}`.localeCompare(`${b.lastName},${b.firstName}`)
-            : a.allocated - b.allocated,
-        )
-        .map(o => {
-          return {
-            text: `${lastNameCommaFirstName(o)} (allocations: ${o.allocated})`,
-            value: `allocate:${o.staffId}`,
-          }
-        }),
+      staff: mappedStaff,
     }
+  }
+
+  getDropdownOptions = <T extends { allocated: number; staffId: number; firstName: string; lastName: string }>(
+    staff: T[],
+  ) => {
+    return staff
+      .sort((a, b) =>
+        a.allocated === b.allocated
+          ? `${a.lastName},${a.firstName}`.localeCompare(`${b.lastName},${b.firstName}`)
+          : a.allocated - b.allocated,
+      )
+      .map(o => {
+        return {
+          text: `${lastNameCommaFirstName(o)} (allocations: ${o.allocated})`,
+          value: `allocate:${o.staffId}`,
+        } as { text: string; value: string; onlyFor?: string }
+      })
   }
 
   submitToApi =

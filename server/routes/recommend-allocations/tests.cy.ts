@@ -119,6 +119,7 @@ context('/recommend-allocations', () => {
     cy.task('stubPutAllocationRecommendationSuccess')
     navigateToTestPage()
 
+    cy.get('select').eq(1).focus()
     cy.get('select').eq(1).select('Active, Available (allocations: 0)')
 
     cy.findByRole('button', { name: /Save changes/i }).click()
@@ -172,6 +173,7 @@ context('/recommend-allocations', () => {
     cy.task('stubPutAllocationRecommendationSuccess')
     navigateToTestPage()
 
+    cy.get('select').eq(1).focus()
     cy.get('select').eq(1).select('Active, Available (allocations: 0)')
     cy.findByRole('button', { name: /Save changes/i }).click()
 
@@ -275,6 +277,7 @@ context('/recommend-allocations', () => {
     cy.get('select').eq(0).should('contain.text', 'Active, Available (allocations: 0)')
 
     // Only the first prisoner should have the unavailable keyworker selectable as this is the recommendation
+    cy.get('select').eq(1).focus()
     cy.get('select').eq(1).should('not.contain.text', 'Annual-Leave, Unavailable (allocations: 1)')
     cy.get('select').eq(1).should('contain.text', 'Active, Available (allocations: 0)')
 

@@ -9,10 +9,9 @@
 {% from "partials/alertFlags/macro.njk" import alertFlags %}
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
 
-
 {% set fullWidth = true %}
 {% set pageTitle -%}
-  {{ policyStaff | sentenceCase }} profile
+{{ policyStaff | sentenceCase }} profile
 {%- endset %}
 
 {% block pageHeader %}
@@ -29,7 +28,7 @@
         {{ statusTag({ text: status.description, fullText: true }) }}
       </p>
       {% if user | hasPermission('allocate') %}
-        <a class="govuk-!-margin-left-2 govuk-link govuk-link--no-visited-state govuk-!-display-inline-block " href="../start-update-staff/{{ staffId }}?proceedTo=update-capacity-status-and-working-pattern">Update capacity, status or working pattern</a> 
+        <a class="govuk-!-margin-left-2 govuk-link govuk-link--no-visited-state govuk-!-display-inline-block " href="../start-update-staff/{{ staffId }}?proceedTo=update-capacity-status-and-working-pattern">Update capacity, status or working pattern</a>
       {% endif %}
     </div>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
@@ -115,13 +114,18 @@
           },
           {
             html: govukSelect({
+              attributes: {
+                'staff-id': staffId or '',
+                'person-id': item.prisoner.prisonNumber
+              },
               id: "selectStaffMember",
+              classes: 'placeholder-select',
               name: "selectStaffMember",
               text: 'Select ' + policyStaff,
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: staff | excludeCurrentStaffMember({staffId: staffId}) | conditionallyAddDeallocate(staffId) | mergePrisonerKeyworkerIds(item.prisoner.prisonNumber) | addSelectValue('Select ' + policyStaff)
+              items: [] | addSelectValue('Select ' + policyStaff, true, '', true)
             })
           } if user | hasPermission('allocate') else undefined,
           {
@@ -201,4 +205,12 @@
     </form>
   </div>
 
+{% endblock %}
+
+{% block pageScripts %}
+  <script nonce="{{ cspNonce }}">
+    window.onload = function () {
+      window.initialiseDropdown('{{ policyStaff }}', {{ staff | dump | safe }})
+    }
+  </script>
 {% endblock %}

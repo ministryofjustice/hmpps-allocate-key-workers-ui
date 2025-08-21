@@ -142,7 +142,7 @@ context('Personal Officer Profile Info', () => {
     cy.get('.govuk-table__row').should('have.length', 3)
     cy.get('.govuk-table__row').eq(2).children().eq(0).should('contain.text', 'John, Doe')
 
-    cy.findAllByRole('combobox').eq(1).select('Deallocate')
+    cy.findAllByRole('combobox').eq(1).focus().select('Deallocate')
 
     cy.findByRole('button', { name: /Save changes/i }).click()
     cy.verifyLastAPICall(
@@ -169,7 +169,7 @@ context('Personal Officer Profile Info', () => {
     cy.get('#selectStaffMember').should('contain', 'Select personal officer')
     cy.get('#selectStaffMember').should('contain', 'Deallocate')
     cy.get('#selectStaffMember').should('not.contain', 'Key-Worker, Available-Active (allocations: 32)')
-    cy.findAllByRole('combobox').eq(1).select('Deallocate')
+    cy.findAllByRole('combobox').eq(1).focus().select('Deallocate')
 
     cy.findByRole('button', { name: /Save changes/i }).click()
     cy.verifyLastAPICall(
@@ -198,6 +198,7 @@ context('Personal Officer Profile Info', () => {
     cy.get('select').eq(0).should('not.contain', 'Key-Worker, Available-Active (allocations: 32)')
     cy.get('select').eq(0).should('contain', 'Key-Worker, Available-Active2 (allocations: 32)')
 
+    cy.get('select').eq(1).focus()
     cy.get('select').eq(1).should('contain', 'Deallocate')
     cy.get('select').eq(1).should('not.contain', 'Key-Worker, Available-Active (allocations: 32)')
     cy.get('select').eq(1).should('contain', 'Key-Worker, Available-Active2 (allocations: 32)')

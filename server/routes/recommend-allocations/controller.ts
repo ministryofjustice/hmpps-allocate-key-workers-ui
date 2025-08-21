@@ -65,31 +65,32 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
       })
     }
 
+    const dropdownOptions = this.getDropdownOptions(recommendations.staff)
+
     const matchedPrisoners = records.map(o => {
       const match = recommendations.allocations.find(a => a.personIdentifier === o.personIdentifier)
-      const staff = [...recommendations.staff]
 
-      if (match && !recommendations.staff.find(s => s.staffId === match.staff.staffId)) {
-        staff.push(match.staff)
+      if (match) {
+        dropdownOptions.push({
+          text: `${lastNameCommaFirstName(match.staff)} (allocations: ${match.staff.allocated})`,
+          value: `allocate:${match.staff.staffId}:auto`,
+          onlyFor: o.personIdentifier,
+        })
       }
 
       return {
         ...o,
         recommendation: match?.staff.staffId,
-        kwDropdown: staff
-          .sort((a, b) => (a.allocated > b.allocated ? 1 : -1))
-          .map(s => {
-            return {
-              text: `${lastNameCommaFirstName(s)} (allocations: ${s.allocated})`,
-              value: `allocate:${s.staffId}${s.staffId === match?.staff.staffId ? ':auto' : ''}`,
-            }
-          }),
+        recommendedText: match
+          ? `${lastNameCommaFirstName(match!.staff)} (allocations: ${match!.staff.allocated})`
+          : '',
       }
     })
 
     return res.render('recommend-allocations/view', {
       showBreadcrumbs: true,
       records: matchedPrisoners,
+      staff: dropdownOptions,
       count: req.flash(FLASH_KEY__COUNT)[0],
       apiError: req.flash(FLASH_KEY__API_ERROR)[0],
     })
