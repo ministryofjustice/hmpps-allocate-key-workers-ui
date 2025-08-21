@@ -446,10 +446,8 @@ context('/allocate', () => {
       .should('match', /key-worker\/prisoner-allocation-history\/A4288DZ/)
 
     if (!readonly) {
-      cy.get('.govuk-table__row')
-        .eq(3)
-        .children()
-        .eq(4)
+      cy.get('.govuk-table__row:nth-child(4) > :nth-child(5) > :nth-child(1) > :nth-child(1)')
+        .focus()
         .should('contain.text', 'Key-Worker, Available-Active2 (allocations: 32)')
     }
 
@@ -517,10 +515,8 @@ context('/allocate', () => {
     cy.get('.govuk-table__row').eq(3).children().eq(3).should('contain.text', 'None')
 
     if (!readonly) {
-      cy.get('.govuk-table__row')
-        .eq(3)
-        .children()
-        .eq(4)
+      cy.get('.govuk-table__row:nth-child(3) > :nth-child(5) > :nth-child(1) > :nth-child(1)')
+        .focus()
         .should('contain.text', 'Key-Worker2, Available-Active (allocations: 32)')
     }
 

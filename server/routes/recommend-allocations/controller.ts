@@ -65,12 +65,17 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
       })
     }
 
+    const dropdownOptions = this.getDropdownOptions(recommendations.staff)
+
     const matchedPrisoners = records.map(o => {
       const match = recommendations.allocations.find(a => a.personIdentifier === o.personIdentifier)
-      const staff = [...recommendations.staff]
 
-      if (match && !recommendations.staff.find(s => s.staffId === match.staff.staffId)) {
-        staff.push(match.staff)
+      if (match) {
+        dropdownOptions.push({
+          text: `${lastNameCommaFirstName(match.staff)} (allocations: ${match.staff.allocated})`,
+          value: `allocate:${match.staff.staffId}:auto`,
+          onlyFor: o.personIdentifier,
+        })
       }
 
       return {
@@ -82,13 +87,10 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
       }
     })
 
-    const dropdownOptions = this.getDropdownOptions(recommendations.staff)
-
     return res.render('recommend-allocations/view', {
       showBreadcrumbs: true,
       records: matchedPrisoners,
       staff: dropdownOptions,
-      longestOption: dropdownOptions.reduce((acc, obj) => (acc.length > obj.text.length ? acc : obj.text), ''),
       count: req.flash(FLASH_KEY__COUNT)[0],
       apiError: req.flash(FLASH_KEY__API_ERROR)[0],
     })

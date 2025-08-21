@@ -13,7 +13,7 @@
 
 {% set fullWidth = true %}
 {% set pageTitle -%}
-  {{ policyStaff | sentenceCase }} profile
+{{ policyStaff | sentenceCase }} profile
 {%- endset %}
 
 {% block pageHeader %}
@@ -60,9 +60,9 @@
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
 
     {%- set filterOptionsHtml %}
-      <h2 class="govuk-heading-m">Select a date range to view</h2>
-      <div class="date-search-form govuk-!-margin-bottom-5">
-        {{ mojDatePicker({
+    <h2 class="govuk-heading-m">Select a date range to view</h2>
+    <div class="date-search-form govuk-!-margin-bottom-5">
+      {{ mojDatePicker({
           id: "dateFrom",
           name: "dateFrom",
           label: {
@@ -73,7 +73,7 @@
           maxDate: todayStringGBFormat()
         }) }}
 
-        {{ mojDatePicker({
+      {{ mojDatePicker({
           id: "dateTo",
           name: "dateTo",
           label: {
@@ -83,11 +83,11 @@
           value: dateTo,
           maxDate: todayStringGBFormat()
         }) }}
-      </div>
+    </div>
 
-      <h2 class="govuk-heading-m">Select a custom date range to compare against (optional)</h2>
-      <div class="date-search-form">
-        {{ mojDatePicker({
+    <h2 class="govuk-heading-m">Select a custom date range to compare against (optional)</h2>
+    <div class="date-search-form">
+      {{ mojDatePicker({
           id: "compareDateFrom",
           name: "compareDateFrom",
           label: {
@@ -98,7 +98,7 @@
           maxDate: todayStringGBFormat()
         }) }}
 
-        {{ mojDatePicker({
+      {{ mojDatePicker({
           id: "compareDateTo",
           name: "compareDateTo",
           label: {
@@ -108,13 +108,15 @@
           value: compareDateTo,
           maxDate: todayStringGBFormat()
         }) }}
-      </div>
+    </div>
     {% endset -%}
 
     <div class="govuk-grid-column-full-width govuk-grid-row">
-      <div class="moj-action-bar moj-action-bar-indent"><div class="moj-action-bar__filter"></div></div>
+      <div class="moj-action-bar moj-action-bar-indent">
+        <div class="moj-action-bar__filter"></div>
+      </div>
       <form id="filter-form" method='POST' action='{{ filterUrl }}' class="govuk-grid-column-two-thirds govuk-!-margin-bottom-6">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
         {{ mojFilter({
           heading: { text: "Filter" },
           submit:{
@@ -207,13 +209,18 @@
           },
           {
             html: govukSelect({
+              attributes: {
+                'staff-id': staffId or '',
+                'person-id': item.prisoner.prisonNumber
+              },
               id: "selectStaffMember",
+              classes: 'placeholder-select',
               name: "selectStaffMember",
               text: 'Select ' + policyStaff,
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: staff | excludeCurrentStaffMember({staffId: staffId}) | conditionallyAddDeallocate(staffId) | mergePrisonerKeyworkerIds(item.prisoner.prisonNumber) | addSelectValue('Select ' + policyStaff)
+              items: [] | addSelectValue('Select ' + policyStaff, true, '', true)
             })
           } if user | hasPermission('allocate') else undefined,
           {
@@ -299,18 +306,86 @@
   <script nonce="{{ cspNonce }}">
     window.onload = function () {
       const filter = document.querySelector('[data-module="moj-filter"]')
-      filter && new window.MojFrontend.FilterToggleButton(filter, {
-        bigModeMediaQuery: '(min-width: 48.063em)',
-        startHidden: {{ not showFilter }},
-        toggleButton: {
-          showText: 'Show date filter',
-          hideText: 'Hide date filter',
-          classes: 'govuk-button--primary'
-        },
-        toggleButtonContainer: { selector: '.moj-action-bar__filter' },
-        closeButton: { text: 'Close' },
-        closeButtonContainer: { selector: '.moj-filter__header-action' }
+      filter && window.MojFrontend && new window.MojFrontend.FilterToggleButton(filter, {
+          bigModeMediaQuery: '(min-width: 48.063em)',
+          startHidden: {{ not showFilter }},
+          toggleButton: {
+            showText: 'Show date filter',
+            hideText: 'Hide date filter',
+            classes: 'govuk-button--primary'
+          },
+          toggleButtonContainer: {
+            selector: '.moj-action-bar__filter'
+          },
+          closeButton: {
+            text: 'Close'
+          },
+          closeButtonContainer: {
+            selector: '.moj-filter__header-action'
+          }
+        })
+
+      var staff = {{ staff | dump | safe }}
+
+      function createOption(text, value, selected) {
+        const option = document.createElement('option')
+        option.text = text
+        option.value = value
+        if (selected) {
+          option.selected = selected
+        }
+        return option
+      }
+
+      function conditionallyPopulateSelect(select) {
+        if (select.children.length > 2) return
+
+        // Delete all children after the first
+        select.innerHTML = ''
+
+        const staffId = select.attributes['staff-id']?.value || ''
+        const personId = select.attributes['person-id']?.value || '' 
+        const recommendedId = select.attributes['recommended-id']?.value || ''
+
+        // Insert Select (policyName) as first option always
+        select.appendChild(createOption(`Select {{policyStaff}}`, ''))
+
+        // Equal to conditionallyAddDeallocate
+        if (staffId) {
+          select.appendChild(createOption('Deallocate', `${personId}:deallocate:${staffId}`))
+        }
+
+        staff.forEach(option => {
+          let opt = createOption(option.text, option.value)
+
+          // Equal to excludeCurrentStaffMember
+          if (staffId && opt.value.includes(`:${staffId}`)) {
+            return
+          }
+
+          if (recommendedId && opt.value.includes(`:${recommendedId}`)) {
+            opt.selected = true
+          }
+
+          // Equal to mergePrisonerKeyworkerIds
+          opt.value = `${personId}:${opt.value}`
+          select.appendChild(opt)
+        })
+      }
+
+      document.querySelectorAll('.placeholder-select').forEach((select, i) => {
+        if (i == 0) {
+          // Populate the first one so that table space gets reserved correctly
+          conditionallyPopulateSelect(select)
+        }
+
+        select.addEventListener('focus', e => {
+          conditionallyPopulateSelect(select)
+        })
       })
+
     }
   </script>
+
+  <script nonce="{{ cspNonce }}"></script>
 {% endblock %}

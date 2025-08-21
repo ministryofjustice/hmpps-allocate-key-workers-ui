@@ -31,7 +31,6 @@ export class ChangeStaffController {
       count: req.flash(FLASH_KEY__COUNT)[0],
       apiError: req.flash(FLASH_KEY__API_ERROR)[0],
       staff: mappedStaff,
-      longestOption: mappedStaff.reduce((acc, obj) => (acc.length > obj.text.length ? acc : obj.text), ''),
     }
   }
 
@@ -48,7 +47,7 @@ export class ChangeStaffController {
         return {
           text: `${lastNameCommaFirstName(o)} (allocations: ${o.allocated})`,
           value: `allocate:${o.staffId}`,
-        }
+        } as { text: string; value: string; onlyFor?: string }
       })
   }
 
