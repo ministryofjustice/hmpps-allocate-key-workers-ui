@@ -1,0 +1,49 @@
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
+{% extends "partials/layout.njk" %}
+
+{% set pageTitle = "Confirmation" %}
+
+{% block innerContent %}
+  {% switch services %}
+  {% case 'KWPO' %}
+    {{ govukPanel({
+      titleText: "Key worker and personal officer activated in " + user.activeCaseLoad.description,
+      html: ""
+    }) }}
+    <p class="govuk-body">
+      Users in this establishment now have access to the key worker and personal officer services
+    </p>
+  {% case 'KW' %}
+    {{ govukPanel({
+      titleText: "Key worker activated and personal officer deactivated in " + user.activeCaseLoad.description,
+      html: ""
+    }) }}
+    <p class="govuk-body">
+      Users in this establishment now have access to the key worker service
+    </p>
+  {% case 'PO' %}
+    {{ govukPanel({
+      titleText: "Personal officer activated and key worker deactivated in " + user.activeCaseLoad.description,
+      html: ""
+    }) }}
+    <p class="govuk-body">
+      Users in this establishment now have access to the personal officer service
+    </p>
+  {% default %}
+    {{ govukPanel({
+      titleText: "Key worker and personal officer deactivated in " + user.activeCaseLoad.description,
+      html: ""
+    }) }}
+    <p class="govuk-body">
+      Users in this establishment now have no access to the key worker or personal officer services
+    </p>
+  {% endswitch %}
+
+  <p class="govuk-body">
+    <a class="govuk-link govuk-link--no-visited-state" href="/key-worker/establishment-settings">Manage your establishment’s key worker settings</a>
+  </p>
+  <p class="govuk-body">
+    <a class="govuk-link govuk-link--no-visited-state" href="/personal-officer/establishment-settings">Manage your establishment’s personal officer settings</a>
+  </p>
+{% endblock %}

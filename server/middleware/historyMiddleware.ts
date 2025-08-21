@@ -15,6 +15,15 @@ function serialiseHistory(history: string[]) {
   return Buffer.from(JSON.stringify(history)).toString('base64')
 }
 
+export function restoreHistoryFromJourneyData(req: Request, res: Response) {
+  const history = deserialiseHistory(req.journeyData.b64History)
+  res.locals.history = history
+  res.locals.b64History = req.journeyData.b64History!
+
+  res.locals.breadcrumbs = new Breadcrumbs(res)
+  res.locals.breadcrumbs.addItems(...getBreadcrumbs(req, res))
+}
+
 export function getHistoryParamForPOST(
   req: Request,
   targetPage?: string,
@@ -108,7 +117,11 @@ export function getBreadcrumbs(req: Request, res: Response) {
       alias: Page.HOMEPAGE,
     },
     { matcher: /\/allocate/g, text: `Allocate ${res.locals.policyStaffs!}`, alias: Page.ALLOCATE },
-    { matcher: /recommend-allocations/g, text: 'Recommend allocations', alias: Page.RECOMMENDED_ALLOCATIONS },
+    {
+      matcher: /recommend-allocations/g,
+      text: `Allocate ${res.locals.policyStaffs!} automatically`,
+      alias: Page.RECOMMENDED_ALLOCATIONS,
+    },
     {
       matcher: /prisoner-allocation-history/g,
       text: 'Prisoner allocation history',
@@ -116,7 +129,11 @@ export function getBreadcrumbs(req: Request, res: Response) {
     },
     { matcher: /\/manage([^-]|$)/g, text: `Manage ${res.locals.policyStaffs!}`, alias: Page.MANAGE_ALLOCATABLE_STAFF },
     { matcher: /\/manage-roles([^/]|$)/g, text: `Manage roles`, alias: Page.MANAGE_ROLES },
-    { matcher: /\/staff-profile/g, text: 'Profile', alias: Page.STAFF_PROFILE },
+    {
+      matcher: /\/staff-profile/g,
+      text: `${sentenceCase(res.locals.policyStaff!)} profile`,
+      alias: Page.STAFF_PROFILE,
+    },
   ]
 
   const breadcrumbs: Breadcrumb[] = []

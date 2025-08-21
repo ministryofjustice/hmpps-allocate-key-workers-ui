@@ -20,8 +20,8 @@ export const JourneyRouter = () => {
   const post = <T, ResBody, ReqBody, Q>(path: string, ...handlers: RequestHandler<T, ResBody, ReqBody, Q>[]) =>
     router.post(path, ...handlers.slice(0, -1), asyncMiddleware(handlers.slice(-1)[0]!))
 
-  const useForPolicies = (path: string, routerMap: { [policy: string]: Router }) =>
-    router.use(path, (req: Request, res: Response, next: NextFunction) => {
+  const useForPolicies = (path: string, permissionCheck: RequestHandler, routerMap: { [policy: string]: Router }) =>
+    router.use(path, permissionCheck, (req: Request, res: Response, next: NextFunction) => {
       const policyRouter = req.middleware?.policy ? routerMap[req.middleware.policy] : undefined
       if (!policyRouter)
         throw new Error(`No route defined for path: ${req.originalUrl},  policy: ${req.middleware?.policy}`)

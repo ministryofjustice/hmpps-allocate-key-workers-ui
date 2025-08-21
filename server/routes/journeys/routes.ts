@@ -6,17 +6,21 @@ import { StartUpdateStaffRoutes } from './start-update-staff/routes'
 import { UpdateCapacityAndStatusRoutes } from './update-capacity-status-and-working-pattern/routes'
 import { AssignStaffRoleRoutes } from './manage-roles/assign/routes'
 import { RemoveStaffRoleRoutes } from './manage-roles/remove/routes'
+import { SelectServicesRoutes } from './select-services/routes'
+import { minRequireAdmin, minRequireAllocate } from '../permissions'
 
 export default function JourneyRoutes({ cacheStore }: DataAccess, services: Services) {
   const router = Router({ mergeParams: true })
 
   router.use(setUpJourneyData(cacheStore('journey')))
 
-  router.use('/start-update-staff/:staffId', StartUpdateStaffRoutes(services))
-  router.use('/update-capacity-status-and-working-pattern', UpdateCapacityAndStatusRoutes(services))
+  router.use('/start-update-staff/:staffId', minRequireAllocate, StartUpdateStaffRoutes(services))
+  router.use('/update-capacity-status-and-working-pattern', minRequireAllocate, UpdateCapacityAndStatusRoutes(services))
 
-  router.use('/manage-roles/assign', AssignStaffRoleRoutes(services))
-  router.use('/manage-roles/remove', RemoveStaffRoleRoutes(services))
+  router.use('/manage-roles/assign', minRequireAllocate, AssignStaffRoleRoutes(services))
+  router.use('/manage-roles/remove', minRequireAllocate, RemoveStaffRoleRoutes(services))
+
+  router.use('/select-services', minRequireAdmin, SelectServicesRoutes(services))
 
   if (process.env.NODE_ENV === 'e2e-test') {
     /* eslint-disable no-param-reassign */

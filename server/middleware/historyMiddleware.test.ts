@@ -119,7 +119,7 @@ describe('historyMiddleware', () => {
       {
         alias: 'RECOMMENDED_ALLOCATIONS',
         href: `/key-worker/recommend-allocations?history=${historyToBase64(['/key-worker', '/key-worker/allocate?excludeActiveAllocations=true', '/key-worker/recommend-allocations'], true)}`,
-        text: 'Recommend allocations',
+        text: 'Allocate key workers automatically',
       },
     ])
   })
