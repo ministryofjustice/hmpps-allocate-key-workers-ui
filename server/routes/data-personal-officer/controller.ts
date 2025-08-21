@@ -65,11 +65,10 @@ export class POStaffDataController {
 
     res.render('data-personal-officer/view', {
       showBreadcrumbs: true,
-      stats,
       data: getEstablishmentData(stats, req),
       dateRange,
-      dateFrom: resQuery?.dateFrom ?? formatDateConcise(stats.current?.from),
-      dateTo: resQuery?.dateTo ?? formatDateConcise(stats.current?.to),
+      dateFrom: resQuery?.dateFrom ?? formatDateConcise(dateRange.dateFrom),
+      dateTo: resQuery?.dateTo ?? formatDateConcise(dateRange.dateTo),
       compareDateFrom: resQuery?.compareDateFrom,
       compareDateTo: resQuery?.compareDateTo,
       dateUpdated: new Date().toISOString(),
