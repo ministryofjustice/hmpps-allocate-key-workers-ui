@@ -15,7 +15,6 @@ export function initialiseDropdown(policyStaff, staff) {
 
   function conditionallyPopulateSelect(select) {
     if (select.children.length > 2) {
-      console.warn(`Skipping populating select with ${select.children.length} children`)
       return
     }
 
