@@ -92,7 +92,8 @@ context('/recommend-allocations', () => {
     cy.findByText('There is a problem').should('be.visible')
     cy.findByRole('link', { name: /Select key workers from the dropdown lists/ })
       .should('be.visible')
-      .should('have.attr', 'href', '#selectStaffMember')
+      .should('have.attr', 'href')
+      .should('match', /#selectStaffMember$/)
   })
 
   it('should show error on de/allocation failure', () => {
@@ -203,6 +204,39 @@ context('/recommend-allocations', () => {
     cy.findByText(
       'Key workers could not be recommended for any prisoners who do not currently have a key worker. This is because none of your key workers have available capacity.',
     ).should('exist')
+  })
+
+  describe('JS Dropdown', () => {
+    it('should not populate dropdowns when client side JS is disabled and the js query param is set', () => {
+      navigateToTestPage(true, true, win => {
+        // @ts-expect-error add property to client window
+        win['jsDisabled'] = true // eslint-disable-line no-param-reassign
+      })
+
+      cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
+      cy.get('.placeholder-select').eq(1).focus()
+      cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
+    })
+
+    it('should populate dropdowns through nunjucks when client side JS is disabled', () => {
+      navigateToTestPage(true, false, win => {
+        // @ts-expect-error add property to client window
+        win['jsDisabled'] = true // eslint-disable-line no-param-reassign
+      })
+
+      cy.get('.placeholder-select').eq(1).children().should('have.length', 2)
+    })
+
+    it('should populate dropdowns through client side JS when available', () => {
+      navigateToTestPage(true, true, win => {
+        // @ts-expect-error add property to client window
+        win['jsDisabled'] = false // eslint-disable-line no-param-reassign
+      })
+      // Nunjucks prepopulates with one item (or two if on recommend allocations page) and then JS populates the rest on focus
+      cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
+      cy.get('.placeholder-select').eq(1).focus()
+      cy.get('.placeholder-select').eq(1).children().should('have.length', 2)
+    })
   })
 
   const checkPageContents = () => {
@@ -320,12 +354,17 @@ context('/recommend-allocations', () => {
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Tester, Jane')
   }
 
-  const navigateToTestPage = (allowPartialAllocation: boolean = true) => {
+  const navigateToTestPage = (
+    allowPartialAllocation: boolean = true,
+    jsParam: boolean = true,
+    onBeforeLoad?: (win: Window) => void,
+  ) => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(
-      `/key-worker/recommend-allocations?allowPartialAllocation=${allowPartialAllocation}&history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL2FsbG9jYXRlIiwiL2tleS13b3JrZXIvYWxsb2NhdGU%2FcXVlcnk9JmNlbGxMb2NhdGlvblByZWZpeD0xJmV4Y2x1ZGVBY3RpdmVBbGxvY2F0aW9ucz10cnVlIiwiL2tleS13b3JrZXIvcmVjb21tZW5kLWFsbG9jYXRpb25zIl0%3D`,
+      `/key-worker/recommend-allocations?allowPartialAllocation=${allowPartialAllocation}&js=${jsParam}&history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL2FsbG9jYXRlIiwiL2tleS13b3JrZXIvYWxsb2NhdGU%2FcXVlcnk9JmNlbGxMb2NhdGlvblByZWZpeD0xJmV4Y2x1ZGVBY3RpdmVBbGxvY2F0aW9ucz10cnVlIiwiL2tleS13b3JrZXIvcmVjb21tZW5kLWFsbG9jYXRpb25zIl0%3D`,
       {
         failOnStatusCode: false,
+        ...(onBeforeLoad ? { onBeforeLoad } : {}),
       },
     )
   }

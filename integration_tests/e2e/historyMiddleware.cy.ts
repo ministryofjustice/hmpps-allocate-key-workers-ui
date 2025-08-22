@@ -95,14 +95,14 @@ context('historyMiddleware', () => {
       .eq(1)
       .should('include.text', 'Key worker')
       .and('have.attr', 'href')
-      .should('equal', `/key-worker?history=${historyToBase64(['/key-worker'], true)}`)
+      .should('equal', `/key-worker?history=${historyToBase64(['/key-worker'], true)}&js=true`)
     cy.get('.govuk-breadcrumbs__link')
       .eq(2)
       .should('include.text', 'Allocate key workers')
       .and('have.attr', 'href')
       .should(
         'equal',
-        `/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true'], true)}`,
+        `/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true'], true)}`,
       )
   })
 
@@ -131,14 +131,14 @@ context('historyMiddleware', () => {
       .eq(1)
       .should('include.text', 'Key worker')
       .and('have.attr', 'href')
-      .should('equal', `/key-worker?history=${historyToBase64(['/key-worker'], true)}`)
+      .should('equal', `/key-worker?history=${historyToBase64(['/key-worker'], true)}&js=true`)
     cy.get('.govuk-breadcrumbs__link')
       .eq(2)
       .should('include.text', 'Allocate key workers')
       .and('have.attr', 'href')
       .should(
         'equal',
-        `/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true'], true)}`,
+        `/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true'], true)}`,
       )
 
     cy.findByRole('button', { name: 'Continue' }).click()
@@ -155,14 +155,14 @@ context('historyMiddleware', () => {
       .eq(1)
       .should('include.text', 'Key worker')
       .and('have.attr', 'href')
-      .should('equal', `/key-worker?history=${historyToBase64(['/key-worker'], true)}`)
+      .should('equal', `/key-worker?history=${historyToBase64(['/key-worker'], true)}&js=true`)
     cy.get('.govuk-breadcrumbs__link')
       .eq(2)
       .should('include.text', 'Allocate key workers')
       .and('have.attr', 'href')
       .should(
         'equal',
-        `/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true'], true)}`,
+        `/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true'], true)}`,
       )
     cy.get('.govuk-breadcrumbs__link')
       .eq(3)
@@ -170,7 +170,7 @@ context('historyMiddleware', () => {
       .and('have.attr', 'href')
       .should(
         'equal',
-        `/key-worker/recommend-allocations?allowPartialAllocation=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true', '/key-worker/recommend-allocations?allowPartialAllocation=true'], true)}`,
+        `/key-worker/recommend-allocations?allowPartialAllocation=true&js=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true', '/key-worker/recommend-allocations?allowPartialAllocation=true&js=true'], true)}`,
       )
   })
 
@@ -195,14 +195,14 @@ context('historyMiddleware', () => {
       .eq(1)
       .should('include.text', 'Key worker')
       .and('have.attr', 'href')
-      .should('equal', `/key-worker?history=${historyToBase64(['/key-worker'], true)}`)
+      .should('equal', `/key-worker?history=${historyToBase64(['/key-worker'], true)}&js=true`)
     cy.get('.govuk-breadcrumbs__link')
       .eq(2)
       .should('include.text', 'Manage key workers')
       .and('have.attr', 'href')
       .should(
         'equal',
-        `/key-worker/manage?query=&status=ACTIVE&history=${historyToBase64(['/key-worker', '/key-worker/manage?query=&status=ACTIVE'], true)}`,
+        `/key-worker/manage?query=&status=ACTIVE&history=${historyToBase64(['/key-worker', '/key-worker/manage?query=&status=ACTIVE'], true)}&js=true`,
       )
 
     cy.get('a[href*="prisoner-allocation-history"]').eq(0).click()
@@ -217,14 +217,14 @@ context('historyMiddleware', () => {
       .eq(1)
       .should('include.text', 'Key worker')
       .and('have.attr', 'href')
-      .should('equal', `/key-worker?history=${historyToBase64(['/key-worker'], true)}`)
+      .should('equal', `/key-worker?history=${historyToBase64(['/key-worker'], true)}&js=true`)
     cy.get('.govuk-breadcrumbs__link')
       .eq(2)
       .should('include.text', 'Manage key workers')
       .and('have.attr', 'href')
       .should(
         'equal',
-        `/key-worker/manage?query=&status=ACTIVE&history=${historyToBase64(['/key-worker', '/key-worker/manage?query=&status=ACTIVE'], true)}`,
+        `/key-worker/manage?query=&status=ACTIVE&history=${historyToBase64(['/key-worker', '/key-worker/manage?query=&status=ACTIVE'], true)}&js=true`,
       )
     cy.get('.govuk-breadcrumbs__link')
       .eq(3)
@@ -232,7 +232,7 @@ context('historyMiddleware', () => {
       .and('have.attr', 'href')
       .should(
         'equal',
-        `/key-worker/staff-profile/488095?history=${historyToBase64(['/key-worker', '/key-worker/manage?query=&status=ACTIVE', '/key-worker/staff-profile/488095'], true)}`,
+        `/key-worker/staff-profile/488095?js=true&history=${historyToBase64(['/key-worker', '/key-worker/manage?query=&status=ACTIVE', '/key-worker/staff-profile/488095?js=true'], true)}`,
       )
   })
 })

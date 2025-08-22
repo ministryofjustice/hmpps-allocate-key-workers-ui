@@ -112,7 +112,7 @@ function removeDuplicateConsecutiveUrls(history: string[]) {
 export function getBreadcrumbs(req: Request, res: Response) {
   const URL_MAPPINGS: { matcher: RegExp; text: string; alias: string }[] = [
     {
-      matcher: new RegExp(`^/${res.locals.policyPath}/?$`, 'i'),
+      matcher: new RegExp(`^/${res.locals.policyPath}([^/]|$)`, 'i'),
       text: sentenceCase(res.locals.policyStaffs!, true),
       alias: Page.HOMEPAGE,
     },

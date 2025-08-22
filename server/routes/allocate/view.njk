@@ -61,6 +61,7 @@
 
         <form method="post" action="/{{ policyPath }}/allocate/filter" class="govuk-grid-row govuk-!-margin-right-0 govuk-!-margin-left-0 govuk-!-margin-bottom-7 govuk-!-padding-top-4 govuk-!-padding-bottom-2 govuk-!-padding-left-4 govuk-!-padding-right-4 search-form">
           <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+          <input type="hidden" name="js" value="{{ jsEnabled }}"/>
           <h2 id="searchBy" class="govuk-heading-m">Search by</h2>
           <div class="horizontal-form">
             {{ govukInput({
@@ -172,7 +173,7 @@
                 formGroup: {
                   classes: "govuk-!-margin-0"
                 },
-                items: [] | addSelectValue('Select ' + policyStaff, true, '', true)
+                items: ([] | addSelectValue('Select ' + policyStaff, true, '', true)) if jsEnabled else (staff | excludeCurrentStaffMember(item.staffMember) | conditionallyAddDeallocate(item.staffMember.staffId) | mergePrisonerKeyworkerIds(item.personIdentifier) | addSelectValue('Select ' + policyStaff))
               })
             } if user | hasPermission('allocate') else undefined,
             {
@@ -241,10 +242,13 @@
     </div>
   {% endblock %}
 
+
 {% block pageScripts %}
-  <script nonce="{{ cspNonce }}">
-    window.onload = function () {
-      window.initialiseDropdown('{{ policyStaff }}', {{ staff | dump | safe }})
-    }
-  </script>
+  {% if jsEnabled %}
+    <script nonce="{{ cspNonce }}">
+      window.onload = function () {
+        window.initialiseDropdown('{{ policyStaff }}', {{ staff | dump | safe }})
+      }
+    </script>
+    {% endif %}
 {% endblock %}

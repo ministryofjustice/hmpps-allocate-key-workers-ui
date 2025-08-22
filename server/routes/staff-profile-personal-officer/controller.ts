@@ -84,6 +84,7 @@ export class POStaffProfileController extends ChangeStaffController {
           : req.baseUrl,
       showFilter: !!resQuery,
       ...resQuery,
+      jsEnabled: req.query['js'] === 'true',
     })
   }
 

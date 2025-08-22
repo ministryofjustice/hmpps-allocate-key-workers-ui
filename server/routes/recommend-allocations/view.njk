@@ -36,6 +36,12 @@
         <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
         {% set rows = [] %}
         {% for item in records %}
+          {% if jsEnabled %}
+            {% set items = ([] | addSelectValue(item.recommendedText, true, item.personIdentifier+ ':allocate:' + item.recommendation + ':auto', true)) if item.recommendedText else ([] | addSelectValue('Select ' + policyStaff, true, '', true)) %}
+          {% else %}
+            {% set items = item.kwDropdown | mergePrisonerKeyworkerIds(item.personIdentifier, item.recommendation) | addSelectValue('Select ' + policyStaff, true, '', false) | setSelectedValue(item.personIdentifier+ ':allocate:' + item.recommendation + ':auto') %}
+          {% endif %}
+
           {% set rows = (rows.push([
             {
               html: '<a class="govuk-link--no-visited-state" target="_blank" href="' + prisonerProfileUrl + '/prisoner/' + item.personIdentifier + '">' + item | lastNameCommaFirstName + "</a><br/>" + item.personIdentifier,
@@ -69,7 +75,7 @@
                 formGroup: {
                   classes: "govuk-!-margin-0"
                 },
-                items: ([] | addSelectValue(item.recommendedText, true, item.personIdentifier+ ':allocate:' + item.recommendation + ':auto', true)) if item.recommendedText else ([] | addSelectValue('Select ' + policyStaff, true, '', true) )
+                items: items
               })
             },
             {
@@ -139,9 +145,11 @@
 {% endblock %}
 
 {% block pageScripts %}
-  <script nonce="{{ cspNonce }}">
-    window.onload = function () {
-      window.initialiseDropdown('{{ policyStaff }}', {{ staff | dump | safe }})
-    }
-  </script>
+  {% if jsEnabled %}
+    <script nonce="{{ cspNonce }}">
+      window.onload = function () {
+        window.initialiseDropdown('{{ policyStaff }}', {{ staff | dump | safe }})
+      }
+    </script>
+    {% endif %}
 {% endblock %}

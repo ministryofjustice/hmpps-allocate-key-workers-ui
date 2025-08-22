@@ -81,6 +81,7 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
       return {
         ...o,
         recommendation: match?.staff.staffId,
+        kwDropdown: dropdownOptions.filter(x => !x.onlyFor || x.onlyFor === o.personIdentifier),
         recommendedText: match
           ? `${lastNameCommaFirstName(match!.staff)} (allocations: ${match!.staff.allocated})`
           : '',
@@ -93,6 +94,7 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
       staff: dropdownOptions,
       count: req.flash(FLASH_KEY__COUNT)[0],
       apiError: req.flash(FLASH_KEY__API_ERROR)[0],
+      jsEnabled: req.query['js'] === 'true',
     })
   }
 
