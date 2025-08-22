@@ -125,7 +125,7 @@
               formGroup: {
                 classes: "govuk-!-margin-0"
               },
-              items: [] | addSelectValue('Select ' + policyStaff, true, '', true)
+              items: ([] | addSelectValue('Select ' + policyStaff, true, '', true)) if jsEnabled else (staff | excludeCurrentStaffMember({staffId: staffId}) | conditionallyAddDeallocate(staffId) | mergePrisonerKeyworkerIds(item.prisoner.prisonNumber) | addSelectValue('Select ' + policyStaff) )
             })
           } if user | hasPermission('allocate') else undefined,
           {
@@ -208,9 +208,11 @@
 {% endblock %}
 
 {% block pageScripts %}
-  <script nonce="{{ cspNonce }}">
-    window.onload = function () {
-      window.initialiseDropdown('{{ policyStaff }}', {{ staff | dump | safe }})
-    }
-  </script>
+  {% if jsEnabled %}
+    <script nonce="{{ cspNonce }}">
+      window.onload = function () {
+        window.initialiseDropdown('{{ policyStaff }}', {{ staff | dump | safe }})
+      }
+    </script>
+    {% endif %}
 {% endblock %}

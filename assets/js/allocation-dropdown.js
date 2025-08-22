@@ -1,4 +1,8 @@
 export function initialiseDropdown(policyStaff, staff) {
+  if (window['jsDisabled']) {
+    return
+  }
+
   function createOption(text, value, selected) {
     const option = document.createElement('option')
     option.text = text
@@ -10,7 +14,10 @@ export function initialiseDropdown(policyStaff, staff) {
   }
 
   function conditionallyPopulateSelect(select) {
-    if (select.children.length > 2) return
+    if (select.children.length > 2) {
+      console.warn(`Skipping populating select with ${select.children.length} children`)
+      return
+    }
 
     // Delete all children after the first
     select.innerHTML = ''

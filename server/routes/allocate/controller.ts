@@ -38,12 +38,13 @@ export class AllocateStaffController extends ChangeStaffController {
       Object.entries(sanitisedQuery).reduce((acc, [key, value]) => ({ ...acc, [key]: String(value) }), {}),
     ).toString()
 
-    if (!Object.keys(req.query).filter(o => o !== 'history').length) {
+    if (!Object.keys(req.query).filter(o => o !== 'history' && o !== 'js').length) {
       return res.render('allocate/view', {
         locations: locationsValues,
         showBreadcrumbs: true,
         allowAutoAllocation,
         allocationResult,
+        jsEnabled: req.query['js'] === 'true',
       })
     }
 
@@ -56,6 +57,7 @@ export class AllocateStaffController extends ChangeStaffController {
         showBreadcrumbs: true,
         allowAutoAllocation,
         allocationResult,
+        jsEnabled: req.query['js'] === 'true',
       })
     }
 
@@ -69,6 +71,7 @@ export class AllocateStaffController extends ChangeStaffController {
       showBreadcrumbs: true,
       allowAutoAllocation,
       allocationResult,
+      jsEnabled: req.query['js'] === 'true',
     })
   }
 
@@ -81,6 +84,7 @@ export class AllocateStaffController extends ChangeStaffController {
       excludeActiveAllocations: req.body.excludeActiveAllocations || false,
     })
     params.set('history', getHistoryParamForPOST(req, `/${res.locals.policyPath}/allocate`, params))
+    params.set('js', req.body.js === 'true' ? 'true' : 'false')
     return res.redirect(`/${res.locals.policyPath}/allocate?${params.toString()}`)
   }
 }

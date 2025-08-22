@@ -75,7 +75,10 @@ context('/allocate', () => {
     searchBtn().click()
 
     cy.get('.govuk-error-summary').should('have.length', 1)
-    cy.findByText(invalidSearchError).should('exist').should('have.attr', 'href', '#searchBy')
+    cy.findByText(invalidSearchError)
+      .should('exist')
+      .should('have.attr', 'href')
+      .should('match', /#searchBy$/)
 
     queryTextbox().type('ALL')
     searchBtn().click()
@@ -230,8 +233,14 @@ context('/allocate', () => {
     locationTextBox().should('have.value', '')
 
     cy.get('.govuk-error-summary').should('have.length', 1)
-    cy.findByText(invalidNameError).should('exist').should('have.attr', 'href', '#query')
-    cy.findByText(invalidLocationError).should('exist').should('have.attr', 'href', '#cellLocationPrefix')
+    cy.findByText(invalidNameError)
+      .should('exist')
+      .should('have.attr', 'href')
+      .should('match', /#query$/)
+    cy.findByText(invalidLocationError)
+      .should('exist')
+      .should('have.attr', 'href')
+      .should('match', /#cellLocationPrefix$/)
   })
 
   it('should show error when no allocations or deallocations are made', () => {
@@ -242,7 +251,8 @@ context('/allocate', () => {
     cy.findByText('There is a problem').should('be.visible')
     cy.findByRole('link', { name: /Select key workers from the dropdown lists/ })
       .should('be.visible')
-      .should('have.attr', 'href', '#selectStaffMember')
+      .should('have.attr', 'href')
+      .should('match', /#selectStaffMember/)
   })
 
   it('should preserve queries on submit form validation error', () => {
@@ -361,6 +371,51 @@ context('/allocate', () => {
 
     cy.get('.moj-alert').should('contain.text', 'Changes made successfully')
     cy.findByText('You have successfully made changes to 2 prisoners.').should('exist')
+  })
+
+  describe('JS Dropdown', () => {
+    it('should not populate dropdowns when client side JS is disabled and the js query param is set', () => {
+      cy.signIn({ failOnStatusCode: false })
+      cy.visit('/key-worker/allocate?query=ALL&js=true', {
+        onBeforeLoad(win) {
+          // @ts-expect-error add property to client window
+          win['jsDisabled'] = false // eslint-disable-line no-param-reassign
+        },
+        failOnStatusCode: false,
+      })
+
+      cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
+      cy.get('.placeholder-select').eq(1).focus()
+      cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
+    })
+
+    it('should populate dropdowns through nunjucks when client side JS is disabled', () => {
+      cy.signIn({ failOnStatusCode: false })
+      cy.visit('/key-worker/allocate?query=ALL&js=false', {
+        onBeforeLoad(win) {
+          // @ts-expect-error add property to client window
+          win['jsDisabled'] = true // eslint-disable-line no-param-reassign
+        },
+        failOnStatusCode: false,
+      })
+
+      cy.get('.placeholder-select').eq(1).children().should('have.length', 4)
+    })
+
+    it('should populate dropdowns through client side JS when available', () => {
+      cy.signIn({ failOnStatusCode: false })
+      cy.visit('/key-worker/allocate?query=ALL&js=true', {
+        onBeforeLoad(win) {
+          // @ts-expect-error add property to client window
+          win['jsDisabled'] = false // eslint-disable-line no-param-reassign
+        },
+        failOnStatusCode: false,
+      })
+      // Nunjucks prepopulates with one item (or two if on recommend allocations page) and then JS populates the rest on focus
+      cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
+      cy.get('.placeholder-select').eq(1).focus()
+      cy.get('.placeholder-select').eq(1).children().should('have.length', 3)
+    })
   })
 
   const checkPageContentsNoFilter = (readonly = false, allowAutoAllocation = true) => {
