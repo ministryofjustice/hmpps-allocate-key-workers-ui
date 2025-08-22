@@ -379,7 +379,7 @@ context('/allocate', () => {
       cy.visit('/key-worker/allocate?query=ALL&js=true', {
         onBeforeLoad(win) {
           // @ts-expect-error add property to client window
-          win['jsDisabled'] = false // eslint-disable-line no-param-reassign
+          win['jsDisabled'] = true // eslint-disable-line no-param-reassign
         },
         failOnStatusCode: false,
       })

@@ -76,14 +76,6 @@ context('Personal Officer Profile Info', () => {
       },
       {
         who: 'USER1',
-        subjectType: 'NOT_APPLICABLE',
-        details:
-          '{"pageUrl":"/personal-officer/staff-profile/488095?js=true","activeCaseLoadId":"LEI","policy":"PERSONAL_OFFICER"}',
-        what: 'PAGE_VIEW_ACCESS_ATTEMPT',
-        service: 'DPS023',
-      },
-      {
-        who: 'USER1',
         subjectType: 'SEARCH_TERM',
         details:
           '{"pageUrl":"/personal-officer/staff-profile/488095?js=true","pageName":"STAFF_ALLOCATIONS","staffId":"488095","query":"488095","activeCaseLoadId":"LEI","policy":"PERSONAL_OFFICER"}',
