@@ -40,6 +40,7 @@ export class StaffProfileController extends ChangeStaffController {
       staffMember: { firstName: staffDetails.firstName, lastName: staffDetails.lastName },
       ...(await this.getChangeData(req, res)),
       showBreadcrumbs: true,
+      jsEnabled: req.query['js'] === 'true',
     })
   }
 

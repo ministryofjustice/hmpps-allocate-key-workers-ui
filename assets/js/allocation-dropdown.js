@@ -10,7 +10,9 @@ export function initialiseDropdown(policyStaff, staff) {
   }
 
   function conditionallyPopulateSelect(select) {
-    if (select.children.length > 2) return
+    if (select.children.length > 2) {
+      return
+    }
 
     // Delete all children after the first
     select.innerHTML = ''

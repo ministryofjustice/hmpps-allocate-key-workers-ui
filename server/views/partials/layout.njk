@@ -27,8 +27,9 @@
             if (!url.searchParams.get('history')) {
               const urlHistory = [...history, link.href.replace(window.location.origin, '')]
               url.searchParams.set('history', btoa(JSON.stringify(urlHistory)))
-              link.href = url.pathname + url.search + url.hash;
             }
+            url.searchParams.set('js', 'true')
+            link.href = url.pathname + url.search + url.hash;
           }
         });
       } catch(e) {
