@@ -1,6 +1,13 @@
 import { Request } from 'express'
 import type { components } from '../../@types/keyWorker'
 
+function sessionEntry(req: Request, plural: boolean = false) {
+  if (req.middleware!.policy === 'PERSONAL_OFFICER') {
+    return plural ? 'entries' : 'entry'
+  }
+  return plural ? 'sessions' : 'session'
+}
+
 export const getEstablishmentData = (stats: components['schemas']['PrisonStats'], req: Request) =>
   stats.current
     ? [
@@ -62,19 +69,18 @@ export const getEstablishmentData = (stats: components['schemas']['PrisonStats']
         },
         req.middleware!.prisonConfiguration!.hasPrisonersWithHighComplexityNeeds
           ? {
-              heading: 'Average time from eligibility to first [staff] session',
+              heading: `Average time from eligibility to first [staff] ${sessionEntry(req)}`,
               type: 'day',
               currentValue: stats.current.avgReceptionToRecordedEventDays,
               previousValue: stats.previous?.avgReceptionToRecordedEventDays,
-              calculationMethod: `This figure displays the average time between prisoners becoming eligible for ${req.middleware!.policy === 'KEY_WORKER' ? 'key work' : '[staff] sessions'} and the first recorded [staff] session for sessions recorded in the selected date range.`,
+              calculationMethod: `This figure displays the average time between prisoners becoming eligible for ${req.middleware!.policy === 'KEY_WORKER' ? 'key work' : '[staff] entries'} and the first recorded [staff] ${sessionEntry(req)} for ${sessionEntry(req, true)} recorded in the selected date range.`,
             }
           : {
-              heading: 'Average time from reception to first [staff] session',
+              heading: `Average time from reception to first [staff] ${sessionEntry(req)}`,
               type: 'day',
               currentValue: stats.current.avgReceptionToRecordedEventDays,
               previousValue: stats.previous?.avgReceptionToRecordedEventDays,
-              calculationMethod:
-                'This figure displays the average time between reception and the first recorded [staff] session for sessions recorded in the selected date range.',
+              calculationMethod: `This figure displays the average time between reception and the first recorded [staff] ${sessionEntry(req)} for ${sessionEntry(req, true)} recorded in the selected date range.`,
             },
         req.middleware!.prisonConfiguration!.hasPrisonersWithHighComplexityNeeds
           ? {
@@ -82,7 +88,7 @@ export const getEstablishmentData = (stats: components['schemas']['PrisonStats']
               type: 'day',
               currentValue: stats.current.avgReceptionToAllocationDays,
               previousValue: stats.previous?.avgReceptionToAllocationDays,
-              calculationMethod: `This figure displays the average time between prisoners becoming eligible for ${req.middleware!.policy === 'KEY_WORKER' ? 'key work' : '[staff] sessions'} and [staff] allocation for allocations made in the selected date range.`,
+              calculationMethod: `This figure displays the average time between prisoners becoming eligible for ${req.middleware!.policy === 'KEY_WORKER' ? 'key work' : '[staff] entries'} and [staff] allocation for allocations made in the selected date range.`,
             }
           : {
               heading: 'Average time from reception to [staff] allocation',

@@ -1,5 +1,4 @@
 import { POLICIES, Policy } from '../middleware/policyMiddleware'
-import { sentenceCase } from './formatUtils'
 
 const properCase = (word: string): string =>
   word.length >= 1 && word[0] ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -36,13 +35,13 @@ export const policyAware = (text: string | Record<string, string[]>, policy: str
   if (!text) return text
 
   if (typeof text === 'string') {
-    return sentenceCase(text.replaceAll('[staff]', policy).replaceAll('[staffs]', `${policy}s`))
+    return text.replaceAll('[staff]', policy).replaceAll('[staffs]', `${policy}s`)
   }
 
   return Object.fromEntries(
     Object.entries(text).map(([k, v]) => [
       k,
-      v.map(o => sentenceCase(o.replaceAll('[staff]', policy).replaceAll('[staffs]', `${policy}s`))),
+      v.map(o => o.replaceAll('[staff]', policy).replaceAll('[staffs]', `${policy}s`)),
     ]),
   )
 }
