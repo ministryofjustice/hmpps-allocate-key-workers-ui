@@ -1,6 +1,6 @@
 {% macro statCard(title, currentValue, previousValue, format='number') %}
   <div class="govuk-grid-column-one-quarter left-aligned">
-    <h2 class="govuk-heading-s govuk-!-margin-bottom-2">{{ title }}</h2>
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-2">{{ title }}</h3>
     <p class="govuk-!-margin-bottom-1 govuk-body-l">{{ currentValue | formatValue(format) }}</p>
     <p class="govuk-!-margin-bottom-2">{{ currentValue | getStatChange(previousValue, format) }}</p>
   </div>
