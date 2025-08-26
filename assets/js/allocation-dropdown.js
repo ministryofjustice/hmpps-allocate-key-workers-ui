@@ -1,8 +1,4 @@
 export function initialiseDropdown(policyStaff, staff) {
-  if (window['jsDisabled']) {
-    return
-  }
-
   function createOption(text, value, selected) {
     const option = document.createElement('option')
     option.text = text

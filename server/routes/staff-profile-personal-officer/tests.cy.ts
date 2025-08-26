@@ -217,31 +217,14 @@ context('Personal Officer Profile Info', () => {
   })
 
   describe('JS Dropdown', () => {
-    it('should not populate dropdowns when client side JS is disabled and the js query param is set', () => {
-      navigateToTestPage(true, win => {
-        // @ts-expect-error add property to client window
-        win['jsDisabled'] = true // eslint-disable-line no-param-reassign
-      })
-
-      cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
-      cy.get('.placeholder-select').eq(1).focus()
-      cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
-    })
-
     it('should populate dropdowns through nunjucks when client side JS is disabled', () => {
-      navigateToTestPage(false, win => {
-        // @ts-expect-error add property to client window
-        win['jsDisabled'] = true // eslint-disable-line no-param-reassign
-      })
+      navigateToTestPage(false)
 
       cy.get('.placeholder-select').eq(1).children().should('have.length', 4)
     })
 
     it('should populate dropdowns through client side JS when available', () => {
-      navigateToTestPage(true, win => {
-        // @ts-expect-error add property to client window
-        win['jsDisabled'] = false // eslint-disable-line no-param-reassign
-      })
+      navigateToTestPage(true)
       // Nunjucks prepopulates with one item (or two if on recommend allocations page) and then JS populates the rest on focus
       cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
       cy.get('.placeholder-select').eq(1).focus()
@@ -249,14 +232,11 @@ context('Personal Officer Profile Info', () => {
     })
   })
 
-  const navigateToTestPage = (jsParam: boolean = true, onBeforeLoad?: (win: Window) => void) => {
+  const navigateToTestPage = (jsParam: boolean = true) => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(
       `/personal-officer/staff-profile/488095?js=${jsParam}&history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL21hbmFnZSIsIi9rZXktd29ya2VyL3N0YWZmLXByb2ZpbGUvMzQzNTMiXQ%3D%3D`,
-      {
-        failOnStatusCode: false,
-        ...(onBeforeLoad ? { onBeforeLoad } : {}),
-      },
+      { failOnStatusCode: false },
     )
   }
 

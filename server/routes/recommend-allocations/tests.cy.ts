@@ -207,31 +207,14 @@ context('/recommend-allocations', () => {
   })
 
   describe('JS Dropdown', () => {
-    it('should not populate dropdowns when client side JS is disabled and the js query param is set', () => {
-      navigateToTestPage(true, true, win => {
-        // @ts-expect-error add property to client window
-        win['jsDisabled'] = true // eslint-disable-line no-param-reassign
-      })
-
-      cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
-      cy.get('.placeholder-select').eq(1).focus()
-      cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
-    })
-
     it('should populate dropdowns through nunjucks when client side JS is disabled', () => {
-      navigateToTestPage(true, false, win => {
-        // @ts-expect-error add property to client window
-        win['jsDisabled'] = true // eslint-disable-line no-param-reassign
-      })
+      navigateToTestPage(true, false)
 
       cy.get('.placeholder-select').eq(1).children().should('have.length', 2)
     })
 
     it('should populate dropdowns through client side JS when available', () => {
-      navigateToTestPage(true, true, win => {
-        // @ts-expect-error add property to client window
-        win['jsDisabled'] = false // eslint-disable-line no-param-reassign
-      })
+      navigateToTestPage(true, true)
       // Nunjucks prepopulates with one item (or two if on recommend allocations page) and then JS populates the rest on focus
       cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
       cy.get('.placeholder-select').eq(1).focus()
@@ -354,18 +337,11 @@ context('/recommend-allocations', () => {
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Tester, Jane')
   }
 
-  const navigateToTestPage = (
-    allowPartialAllocation: boolean = true,
-    jsParam: boolean = true,
-    onBeforeLoad?: (win: Window) => void,
-  ) => {
+  const navigateToTestPage = (allowPartialAllocation: boolean = true, jsParam: boolean = true) => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(
       `/key-worker/recommend-allocations?allowPartialAllocation=${allowPartialAllocation}&js=${jsParam}&history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL2FsbG9jYXRlIiwiL2tleS13b3JrZXIvYWxsb2NhdGU%2FcXVlcnk9JmNlbGxMb2NhdGlvblByZWZpeD0xJmV4Y2x1ZGVBY3RpdmVBbGxvY2F0aW9ucz10cnVlIiwiL2tleS13b3JrZXIvcmVjb21tZW5kLWFsbG9jYXRpb25zIl0%3D`,
-      {
-        failOnStatusCode: false,
-        ...(onBeforeLoad ? { onBeforeLoad } : {}),
-      },
+      { failOnStatusCode: false },
     )
   }
 })

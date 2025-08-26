@@ -198,31 +198,14 @@ context('Profile Info', () => {
   })
 
   describe('JS Dropdown', () => {
-    it('should not populate dropdowns when client side JS is disabled and the js query param is set', () => {
-      navigateToTestPage(true, win => {
-        // @ts-expect-error add property to client window
-        win['jsDisabled'] = true // eslint-disable-line no-param-reassign
-      })
-
-      cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
-      cy.get('.placeholder-select').eq(1).focus()
-      cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
-    })
-
     it('should populate dropdowns through nunjucks when client side JS is disabled', () => {
-      navigateToTestPage(false, win => {
-        // @ts-expect-error add property to client window
-        win['jsDisabled'] = true // eslint-disable-line no-param-reassign
-      })
+      navigateToTestPage(false)
 
       cy.get('.placeholder-select').eq(1).children().should('have.length', 4)
     })
 
     it('should populate dropdowns through client side JS when available', () => {
-      navigateToTestPage(true, win => {
-        // @ts-expect-error add property to client window
-        win['jsDisabled'] = false // eslint-disable-line no-param-reassign
-      })
+      navigateToTestPage(true)
       // Nunjucks prepopulates with one item (or two if on recommend allocations page) and then JS populates the rest on focus
       cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
       cy.get('.placeholder-select').eq(1).focus()

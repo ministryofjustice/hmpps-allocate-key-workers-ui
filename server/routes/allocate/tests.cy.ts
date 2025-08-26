@@ -374,43 +374,16 @@ context('/allocate', () => {
   })
 
   describe('JS Dropdown', () => {
-    it('should not populate dropdowns when client side JS is disabled and the js query param is set', () => {
-      cy.signIn({ failOnStatusCode: false })
-      cy.visit('/key-worker/allocate?query=ALL&js=true', {
-        onBeforeLoad(win) {
-          // @ts-expect-error add property to client window
-          win['jsDisabled'] = true // eslint-disable-line no-param-reassign
-        },
-        failOnStatusCode: false,
-      })
-
-      cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
-      cy.get('.placeholder-select').eq(1).focus()
-      cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
-    })
-
     it('should populate dropdowns through nunjucks when client side JS is disabled', () => {
       cy.signIn({ failOnStatusCode: false })
-      cy.visit('/key-worker/allocate?query=ALL&js=false', {
-        onBeforeLoad(win) {
-          // @ts-expect-error add property to client window
-          win['jsDisabled'] = true // eslint-disable-line no-param-reassign
-        },
-        failOnStatusCode: false,
-      })
+      cy.visit('/key-worker/allocate?query=ALL&js=false')
 
       cy.get('.placeholder-select').eq(1).children().should('have.length', 4)
     })
 
     it('should populate dropdowns through client side JS when available', () => {
       cy.signIn({ failOnStatusCode: false })
-      cy.visit('/key-worker/allocate?query=ALL&js=true', {
-        onBeforeLoad(win) {
-          // @ts-expect-error add property to client window
-          win['jsDisabled'] = false // eslint-disable-line no-param-reassign
-        },
-        failOnStatusCode: false,
-      })
+      cy.visit('/key-worker/allocate?query=ALL&js=true')
       // Nunjucks prepopulates with one item (or two if on recommend allocations page) and then JS populates the rest on focus
       cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
       cy.get('.placeholder-select').eq(1).focus()
