@@ -59,7 +59,7 @@ context('Profile Info', () => {
         who: 'USER1',
         subjectType: 'SEARCH_TERM',
         details:
-          '{"pageUrl":"/key-worker/staff-profile/488095","pageName":"STAFF_ALLOCATIONS","staffId":"488095","query":"488095","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          '{"pageUrl":"/key-worker/staff-profile/488095?js=true","pageName":"STAFF_ALLOCATIONS","staffId":"488095","query":"488095","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
         subjectId: '488095',
         what: 'PAGE_VIEW',
         service: 'DPS023',
@@ -68,7 +68,7 @@ context('Profile Info', () => {
         who: 'USER1',
         subjectType: 'SEARCH_TERM',
         details:
-          '{"pageUrl":"/key-worker/staff-profile/488095","pageName":"STAFF_ALLOCATIONS","staffId":"488095","query":"488095","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
+          '{"pageUrl":"/key-worker/staff-profile/488095?js=true","pageName":"STAFF_ALLOCATIONS","staffId":"488095","query":"488095","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
         subjectId: '488095',
         what: 'PAGE_VIEW_ACCESS_ATTEMPT',
         service: 'DPS023',
@@ -103,7 +103,8 @@ context('Profile Info', () => {
     cy.findByText('There is a problem').should('be.visible')
     cy.findByRole('link', { name: /Select key workers from the dropdown lists/ })
       .should('be.visible')
-      .should('have.attr', 'href', '#selectStaffMember')
+      .should('have.attr', 'href')
+      .should('match', /#selectStaffMember$/)
   })
 
   it('should show error on de/allocation failure', () => {
@@ -196,11 +197,30 @@ context('Profile Info', () => {
     cy.findByText('You have successfully made changes to 2 prisoners.').should('exist')
   })
 
-  const navigateToTestPage = () => {
+  describe('JS Dropdown', () => {
+    it('should populate dropdowns through nunjucks when client side JS is disabled', () => {
+      navigateToTestPage(false)
+
+      cy.get('.placeholder-select').eq(1).children().should('have.length', 4)
+    })
+
+    it('should populate dropdowns through client side JS when available', () => {
+      navigateToTestPage(true)
+      // Nunjucks prepopulates with one item (or two if on recommend allocations page) and then JS populates the rest on focus
+      cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
+      cy.get('.placeholder-select').eq(1).focus()
+      cy.get('.placeholder-select').eq(1).children().should('have.length', 3)
+    })
+  })
+
+  const navigateToTestPage = (jsParam: boolean = true, onBeforeLoad?: (win: Window) => void) => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(
-      '/key-worker/staff-profile/488095?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL21hbmFnZSIsIi9rZXktd29ya2VyL3N0YWZmLXByb2ZpbGUvMzQzNTMiXQ%3D%3D',
-      { failOnStatusCode: false },
+      `/key-worker/staff-profile/488095?js=${jsParam}&history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL21hbmFnZSIsIi9rZXktd29ya2VyL3N0YWZmLXByb2ZpbGUvMzQzNTMiXQ%3D%3D`,
+      {
+        failOnStatusCode: false,
+        ...(onBeforeLoad ? { onBeforeLoad } : {}),
+      },
     )
   }
 
