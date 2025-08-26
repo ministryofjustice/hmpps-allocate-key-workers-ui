@@ -232,10 +232,23 @@
           {{ mojPagination(records.length) }}
 
           {% if user | hasPermission('allocate') %}
-            {{ govukButton({
-            text: "Save changes",
-            preventDoubleClick: true
-          }) }}
+            {% if jsEnabled %}
+              <div class="sticky-action-bar">
+                <div class="govuk-body sticky-action-bar--label">
+                  <strong class="change-count"></strong> <span class="clear-select">Clear</span>
+                </div>
+                {{ govukButton({
+                  classes: "govuk-!-margin-bottom-0 govuk-button--secondary",
+                  text: "Save changes",
+                  preventDoubleClick: true
+                }) }}
+              </div>
+            {% else %}
+              {{ govukButton({
+                text: "Save changes",
+                preventDoubleClick: true
+              }) }}
+            {% endif %}
           {% endif %}
         </form>
       {% endif %}
@@ -246,8 +259,34 @@
 {% block pageScripts %}
   {% if jsEnabled %}
     <script nonce="{{ cspNonce }}">
+      const updateActionBar = () => {
+        let changeCount = 0
+        document.querySelectorAll('select[name="selectStaffMember"]').forEach(dropdown => {
+         if (dropdown.value){
+           changeCount++
+         }
+        })
+        if (changeCount) {
+          document.querySelector('.sticky-action-bar').style.display = 'flex'
+          document.querySelector('.change-count').innerHTML = `${changeCount} change${ changeCount === 1 ? '' : 's' } selected`
+        } else {
+          document.querySelector('.sticky-action-bar').style.display = 'none'
+        }
+      }
+
       window.onload = function () {
         window.initialiseDropdown('{{ policyStaff }}', {{ staff | dump | safe }})
+
+        document.querySelectorAll('select[name="selectStaffMember"]').forEach(dropdown =>
+          dropdown.addEventListener('change', updateActionBar)
+        )
+
+        document.querySelector('.clear-select').addEventListener('click', e => {
+          document.querySelectorAll('select[name="selectStaffMember"]').forEach(dropdown =>
+            dropdown.value = ''
+          )
+          updateActionBar()
+        })
       }
     </script>
     {% endif %}
