@@ -1,6 +1,10 @@
 import express from 'express'
 import * as Sentry from '@sentry/node'
-import dpsComponents from '@ministryofjustice/hmpps-connect-dps-components'
+import {
+  getFrontendComponents,
+  retrieveCaseLoadData,
+  retrieveAllocationJobResponsibilities,
+} from '@ministryofjustice/hmpps-connect-dps-components'
 
 // @ts-expect-error Import untyped middleware for cypress coverage
 import cypressCoverage from '@cypress/code-coverage/middleware/express'
@@ -53,7 +57,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpWebRequestParsing())
   app.use(setUpStaticResources())
   nunjucksSetup(app)
-  app.use(setUpAuthentication())
+  app.use(setUpAuthentication(services))
   app.get('*any', auditPageViewMiddleware(services.auditService))
   app.post('*any', auditApiCallMiddleware(services.auditService))
   app.use(authorisationMiddleware())
@@ -63,14 +67,12 @@ export default function createApp(services: Services): express.Application {
   app.get('/prisoner-image/:prisonerNumber', new PrisonerImageRoutes(services.prisonApiService).GET)
   app.get(
     /(.*)/,
-    dpsComponents.getPageComponents({
+    getFrontendComponents({
       logger,
-      includeSharedData: true,
+      requestOptions: { includeSharedData: true },
+      componentApiConfig: config.apis.componentApi,
       dpsUrl: config.serviceUrls.digitalPrison,
-      timeoutOptions: {
-        response: config.apis.componentApi.timeout.response,
-        deadline: config.apis.componentApi.timeout.deadline,
-      },
+      authenticationClient: services.authenticationClient,
     }),
   )
   app.use((_req, res, next) => {
@@ -78,8 +80,20 @@ export default function createApp(services: Services): express.Application {
     next()
   })
 
-  app.use(dpsComponents.retrieveCaseLoadData({ logger }))
-  app.use(dpsComponents.retrieveAllocationJobResponsibilities({ logger }))
+  app.use(
+    retrieveCaseLoadData({
+      logger,
+      prisonApiConfig: config.apis.prisonApi,
+      authenticationClient: services.authenticationClient,
+    }),
+  )
+  app.use(
+    retrieveAllocationJobResponsibilities({
+      logger,
+      allocationsApiConfig: config.apis.keyworkerApi,
+      authenticationClient: services.authenticationClient,
+    }),
+  )
   app.use(populateValidationErrors())
 
   app.get('/:policy/not-authorised', (req, res) => {

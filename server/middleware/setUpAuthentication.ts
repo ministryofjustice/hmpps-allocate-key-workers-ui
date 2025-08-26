@@ -2,11 +2,13 @@ import passport from 'passport'
 import flash from 'connect-flash'
 import { Router } from 'express'
 import { Strategy } from 'passport-oauth2'
-import dpsComponents from '@ministryofjustice/hmpps-connect-dps-components'
+import { getFrontendComponents } from '@ministryofjustice/hmpps-connect-dps-components'
 import config from '../config'
 import tokenVerifier from '../data/tokenVerification'
 import { HmppsUser } from '../interfaces/hmppsUser'
 import generateOauthClientToken from '../authentication/clientCredentials'
+import logger from '../../logger'
+import { Services } from '../services'
 
 passport.serializeUser((user, done) => {
   // Not used but required for Passport
@@ -35,7 +37,7 @@ passport.use(
   ),
 )
 
-export default function setupAuthentication() {
+export default function setupAuthentication(services: Services) {
   const router = Router()
 
   router.use(passport.initialize())
@@ -44,7 +46,13 @@ export default function setupAuthentication() {
 
   router.get(
     '/autherror',
-    dpsComponents.getPageComponents({ dpsUrl: config.serviceUrls.digitalPrison }),
+    getFrontendComponents({
+      logger,
+      requestOptions: { includeSharedData: true },
+      componentApiConfig: config.apis.componentApi,
+      dpsUrl: config.serviceUrls.digitalPrison,
+      authenticationClient: services.authenticationClient,
+    }),
     (_req, res) => {
       res.status(401)
       return res.render('autherror')
