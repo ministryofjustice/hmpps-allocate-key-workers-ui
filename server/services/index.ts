@@ -27,10 +27,11 @@ export const services = () => {
   const prisonApiService = new PrisonApiService(prisonApiClient)
   const locationsApiService = new LocationsInsidePrisonApiService(locationsWithinPrisonApiClient)
   const prisonerSearchApiService = new PrisonerSearchApiService(prisonerSearchApiClient)
+  const authenticationClient = new AuthenticationClient(config.apis.hmppsAuth, logger, tokenStore)
 
   const prisonPermissionsService = PermissionsService.create({
     prisonerSearchConfig: config.apis.prisonerSearchApi,
-    authenticationClient: new AuthenticationClient(config.apis.hmppsAuth, logger, tokenStore),
+    authenticationClient,
     logger,
     telemetryClient,
   })
@@ -43,6 +44,7 @@ export const services = () => {
     locationsApiService,
     prisonerSearchApiService,
     prisonPermissionsService,
+    authenticationClient,
   }
 }
 

@@ -63,10 +63,12 @@ export default {
   },
   apis: {
     componentApi: {
+      url: get('COMPONENT_API_URL', 'http://localhost:8082', requiredInProduction),
       timeout: {
         response: Number(get('COMPONENT_API_TIMEOUT_RESPONSE', 2500)),
         deadline: Number(get('COMPONENT_API_TIMEOUT_DEADLINE', 2500)),
       },
+      agent: new AgentConfig(Number(get('COMPONENT_API_TIMEOUT_RESPONSE', 2500))),
     },
     hmppsAuth: {
       url: get('HMPPS_AUTH_URL', 'http://localhost:9090/auth', requiredInProduction),
