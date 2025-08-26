@@ -281,6 +281,12 @@ context('Personal Officer Profile Info', () => {
     cy.get('.govuk-grid-column-one-quarter').eq(4).children().eq(2).should('have.text', '+5 increase')
 
     // Allocations panel
+    cy.get('.govuk-table__row').eq(0).children().eq(0).should('contain.text', 'Name and prisoner number')
+    cy.get('.govuk-table__row').eq(0).children().eq(1).should('contain.text', 'Residential location')
+    cy.get('.govuk-table__row').eq(0).children().eq(2).should('contain.text', 'Relevant alerts')
+    cy.get('.govuk-table__row').eq(0).children().eq(3).should('contain.text', 'Most recent entry')
+    cy.get('.govuk-table__row').eq(0).children().eq(4).should('contain.text', 'Entries in last month')
+
     cy.get('.govuk-table__row').eq(1).children().eq(0).should('contain.text', 'Bar, Foo')
     cy.get('.govuk-table__row').eq(1).children().eq(1).should('contain.text', '3-1-027')
     cy.get('.govuk-table__row').eq(1).children().eq(2).should('contain.text', 'None')

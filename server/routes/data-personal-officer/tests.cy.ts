@@ -59,7 +59,7 @@ context('Personal officer data', () => {
     cy.get('.key-worker-data-stat-card')
       .eq(5)
       .within(() => {
-        cy.get('h2').should('have.text', 'Average time from eligibility to first personal officer session')
+        cy.get('h2').should('have.text', 'Average time from eligibility to first personal officer entry')
         cy.get('.govuk-heading-l').should('have.text', '0 days')
         cy.get('p').eq(1).should('have.text', 'No change')
       })
@@ -114,7 +114,7 @@ context('Personal officer data', () => {
     cy.get('.key-worker-data-stat-card')
       .eq(4)
       .within(() => {
-        cy.get('h2').should('have.text', 'Average time from reception to first personal officer session')
+        cy.get('h2').should('have.text', 'Average time from reception to first personal officer entry')
         cy.get('.govuk-heading-l').should('have.text', '0 days')
         cy.get('p').eq(1).should('have.text', 'No change')
       })
