@@ -373,6 +373,28 @@ context('/allocate', () => {
     cy.findByText('You have successfully made changes to 2 prisoners.').should('exist')
   })
 
+  it('should show Save changes button only when there are selected changes', () => {
+    cy.signIn({ failOnStatusCode: false })
+    cy.visit('/key-worker/allocate?query=ALL&js=true')
+
+    cy.get('select').eq(1).focus()
+    cy.get('select').eq(2).focus()
+
+    cy.findByRole('button', { name: /Save changes/i }).should('not.exist')
+
+    cy.get('select').eq(1).select('Key-Worker, Available-Active2 (allocations: 32)')
+    cy.get('select').eq(2).select('Key-Worker, Available-Active2 (allocations: 32)')
+    cy.findByText('2 changes selected').should('be.visible')
+    cy.findByRole('button', { name: /Save changes/i }).should('be.visible')
+
+    cy.findByRole('button', { name: 'Clear' }).click()
+    cy.findByRole('button', { name: /Save changes/i }).should('not.exist')
+
+    cy.get('select').eq(1).select('Key-Worker, Available-Active2 (allocations: 32)')
+    cy.findByText('1 change selected').should('be.visible')
+    cy.findByRole('button', { name: /Save changes/i }).should('be.visible')
+  })
+
   describe('JS Dropdown', () => {
     it('should populate dropdowns through nunjucks when client side JS is disabled', () => {
       cy.signIn({ failOnStatusCode: false })

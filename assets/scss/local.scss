@@ -56,3 +56,31 @@ div.moj-action-bar__filter::after { content: none !important; }
 .placeholder-select {
   min-width: 100% !important;
 }
+
+.sticky-action-bar {
+  justify-content: space-between;
+  display: none;
+  position: sticky;
+  z-index: 1000;
+  bottom: -1px;
+  background-color: #1d70b8;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 20px;
+
+  .sticky-action-bar--label {
+    color: white;
+    position: relative;
+    top: 10px;
+
+    .clear-select {
+      background: none!important;
+      border: none;
+      padding: 0!important;
+      text-decoration: underline;
+      cursor: pointer;
+      margin-left: 10px;
+      color: white;
+    }
+  }
+}

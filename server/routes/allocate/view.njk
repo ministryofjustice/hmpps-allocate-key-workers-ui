@@ -232,10 +232,23 @@
           {{ mojPagination(records.length) }}
 
           {% if user | hasPermission('allocate') %}
-            {{ govukButton({
-            text: "Save changes",
-            preventDoubleClick: true
-          }) }}
+            {% if jsEnabled %}
+              <div class="sticky-action-bar">
+                <div class="govuk-body sticky-action-bar--label">
+                  <strong class="change-count"></strong> <button class="clear-select govuk-body govuk-!-margin-bottom-0">Clear</button>
+                </div>
+                {{ govukButton({
+                  classes: "govuk-!-margin-bottom-0 govuk-button--secondary",
+                  text: "Save changes",
+                  preventDoubleClick: true
+                }) }}
+              </div>
+            {% else %}
+              {{ govukButton({
+                text: "Save changes",
+                preventDoubleClick: true
+              }) }}
+            {% endif %}
           {% endif %}
         </form>
       {% endif %}
@@ -248,6 +261,7 @@
     <script nonce="{{ cspNonce }}">
       window.onload = function () {
         window.initialiseDropdown('{{ policyStaff }}', {{ staff | dump | safe }})
+        window.initAllocateStickyAction()
       }
     </script>
     {% endif %}
