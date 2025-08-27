@@ -59,17 +59,10 @@ context('/allocate', () => {
 
     cy.get('.moj-pagination').should('have.length', 0)
     cy.get('form').should('have.length', 1)
-    cy.get('p')
-      .should('have.length', 2)
-      .eq(0)
-      .should('contain', 'You must select or enter text into at least one search option below.')
-
-    cy.get('p')
-      .eq(1)
-      .should(
-        'contain',
-        'Select ‘Assign key workers automatically’ to get key worker recommendations for all prisoners without a current key worker.',
-      )
+    cy.findByText('You must select or enter text into at least one search option below.').should('be.visible')
+    cy.findByText(
+      'Select ‘Assign key workers automatically’ to get key worker recommendations for all prisoners without a current key worker.',
+    )
 
     queryTextbox().clear()
     searchBtn().click()

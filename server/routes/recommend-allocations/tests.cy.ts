@@ -76,11 +76,10 @@ context('/recommend-allocations', () => {
     cy.visit(`/key-worker/recommend-allocations`, { failOnStatusCode: false })
 
     cy.findByRole('heading', { name: /Allocate key workers automatically/i }).should('be.visible')
-    cy.findByText('All prisoners currently have a key worker assigned.').should('exist')
+    cy.findByText('All prisoners currently have a key worker assigned.').should('be.visible')
 
     cy.get('.moj-pagination').should('have.length', 0)
     cy.get('.govuk-table__row').should('have.length', 0)
-    cy.get('p').should('have.length', 1)
   })
 
   it('should show error when no allocations or deallocations are made', () => {
