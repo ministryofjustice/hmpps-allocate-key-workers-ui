@@ -19,6 +19,7 @@ export const initAllocateStickyAction = () => {
     .forEach(dropdown => dropdown.addEventListener('change', updateActionBar))
 
   document.querySelector('.clear-select')?.addEventListener('click', e => {
+    e.preventDefault && e.preventDefault()
     document.querySelectorAll('select[name="selectStaffMember"]').forEach(dropdown => (dropdown.value = ''))
     updateActionBar()
   })
