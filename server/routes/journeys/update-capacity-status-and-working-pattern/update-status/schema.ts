@@ -1,12 +1,12 @@
 import { z } from 'zod'
 import { Request } from 'express'
 import { createSchema } from '../../../../middleware/validationMiddleware'
-import KeyworkerApiService from '../../../../services/keyworkerApi/keyworkerApiService'
+import AllocationsApiService from '../../../../services/allocationsApi/allocationsApiService'
 import { validateAndTransformReferenceData } from '../../../../utils/validation/validateReferenceData'
 
-export const schemaFactory = (keyworkerApiService: KeyworkerApiService) => async (req: Request) => {
+export const schemaFactory = (allocationsApiService: AllocationsApiService) => async (req: Request) => {
   const refDataMap = new Map(
-    (await keyworkerApiService.getReferenceData(req, 'staff-status')).map(itm => [itm.code, itm]),
+    (await allocationsApiService.getReferenceData(req, 'staff-status')).map(itm => [itm.code, itm]),
   )
 
   return createSchema({

@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
-import KeyworkerApiService from '../../../../services/keyworkerApi/keyworkerApiService'
+import AllocationsApiService from '../../../../services/allocationsApi/allocationsApiService'
 
 export const resetJourneyAndReloadKeyWorkerDetails = async (
-  service: KeyworkerApiService,
+  service: AllocationsApiService,
   req: Request,
   res: Response,
 ) => {

@@ -12,7 +12,7 @@ import InMemoryTokenStore from './tokenStore/inMemoryTokenStore'
 import config from '../config'
 import HmppsAuditClient from './hmppsAuditClient'
 import PrisonApiRestClient from '../services/prisonApi/prisonApiClient'
-import KeyworkerApiClient from '../services/keyworkerApi/keyworkerApiClient'
+import AllocationsApiClient from '../services/allocationsApi/allocationsApiClient'
 import LocationsInsidePrisonApiRestClient from '../services/locationsInsidePrisonApi/locationsInsidePrisonApiClient'
 import PrisonerSearchApiRestClient from '../services/prisonerSearch/prisonerSearchApiClient'
 import RedisCache from './cache/redisCache'
@@ -34,7 +34,7 @@ export const dataAccess = () => ({
   applicationInfo,
   hmppsAuthClient: new HmppsAuthClient(tokenStore),
   hmppsAuditClient: new HmppsAuditClient(config.sqs.audit),
-  keyworkerApiClient: (req: Request, res?: Response) => new KeyworkerApiClient(req, res),
+  keyworkerApiClient: (req: Request, res?: Response) => new AllocationsApiClient(req, res),
   prisonApiClient: (token: string) => new PrisonApiRestClient(token),
   locationsWithinPrisonApiClient: (token: string) => new LocationsInsidePrisonApiRestClient(token),
   prisonerSearchApiClient: (token: string) => new PrisonerSearchApiRestClient(token),

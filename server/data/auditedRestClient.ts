@@ -1,12 +1,20 @@
 import { Response } from 'express'
+import { Response as SuperAgentResponse } from 'superagent'
 import type { ApiConfig } from '../config'
 import RestClient, { RequestWithBody, Request } from './restClient'
 
 export default class AuditedRestClient extends RestClient {
   auditEventHandler: ((apiUrl: string, isAttempt: boolean) => void) | undefined
 
-  constructor(name: string, config: ApiConfig, token: string, headers: { [key: string]: string } = {}, res?: Response) {
-    super(name, config, token, headers)
+  constructor(
+    name: string,
+    config: ApiConfig,
+    token: string,
+    headers: { [key: string]: string } = {},
+    retryHandler?: (err: unknown, res: SuperAgentResponse) => boolean | undefined,
+    res?: Response,
+  ) {
+    super(name, config, token, headers, retryHandler)
     this.auditEventHandler = res?.sendApiEvent
   }
 

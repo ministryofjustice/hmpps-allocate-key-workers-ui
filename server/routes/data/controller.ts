@@ -1,13 +1,13 @@
 import { Request, Response } from 'express'
 import { format, lastDayOfMonth, startOfMonth, subMonths, isLastDayOfMonth, differenceInDays, subDays } from 'date-fns'
-import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
+import AllocationsApiService from '../../services/allocationsApi/allocationsApiService'
 import { formatDateConcise } from '../../utils/datetimeUtils'
 import { ResQuerySchemaType } from './schema'
 import { getEstablishmentData } from './utils'
 import { getHistoryParamForPOST } from '../../middleware/historyMiddleware'
 
 export class StaffDataController {
-  constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
+  constructor(private readonly allocationsApiService: AllocationsApiService) {}
 
   private getDateAsIsoString = () => {
     const today = new Date()
@@ -39,7 +39,7 @@ export class StaffDataController {
     const resQuery = res.locals['query'] as ResQuerySchemaType
     const dateRange = this.addComparisonDates(resQuery?.validated ?? this.getDateAsIsoString())
     const prisonCode = res.locals.user.getActiveCaseloadId()!
-    const stats = await this.keyworkerApiService.getPrisonStats(
+    const stats = await this.allocationsApiService.getPrisonStats(
       req,
       prisonCode,
       dateRange.dateFrom,

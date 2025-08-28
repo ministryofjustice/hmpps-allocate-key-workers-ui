@@ -2,9 +2,9 @@ import { Services } from '../../../services'
 import { JourneyRouter } from '../../base/routes'
 import { StartUpdateStaffController } from './controller'
 
-export const StartUpdateStaffRoutes = ({ keyworkerApiService }: Services) => {
+export const StartUpdateStaffRoutes = ({ allocationsApiService }: Services) => {
   const { router, get } = JourneyRouter()
-  const controller = new StartUpdateStaffController(keyworkerApiService)
+  const controller = new StartUpdateStaffController(allocationsApiService)
 
   get('/', controller.GET)
 

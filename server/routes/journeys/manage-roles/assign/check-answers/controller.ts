@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
-import KeyworkerApiService from '../../../../../services/keyworkerApi/keyworkerApiService'
+import AllocationsApiService from '../../../../../services/allocationsApi/allocationsApiService'
 
 export class AssignRoleCheckAnswersController {
-  constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
+  constructor(private readonly allocationsApiService: AllocationsApiService) {}
 
   GET = async (req: Request, res: Response) => {
     if (!req.journeyData.assignStaffRole!.isPrisonOfficer && req.middleware?.policy !== 'PERSONAL_OFFICER') {
@@ -24,7 +24,7 @@ export class AssignRoleCheckAnswersController {
   submitToApi = async (req: Request, res: Response, next: NextFunction) => {
     const { staff, scheduleType, hoursPerWeek, capacity } = req.journeyData.assignStaffRole!
 
-    await this.keyworkerApiService.upsertStaffDetails(req, res, staff!.staffId, {
+    await this.allocationsApiService.upsertStaffDetails(req, res, staff!.staffId, {
       ...(capacity !== req.middleware!.prisonConfiguration!.capacity ? { capacity } : {}),
       staffRole: {
         position: 'PRO',

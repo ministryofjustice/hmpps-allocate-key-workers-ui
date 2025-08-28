@@ -14,5 +14,11 @@ declare namespace Cypress {
     verifyAuditEvents(events: object[]): Chainable<unknown>
     navigateWithHistory(url: string, history: string[]): Chainable<unknown>
     verifyHistoryLink(urlRegex: RegExp): Chainable<Subject>
+    /**
+     * Custom command to verify that an API matching the parameter was called the expected number of times.
+     * @param matching a wiremock request to /requests/find. For options see: https://wiremock.org/docs/standalone/admin-api-reference/#tag/Requests/operation/removeRequestsByMetadata
+     * @param expected the number of requests expected
+     */
+    verifyAPIWasCalled(matching: string | object, expected: number): Chainable<*>
   }
 }

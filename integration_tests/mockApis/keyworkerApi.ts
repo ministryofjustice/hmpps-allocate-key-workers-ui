@@ -630,6 +630,51 @@ const stubSearchAllocatableStaffError = () =>
 const stubSearchStaff = (results: StaffSummary[] = []) =>
   createBasicHttpStub('POST', '/keyworker-api/search/prisons/.*/staff', 200, { content: results })
 
+const stubSearchStaff400 = (results: StaffSummary[] = []) =>
+  createBasicHttpStub('POST', '/keyworker-api/search/prisons/.*/staff', 400, { content: results })
+
+const stubSearchStaffRetry = () =>
+  Promise.all([
+    stubFor({
+      scenarioName: 'Retry search staff',
+      requiredScenarioState: 'Started',
+      newScenarioState: 'FAILED_ONE',
+      request: { method: 'POST', urlPattern: '/keyworker-api/search/prisons/.*/staff' },
+      response: {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: { content: [] },
+      },
+    }),
+    stubFor({
+      scenarioName: 'Retry search staff',
+      requiredScenarioState: 'FAILED_ONE',
+      newScenarioState: 'FAILED_TWICE',
+      request: { method: 'POST', urlPattern: '/keyworker-api/search/prisons/.*/staff' },
+      response: {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: { content: [] },
+      },
+    }),
+    stubFor({
+      scenarioName: 'Retry search staff',
+      requiredScenarioState: 'FAILED_TWICE',
+      request: { method: 'POST', urlPattern: '/keyworker-api/search/prisons/.*/staff' },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: { content: [] },
+      },
+    }),
+  ])
+
 const stubSearchStaffError = () =>
   createHttpStub('POST', '/keyworker-api/search/prisons/.*/staff', undefined, undefined, 502, {})
 
@@ -774,6 +819,8 @@ export default {
   stubSearchPrisonersWithLocation,
   stubSearchPrisoner,
   stubSearchStaff,
+  stubSearchStaff400,
+  stubSearchStaffRetry,
   stubSearchAllocatableStaff,
   stubSearchPrisonersWithExcludeAllocations,
   stubPrisonerAllocations,

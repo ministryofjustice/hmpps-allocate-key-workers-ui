@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from 'express'
-import KeyworkerApiService from '../../../../services/keyworkerApi/keyworkerApiService'
+import AllocationsApiService from '../../../../services/allocationsApi/allocationsApiService'
 import { FLASH_KEY__SUCCESS_MESSAGE } from '../../../../utils/constants'
 import { resetJourneyAndReloadKeyWorkerDetails } from '../common/utils'
 import { possessiveComma } from '../../../../utils/formatUtils'
 
 export class UpdateStatusInactiveController {
-  constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
+  constructor(private readonly allocationsApiService: AllocationsApiService) {}
 
   GET = async (req: Request, res: Response) => {
     res.render('journeys/update-capacity-status-and-working-pattern/update-status-inactive/view', {
@@ -16,7 +16,7 @@ export class UpdateStatusInactiveController {
 
   submitToApi = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await this.keyworkerApiService.upsertStaffDetails(req as Request, res, req.journeyData.staffDetails!.staffId, {
+      await this.allocationsApiService.upsertStaffDetails(req as Request, res, req.journeyData.staffDetails!.staffId, {
         status: req.journeyData.updateStaffDetails!.status!.code,
         reactivateOn: null,
         deactivateActiveAllocations: true,
@@ -34,7 +34,7 @@ export class UpdateStatusInactiveController {
   }
 
   POST = async (req: Request, res: Response) => {
-    await resetJourneyAndReloadKeyWorkerDetails(this.keyworkerApiService, req, res)
+    await resetJourneyAndReloadKeyWorkerDetails(this.allocationsApiService, req, res)
     res.redirect('../update-capacity-status-and-working-pattern')
   }
 }

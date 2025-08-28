@@ -5,9 +5,9 @@ import { POStaffDataController } from './controller'
 import { schema } from './schema'
 import { Page } from '../../services/auditService'
 
-export const POStaffDataRoutes = ({ keyworkerApiService }: Services) => {
+export const POStaffDataRoutes = ({ allocationsApiService }: Services) => {
   const { router, get, post } = JourneyRouter()
-  const controller = new POStaffDataController(keyworkerApiService)
+  const controller = new POStaffDataController(allocationsApiService)
 
   get(
     '/',

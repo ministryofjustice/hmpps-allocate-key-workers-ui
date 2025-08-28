@@ -8,9 +8,9 @@ import { requireRole } from '../../middleware/permissionsMiddleware'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import { Page } from '../../services/auditService'
 
-export const RecommendStaffAutomaticallyRoutes = ({ keyworkerApiService }: Services) => {
+export const RecommendStaffAutomaticallyRoutes = ({ allocationsApiService }: Services) => {
   const { router, get, post } = JourneyRouter()
-  const controller = new RecommendStaffAutomaticallyController(keyworkerApiService)
+  const controller = new RecommendStaffAutomaticallyController(allocationsApiService)
 
   const allowAutoAllocationGuard = (req: Request, res: Response, next: NextFunction) => {
     if (!req.middleware!.prisonConfiguration!.allowAutoAllocation) {

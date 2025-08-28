@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { Response as SuperAgentResponse } from 'superagent'
 import AuditedRestClient from '../../data/auditedRestClient'
 import config from '../../config'
 import type { components, operations } from '../../@types/keyWorker'
@@ -32,7 +33,7 @@ export type StaffDetailsRequest = MakeNullable<
   'reactivateOn' | 'staffRole'
 >
 
-export default class KeyworkerApiClient {
+export default class AllocationsApiClient {
   private readonly restClient: AuditedRestClient
 
   constructor(req: Request, res?: Response) {
@@ -48,6 +49,13 @@ export default class KeyworkerApiClient {
       config.apis.keyworkerApi,
       req.systemClientToken,
       headers,
+      (err, response: SuperAgentResponse) => {
+        if (err) return true
+        if (response?.statusCode) {
+          return response.statusCode >= 500
+        }
+        return undefined
+      },
       res,
     )
   }
@@ -82,6 +90,7 @@ export default class KeyworkerApiClient {
     return this.restClient.put({
       path: `/prisons/${prisonId}/configurations`,
       data: requestBody,
+      retry: true,
     })
   }
 
@@ -93,6 +102,7 @@ export default class KeyworkerApiClient {
       {
         path: `/search/prisons/${prisonId}/staff`,
         data: query,
+        retry: true,
       },
       true,
     )
@@ -133,6 +143,7 @@ export default class KeyworkerApiClient {
       {
         path: `/search/prisons/${prisonCode}/prisoners`,
         data: body,
+        retry: true,
       },
       true,
     )
@@ -159,6 +170,7 @@ export default class KeyworkerApiClient {
     const response = await this.restClient.put<components['schemas']['StaffAllocationHistory']>({
       path: `/prisons/${prisonCode}/prisoners/allocations`,
       data,
+      retry: true,
     })
 
     return response
@@ -173,6 +185,7 @@ export default class KeyworkerApiClient {
       {
         path: `/search/prisons/${prisonCode}/staff-allocations?includeStats=${includeStats}`,
         data: query,
+        retry: true,
       },
       true,
     )
@@ -182,6 +195,7 @@ export default class KeyworkerApiClient {
     await this.restClient.put({
       path: `/prisons/${prisonCode}/staff/${staffId}`,
       data: requestBody,
+      retry: true,
     })
   }
 
@@ -201,6 +215,7 @@ export default class KeyworkerApiClient {
     return this.restClient.put<components['schemas']['PrisonPolicies']>({
       path: `/prisons/${prisonCode}/policies`,
       data: requestBody,
+      retry: true,
     })
   }
 }

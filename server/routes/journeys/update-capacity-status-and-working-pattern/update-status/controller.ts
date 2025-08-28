@@ -1,16 +1,16 @@
 import { Request, Response } from 'express'
 import { SchemaType } from './schema'
-import KeyworkerApiService from '../../../../services/keyworkerApi/keyworkerApiService'
+import AllocationsApiService from '../../../../services/allocationsApi/allocationsApiService'
 
 export class UpdateStatusController {
-  constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
+  constructor(private readonly allocationsApiService: AllocationsApiService) {}
 
   GET = async (req: Request, res: Response) => {
     const staffDetails = req.journeyData.staffDetails!
     res.render('journeys/update-capacity-status-and-working-pattern/update-status/view', {
       ...staffDetails,
       statusCode: res.locals.formResponses?.['status'] ?? req.journeyData.updateStaffDetails!.status?.code,
-      statuses: (await this.keyworkerApiService.getReferenceData(req, 'staff-status'))
+      statuses: (await this.allocationsApiService.getReferenceData(req, 'staff-status'))
         .filter(itm => itm.code !== staffDetails.status?.code)
         .map(({ code, description }) => ({
           value: code,

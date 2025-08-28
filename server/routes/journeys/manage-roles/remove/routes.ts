@@ -9,8 +9,8 @@ import { Page } from '../../../../services/auditService'
 
 export const RemoveStaffRoleRoutes = (services: Services) => {
   const { router, get, post } = JourneyRouter()
-  const { keyworkerApiService } = services
-  const controller = new RemoveStaffRoleController(keyworkerApiService)
+  const { allocationsApiService } = services
+  const controller = new RemoveStaffRoleController(allocationsApiService)
 
   get('*any', Page.UPDATE_STAFF_JOB_CLASSIFICATION, (req, res, next) => {
     if (req.journeyData.removeStaffRole?.staff?.staffId) {

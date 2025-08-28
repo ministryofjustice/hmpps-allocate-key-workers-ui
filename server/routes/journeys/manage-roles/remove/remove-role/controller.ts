@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
-import KeyworkerApiService from '../../../../../services/keyworkerApi/keyworkerApiService'
+import AllocationsApiService from '../../../../../services/allocationsApi/allocationsApiService'
 
 export class ConfirmRemoveRoleController {
-  constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
+  constructor(private readonly allocationsApiService: AllocationsApiService) {}
 
   GET = async (req: Request, res: Response) => {
     res.render('manage-roles/remove/remove-role/view', {
@@ -12,7 +12,7 @@ export class ConfirmRemoveRoleController {
   }
 
   submitToApi = async (req: Request, res: Response, next: NextFunction) => {
-    await this.keyworkerApiService.upsertStaffDetails(req, res, req.journeyData.removeStaffRole!.staff!.staffId, {
+    await this.allocationsApiService.upsertStaffDetails(req, res, req.journeyData.removeStaffRole!.staff!.staffId, {
       staffRole: null,
     })
     next()

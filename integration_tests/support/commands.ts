@@ -1,4 +1,4 @@
-import { getLastAPICallMatching, getSentAuditEvents } from '../mockApis/wiremock'
+import { getAPICallCountMatching, getLastAPICallMatching, getSentAuditEvents } from '../mockApis/wiremock'
 import { JourneyData } from '../../server/@types/express'
 
 type RecursivePartial<T> = T extends unknown
@@ -18,6 +18,10 @@ Cypress.Commands.add('signIn', (options = { failOnStatusCode: true }) => {
 
 Cypress.Commands.add('verifyLastAPICall', (matching: string | object, expected: unknown) => {
   return cy.wrap(getLastAPICallMatching(matching)).should('deep.equal', expected)
+})
+
+Cypress.Commands.add('verifyAPIWasCalled', (matching: string | object, expected: number) => {
+  return cy.wrap(getAPICallCountMatching(matching)).should('eq', expected)
 })
 
 Cypress.Commands.add('injectJourneyDataAndReload', <T>(uuid: string, json: T, policy: string = 'key-worker') => {

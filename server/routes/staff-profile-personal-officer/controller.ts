@@ -54,7 +54,7 @@ export class POStaffProfileController extends ChangeStaffController {
 
     const resQuery = res.locals['query'] as ResQuerySchemaType
 
-    const staffDetails = await this.keyworkerApiService.getStaffDetails(
+    const staffDetails = await this.allocationsApiService.getStaffDetails(
       req,
       res.locals.user.getActiveCaseloadId()!,
       req.params.staffId,

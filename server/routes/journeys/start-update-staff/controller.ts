@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
-import KeyworkerApiService from '../../../services/keyworkerApi/keyworkerApiService'
+import AllocationsApiService from '../../../services/allocationsApi/allocationsApiService'
 
 export class StartUpdateStaffController {
-  constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
+  constructor(private readonly allocationsApiService: AllocationsApiService) {}
 
   GET = async (req: Request<{ staffId: string }, unknown, unknown, { proceedTo: string }>, res: Response) => {
-    req.journeyData.staffDetails = await this.keyworkerApiService.getStaffDetails(
+    req.journeyData.staffDetails = await this.allocationsApiService.getStaffDetails(
       req,
       res.locals.user.getActiveCaseloadId()!,
       req.params.staffId,
