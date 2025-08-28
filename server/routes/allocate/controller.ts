@@ -6,6 +6,7 @@ import { schemaFactory } from './schema'
 import { FLASH_KEY__ALLOCATE_RESULT } from '../../utils/constants'
 import { deduplicateFieldErrors } from '../../middleware/validationMiddleware'
 import { getHistoryParamForPOST } from '../../middleware/historyMiddleware'
+import { prisonerProfileBacklink } from '../../utils/utils'
 
 export class AllocateStaffController extends ChangeStaffController {
   constructor(
@@ -64,7 +65,13 @@ export class AllocateStaffController extends ChangeStaffController {
     const records = await this.keyworkerApiService.searchPrisoners(req, prisonCode, sanitisedQuery)
     return res.render('allocate/view', {
       ...sanitisedQuery,
-      records,
+      records: records.map(o => {
+        return {
+          ...o,
+          profileHref: prisonerProfileBacklink(req, res, o.personIdentifier),
+          alertsHref: prisonerProfileBacklink(req, res, o.personIdentifier, '/alerts/active'),
+        }
+      }),
       searchQuery,
       locations: locationsValues,
       ...(await this.getChangeData(req, res)),

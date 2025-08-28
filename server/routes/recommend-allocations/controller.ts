@@ -9,6 +9,7 @@ import {
 } from '../../utils/constants'
 import { lastNameCommaFirstName } from '../../utils/formatUtils'
 import { Page } from '../../services/auditService'
+import { prisonerProfileBacklink } from '../../utils/utils'
 
 export class RecommendStaffAutomaticallyController extends ChangeStaffController {
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -80,6 +81,8 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
 
       return {
         ...o,
+        profileHref: prisonerProfileBacklink(req, res, o.personIdentifier),
+        alertsHref: prisonerProfileBacklink(req, res, o.personIdentifier, '/alerts/active'),
         recommendation: match?.staff.staffId,
         kwDropdown: dropdownOptions.filter(x => !x.onlyFor || x.onlyFor === o.personIdentifier),
         recommendedText: match
