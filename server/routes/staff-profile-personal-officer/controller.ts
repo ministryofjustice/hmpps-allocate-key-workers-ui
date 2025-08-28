@@ -3,6 +3,7 @@ import { subMonths, subDays, differenceInDays, format, startOfMonth, endOfMonth 
 import { ChangeStaffController } from '../base/changeStaffController'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import { ResQuerySchemaType } from './schema'
+import { prisonerProfileBacklink } from '../../utils/utils'
 
 export class POStaffProfileController extends ChangeStaffController {
   private getDateRange = (query?: ResQuerySchemaType) => {
@@ -63,6 +64,13 @@ export class POStaffProfileController extends ChangeStaffController {
 
     return res.render('staff-profile-personal-officer/view', {
       ...staffDetails,
+      allocations: staffDetails.allocations.map(a => {
+        return {
+          ...a,
+          profileHref: prisonerProfileBacklink(req, res, a.prisoner.prisonNumber),
+          alertsHref: prisonerProfileBacklink(req, res, a.prisoner.prisonNumber, '/alerts/active'),
+        }
+      }),
       staffMember: { firstName: staffDetails.firstName, lastName: staffDetails.lastName },
       ...(await this.getChangeData(req, res)),
       showBreadcrumbs: true,
