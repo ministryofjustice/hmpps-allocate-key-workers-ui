@@ -1,6 +1,7 @@
 {% extends "govuk/template.njk" %}
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 
 {% block head %}
   <link href="{{ '/assets/css/app.css' | assetMap }}" rel="stylesheet"/>
@@ -50,6 +51,23 @@
 {% endblock %}
 
 {% block beforeContent %}
+  {% switch policyPath %}
+  {% case 'key-worker' %}
+    {{ govukPhaseBanner({
+      tag: {
+        text: "Beta"
+      },
+      html: 'This is a new service - your <a href="mailto:keyworker-rollout@justice.gov.uk">feedback</a> will help us to improve it. You can find out more on <a class="govuk-link" target="_blank" href="https://justiceuk.sharepoint.com/sites/prisons-digital/SitePages/Keyworker.aspx?ga=1">SharePoint</a>.'
+    }) }}
+  {% case 'personal-officer' %}
+    {{ govukPhaseBanner({
+      tag: {
+        text: "Beta"
+      },
+      html: 'This is a new service - your <a href="mailto:personalofficer-rollout@justice.gov.uk">feedback</a> will help us to improve it. You can find out more on <a class="govuk-link" target="_blank" href="https://justiceuk.sharepoint.com/sites/prisons-digital/SitePages/Personal%20Officer.aspx?ga=1">SharePoint</a>.'
+    }) }}
+  {% default %}
+  {% endswitch %}
   {% if backUrl == 'javascript-back' %}
     {{ govukBackLink({
       classes: 'js-back-link govuk-!-display-none',
