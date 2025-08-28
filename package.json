@@ -98,7 +98,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.872.0",
+    "@aws-sdk/client-sqs": "^3.873.0",
     "@cypress/code-coverage": "^3.14.6",
     "@ministryofjustice/frontend": "^5.1.5",
     "@ministryofjustice/hmpps-auth-clients": "^0.0.1",
@@ -131,7 +131,7 @@
     "redis": "^5.8.2",
     "superagent": "^10.2.3",
     "uuid": "^11.1.0",
-    "zod": "^4.0.17"
+    "zod": "^4.1.0"
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
