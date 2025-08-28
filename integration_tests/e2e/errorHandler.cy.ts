@@ -8,14 +8,6 @@ context('test errorHandler', () => {
     cy.task('stubEnabledPrison')
   })
 
-  // TODO: add test for API error handling
-  it.skip('should go to the custom error page when an API 500s', () => {
-    cy.task('stubAPI500Error')
-    cy.signIn()
-    cy.visit(`/path-that-requires-API-call`, { failOnStatusCode: false })
-    cy.findByText(/sorry, there is a problem with the service/i).should('be.visible')
-  })
-
   it('should say page not found when 404', () => {
     cy.signIn()
     cy.visit(`/foobar`, { failOnStatusCode: false })
@@ -39,7 +31,29 @@ context('test errorHandler', () => {
     ])
   })
 
-  it('should retry on API call error', () => {
+  it('should show error page for 4XX API error', () => {
+    cy.task('stubSearchStaff400')
+    cy.signIn()
+    const journeyId = uuidV4()
+    cy.visit(`/key-worker/${journeyId}/manage-roles/assign`, {
+      failOnStatusCode: false,
+    })
+
+    cy.findByRole('textbox', { name: 'Find a staff member' }).type('Joe')
+    cy.findByRole('button', { name: 'Search' }).click()
+
+    cy.findByText(/sorry, there is a problem with the service/i).should('be.visible')
+
+    cy.verifyAPIWasCalled(
+      {
+        method: 'POST',
+        urlPath: '/keyworker-api/search/prisons/LEI/staff',
+      },
+      1,
+    )
+  })
+
+  it('should retry on 5XX API error', () => {
     cy.task('stubSearchStaffRetry')
     cy.signIn()
     const journeyId = uuidV4()

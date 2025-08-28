@@ -630,6 +630,9 @@ const stubSearchAllocatableStaffError = () =>
 const stubSearchStaff = (results: StaffSummary[] = []) =>
   createBasicHttpStub('POST', '/keyworker-api/search/prisons/.*/staff', 200, { content: results })
 
+const stubSearchStaff400 = (results: StaffSummary[] = []) =>
+  createBasicHttpStub('POST', '/keyworker-api/search/prisons/.*/staff', 400, { content: results })
+
 const stubSearchStaffRetry = () =>
   Promise.all([
     stubFor({
@@ -816,6 +819,7 @@ export default {
   stubSearchPrisonersWithLocation,
   stubSearchPrisoner,
   stubSearchStaff,
+  stubSearchStaff400,
   stubSearchStaffRetry,
   stubSearchAllocatableStaff,
   stubSearchPrisonersWithExcludeAllocations,

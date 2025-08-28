@@ -51,7 +51,9 @@ export default class AllocationsApiClient {
       headers,
       (err, response: SuperAgentResponse) => {
         if (err) return true
-        if (response?.statusCode && response.statusCode >= 500) return true
+        if (response?.statusCode) {
+          return response.statusCode >= 500
+        }
         return undefined
       },
       res,
