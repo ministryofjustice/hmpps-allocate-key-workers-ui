@@ -1,3 +1,5 @@
+import { v4 as uuidV4 } from 'uuid'
+
 context('test errorHandler', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -35,5 +37,27 @@ context('test errorHandler', () => {
         service: 'DPS023',
       },
     ])
+  })
+
+  it('should retry on API call error', () => {
+    cy.task('stubSearchStaffRetry')
+    cy.signIn()
+    const journeyId = uuidV4()
+    cy.visit(`/key-worker/${journeyId}/manage-roles/assign`, {
+      failOnStatusCode: false,
+    })
+
+    cy.findByRole('textbox', { name: 'Find a staff member' }).type('Joe')
+    cy.findByRole('button', { name: 'Search' }).click()
+
+    cy.findByText('There are no results for this name or email address at Leeds (HMP)').should('be.visible')
+
+    cy.verifyAPIWasCalled(
+      {
+        method: 'POST',
+        urlPath: '/keyworker-api/search/prisons/LEI/staff',
+      },
+      3,
+    )
   })
 })

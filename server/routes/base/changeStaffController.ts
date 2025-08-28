@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
+import AllocationsApiService from '../../services/allocationsApi/allocationsApiService'
 import { lastNameCommaFirstName } from '../../utils/formatUtils'
 import { components } from '../../@types/keyWorker'
 import {
@@ -12,10 +12,10 @@ import {
 import { SelectKeyworkerSchemaType } from './selectKeyworkerSchema'
 
 export class ChangeStaffController {
-  constructor(readonly keyworkerApiService: KeyworkerApiService) {}
+  constructor(readonly allocationsApiService: AllocationsApiService) {}
 
   getChangeData = async (req: Request, res: Response) => {
-    const staff = await this.keyworkerApiService.searchAllocatableStaff(req, res, { status: 'ACTIVE' }, false)
+    const staff = await this.allocationsApiService.searchAllocatableStaff(req, res, { status: 'ACTIVE' }, false)
     const mappedStaff = this.getDropdownOptions(staff.content)
 
     return {
@@ -71,7 +71,7 @@ export class ChangeStaffController {
         }
       }
 
-      await this.keyworkerApiService.putAllocationDeallocations(
+      await this.allocationsApiService.putAllocationDeallocations(
         req as Request,
         res,
         res.locals.user.getActiveCaseloadId()!,

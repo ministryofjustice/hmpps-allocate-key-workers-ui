@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
 import { FLASH_KEY__SUCCESS_MESSAGE } from '../../../../utils/constants'
-import KeyworkerApiService from '../../../../services/keyworkerApi/keyworkerApiService'
+import AllocationsApiService from '../../../../services/allocationsApi/allocationsApiService'
 import { resetJourneyAndReloadKeyWorkerDetails } from '../common/utils'
 import { SchemaType } from './schema'
 import { possessiveComma } from '../../../../utils/formatUtils'
 
 export class UpdateCapacityController {
-  constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
+  constructor(private readonly allocationsApiService: AllocationsApiService) {}
 
   GET = async (req: Request, res: Response) => {
     res.render('journeys/update-capacity-status-and-working-pattern/update-capacity/view', {
@@ -21,7 +21,7 @@ export class UpdateCapacityController {
     const staffDetails = req.journeyData.staffDetails!
 
     try {
-      await this.keyworkerApiService.upsertStaffDetails(req as Request, res, staffDetails.staffId, { capacity })
+      await this.allocationsApiService.upsertStaffDetails(req as Request, res, staffDetails.staffId, { capacity })
       req.flash(
         FLASH_KEY__SUCCESS_MESSAGE,
         `You have updated this ${possessiveComma(res.locals.policyStaff!)} maximum capacity.`,
@@ -33,7 +33,7 @@ export class UpdateCapacityController {
   }
 
   POST = async (req: Request, res: Response) => {
-    await resetJourneyAndReloadKeyWorkerDetails(this.keyworkerApiService, req, res)
+    await resetJourneyAndReloadKeyWorkerDetails(this.allocationsApiService, req, res)
     res.redirect('../update-capacity-status-and-working-pattern')
   }
 }

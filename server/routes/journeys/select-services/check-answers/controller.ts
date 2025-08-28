@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
-import KeyworkerApiService from '../../../../services/keyworkerApi/keyworkerApiService'
+import AllocationsApiService from '../../../../services/allocationsApi/allocationsApiService'
 import { components } from '../../../../@types/keyWorker'
 
 export class SelectServicesCheckAnswersController {
-  constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
+  constructor(private readonly allocationsApiService: AllocationsApiService) {}
 
   GET = async (req: Request, res: Response) => {
     req.journeyData.isCheckAnswers = true
@@ -32,7 +32,7 @@ export class SelectServicesCheckAnswersController {
       ],
     }
 
-    await this.keyworkerApiService.putPolicies(req, res, request)
+    await this.allocationsApiService.putPolicies(req, res, request)
     next()
   }
 

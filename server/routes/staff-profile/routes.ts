@@ -8,9 +8,9 @@ import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import { Page } from '../../services/auditService'
 
 export const StaffProfileRoutes = (services: Services) => {
-  const { keyworkerApiService } = services
+  const { allocationsApiService } = services
   const { router, get, post } = JourneyRouter()
-  const controller = new StaffProfileController(keyworkerApiService)
+  const controller = new StaffProfileController(allocationsApiService)
 
   get('/', Page.STAFF_ALLOCATIONS, controller.GET)
   post(

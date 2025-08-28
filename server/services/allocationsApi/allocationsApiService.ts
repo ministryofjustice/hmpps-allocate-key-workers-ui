@@ -1,17 +1,17 @@
 import { Request, Response } from 'express'
 import { EnhancedRestClientBuilder } from '../../data'
-import KeyworkerApiClient, { ServiceConfigInfo, StaffDetailsRequest } from './keyworkerApiClient'
+import AllocationsApiClient, { ServiceConfigInfo, StaffDetailsRequest } from './allocationsApiClient'
 import { components } from '../../@types/keyWorker'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import CacheInterface from '../../data/cache/cacheInterface'
 
-export default class KeyworkerApiService {
+export default class AllocationsApiService {
   private prisonConfigCache: CacheInterface<components['schemas']['PrisonConfigResponse']>
 
   private readonly PRISON_CONFIG_CACHE_TIMEOUT = Number(process.env['PRISON_CONFIG_CACHE_TIMEOUT'] ?? 60)
 
   constructor(
-    private readonly keyworkerApiClientBuilder: EnhancedRestClientBuilder<KeyworkerApiClient>,
+    private readonly keyworkerApiClientBuilder: EnhancedRestClientBuilder<AllocationsApiClient>,
     cacheStore: (prefix: string) => CacheInterface<components['schemas']['PrisonConfigResponse']>,
   ) {
     this.prisonConfigCache = cacheStore('prison-config')
@@ -28,11 +28,11 @@ export default class KeyworkerApiService {
     toDate: string,
     comparisonFrom: string,
     comparisonTo: string,
-  ): ReturnType<KeyworkerApiClient['getPrisonStats']> {
+  ): ReturnType<AllocationsApiClient['getPrisonStats']> {
     return this.keyworkerApiClientBuilder(req).getPrisonStats(prisonId, fromDate, toDate, comparisonFrom, comparisonTo)
   }
 
-  async getPrisonConfig(req: Request, prisonId: string): Promise<ReturnType<KeyworkerApiClient['getPrisonConfig']>> {
+  async getPrisonConfig(req: Request, prisonId: string): Promise<ReturnType<AllocationsApiClient['getPrisonConfig']>> {
     const cached = await this.prisonConfigCache.get(prisonId)
     if (cached) {
       return cached
@@ -91,7 +91,7 @@ export default class KeyworkerApiService {
   getReferenceData(
     req: Request,
     domain: 'staff-status' | 'allocation-reason' | 'deallocation-reason',
-  ): ReturnType<KeyworkerApiClient['getReferenceData']> {
+  ): ReturnType<AllocationsApiClient['getReferenceData']> {
     return this.keyworkerApiClientBuilder(req).getReferenceData(domain)
   }
 
@@ -99,7 +99,7 @@ export default class KeyworkerApiService {
     req: Request,
     prisonCode: string,
     body: components['schemas']['PersonSearchRequest'],
-  ): ReturnType<KeyworkerApiClient['searchPrisoners']> {
+  ): ReturnType<AllocationsApiClient['searchPrisoners']> {
     const query = {
       excludeActiveAllocations: body.excludeActiveAllocations,
     } as components['schemas']['PersonSearchRequest']
@@ -119,7 +119,7 @@ export default class KeyworkerApiService {
     req: Request,
     prisonerId: string,
     policy?: string,
-  ): ReturnType<KeyworkerApiClient['getStaffAllocations']> {
+  ): ReturnType<AllocationsApiClient['getStaffAllocations']> {
     return this.keyworkerApiClientBuilder(req).getStaffAllocations(prisonerId, policy)
   }
 
@@ -128,7 +128,7 @@ export default class KeyworkerApiService {
     res: Response,
     prisonCode: string,
     data: components['schemas']['PersonStaffAllocations'],
-  ): ReturnType<KeyworkerApiClient['putAllocationDeallocations']> {
+  ): ReturnType<AllocationsApiClient['putAllocationDeallocations']> {
     return this.keyworkerApiClientBuilder(req, res).putAllocationDeallocations(prisonCode, data)
   }
 

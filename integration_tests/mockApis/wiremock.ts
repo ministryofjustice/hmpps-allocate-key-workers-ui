@@ -14,6 +14,12 @@ const getLastAPICallMatching = async (matching: string | object): Promise<unknow
   return last?.body && JSON.parse(last.body)
 }
 
+const getAPICallCountMatching = async (matching: string | object): Promise<number> => {
+  const wiremockApiResponse: Response = await superagent.post(`${url}/requests/find`).send(matching)
+  const responses = (wiremockApiResponse.body || '[]').requests
+  return responses.length
+}
+
 const parseAuditEventBody = (itm: { body?: string }) => {
   if (!itm.body || !itm.body.includes('MessageBody')) {
     return undefined
@@ -36,4 +42,4 @@ const getSentAuditEvents = async (): Promise<unknown> => {
 const resetStubs = (): Promise<Array<Response>> =>
   Promise.all([superagent.delete(`${url}/mappings`), superagent.delete(`${url}/requests`)])
 
-export { stubFor, getMatchingRequests, getSentAuditEvents, resetStubs, getLastAPICallMatching }
+export { stubFor, getMatchingRequests, getSentAuditEvents, resetStubs, getLastAPICallMatching, getAPICallCountMatching }

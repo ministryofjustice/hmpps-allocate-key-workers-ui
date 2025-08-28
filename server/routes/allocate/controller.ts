@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
+import AllocationsApiService from '../../services/allocationsApi/allocationsApiService'
 import LocationsInsidePrisonApiService from '../../services/locationsInsidePrisonApi/locationsInsidePrisonApiService'
 import { ChangeStaffController } from '../base/changeStaffController'
 import { schemaFactory } from './schema'
@@ -9,10 +9,10 @@ import { getHistoryParamForPOST } from '../../middleware/historyMiddleware'
 
 export class AllocateStaffController extends ChangeStaffController {
   constructor(
-    keyworkerApiService: KeyworkerApiService,
+    allocationsApiService: AllocationsApiService,
     private readonly locationsApiService: LocationsInsidePrisonApiService,
   ) {
-    super(keyworkerApiService)
+    super(allocationsApiService)
   }
 
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -61,7 +61,7 @@ export class AllocateStaffController extends ChangeStaffController {
       })
     }
 
-    const records = await this.keyworkerApiService.searchPrisoners(req, prisonCode, sanitisedQuery)
+    const records = await this.allocationsApiService.searchPrisoners(req, prisonCode, sanitisedQuery)
     return res.render('allocate/view', {
       ...sanitisedQuery,
       records,

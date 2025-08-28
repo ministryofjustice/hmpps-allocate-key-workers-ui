@@ -1,7 +1,7 @@
 import { Readable } from 'stream'
 
 import Agent, { HttpsAgent } from 'agentkeepalive'
-import superagent from 'superagent'
+import superagent, { Response } from 'superagent'
 
 import logger from '../../logger'
 import sanitiseError from '../sanitisedError'
@@ -35,6 +35,7 @@ export default class RestClient {
     private readonly config: ApiConfig,
     private readonly token: string,
     private readonly headers: { [key: string]: string } = {},
+    private readonly retryHandler?: (err: unknown, res: Response) => boolean | undefined,
   ) {
     this.agent = config.url.startsWith('https') ? new HttpsAgent(config.agent) : new Agent(config.agent)
   }
@@ -60,10 +61,14 @@ export default class RestClient {
         .get(`${this.apiUrl()}${path}`)
         .query(query)
         .agent(this.agent)
-        .retry(2, err => {
-          if (err) logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
-          return undefined // retry handler only for logging retries, not to influence retry logic
-        })
+        .retry(
+          3,
+          this.retryHandler ??
+            (err => {
+              if (err) logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
+              return undefined // retry handler only for logging retries, not to influence retry logic
+            }),
+        )
         .auth(this.token, { type: 'bearer' })
         .set({ ...this.headers, ...headers })
         .responseType(responseType)
@@ -90,13 +95,16 @@ export default class RestClient {
         .query(query)
         .send(data)
         .agent(this.agent)
-        .retry(2, err => {
-          if (retry === false) {
-            return false
-          }
-          if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
-          return undefined // retry handler only for logging retries, not to influence retry logic
-        })
+        .retry(
+          3,
+          retry === false
+            ? () => false
+            : (this.retryHandler ??
+                (err => {
+                  if (err) logger.info(`Retry handler found API error with ${err.code} ${err.message}`)
+                  return undefined // retry handler only for logging retries, not to influence retry logic
+                })),
+        )
         .auth(this.token, { type: 'bearer' })
         .set({ ...this.headers, ...headers })
         .responseType(responseType)
@@ -138,10 +146,14 @@ export default class RestClient {
         .delete(`${this.apiUrl()}${path}`)
         .query(query)
         .agent(this.agent)
-        .retry(2, err => {
-          if (err) logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
-          return undefined // retry handler only for logging retries, not to influence retry logic
-        })
+        .retry(
+          3,
+          this.retryHandler ??
+            (err => {
+              if (err) logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
+              return undefined // retry handler only for logging retries, not to influence retry logic
+            }),
+        )
         .auth(this.token, { type: 'bearer' })
         .set({ ...this.headers, ...headers })
         .responseType(responseType)
@@ -165,10 +177,14 @@ export default class RestClient {
         .get(`${this.apiUrl()}${path}`)
         .agent(this.agent)
         .auth(this.token, { type: 'bearer' })
-        .retry(2, err => {
-          if (err) logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
-          return undefined // retry handler only for logging retries, not to influence retry logic
-        })
+        .retry(
+          3,
+          this.retryHandler ??
+            (err => {
+              if (err) logger.info(`Retry handler found ${this.name} API error with ${err.code} ${err.message}`)
+              return undefined // retry handler only for logging retries, not to influence retry logic
+            }),
+        )
         .timeout(this.timeoutConfig())
         .set({ ...this.headers, ...headers })
         .end((error, response) => {

@@ -64,7 +64,7 @@ export const requirePermissionsAndConfig =
   }
 
 export function populateUserPermissionsAndPrisonConfig(): RequestHandler {
-  const { keyworkerApiService } = services()
+  const { allocationsApiService } = services()
 
   return async (req, res, next) => {
     try {
@@ -95,7 +95,7 @@ export function populateUserPermissionsAndPrisonConfig(): RequestHandler {
         }
       }
 
-      req.middleware.prisonConfiguration = await keyworkerApiService.getPrisonConfig(req, prisonCode)
+      req.middleware.prisonConfiguration = await allocationsApiService.getPrisonConfig(req, prisonCode)
 
       return next()
     } catch (e) {

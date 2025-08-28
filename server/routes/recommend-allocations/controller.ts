@@ -16,7 +16,7 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
 
     const prisonCode = res.locals.user.getActiveCaseloadId()!
 
-    const recommendations = await this.keyworkerApiService.allocationRecommendations(req, prisonCode)
+    const recommendations = await this.allocationsApiService.allocationRecommendations(req, prisonCode)
 
     if (!recommendations.allocations.length && !recommendations.noAvailableStaffFor?.length) {
       return res.render('recommend-allocations/view', {
@@ -38,7 +38,7 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
     }
 
     const records = (
-      await this.keyworkerApiService.searchPrisoners(req, prisonCode, {
+      await this.allocationsApiService.searchPrisoners(req, prisonCode, {
         query: '',
         cellLocationPrefix: '',
         excludeActiveAllocations: true,

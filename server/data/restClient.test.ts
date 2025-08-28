@@ -68,6 +68,8 @@ describe.each(['get', 'patch', 'post', 'put', 'delete'] as const)('Method: %s', 
         .reply(500)
         [method]('/api/test')
         .reply(500)
+        [method]('/api/test')
+        .reply(500)
 
       await expect(
         restClient[method]({
@@ -100,6 +102,8 @@ describe.each(['get', 'patch', 'post', 'put', 'delete'] as const)('Method: %s', 
       nock('http://localhost:8080', {
         reqheaders: { authorization: 'Bearer token-1' },
       })
+        [method]('/api/test')
+        .reply(500)
         [method]('/api/test')
         .reply(500)
         [method]('/api/test')

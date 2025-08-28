@@ -27,7 +27,7 @@ export class StaffProfileController extends ChangeStaffController {
       comparisonFrom: format(comparisonFrom, 'yyyy-MM-dd'),
     }
 
-    const staffDetails = await this.keyworkerApiService.getStaffDetails(
+    const staffDetails = await this.allocationsApiService.getStaffDetails(
       req,
       res.locals.user.getActiveCaseloadId()!,
       req.params.staffId,

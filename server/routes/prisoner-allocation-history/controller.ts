@@ -1,15 +1,15 @@
 import { Request, Response } from 'express'
-import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
+import AllocationsApiService from '../../services/allocationsApi/allocationsApiService'
 import { components } from '../../@types/keyWorker'
 import { POLICIES } from '../../middleware/policyMiddleware'
 
 export class PrisonerAllocationHistoryController {
-  constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
+  constructor(private readonly allocationsApiService: AllocationsApiService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const prisoner = req.middleware!.prisonerData!
     const policy = sanitisePolicy(res, req.url.split('/').pop()?.split('?')[0])
-    const staffAllocations = await this.keyworkerApiService.getStaffAllocations(req, prisoner.prisonerNumber, policy)
+    const staffAllocations = await this.allocationsApiService.getStaffAllocations(req, prisoner.prisonerNumber, policy)
 
     res.render('prisoner-allocation-history/view', {
       prisoner,

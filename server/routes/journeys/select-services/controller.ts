@@ -1,15 +1,15 @@
 import { Request, Response } from 'express'
-import KeyworkerApiService from '../../../services/keyworkerApi/keyworkerApiService'
+import AllocationsApiService from '../../../services/allocationsApi/allocationsApiService'
 import { SchemaType } from './schema'
 
 export class SelectServicesController {
-  constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
+  constructor(private readonly allocationsApiService: AllocationsApiService) {}
 
   GET = async (req: Request, res: Response) => {
     if (!req.journeyData.selectServices) {
       req.journeyData.b64History = res.locals.b64History
 
-      const policies = await this.keyworkerApiService.getPolicies(req, res.locals.user.getActiveCaseloadId()!)
+      const policies = await this.allocationsApiService.getPolicies(req, res.locals.user.getActiveCaseloadId()!)
       req.journeyData.selectServices = {
         keyWorkerEnabled: !!policies.policies.find(({ enabled, policy }) => enabled && policy === 'KEY_WORKER'),
         personalOfficerEnabled: !!policies.policies.find(

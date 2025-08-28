@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express'
-import KeyworkerApiService from '../../../../services/keyworkerApi/keyworkerApiService'
+import AllocationsApiService from '../../../../services/allocationsApi/allocationsApiService'
 import { components } from '../../../../@types/keyWorker'
 import { getHistoryParamForPOST } from '../../../../middleware/historyMiddleware'
 
 export class AssignStaffRoleController {
-  constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
+  constructor(private readonly allocationsApiService: AllocationsApiService) {}
 
   GET = async (req: Request, res: Response, next: NextFunction) => {
     req.journeyData.assignStaffRole ??= {}
@@ -21,7 +21,7 @@ export class AssignStaffRoleController {
           hasPolicyStaffRole: false,
         }
         req.journeyData.assignStaffRole!.searchResults = (
-          await this.keyworkerApiService.searchStaff(
+          await this.allocationsApiService.searchStaff(
             req as Request,
             res.locals.user.getActiveCaseloadId()!,
             searchOptions,

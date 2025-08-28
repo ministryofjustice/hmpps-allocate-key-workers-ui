@@ -5,9 +5,9 @@ import { validate } from '../../middleware/validationMiddleware'
 import { schemaFactory } from './schema'
 import { Page } from '../../services/auditService'
 
-export const EstablishmentSettingsRoutes = ({ keyworkerApiService }: Services) => {
+export const EstablishmentSettingsRoutes = ({ allocationsApiService }: Services) => {
   const { router, get, post } = JourneyRouter()
-  const controller = new EstablishmentSettingsController(keyworkerApiService)
+  const controller = new EstablishmentSettingsController(allocationsApiService)
 
   get('/', Page.ESTABLISHMENT_SETTINGS, controller.GET)
   post('/', validate(schemaFactory), controller.submitToApi, controller.POST)

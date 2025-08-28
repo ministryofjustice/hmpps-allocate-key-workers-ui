@@ -9,9 +9,9 @@ import { Page } from '../../services/auditService'
 import { schema } from './schema'
 
 export const POStaffProfileRoutes = (services: Services) => {
-  const { keyworkerApiService } = services
+  const { allocationsApiService } = services
   const { router, get, post } = JourneyRouter()
-  const controller = new POStaffProfileController(keyworkerApiService)
+  const controller = new POStaffProfileController(allocationsApiService)
 
   get(
     '/',

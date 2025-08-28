@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
-import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
+import AllocationsApiService from '../../services/allocationsApi/allocationsApiService'
 import { sanitizeQueryName, sanitizeSelectValue } from '../../middleware/validationMiddleware'
 import { components } from '../../@types/keyWorker'
 import { getHistoryParamForPOST } from '../../middleware/historyMiddleware'
 
 export class ManageController {
-  constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
+  constructor(private readonly allocationsApiService: AllocationsApiService) {}
 
   GET = async (req: Request, res: Response): Promise<void> => {
     const { user } = res.locals
@@ -19,7 +19,7 @@ export class ManageController {
       throw new Error('No active caseload')
     }
 
-    const keyworkerStatuses = await this.keyworkerApiService.getReferenceData(req, 'staff-status')
+    const keyworkerStatuses = await this.allocationsApiService.getReferenceData(req, 'staff-status')
     const statuses = keyworkerStatuses.map(keyworkerStatus => {
       return { value: keyworkerStatus.code, text: keyworkerStatus.description }
     })
@@ -39,7 +39,7 @@ export class ManageController {
       hasPolicyStaffRole: true,
     }
 
-    const data = await this.keyworkerApiService.searchAllocatableStaff(req, res, searchOptions, true)
+    const data = await this.allocationsApiService.searchAllocatableStaff(req, res, searchOptions, true)
 
     res.render('manage/view', {
       params: query,

@@ -14,8 +14,8 @@ import { Page } from '../../../../services/auditService'
 
 export const AssignStaffRoleRoutes = (services: Services) => {
   const { router, get, post } = JourneyRouter()
-  const { keyworkerApiService } = services
-  const controller = new AssignStaffRoleController(keyworkerApiService)
+  const { allocationsApiService } = services
+  const controller = new AssignStaffRoleController(allocationsApiService)
 
   router.use(redirectCheckAnswersMiddleware([/assign$/, /not-prison-officer$/, /check-answers$/]))
 

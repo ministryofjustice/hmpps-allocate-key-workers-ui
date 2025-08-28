@@ -4,9 +4,9 @@ import { JourneyRouter } from '../base/routes'
 import { PrisonerAllocationHistoryController } from './controller'
 import { Page } from '../../services/auditService'
 
-export const PrisonerAllocationHistoryRoutes = ({ keyworkerApiService, prisonPermissionsService }: Services) => {
+export const PrisonerAllocationHistoryRoutes = ({ allocationsApiService, prisonPermissionsService }: Services) => {
   const { router, get } = JourneyRouter()
-  const controller = new PrisonerAllocationHistoryController(keyworkerApiService)
+  const controller = new PrisonerAllocationHistoryController(allocationsApiService)
   const populatePrisonerDataMiddleware = prisonerPermissionsGuard(prisonPermissionsService, {
     requestDependentOn: [PrisonerBasePermission.read],
     getPrisonerNumberFunction: req => req.params['prisonerId'] as string,

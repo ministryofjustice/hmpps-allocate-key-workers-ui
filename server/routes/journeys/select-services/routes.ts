@@ -9,7 +9,7 @@ import { SelectServicesConfirmationRoutes } from './confirmation/routes'
 
 export const SelectServicesRoutes = (services: Services) => {
   const { router, get, post } = JourneyRouter()
-  const controller = new SelectServicesController(services.keyworkerApiService)
+  const controller = new SelectServicesController(services.allocationsApiService)
 
   get('*any', Page.SELECT_SERVICES, (req, res, next) => {
     if (req.journeyData.staffDetails?.staffId) {

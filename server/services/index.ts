@@ -2,7 +2,7 @@ import { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import { PermissionsService } from '@ministryofjustice/hmpps-prison-permissions-lib'
 import { dataAccess } from '../data'
 import AuditService from './auditService'
-import KeyworkerApiService from './keyworkerApi/keyworkerApiService'
+import AllocationsApiService from './allocationsApi/allocationsApiService'
 import LocationsInsidePrisonApiService from './locationsInsidePrisonApi/locationsInsidePrisonApiService'
 import PrisonApiService from './prisonApi/prisonApiService'
 import PrisonerSearchApiService from './prisonerSearch/prisonerSearchApiService'
@@ -23,7 +23,7 @@ export const services = () => {
   } = dataAccess()
 
   const auditService = new AuditService(hmppsAuditClient)
-  const keyworkerApiService = new KeyworkerApiService(keyworkerApiClient, cacheStore)
+  const allocationsApiService = new AllocationsApiService(keyworkerApiClient, cacheStore)
   const prisonApiService = new PrisonApiService(prisonApiClient)
   const locationsApiService = new LocationsInsidePrisonApiService(locationsWithinPrisonApiClient)
   const prisonerSearchApiService = new PrisonerSearchApiService(prisonerSearchApiClient)
@@ -39,7 +39,7 @@ export const services = () => {
   return {
     applicationInfo,
     auditService,
-    keyworkerApiService,
+    allocationsApiService,
     prisonApiService,
     locationsApiService,
     prisonerSearchApiService,

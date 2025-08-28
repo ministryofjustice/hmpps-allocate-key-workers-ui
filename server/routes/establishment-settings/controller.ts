@@ -1,16 +1,16 @@
 import { Request, Response, NextFunction } from 'express'
-import KeyworkerApiService from '../../services/keyworkerApi/keyworkerApiService'
+import AllocationsApiService from '../../services/allocationsApi/allocationsApiService'
 import { FLASH_KEY__SUCCESS_MESSAGE } from '../../utils/constants'
 import { SchemaType, parseFrequencyInWeeks } from './schema'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 
 export class EstablishmentSettingsController {
-  constructor(private readonly keyworkerApiService: KeyworkerApiService) {}
+  constructor(private readonly allocationsApiService: AllocationsApiService) {}
 
   GET = async (req: Request, res: Response) => {
     const { allowAutoAllocation, capacity, frequencyInWeeks } = req.middleware!.prisonConfiguration!
 
-    const policyStatus = await this.keyworkerApiService.getPolicies(req, res.locals.user.getActiveCaseloadId()!)
+    const policyStatus = await this.allocationsApiService.getPolicies(req, res.locals.user.getActiveCaseloadId()!)
 
     res.render('establishment-settings/view', {
       showBreadcrumbs: true,
@@ -37,7 +37,7 @@ export class EstablishmentSettingsController {
     const { allowAutoAllocation, maximumCapacity, frequencyInWeeks } = req.body
 
     try {
-      await this.keyworkerApiService.updatePrisonConfig(
+      await this.allocationsApiService.updatePrisonConfig(
         req as Request,
         res,
         allowAutoAllocation,
