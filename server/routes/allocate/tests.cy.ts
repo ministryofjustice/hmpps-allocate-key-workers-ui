@@ -76,6 +76,22 @@ context('/allocate', () => {
     queryTextbox().type('ALL')
     searchBtn().click()
 
+    // Prisoner profile back link
+    cy.get('.govuk-table__row:nth-child(2) > :nth-child(1) > :nth-child(1)')
+      .should('have.attr', 'href')
+      .should(
+        'equal',
+        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FAAA1234&returnPath=%2Fallocate%3Fquery%3DALL%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dfalse%26history%3DWyIva2V5LXdvcmtlci9hbGxvY2F0ZT9xdWVyeT1BTEwmY2VsbExvY2F0aW9uUHJlZml4PSZleGNsdWRlQWN0aXZlQWxsb2NhdGlvbnM9ZmFsc2UiXQ%253D%253D%26js%3Dfalse',
+      )
+
+    // Prisoner profile alerts back link
+    cy.get('.govuk-table__row:nth-child(2) >:nth-child(3) > :nth-child(1) > :nth-child(2) > :nth-child(1)')
+      .should('have.attr', 'href')
+      .should(
+        'equal',
+        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FAAA1234%2Falerts%2Factive&returnPath=%2Fallocate%3Fquery%3DALL%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dfalse%26history%3DWyIva2V5LXdvcmtlci9hbGxvY2F0ZT9xdWVyeT1BTEwmY2VsbExvY2F0aW9uUHJlZml4PSZleGNsdWRlQWN0aXZlQWxsb2NhdGlvbnM9ZmFsc2UiXQ%253D%253D%26js%3Dfalse',
+      )
+
     checkPageContentsNoFilter()
 
     checkSorting()

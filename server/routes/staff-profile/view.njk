@@ -89,7 +89,7 @@
     {% for item in allocations %}
       {% set rows = (rows.push([
           {
-            html: '<a class="govuk-link--no-visited-state" target="_blank" href="' + prisonerProfileUrl + '/prisoner/' + item.prisoner.prisonNumber + '">' + item.prisoner | lastNameCommaFirstName + "</a><br/>" + item.prisoner.prisonNumber,
+            html: '<a class="govuk-link--no-visited-state" href="' + item.profileHref + '">' + item.prisoner | lastNameCommaFirstName + "</a><br/>" + item.prisoner.prisonNumber,
             attributes: {
             "data-sort-value": item.prisoner | lastNameCommaFirstName
           }
@@ -98,7 +98,7 @@
             text: item.prisoner.cellLocation
           },
           {
-            html: alertFlags(prisonerProfileUrl + '/prisoner/' + item.prisoner.prisonNumber + '/alerts/active', item.prisoner.relevantAlertCodes, item.prisoner.remainingAlertCount),
+            html: alertFlags(item.alertsHref, item.prisoner.relevantAlertCodes, item.prisoner.remainingAlertCount),
             attributes: {
             "data-sort-value": item.prisoner | alertsSortValue
           }

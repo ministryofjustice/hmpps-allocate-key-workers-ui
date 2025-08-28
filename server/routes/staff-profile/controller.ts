@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { subMonths, subDays, differenceInDays, format } from 'date-fns'
 import { ChangeStaffController } from '../base/changeStaffController'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
+import { prisonerProfileBacklink } from '../../utils/utils'
 
 export class StaffProfileController extends ChangeStaffController {
   GET = async (req: Request<{ staffId: string }>, res: Response): Promise<void> => {
@@ -37,6 +38,13 @@ export class StaffProfileController extends ChangeStaffController {
 
     return res.render('staff-profile/view', {
       ...staffDetails,
+      allocations: staffDetails.allocations.map(a => {
+        return {
+          ...a,
+          profileHref: prisonerProfileBacklink(req, res, a.prisoner.prisonNumber),
+          alertsHref: prisonerProfileBacklink(req, res, a.prisoner.prisonNumber, '/alerts/active'),
+        }
+      }),
       staffMember: { firstName: staffDetails.firstName, lastName: staffDetails.lastName },
       ...(await this.getChangeData(req, res)),
       showBreadcrumbs: true,

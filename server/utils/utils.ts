@@ -1,3 +1,5 @@
+import { Request, Response } from 'express'
+import config from '../config'
 import { POLICIES, Policy } from '../middleware/policyMiddleware'
 
 const properCase = (word: string): string =>
@@ -50,3 +52,12 @@ export const policyString = (policyPath: keyof typeof POLICIES, key: keyof Polic
 
 // @ts-expect-error T[P] index error
 export type MakeNullable<T, K extends PropertyKey> = Pick<T, Exclude<keyof T, K>> & { [P in K]?: T[P] | null }
+
+export const prisonerProfileBacklink = (req: Request, res: Response, personIdentifier: string, suffix: string = '') => {
+  const searchParams = new URLSearchParams({
+    service: `allocate-${res.locals.policyPath}s`,
+    redirectPath: `/prisoner/${personIdentifier}${suffix}`,
+    returnPath: `/${req.originalUrl.split('/').slice(2).join('/')}`,
+  })
+  return `${config.serviceUrls.prisonerProfile}/save-backlink?${searchParams.toString()}`
+}
