@@ -1,0 +1,45 @@
+.no-border-tabs .govuk-tabs__list {
+  border-bottom: none !important;
+}
+
+.no-border-tabs .govuk-tabs__panel {
+  border: none !important;
+}
+
+.case-note-full {
+  display: none;
+}
+
+.case-note-truncated {
+  display: inline;
+}
+
+.case-note-truncated:has(+ details[open]) {
+  display: none;
+}
+details[open] .case-note-full {
+  display: inline;
+}
+
+.upward {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.case-note-details > summary {
+  list-style: none;
+  color: $govuk-link-colour;
+  cursor: pointer;
+}
+
+.case-note-details > summary::marker {
+  content: "";
+}
+
+.case-note-details summary::before {
+  content: "Show case note";
+}
+
+.case-note-details[open] summary::before {
+  content: "Show preview";
+}

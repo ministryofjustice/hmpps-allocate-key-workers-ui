@@ -1,0 +1,19 @@
+{% macro recordedEvent(event, staffName, staffId) %}
+  <div data-created-at="{{ event.createdAt }}" data-happened-at="{{ event.occurredAt }}">
+    <p class="govuk-!-margin-bottom-0">
+      {{ event.createdAt | formatDisplayDateTime }}
+    </p>
+    <p class="govuk-heading-m">
+      {{ event.type.description }}: {{ staffName }} ({{ staffId }})
+    </p>
+    <span class="case-note-truncated">{{ event.text | truncate(128) }}</span>
+    <details class="no-margin upward case-note-details">
+      <summary class="govuk-details__summary-text"></summary>
+      <p class="case-note-full">{{ event.text }}</p>
+    </details>
+    <p class="govuk-body govuk-!-margin-top-4">
+      <b>Happened:</b>
+      {{ event.occurredAt | formatDisplayDateTime }}</p>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
+  </div>
+{% endmacro %}

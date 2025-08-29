@@ -8,6 +8,9 @@
 {% from "partials/deallocateSuccessError/macro.njk" import deallocateSuccessError %}
 {% from "partials/alertFlags/macro.njk" import alertFlags %}
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
+{% from "partials/recordedEvent/macro.njk" import recordedEvent %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set fullWidth = true %}
 {% set pageTitle -%}
@@ -76,14 +79,14 @@
 
     <hr class="govuk-section-break govuk-section-break--m"/>
 
+    {% set allocationTabHtml %}
+
     {% if user | hasPermission('allocate') %}
       <p>Select {{ policyStaffs }} from the dropdown lists to reallocate or deallocate prisoners.</p>
       <p>{{ policyStaffs | sentenceCase }} will only be allocated when you save your changes.</p>
 
       <br/>
     {% endif %}
-
-    <h2 class="govuk-heading-m govuk-!-display-inline">Current allocations</h2>
 
     {% set rows = [] %}
     {% for item in allocations %}
@@ -203,6 +206,75 @@
         <p class="govuk-!-margin-bottom-6">There are no allocations for this {{ policyStaff }}.</p>
       {% endif %}
     </form>
+    {% endset %}
+
+    {% set caseNoteTabHtml %}
+    <h2>Recent {{ policyStaff }} case notes</h2>
+    {% if recordedEvents.length %}
+    <p>Displaying {{ policyStaff }} case notes from {{ stats.current.from | dateString }} to {{ stats.current.to | dateString }}.</p>
+
+    {% if jsEnabled %}
+      {{ govukSelect({
+            id: "sortBy",
+            name: "sortBy",
+            classes: "min-width-one-quarter",
+            label: {
+              text: "Sort by"
+            },
+            items: [
+              {
+                text: "Created (most recent)",
+                value: "desc-created"
+              }, 
+              {
+                text: "Created (oldest)",
+                value: "asc-created"
+              },
+              {
+                text: "Happened (most recent)",
+                value: "desc-happened"
+              },
+              {
+                text: "Happened (oldest)",
+                value: "asc-happened"
+              }
+            ]
+          }) }}
+    {% endif %}
+
+    <p class="moj-pagination__results float-right">Showing <b>1</b> to <b>{{ recordedEvents.length }}</b> of <b>{{  recordedEvents.length }}</b>
+      {{ 'case note' + ('' if recordedEvents.length == 1 else 's') }}</p>
+    <br />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
+    <div id="case-notes-list">
+      {% for event in recordedEvents %}
+        {{ recordedEvent(event, staffMember | firstNameSpaceLastName, staffId, jsEnabled) }}
+      {% endfor %}
+    </div>
+    {% else %}
+      <p>There are no {{ policyStaff }} case notes with a ‘happened’ date from {{ stats.current.from | dateString }} to {{ stats.current.to | dateString }}.</p>
+    {% endif %}
+    {% endset %}
+
+    {{ govukTabs({
+        classes: 'no-border-tabs',
+        items: [
+          {
+            label: "Current allocations",
+            id: "current-allocations",
+            panel: {
+              html: allocationTabHtml
+            }
+          },
+          {
+            label: "Case notes",
+            id: "case-notes",
+            panel: {
+              html: caseNoteTabHtml
+            }
+          }
+        ]
+    }) }}
   </div>
 
 {% endblock %}
@@ -212,7 +284,28 @@
     <script nonce="{{ cspNonce }}">
       window.onload = function () {
         window.initialiseDropdown('{{ policyStaff }}', {{ staff | dump | safe }})
+        document.getElementById('sortBy').addEventListener('change', function(e) {
+          const container = document.getElementById('case-notes-list')
+          const sortBy = e.target.value
+
+          const divs = Array.from(document.querySelectorAll('[data-created-at]'))
+          if (sortBy === 'desc-created') {
+            divs.sort((a, b) => new Date(b.dataset.createdAt).getTime() - new Date(a.dataset.createdAt).getTime())
+          } else if (sortBy === 'asc-created') {
+            divs.sort((a, b) => new Date(a.dataset.createdAt).getTime() - new Date(b.dataset.createdAt).getTime())
+          } else if (sortBy === 'desc-happened') {
+            divs.sort((a, b) => new Date(b.dataset.happenedAt).getTime() - new Date(a.dataset.happenedAt).getTime())
+          } else if (sortBy === 'asc-happened') {
+            divs.sort((a, b) => new Date(a.dataset.happenedAt).getTime() - new Date(b.dataset.happenedAt).getTime())
+          }
+          
+          container.innerHTML = ''
+
+          for (const div of divs) {
+            container.appendChild(div)
+          }
+        })
       }
     </script>
-    {% endif %}
+  {% endif %}
 {% endblock %}

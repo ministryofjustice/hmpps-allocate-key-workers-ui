@@ -697,6 +697,49 @@ const stubPutPolicies = () =>
     ],
   })
 
+const stubStaffRecordedEvents = (
+  data: { staffId: number; events: components['schemas']['RecordedEventResponse']['recordedEvents'] } = {
+    staffId: 488095,
+    events: defaultRecordedEvents,
+  },
+) =>
+  createBasicHttpStub('POST', `/keyworker-api/search/prisons/LEI/staff/${data.staffId}/recorded-events`, 200, {
+    recordedEvents: data.events,
+  })
+
+const defaultRecordedEvents = [
+  {
+    type: {
+      code: 'SESSION',
+      description: 'Key worker session',
+    },
+    createdAt: '2025-02-17T15:57:56.862492',
+    occurredAt: '2025-02-18T15:57:56.862492',
+    text: 'Some really long text that should be truncated'.repeat(100),
+    amendments: [],
+  },
+  {
+    type: {
+      code: 'ENTRY',
+      description: 'Key worker entry',
+    },
+    createdAt: '2025-02-18T15:57:56.862492',
+    occurredAt: '2025-02-17T15:57:56.862492',
+    text: 'Entry 1 - Entry description',
+    amendments: [],
+  },
+  {
+    type: {
+      code: 'ENTRY',
+      description: 'Key worker entry',
+    },
+    createdAt: '2025-02-18T15:57:56.862492',
+    occurredAt: '',
+    text: 'Should probably not appear in the list as there is no occurredAt',
+    amendments: [],
+  },
+] as components['schemas']['RecordedEventResponse']['recordedEvents']
+
 const keyworkerSearchPrisoners = [
   {
     personIdentifier: 'A4288DZ',
@@ -837,4 +880,5 @@ export default {
   stubUpsertStaffDetails,
   stubGetPolicies,
   stubPutPolicies,
+  stubStaffRecordedEvents,
 }

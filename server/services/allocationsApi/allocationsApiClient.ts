@@ -218,4 +218,17 @@ export default class AllocationsApiClient {
       retry: true,
     })
   }
+
+  async searchRecordedEvents(prisonCode: string, staffId: string, data: components['schemas']['RecordedEventRequest']) {
+    const response = await this.restClient.post<components['schemas']['RecordedEventResponse']>(
+      {
+        path: `/search/prisons/${prisonCode}/staff/${staffId}/recorded-events`,
+        data,
+        retry: true,
+      },
+      true,
+    )
+
+    return response.recordedEvents
+  }
 }

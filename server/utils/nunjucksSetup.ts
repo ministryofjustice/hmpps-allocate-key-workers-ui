@@ -9,6 +9,7 @@ import logger from '../../logger'
 import {
   formatDateConcise,
   formatDateTime,
+  formatDisplayDateTime,
   getDateInReadableFormat,
   todayStringGBFormat,
   yesterdayStringGBFormat,
@@ -104,4 +105,5 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('takeFirstWord', (val: string) => val.split(' ')[0])
   njkEnv.addFilter('possessiveComma', possessiveComma)
   njkEnv.addFilter('policyString', policyString)
+  njkEnv.addFilter('formatDisplayDateTime', formatDisplayDateTime)
 }

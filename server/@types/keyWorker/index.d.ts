@@ -139,6 +139,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/search/prisons/{prisonCode}/staff/{staffId}/recorded-events': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
+    post: operations['searchStaffRecordedEvents']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/search/prisons/{prisonCode}/staff-allocations': {
     parameters: {
       query?: never
@@ -821,6 +841,37 @@ export interface components {
       staffRole?: components['schemas']['StaffRoleInfo']
       username: string
       email?: string
+    }
+    RecordedEventRequest: {
+      types: ('SESSION' | 'ENTRY')[]
+      /** Format: date */
+      from?: string
+      /** Format: date */
+      to?: string
+    }
+    RecordedEventAmendment: {
+      /** Format: date-time */
+      createdAt: string
+      authorDisplayName: string
+      text: string
+    }
+    RecordedEventPrisoner: {
+      prisonerNumber: string
+      firstName: string
+      lastName: string
+    }
+    RecordedEventResponse: {
+      recordedEvents: components['schemas']['StaffRecordedEvent'][]
+    }
+    StaffRecordedEvent: {
+      prisoner: components['schemas']['RecordedEventPrisoner']
+      type: components['schemas']['CodedDescription']
+      /** Format: date-time */
+      createdAt: string
+      /** Format: date-time */
+      occurredAt: string
+      text: string
+      amendments: components['schemas']['RecordedEventAmendment'][]
     }
     AllocatableSearchRequest: {
       query?: string
@@ -1931,6 +1982,38 @@ export interface operations {
       }
     }
   }
+  searchStaffRecordedEvents: {
+    parameters: {
+      query?: never
+      header: {
+        /** @description
+         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
+         *          */
+        Policy: string
+      }
+      path: {
+        prisonCode: string
+        staffId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RecordedEventRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RecordedEventResponse']
+        }
+      }
+    }
+  }
   searchAllocatableStaff: {
     parameters: {
       query?: {
@@ -2513,10 +2596,21 @@ export interface operations {
   findReferenceDataForDomain: {
     parameters: {
       query?: never
-      header?: never
+      header: {
+        /** @description
+         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
+         *          */
+        Policy: string
+      }
       path: {
         /** @description The reference data domain required. This is case insensitive. */
-        domain: 'allocation-reason' | 'deallocation-reason' | 'staff-position' | 'staff-schedule-type' | 'staff-status'
+        domain:
+          | 'allocation-reason'
+          | 'deallocation-reason'
+          | 'recorded-entry-type'
+          | 'staff-position'
+          | 'staff-schedule-type'
+          | 'staff-status'
       }
       cookie?: never
     }

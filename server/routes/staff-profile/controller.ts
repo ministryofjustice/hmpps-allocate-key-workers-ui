@@ -36,8 +36,16 @@ export class StaffProfileController extends ChangeStaffController {
       dateRange,
     )
 
+    const recordedEvents = await this.allocationsApiService.searchRecordedEvents(
+      req,
+      res.locals.user.getActiveCaseloadId()!,
+      req.params.staffId,
+      { types: ['SESSION', 'ENTRY'], from: dateRange.from, to: dateRange.to },
+    )
+
     return res.render('staff-profile/view', {
       ...staffDetails,
+      recordedEvents: recordedEvents.filter(o => o.occurredAt).sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
       allocations: staffDetails.allocations.map(a => {
         return {
           ...a,

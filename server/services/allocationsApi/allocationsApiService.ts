@@ -168,4 +168,13 @@ export default class AllocationsApiService {
   putPolicies(req: Request, res: Response, request: components['schemas']['PrisonPolicies']) {
     return this.keyworkerApiClientBuilder(req, res).putPolicies(res.locals.user.getActiveCaseloadId()!, request)
   }
+
+  searchRecordedEvents(
+    req: Request,
+    prisonCode: string,
+    staffId: string,
+    body: components['schemas']['RecordedEventRequest'],
+  ) {
+    return this.keyworkerApiClientBuilder(req).searchRecordedEvents(prisonCode, staffId, body)
+  }
 }
