@@ -191,6 +191,21 @@ export default class AllocationsApiClient {
     )
   }
 
+  async searchRecordedEvents(
+    prisonCode: string,
+    staffId: string | number,
+    requestBody: components['schemas']['RecordedEventRequest'],
+  ) {
+    return this.restClient.post<components['schemas']['RecordedEventResponse']>(
+      {
+        path: `/search/prisons/${prisonCode}/staff/${staffId}/recorded-events`,
+        data: requestBody,
+        retry: true,
+      },
+      true,
+    )
+  }
+
   async upsertStaffDetails(prisonCode: string, staffId: string | number, requestBody: StaffDetailsRequest) {
     await this.restClient.put({
       path: `/prisons/${prisonCode}/staff/${staffId}`,

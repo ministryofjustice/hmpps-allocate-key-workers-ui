@@ -9,6 +9,7 @@ import logger from '../../logger'
 import {
   formatDateConcise,
   formatDateTime,
+  formatDateTimeVerbose,
   getDateInReadableFormat,
   todayStringGBFormat,
   yesterdayStringGBFormat,
@@ -88,6 +89,7 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('getStatChange', getStatChange)
   njkEnv.addFilter('firstNameSpaceLastName', firstNameSpaceLastName)
   njkEnv.addFilter('formatDateConcise', formatDateConcise)
+  njkEnv.addFilter('formatDateTimeVerbose', formatDateTimeVerbose)
   njkEnv.addFilter('excludeCurrentStaffMember', excludeCurrentStaffMember)
   njkEnv.addFilter('formatDateTime', formatDateTime)
   njkEnv.addFilter('mergePrisonerKeyworkerIds', mergePrisonerKeyworkerIds)

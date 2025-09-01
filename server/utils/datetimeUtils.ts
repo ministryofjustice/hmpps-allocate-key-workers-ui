@@ -76,3 +76,6 @@ export function getDateInReadableFormat(dateString: string) {
 }
 
 export const formatDateTime = (value?: string) => value && format(new Date(Date.parse(value)), 'dd/MM/yyyy HH:mm')
+
+export const formatDateTimeVerbose = (value?: string) =>
+  value && format(new Date(Date.parse(value)), `d LLLL yyyy 'at' HH:mm`)
