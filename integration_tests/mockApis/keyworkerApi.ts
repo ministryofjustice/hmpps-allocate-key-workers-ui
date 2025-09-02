@@ -627,6 +627,48 @@ const stubSearchAllocatableStaff = (results: StaffSummary[] = []) =>
 const stubSearchAllocatableStaffError = () =>
   createHttpStub('POST', '/keyworker-api/search/prisons/.*/staff-allocations.*', undefined, undefined, 502, {})
 
+const stubSearchCaseNotes = () =>
+  createBasicHttpStub('POST', '/keyworker-api/search/prisons/.*/staff/.*/recorded-events', 200, {
+    recordedEvents: [
+      {
+        prisoner: {
+          prisonerNumber: 'AA1111B',
+          firstName: 'Joe',
+          lastName: 'Doe',
+        },
+        type: {
+          code: 'ENTRY',
+          description: 'Key worker entry',
+        },
+        createdAt: '2025-04-01T16:59:52.589Z',
+        occurredAt: '2025-01-01T16:59:52.589Z',
+        text: 'Entry info',
+        amendments: [
+          {
+            createdAt: '2025-09-01T16:59:52.589Z',
+            authorDisplayName: 'Editor Name',
+            text: 'additional info',
+          },
+        ],
+      },
+      {
+        prisoner: {
+          prisonerNumber: 'AA1111B',
+          firstName: 'Joe',
+          lastName: 'Doe',
+        },
+        type: {
+          code: 'SESSION',
+          description: 'Key worker session',
+        },
+        createdAt: '2025-03-01T16:59:52.589Z',
+        occurredAt: '2025-02-01T16:59:52.589Z',
+        text: 'Session info',
+        amendments: [],
+      },
+    ],
+  })
+
 const stubSearchStaff = (results: StaffSummary[] = []) =>
   createBasicHttpStub('POST', '/keyworker-api/search/prisons/.*/staff', 200, { content: results })
 
@@ -818,6 +860,7 @@ export default {
   stubSearchPrisonersWithQuery,
   stubSearchPrisonersWithLocation,
   stubSearchPrisoner,
+  stubSearchCaseNotes,
   stubSearchStaff,
   stubSearchStaff400,
   stubSearchStaffRetry,

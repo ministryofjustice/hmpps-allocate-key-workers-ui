@@ -1,0 +1,80 @@
+{% extends "partials/layout.njk" %}
+{% from "partials/recordedEvent/macro.njk" import recordedEvent %}
+
+{% set fullWidth = true %}
+{% set pageTitle -%}
+{{ policyStaff | sentenceCase }} profile
+{%- endset %}
+
+{% block innerContent %}
+
+  <div class="govuk-width-container">
+
+    {% include '../components/common.njk' %}
+
+    <ul class="govuk-tabs__list govuk-body govuk-!-margin-bottom-6">
+      <li class="govuk-tabs__list-item">
+        <a class="govuk-tabs__tab" href="../{{ staffId }}">
+          View current allocations
+        </a>
+      </li>
+      <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+        <a class="govuk-tabs__tab" href="#">
+          View recent case notes
+        </a>
+      </li>
+    </ul>
+
+    <h2 class="govuk-heading-m">Recent {{ policyStaff }} case notes</h2>
+
+    {% if not caseNotes.length %}
+      <p class="govuk-body">No case notes found between {{ stats.current.from | dateString }} and {{ stats.current.to | dateString }}.</p>
+    {% else %}
+      <p class="govuk-body">Displaying {{ policyStaff }} case notes from {{ stats.current.from | dateString }} to {{ stats.current.to | dateString }}.</p>
+
+      <div class="hmpps-paged-list-header">
+        <div class="govuk-!-display-none-print">
+          <div>
+            <form id="sortForm">
+              <label class="govuk-label" for="sort">Sort by</label>
+              <select class="govuk-select hmpps-sort-selector__select" id="sort" name="sort" value="{{ sort or 'occurredAt,DESC' }}">
+                <option value="occurredAt,DESC" {{ 'selected' if sort === 'occurredAt,DESC' else '' }}>Happened (most recent)</option>
+                <option value="occurredAt,ASC" {{ 'selected' if sort === 'occurredAt,ASC' else '' }}>Happened (oldest)</option>
+                <option value="createdAt,DESC" {{ 'selected' if sort === 'createdAt,DESC' else '' }}>Created (most recent)</option>
+                <option value="createdAt,ASC" {{ 'selected' if sort === 'createdAt,ASC' else '' }}>Created (oldest)</option>
+              </select>
+              <button type="submit" data-prevent-double-click="true" class="govuk-button hmpps-sort-selector__sort-button">
+                Sort
+              </button>
+            </form>
+          </div>
+        </div>
+        <div>
+          <p class="moj-pagination__results">Showing <b>1</b> to <b>{{ caseNotes.length }}</b> of <b>{{ caseNotes.length }}</b> case note{{ '' if caseNotes.length === 1 else 's'}}</p>
+        </div>
+      </div>
+
+      <div class="govuk-grid-row govuk-body">
+        {% for note in caseNotes %}
+          {{ recordedEvent(note, note.prisoner | firstNameSpaceLastName, note.prisoner.prisonerNumber) }}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block pageScripts %}
+  <script nonce="{{ cspNonce }}">
+    window.onload = function () {
+      $button = document.querySelector('.hmpps-sort-selector__sort-button')
+      if ($button) {
+        $button.classList.add('govuk-!-display-none')
+      }
+      Array.from(document.getElementsByClassName('hmpps-sort-selector__select')).forEach(s => {
+        s.addEventListener('change', () => {
+          s.form.submit()
+        })
+      })
+    }
+  </script>
+{% endblock %}
