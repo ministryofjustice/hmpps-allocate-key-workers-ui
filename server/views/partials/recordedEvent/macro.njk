@@ -1,15 +1,11 @@
 {% macro recordedEvent(event, staffName, staffId) %}
   <div data-created-at="{{ event.createdAt }}" data-happened-at="{{ event.occurredAt }}">
-    <p class="govuk-!-margin-bottom-0">
-      {{ event.createdAt | formatDateTimeVerbose }}
-    </p>
-    <p class="govuk-heading-m">
-      {{ event.type.description }}: {{ staffName }} ({{ staffId }})
-    </p>
-    <span class="case-note-truncated">{{ event.text | truncate(128) }}</span>
+    <p class="govuk-!-margin-bottom-0">{{ event.createdAt | formatDateTimeVerbose }}</p>
+    <h3 class="govuk-heading-m">{{ event.type.description }}: {{ staffName }} ({{ staffId }})</h3>
+    <span class="case-note-truncated">{{ event.text | truncate(128) | nl2br | safe }}</span>
     <details class="no-margin upward case-note-details">
       <summary class="govuk-details__summary-text"></summary>
-      <div class="case-note-full">{{ event.text }}
+      <div class="case-note-full">{{ event.text | nl2br | safe }}
         {% if event.amendments.length %}
           <div class="hmpps-case-note-card-list-item__amendments-header">More details added:</div>
           {% for amendment in event.amendments %}

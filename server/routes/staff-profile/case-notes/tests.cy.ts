@@ -25,6 +25,9 @@ context('Case notes', () => {
         failOnStatusCode: false,
       },
     )
+
+    cy.get('.case-note-details').eq(0).click()
+    cy.get('.case-note-details').eq(1).click()
   }
 
   const validatePageContents = () => {
@@ -37,9 +40,9 @@ context('Case notes', () => {
 
     cy.get('.status-tag').eq(0).should('have.text', 'Active')
 
-    cy.findByText('Session info').should('be.visible')
-    cy.findByText('Entry info').should('be.visible')
-    cy.findByText('additional info').should('be.visible')
+    cy.findAllByText('Session info').eq(1).should('be.visible')
+    cy.findAllByText('Entry info').eq(1).should('be.visible')
+    cy.findAllByText('additional info').eq(0).should('be.visible')
   }
 
   const validateSorting = () => {
