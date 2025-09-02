@@ -1,0 +1,31 @@
+{% macro recordedEvent(event, staffName, staffId) %}
+  <div data-created-at="{{ event.createdAt }}" data-happened-at="{{ event.occurredAt }}">
+    <p class="govuk-!-margin-bottom-0">
+      {{ event.createdAt | formatDateTimeVerbose }}
+    </p>
+    <p class="govuk-heading-m">
+      {{ event.type.description }}: {{ staffName }} ({{ staffId }})
+    </p>
+    <span class="case-note-truncated">{{ event.text | truncate(128) }}</span>
+    <details class="no-margin upward case-note-details">
+      <summary class="govuk-details__summary-text"></summary>
+      <div class="case-note-full">{{ event.text }}
+        {% if event.amendments.length %}
+          <div class="hmpps-case-note-card-list-item__amendments-header">More details added:</div>
+          {% for amendment in event.amendments %}
+            <div class="hmpps-case-note-card-list-item__amendment">
+              <div class="hmpps-case-note-card-list-item__notes govuk-body">{{ amendment.text | escape | nl2br | safe }}</div>
+              <div class="hmpps-case-note-card-list-item__metadata">
+                <span class='govuk-!-font-weight-bold'>Added:</span>
+                {{ amendment.createdAt | formatDateTimeVerbose }} by {{ amendment.authorDisplayName }}</div>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </details>
+    <p class="govuk-body govuk-!-margin-top-4">
+      <b>Happened:</b>
+      {{ event.occurredAt | formatDateTimeVerbose }}</p>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
+  </div>
+{% endmacro %}
