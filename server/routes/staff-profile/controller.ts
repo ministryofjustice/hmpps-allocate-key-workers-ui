@@ -79,14 +79,15 @@ export class StaffProfileController extends ChangeStaffController {
 
   getCaseNoteSorter = (sort?: string): CaseNoteSorter => {
     switch (sort) {
+      case 'createdAt,DESC':
+        return (a, b) => -a.createdAt.localeCompare(b.createdAt)
       case 'createdAt,ASC':
         return (a, b) => a.createdAt.localeCompare(b.createdAt)
-      case 'occurredAt,DESC':
-        return (a, b) => -a.occurredAt.localeCompare(b.occurredAt)
       case 'occurredAt,ASC':
         return (a, b) => a.occurredAt.localeCompare(b.occurredAt)
+      case 'occurredAt,DESC':
       default:
-        return (a, b) => -a.createdAt.localeCompare(b.createdAt)
+        return (a, b) => -a.occurredAt.localeCompare(b.occurredAt)
     }
   }
 }

@@ -94,7 +94,10 @@
 }
 
 .case-note-truncated {
-  display: inline;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .case-note-truncated:has(+ details[open]) {

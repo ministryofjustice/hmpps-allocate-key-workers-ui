@@ -46,12 +46,12 @@ context('Case notes', () => {
   }
 
   const validateSorting = () => {
-    cy.get('h3.govuk-heading-m').eq(0).should('have.text', 'Key worker entry: Joe Doe (AA1111B)')
-    cy.get('h3.govuk-heading-m').eq(1).should('have.text', 'Key worker session: Joe Doe (AA1111B)')
-
-    cy.findByRole('combobox', { name: 'Sort by' }).select('Created (oldest)')
-
     cy.get('h3.govuk-heading-m').eq(0).should('have.text', 'Key worker session: Joe Doe (AA1111B)')
     cy.get('h3.govuk-heading-m').eq(1).should('have.text', 'Key worker entry: Joe Doe (AA1111B)')
+
+    cy.findByRole('combobox', { name: 'Sort by' }).select('Happened (oldest)')
+
+    cy.get('h3.govuk-heading-m').eq(0).should('have.text', 'Key worker entry: Joe Doe (AA1111B)')
+    cy.get('h3.govuk-heading-m').eq(1).should('have.text', 'Key worker session: Joe Doe (AA1111B)')
   }
 })

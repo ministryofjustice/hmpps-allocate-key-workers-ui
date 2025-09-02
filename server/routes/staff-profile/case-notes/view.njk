@@ -37,11 +37,11 @@
           <div>
             <form id="sortForm">
               <label class="govuk-label" for="sort">Sort by</label>
-              <select class="govuk-select hmpps-sort-selector__select" id="sort" name="sort" value="{{ sort or 'createdAt,DESC' }}">
-                <option value="createdAt,DESC" {{ 'selected' if sort === 'createdAt,DESC' else '' }}>Created (most recent)</option>
-                <option value="createdAt,ASC" {{ 'selected' if sort === 'createdAt,ASC' else '' }}>Created (oldest)</option>
+              <select class="govuk-select hmpps-sort-selector__select" id="sort" name="sort" value="{{ sort or 'occurredAt,DESC' }}">
                 <option value="occurredAt,DESC" {{ 'selected' if sort === 'occurredAt,DESC' else '' }}>Happened (most recent)</option>
                 <option value="occurredAt,ASC" {{ 'selected' if sort === 'occurredAt,ASC' else '' }}>Happened (oldest)</option>
+                <option value="createdAt,DESC" {{ 'selected' if sort === 'createdAt,DESC' else '' }}>Created (most recent)</option>
+                <option value="createdAt,ASC" {{ 'selected' if sort === 'createdAt,ASC' else '' }}>Created (oldest)</option>
               </select>
               <button type="submit" data-prevent-double-click="true" class="govuk-button hmpps-sort-selector__sort-button">
                 Sort
