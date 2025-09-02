@@ -139,6 +139,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/search/prisons/{prisonCode}/staff/{staffId}/recorded-events': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** @description
+     *
+     *     Requires one of the following roles:
+     *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI */
+    post: operations['searchStaffRecordedEvents']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/search/prisons/{prisonCode}/staff-allocations': {
     parameters: {
       query?: never
@@ -822,6 +842,37 @@ export interface components {
       username: string
       email?: string
     }
+    RecordedEventRequest: {
+      types: ('SESSION' | 'ENTRY')[]
+      /** Format: date */
+      from?: string
+      /** Format: date */
+      to?: string
+    }
+    RecordedEventAmendment: {
+      /** Format: date-time */
+      createdAt: string
+      authorDisplayName: string
+      text: string
+    }
+    RecordedEventPrisoner: {
+      prisonerNumber: string
+      firstName: string
+      lastName: string
+    }
+    RecordedEventResponse: {
+      recordedEvents: components['schemas']['StaffRecordedEvent'][]
+    }
+    StaffRecordedEvent: {
+      prisoner: components['schemas']['RecordedEventPrisoner']
+      type: components['schemas']['CodedDescription']
+      /** Format: date-time */
+      createdAt: string
+      /** Format: date-time */
+      occurredAt: string
+      text: string
+      amendments: components['schemas']['RecordedEventAmendment'][]
+    }
     AllocatableSearchRequest: {
       query?: string
       /** @enum {string} */
@@ -1042,6 +1093,8 @@ export interface components {
         | 'DUPLICATE'
         | 'MANUAL'
         | 'CHANGE_IN_COMPLEXITY_OF_NEED'
+        | 'NO_LONGER_IN_PRISON'
+        | 'PRISON_USES_KEY_WORK'
     }
     SarAllocation: {
       /** Format: date-time */
@@ -1075,31 +1128,31 @@ export interface components {
       /** Format: date */
       to: string
       /** Format: int32 */
-      totalPrisoners: number
+      totalPrisoners?: number
       /** Format: int32 */
-      highComplexityOfNeedPrisoners: number
+      highComplexityOfNeedPrisoners?: number
       /** Format: int32 */
-      eligiblePrisoners: number
+      eligiblePrisoners?: number
       /** Format: int32 */
-      prisonersAssigned: number
+      prisonersAssigned?: number
       /** Format: int32 */
-      eligibleStaff: number
+      eligibleStaff?: number
       recordedEvents: components['schemas']['RecordedEventCount'][]
       /** Format: int32 */
       avgReceptionToAllocationDays?: number
       /** Format: int32 */
       avgReceptionToRecordedEventDays?: number
       /** Format: int32 */
-      projectedRecordedEvents: number
+      projectedRecordedEvents?: number
       /** Format: double */
       percentageAssigned?: number
       /** Format: double */
-      recordedEventComplianceRate: number
+      recordedEventComplianceRate?: number
     }
     PrisonStats: {
       prisonCode: string
-      current?: components['schemas']['PrisonStatSummary']
-      previous?: components['schemas']['PrisonStatSummary']
+      current: components['schemas']['PrisonStatSummary']
+      previous: components['schemas']['PrisonStatSummary']
       hasPrisonersWithHighComplexityOfNeed: boolean
     }
     Allocation: {
@@ -1206,6 +1259,7 @@ export interface components {
       hasHighComplexityOfNeeds: boolean
       allocations: components['schemas']['CurrentAllocation'][]
       latestRecordedEvents: components['schemas']['RecordedEvent'][]
+      policies: components['schemas']['PolicyEnabled'][]
     }
     RecordedEvent: {
       prison: components['schemas']['CodedDescription']
@@ -1644,7 +1698,6 @@ export interface operations {
         to?: string
         comparisonFrom?: string
         comparisonTo?: string
-        includeStats?: boolean
       }
       header: {
         /** @description
@@ -1927,6 +1980,38 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['StaffSearchResponse']
+        }
+      }
+    }
+  }
+  searchStaffRecordedEvents: {
+    parameters: {
+      query?: never
+      header: {
+        /** @description
+         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
+         *          */
+        Policy: string
+      }
+      path: {
+        prisonCode: string
+        staffId: number
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RecordedEventRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RecordedEventResponse']
         }
       }
     }
@@ -2513,10 +2598,21 @@ export interface operations {
   findReferenceDataForDomain: {
     parameters: {
       query?: never
-      header?: never
+      header: {
+        /** @description
+         *         Relevant policy for the context e.g. KEY_WORKER or PERSONAL_OFFICER
+         *          */
+        Policy: string
+      }
       path: {
         /** @description The reference data domain required. This is case insensitive. */
-        domain: 'allocation-reason' | 'deallocation-reason' | 'staff-position' | 'staff-schedule-type' | 'staff-status'
+        domain:
+          | 'allocation-reason'
+          | 'deallocation-reason'
+          | 'recorded-entry-type'
+          | 'staff-position'
+          | 'staff-schedule-type'
+          | 'staff-status'
       }
       cookie?: never
     }
@@ -2538,8 +2634,8 @@ export interface operations {
       query: {
         from: string
         to: string
-        comparisonFrom?: string
-        comparisonTo?: string
+        comparisonFrom: string
+        comparisonTo: string
       }
       header: {
         /** @description
