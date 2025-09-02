@@ -13,6 +13,7 @@ export const StaffProfileRoutes = (services: Services) => {
   const controller = new StaffProfileController(allocationsApiService)
 
   get('/', Page.STAFF_ALLOCATIONS, controller.GET)
+  get('/case-notes', Page.STAFF_CASE_NOTES, controller.GET_CASE_NOTES)
   post(
     '/',
     requireRole(UserPermissionLevel.ALLOCATE),

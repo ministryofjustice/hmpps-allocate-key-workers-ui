@@ -145,6 +145,18 @@ export default class AllocationsApiService {
     )
   }
 
+  searchRecordedEvents(req: Request, res: Response, staffId: string | number, from: string, to: string) {
+    return this.keyworkerApiClientBuilder(req, res).searchRecordedEvents(
+      res.locals.user.getActiveCaseloadId()!,
+      staffId,
+      {
+        from,
+        to,
+        types: req.middleware?.policy === 'KEY_WORKER' ? ['SESSION', 'ENTRY'] : ['ENTRY'],
+      },
+    )
+  }
+
   upsertStaffDetails(req: Request, res: Response, staffId: string | number, requestBody: StaffDetailsRequest) {
     return this.keyworkerApiClientBuilder(req, res).upsertStaffDetails(
       res.locals.user.getActiveCaseloadId()!,
