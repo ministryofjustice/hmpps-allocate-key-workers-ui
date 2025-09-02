@@ -1,4 +1,5 @@
 {% extends "partials/layout.njk" %}
+{% from "partials/recordedEvent/macro.njk" import recordedEvent %}
 
 {% set fullWidth = true %}
 {% set pageTitle -%}
@@ -55,24 +56,7 @@
 
       <div class="govuk-grid-row govuk-body">
         {% for note in caseNotes %}
-          <div class="govuk-grid-column-full">
-            <div class="govuk-!-margin-bottom-1">{{ note.createdAt | formatDateTimeVerbose }}</div>
-            <h3 class="govuk-heading-m">{{ note.type.description }}: {{ note.prisoner | firstNameSpaceLastName }} ({{ note.prisoner.prisonerNumber }})</h3>
-            <div class="govuk-!-margin-bottom-3">{{ note.text | escape | nl2br | safe }}</div>
-            <div class="govuk-!-margin-bottom-3"><strong>Happened:</strong> {{ note.occurredAt | formatDateTimeVerbose }}</div>
-
-            {% if note.amendments.length %}
-              <div class="hmpps-case-note-card-list-item__amendments-header">More details added:</div>
-              {% for amendment in note.amendments %}
-                <div class="hmpps-case-note-card-list-item__amendment">
-                  <div class="hmpps-case-note-card-list-item__notes govuk-body">{{ amendment.text | escape | nl2br | safe }}</div>
-                  <div class="hmpps-case-note-card-list-item__metadata"><span class='govuk-!-font-weight-bold'>Added:</span> {{ amendment.createdAt | formatDateTimeVerbose }} by {{ amendment.authorDisplayName }}</div>
-                </div>
-              {% endfor %}
-            {% endif %}
-
-            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
-          </div>
+          {{ recordedEvent(note, note.prisoner | firstNameSpaceLastName, note.prisoner.prisonerNumber) }}
         {% endfor %}
       </div>
     {% endif %}
