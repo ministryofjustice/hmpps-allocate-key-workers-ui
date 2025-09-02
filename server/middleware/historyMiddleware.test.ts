@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express'
 
-import { getBreadcrumbs, getHistoryParamForPOST, historyMiddleware } from './historyMiddleware'
+import { createBackUrlFor, getBreadcrumbs, getHistoryParamForPOST, historyMiddleware } from './historyMiddleware'
+import { historyToBase64 } from '../utils/testUtils'
 
 describe('historyMiddleware', () => {
   const req: Request = {} as jest.Mocked<Request>
@@ -21,11 +22,6 @@ describe('historyMiddleware', () => {
   beforeEach(() => {
     jest.resetAllMocks()
   })
-
-  const historyToBase64 = (history: string[], urlEncode: boolean = false) => {
-    const base64 = Buffer.from(JSON.stringify(history)).toString('base64')
-    return urlEncode ? encodeURIComponent(base64) : base64
-  }
 
   it('should redirect to the same page with a history query param added when called with no history', () => {
     const res = createRes()
@@ -160,5 +156,23 @@ describe('historyMiddleware', () => {
     const history = getHistoryParamForPOST(req, '/key-worker/allocate', new URLSearchParams({ query: 'test' }))
 
     expect(history).toBe(historyToBase64(['/key-worker', '/key-worker/allocate?query=test']))
+  })
+
+  it('should construct backUrl correctly when given valid history', () => {
+    const b64History = historyToBase64([
+      '/key-worker',
+      '/key-worker/allocate',
+      '/key-worker/staff-profile/488095',
+      '/key-worker/staff-profile/488095/case-notes',
+      '/key-worker/start-update-staff/488095',
+    ])
+    const backUrl = createBackUrlFor(b64History, /staff-profile/, `default`)
+    expect(backUrl).toBe(`/key-worker/staff-profile/488095/case-notes?history=${b64History}`)
+  })
+
+  it('should use fallback value when history is invalid', () => {
+    const b64History = ''
+    const backUrl = createBackUrlFor(b64History, /staff-profile/, `default`)
+    expect(backUrl).toBe(`default?history=${encodeURIComponent(historyToBase64([]))}`)
   })
 })

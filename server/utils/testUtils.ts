@@ -28,3 +28,8 @@ export const dateFrom = getDateInReadableFormat(formatDateConcise(nowSpan.start)
 export const dateTo = getDateInReadableFormat(formatDateConcise(nowSpan.end)!)
 export const comparisonDateFrom = getDateInReadableFormat(formatDateConcise(previousSpan.start)!)
 export const comparisonDateTo = getDateInReadableFormat(formatDateConcise(previousSpan.end)!)
+
+export const historyToBase64 = (history: string[], urlEncode: boolean = false) => {
+  const base64 = Buffer.from(JSON.stringify(history)).toString('base64')
+  return urlEncode ? encodeURIComponent(base64) : base64
+}
