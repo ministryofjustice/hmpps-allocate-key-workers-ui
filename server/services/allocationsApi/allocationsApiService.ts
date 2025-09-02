@@ -33,13 +33,14 @@ export default class AllocationsApiService {
   }
 
   async getPrisonConfig(req: Request, prisonId: string): Promise<ReturnType<AllocationsApiClient['getPrisonConfig']>> {
-    const cached = await this.prisonConfigCache.get(prisonId)
+    const cacheKey = `${prisonId}.${req.middleware?.policy}`
+    const cached = await this.prisonConfigCache.get(cacheKey)
     if (cached) {
       return cached
     }
     const prisonConfig = await this.keyworkerApiClientBuilder(req).getPrisonConfig(prisonId)
 
-    await this.prisonConfigCache.set(prisonId, prisonConfig, this.PRISON_CONFIG_CACHE_TIMEOUT)
+    await this.prisonConfigCache.set(cacheKey, prisonConfig, this.PRISON_CONFIG_CACHE_TIMEOUT)
 
     return prisonConfig
   }
@@ -66,7 +67,7 @@ export default class AllocationsApiService {
       requestBody,
     )
 
-    await this.prisonConfigCache.del(res.locals.user.getActiveCaseloadId()!)
+    await this.prisonConfigCache.del(`${res.locals.user.getActiveCaseloadId()}.${req.middleware?.policy}`)
 
     return result
   }
@@ -177,7 +178,12 @@ export default class AllocationsApiService {
     return this.keyworkerApiClientBuilder(req).getPolicies(prisonCode)
   }
 
-  putPolicies(req: Request, res: Response, request: components['schemas']['PrisonPolicies']) {
-    return this.keyworkerApiClientBuilder(req, res).putPolicies(res.locals.user.getActiveCaseloadId()!, request)
+  async putPolicies(req: Request, res: Response, request: components['schemas']['PrisonPolicies']) {
+    const result = await this.keyworkerApiClientBuilder(req, res).putPolicies(
+      res.locals.user.getActiveCaseloadId()!,
+      request,
+    )
+    await this.prisonConfigCache.del(`${res.locals.user.getActiveCaseloadId()}.${req.middleware?.policy}`)
+    return result
   }
 }
