@@ -54,7 +54,7 @@
         </div>
       </div>
 
-      <div class="govuk-grid-row govuk-body">
+      <div class="govuk-body">
         {% for note in caseNotes %}
           {{ recordedEvent(note, note.prisoner | firstNameSpaceLastName, note.prisoner.prisonerNumber) }}
         {% endfor %}
