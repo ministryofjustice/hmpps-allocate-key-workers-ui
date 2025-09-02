@@ -1128,31 +1128,31 @@ export interface components {
       /** Format: date */
       to: string
       /** Format: int32 */
-      totalPrisoners: number
+      totalPrisoners?: number
       /** Format: int32 */
-      highComplexityOfNeedPrisoners: number
+      highComplexityOfNeedPrisoners?: number
       /** Format: int32 */
-      eligiblePrisoners: number
+      eligiblePrisoners?: number
       /** Format: int32 */
-      prisonersAssigned: number
+      prisonersAssigned?: number
       /** Format: int32 */
-      eligibleStaff: number
+      eligibleStaff?: number
       recordedEvents: components['schemas']['RecordedEventCount'][]
       /** Format: int32 */
       avgReceptionToAllocationDays?: number
       /** Format: int32 */
       avgReceptionToRecordedEventDays?: number
       /** Format: int32 */
-      projectedRecordedEvents: number
+      projectedRecordedEvents?: number
       /** Format: double */
       percentageAssigned?: number
       /** Format: double */
-      recordedEventComplianceRate: number
+      recordedEventComplianceRate?: number
     }
     PrisonStats: {
       prisonCode: string
-      current?: components['schemas']['PrisonStatSummary']
-      previous?: components['schemas']['PrisonStatSummary']
+      current: components['schemas']['PrisonStatSummary']
+      previous: components['schemas']['PrisonStatSummary']
       hasPrisonersWithHighComplexityOfNeed: boolean
     }
     Allocation: {
