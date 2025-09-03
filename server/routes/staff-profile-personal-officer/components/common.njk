@@ -96,7 +96,7 @@
     <div class="moj-action-bar__filter"></div>
   </div>
   <form id="filter-form" method='GET' class="govuk-grid-column-two-thirds govuk-!-margin-bottom-6">
-    {{ hiddenInputs(query | getQueryEntries(['sort', 'js'])) }}
+    {{ hiddenInputs(query | getQueryEntries(['sort', 'js', 'history'])) }}
     {{ mojFilter({
       heading: { text: "Filter" },
       submit:{

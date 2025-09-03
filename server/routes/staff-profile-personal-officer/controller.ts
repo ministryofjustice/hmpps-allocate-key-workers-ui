@@ -80,13 +80,17 @@ export class POStaffProfileController extends ChangeStaffController {
         staffMember: { firstName: staffDetails.firstName, lastName: staffDetails.lastName },
         ...(await this.getChangeData(req, res)),
         showBreadcrumbs: true,
-        clearFilterUrl: basePath + (req.query['sort'] ? `?sort=${req.query['sort']}` : ''),
+        clearFilterUrl: `${basePath}?${new URLSearchParams({
+          ...(req.query['sort'] ? { sort: req.query['sort'] as string } : {}),
+          ...(req.query['history'] ? { history: req.query['history'] as string } : {}),
+        }).toString()}`,
         clearDateRangeUrl:
           resQuery?.compareDateFrom || resQuery?.compareDateTo
             ? `${basePath}?${new URLSearchParams({
                 compareDateTo: resQuery.compareDateTo ?? '',
                 compareDateFrom: resQuery.compareDateFrom ?? '',
                 ...(req.query['sort'] ? { sort: req.query['sort'] as string } : {}),
+                ...(req.query['history'] ? { history: req.query['history'] as string } : {}),
               }).toString()}`
             : basePath,
         clearCompareDateRangeUrl:
@@ -95,6 +99,7 @@ export class POStaffProfileController extends ChangeStaffController {
                 dateFrom: resQuery.dateFrom ?? '',
                 dateTo: resQuery.dateTo ?? '',
                 ...(req.query['sort'] ? { sort: req.query['sort'] as string } : {}),
+                ...(req.query['history'] ? { history: req.query['history'] as string } : {}),
               }).toString()}`
             : basePath,
         showFilter: !!resQuery,
