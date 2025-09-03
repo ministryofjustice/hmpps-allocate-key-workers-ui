@@ -15,6 +15,7 @@ const createDataItem = (
   currentValue: any,
   previousValue: any,
   calculationMethod: string,
+  requiresHighlighting: boolean = true,
 ) => {
   const hasPreviousWithoutCurrent = previousValue && !currentValue
   const hasNoData = !previousValue && !currentValue
@@ -26,6 +27,7 @@ const createDataItem = (
       currentValue: null,
       previousValue: null,
       calculationMethod,
+      requiresHighlighting,
     }
   }
 
@@ -35,6 +37,7 @@ const createDataItem = (
     currentValue,
     previousValue,
     calculationMethod,
+    requiresHighlighting,
   }
 }
 
@@ -65,6 +68,7 @@ export const getEstablishmentData = (stats: components['schemas']['PrisonStats']
           stats.current.totalPrisoners,
           stats.previous?.totalPrisoners,
           'This figure displays the average number of prisoners in the establishment during the selected date range.',
+          false,
         ),
         ...(req.middleware!.prisonConfiguration!.hasPrisonersWithHighComplexityNeeds
           ? [
@@ -74,6 +78,7 @@ export const getEstablishmentData = (stats: components['schemas']['PrisonStats']
                 stats.current.highComplexityOfNeedPrisoners,
                 stats.previous?.highComplexityOfNeedPrisoners,
                 'This figure displays the average number of high complexity prisoners in the establishment during the selected date range.',
+                false,
               ),
             ]
           : []),
@@ -137,6 +142,7 @@ export const getEstablishmentData = (stats: components['schemas']['PrisonStats']
                 stats.current.projectedRecordedEvents,
                 stats.previous?.projectedRecordedEvents,
                 'This figure is calculated by taking the total number of prisoners with an allocated [staff] and comparing it to the expected frequency of [staff] sessions.',
+                false,
               ),
             ]
           : []),
