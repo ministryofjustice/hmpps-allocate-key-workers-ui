@@ -31,6 +31,7 @@ export function initialiseDropdown(policyStaff, staff) {
 
     staff.forEach(option => {
       if (option.onlyFor && option.onlyFor !== personId) return
+      if (!option.onlyFor && option.value.endsWith(`:${recommendedId}`)) return
 
       let opt = createOption(option.text, option.value)
 
