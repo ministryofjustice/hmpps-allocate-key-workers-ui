@@ -79,7 +79,7 @@ context('/manage-roles/remove', () => {
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(
-      `/key-worker/${journeyId}/manage-roles/remove?history=${encodeURIComponent(historyToBase64(['/key-worker', '/key-worker/manage-roles', '/key-worker/manage-roles/assign']))}`,
+      `/key-worker/${journeyId}/manage-roles/remove?history=${historyToBase64(['/key-worker', '/key-worker/manage-roles', '/key-worker/manage-roles/assign'], true)}`,
       {
         failOnStatusCode: false,
       },

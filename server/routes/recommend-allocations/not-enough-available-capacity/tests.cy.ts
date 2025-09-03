@@ -61,7 +61,7 @@ context('/recommend-allocations not enough capacity interrupt card', () => {
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(
-      `/key-worker/recommend-allocations?history=${encodeURIComponent(historyToBase64(['/key-worker', '/key-worker/allocate', '/key-worker/allocate?query=&cellLocationPrefix=1&excludeActiveAllocations=true', '/key-worker/recommend-allocations']))}`,
+      `/key-worker/recommend-allocations?history=${historyToBase64(['/key-worker', '/key-worker/allocate', '/key-worker/allocate?query=&cellLocationPrefix=1&excludeActiveAllocations=true', '/key-worker/recommend-allocations'], true)}`,
       {
         failOnStatusCode: false,
       },

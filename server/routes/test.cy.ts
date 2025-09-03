@@ -188,7 +188,7 @@ context('test / homepage', () => {
       .and(
         'have.attr',
         'href',
-        `/key-worker/allocate?history=${encodeURIComponent(historyToBase64(['/key-worker', '/key-worker/allocate']))}&js=true`,
+        `/key-worker/allocate?history=${historyToBase64(['/key-worker', '/key-worker/allocate'], true)}&js=true`,
       )
     cy.get('.card__description')
       .eq(0)
@@ -202,7 +202,7 @@ context('test / homepage', () => {
       .and(
         'have.attr',
         'href',
-        `/key-worker/manage?history=${encodeURIComponent(historyToBase64(['/key-worker', '/key-worker/manage']))}&js=true`,
+        `/key-worker/manage?history=${historyToBase64(['/key-worker', '/key-worker/manage'], true)}&js=true`,
       )
     cy.get('.card__description')
       .eq(1)
@@ -216,7 +216,7 @@ context('test / homepage', () => {
       .and(
         'have.attr',
         'href',
-        `/key-worker/data?history=${encodeURIComponent(historyToBase64(['/key-worker', '/key-worker/data']))}&js=true`,
+        `/key-worker/data?history=${historyToBase64(['/key-worker', '/key-worker/data'], true)}&js=true`,
       )
     cy.get('.card__description').eq(2).should('contain.text', 'View key worker data for your establishment.')
 
@@ -227,7 +227,7 @@ context('test / homepage', () => {
         .and(
           'have.attr',
           'href',
-          `/key-worker/manage-roles?history=${encodeURIComponent(historyToBase64(['/key-worker', '/key-worker/manage-roles']))}&js=true`,
+          `/key-worker/manage-roles?history=${historyToBase64(['/key-worker', '/key-worker/manage-roles'], true)}&js=true`,
         )
       cy.get('.card__description')
         .eq(3)
@@ -238,7 +238,7 @@ context('test / homepage', () => {
         .and(
           'have.attr',
           'href',
-          `/key-worker/establishment-settings?history=${encodeURIComponent(historyToBase64(['/key-worker', '/key-worker/establishment-settings']))}&js=true`,
+          `/key-worker/establishment-settings?history=${historyToBase64(['/key-worker', '/key-worker/establishment-settings'], true)}&js=true`,
         )
       cy.get('.card__description')
         .eq(4)
@@ -270,7 +270,7 @@ context('test / homepage', () => {
     cy.findByRole('link', { name: 'Manage your establishment’s key worker settings' }).should(
       'have.attr',
       'href',
-      `/key-worker/establishment-settings?history=${encodeURIComponent(historyToBase64(['/key-worker', '/key-worker/establishment-settings']))}&js=true`,
+      `/key-worker/establishment-settings?history=${historyToBase64(['/key-worker', '/key-worker/establishment-settings'], true)}&js=true`,
     )
   })
 
@@ -288,7 +288,7 @@ context('test / homepage', () => {
     cy.findByRole('link', { name: 'My key worker allocations' }).should(
       'have.attr',
       'href',
-      `/key-worker/staff-profile/1234?history=${encodeURIComponent(historyToBase64(['/key-worker', '/key-worker/staff-profile/1234']))}&js=true`,
+      `/key-worker/staff-profile/1234?history=${historyToBase64(['/key-worker', '/key-worker/staff-profile/1234'], true)}&js=true`,
     )
   })
 

@@ -22,7 +22,7 @@ context('Case notes', () => {
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(
-      `/key-worker/staff-profile/488095/case-notes?history=${encodeURIComponent(historyToBase64(['/key-worker', '/key-worker/manage', '/key-worker/staff-profile/34353']))}`,
+      `/key-worker/staff-profile/488095/case-notes?history=${historyToBase64(['/key-worker', '/key-worker/manage', '/key-worker/staff-profile/34353'], true)}`,
       {
         failOnStatusCode: false,
       },

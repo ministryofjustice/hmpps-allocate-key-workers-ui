@@ -236,7 +236,7 @@ context('Personal Officer Profile Info', () => {
   const navigateToTestPage = (jsParam: boolean = true) => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(
-      `/personal-officer/staff-profile/488095?js=${jsParam}&history=${encodeURIComponent(historyToBase64(['/key-worker', '/key-worker/manage', '/key-worker/staff-profile/34353']))}`,
+      `/personal-officer/staff-profile/488095?js=${jsParam}&history=${historyToBase64(['/key-worker', '/key-worker/manage', '/key-worker/staff-profile/34353'], true)}`,
       { failOnStatusCode: false },
     )
   }

@@ -181,7 +181,7 @@ context('Prisoner Allocation History', () => {
     it('happy path', () => {
       cy.signIn({ failOnStatusCode: false })
       cy.visit(
-        `/personal-officer/prisoner-allocation-history/A9965EA?history=${encodeURIComponent(historyToBase64(['/personal-officer', '/personal-officer/manage?query=Dom&status=ACTIVE', '/personal-officer/staff-profile/485572']))}`,
+        `/personal-officer/prisoner-allocation-history/A9965EA?history=${historyToBase64(['/personal-officer', '/personal-officer/manage?query=Dom&status=ACTIVE', '/personal-officer/staff-profile/485572'], true)}`,
         { failOnStatusCode: false },
       )
 
@@ -233,7 +233,7 @@ context('Prisoner Allocation History', () => {
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(
-      `/key-worker/prisoner-allocation-history/A9965EA?history=${encodeURIComponent(historyToBase64(['/key-worker', '/key-worker/manage?query=Dom&status=ACTIVE', '/key-worker/staff-profile/485572']))}`,
+      `/key-worker/prisoner-allocation-history/A9965EA?history=${historyToBase64(['/key-worker', '/key-worker/manage?query=Dom&status=ACTIVE', '/key-worker/staff-profile/485572'], true)}`,
       { failOnStatusCode: false },
     )
   }

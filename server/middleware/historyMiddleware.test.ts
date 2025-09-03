@@ -173,6 +173,6 @@ describe('historyMiddleware', () => {
   it('should use fallback value when history is invalid', () => {
     const b64History = ''
     const backUrl = createBackUrlFor(b64History, /staff-profile/, `default`)
-    expect(backUrl).toBe(`default?history=${encodeURIComponent(historyToBase64([]))}`)
+    expect(backUrl).toBe(`default?history=${historyToBase64([], true)}`)
   })
 })

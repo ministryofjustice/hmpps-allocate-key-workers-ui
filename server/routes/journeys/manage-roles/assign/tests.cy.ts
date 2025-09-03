@@ -80,7 +80,7 @@ context('/manage-roles/assign', () => {
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(
-      `/key-worker/${journeyId}/manage-roles/assign?history=${encodeURIComponent(historyToBase64(['/key-worker', '/key-worker/manage-roles', '/key-worker/manage-roles/assign']))}`,
+      `/key-worker/${journeyId}/manage-roles/assign?history=${historyToBase64(['/key-worker', '/key-worker/manage-roles', '/key-worker/manage-roles/assign'], true)}`,
       {
         failOnStatusCode: false,
       },

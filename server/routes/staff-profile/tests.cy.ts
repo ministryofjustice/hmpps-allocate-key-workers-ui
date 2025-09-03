@@ -217,7 +217,7 @@ context('Profile Info', () => {
   const navigateToTestPage = (jsParam: boolean = true, onBeforeLoad?: (win: Window) => void) => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(
-      `/key-worker/staff-profile/488095?js=${jsParam}&history=${encodeURIComponent(historyToBase64(['/key-worker', '/key-worker/manage', '/key-worker/staff-profile/34353']))}`,
+      `/key-worker/staff-profile/488095?js=${jsParam}&history=${historyToBase64(['/key-worker', '/key-worker/manage', '/key-worker/staff-profile/34353'], true)}`,
       {
         failOnStatusCode: false,
         ...(onBeforeLoad ? { onBeforeLoad } : {}),

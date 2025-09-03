@@ -356,7 +356,7 @@ context('/recommend-allocations', () => {
   const navigateToTestPage = (allowPartialAllocation: boolean = true, jsParam: boolean = true) => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(
-      `/key-worker/recommend-allocations?allowPartialAllocation=${allowPartialAllocation}&js=${jsParam}&history=${encodeURIComponent(historyToBase64(['/key-worker', '/key-worker/allocate', '/key-worker/allocate?query=&cellLocationPrefix=1&excludeActiveAllocations=true', '/key-worker/recommend-allocations']))}`,
+      `/key-worker/recommend-allocations?allowPartialAllocation=${allowPartialAllocation}&js=${jsParam}&history=${historyToBase64(['/key-worker', '/key-worker/allocate', '/key-worker/allocate?query=&cellLocationPrefix=1&excludeActiveAllocations=true', '/key-worker/recommend-allocations'], true)}`,
       { failOnStatusCode: false },
     )
   }
