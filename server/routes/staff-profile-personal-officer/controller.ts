@@ -41,71 +41,89 @@ export class POStaffProfileController extends ChangeStaffController {
     }
   }
 
-  GET = async (req: Request<{ staffId: string }>, res: Response): Promise<void> => {
-    res.setAuditDetails.staffId(req.params.staffId)
-    res.setAuditDetails.searchTerm(req.params.staffId)
+  GET_BASE =
+    (view: string, withCaseNotes: boolean) =>
+    async (req: Request<{ staffId: string }>, res: Response): Promise<void> => {
+      res.setAuditDetails.staffId(req.params.staffId)
+      res.setAuditDetails.searchTerm(req.params.staffId)
 
-    if (
-      res.locals.user.permissions === UserPermissionLevel.SELF_PROFILE_ONLY &&
-      req.params.staffId !== String(res.locals.user.userId)
-    ) {
-      return res.redirect(`/${res.locals.policyPath}/not-authorised`)
+      if (
+        res.locals.user.permissions === UserPermissionLevel.SELF_PROFILE_ONLY &&
+        req.params.staffId !== String(res.locals.user.userId)
+      ) {
+        return res.redirect(`/${res.locals.policyPath}/not-authorised`)
+      }
+
+      const resQuery = res.locals['query'] as ResQuerySchemaType
+
+      const dateRange = this.getDateRange(resQuery)
+
+      const staffDetails = await this.allocationsApiService.getStaffDetails(
+        req,
+        res.locals.user.getActiveCaseloadId()!,
+        req.params.staffId,
+        true,
+        dateRange,
+      )
+
+      const basePath = req.path.length > 1 ? req.baseUrl + req.path : req.baseUrl
+
+      return res.render(view, {
+        ...staffDetails,
+        allocations: staffDetails.allocations.map(a => {
+          return {
+            ...a,
+            profileHref: prisonerProfileBacklink(req, res, a.prisoner.prisonNumber),
+            alertsHref: prisonerProfileBacklink(req, res, a.prisoner.prisonNumber, '/alerts/active'),
+          }
+        }),
+        staffMember: { firstName: staffDetails.firstName, lastName: staffDetails.lastName },
+        ...(await this.getChangeData(req, res)),
+        showBreadcrumbs: true,
+        clearFilterUrl: `${basePath}?${new URLSearchParams({
+          ...(req.query['sort'] ? { sort: req.query['sort'] as string } : {}),
+          ...(req.query['history'] ? { history: req.query['history'] as string } : {}),
+        }).toString()}`,
+        clearDateRangeUrl:
+          resQuery?.compareDateFrom || resQuery?.compareDateTo
+            ? `${basePath}?${new URLSearchParams({
+                compareDateTo: resQuery.compareDateTo ?? '',
+                compareDateFrom: resQuery.compareDateFrom ?? '',
+                ...(req.query['sort'] ? { sort: req.query['sort'] as string } : {}),
+                ...(req.query['history'] ? { history: req.query['history'] as string } : {}),
+              }).toString()}`
+            : basePath,
+        clearCompareDateRangeUrl:
+          resQuery?.dateFrom || resQuery?.dateTo
+            ? `${basePath}?${new URLSearchParams({
+                dateFrom: resQuery.dateFrom ?? '',
+                dateTo: resQuery.dateTo ?? '',
+                ...(req.query['sort'] ? { sort: req.query['sort'] as string } : {}),
+                ...(req.query['history'] ? { history: req.query['history'] as string } : {}),
+              }).toString()}`
+            : basePath,
+        showFilter: !!resQuery,
+        ...resQuery,
+        jsEnabled: req.query['js'] === 'true',
+        sort: req.query['sort'],
+        query: req.query,
+        caseNotes:
+          withCaseNotes &&
+          (
+            await this.allocationsApiService.searchRecordedEvents(
+              req,
+              res,
+              req.params.staffId,
+              dateRange.from,
+              dateRange.to,
+            )
+          ).recordedEvents.sort(this.getCaseNoteSorter(req.query['sort'] as string)),
+      })
     }
 
-    const resQuery = res.locals['query'] as ResQuerySchemaType
+  GET = this.GET_BASE('staff-profile-personal-officer/view', false)
 
-    const staffDetails = await this.allocationsApiService.getStaffDetails(
-      req,
-      res.locals.user.getActiveCaseloadId()!,
-      req.params.staffId,
-      true,
-      this.getDateRange(resQuery),
-    )
-
-    return res.render('staff-profile-personal-officer/view', {
-      ...staffDetails,
-      allocations: staffDetails.allocations.map(a => {
-        return {
-          ...a,
-          profileHref: prisonerProfileBacklink(req, res, a.prisoner.prisonNumber),
-          alertsHref: prisonerProfileBacklink(req, res, a.prisoner.prisonNumber, '/alerts/active'),
-        }
-      }),
-      staffMember: { firstName: staffDetails.firstName, lastName: staffDetails.lastName },
-      ...(await this.getChangeData(req, res)),
-      showBreadcrumbs: true,
-      filterUrl: `${req.baseUrl}/filter`,
-      clearFilterUrl: req.baseUrl,
-      clearDateRangeUrl:
-        resQuery?.compareDateFrom || resQuery?.compareDateTo
-          ? `${req.baseUrl}?${new URLSearchParams({
-              compareDateTo: resQuery.compareDateTo ?? '',
-              compareDateFrom: resQuery.compareDateFrom ?? '',
-            }).toString()}`
-          : req.baseUrl,
-      clearCompareDateRangeUrl:
-        resQuery?.dateFrom || resQuery?.dateTo
-          ? `${req.baseUrl}?${new URLSearchParams({
-              dateFrom: resQuery.dateFrom ?? '',
-              dateTo: resQuery.dateTo ?? '',
-            }).toString()}`
-          : req.baseUrl,
-      showFilter: !!resQuery,
-      ...resQuery,
-      jsEnabled: req.query['js'] === 'true',
-    })
-  }
-
-  filter = async (req: Request<{ staffId: string }>, res: Response) => {
-    res.redirect(
-      `../${req.params.staffId}?${new URLSearchParams({
-        dateTo: req.body.dateTo,
-        dateFrom: req.body.dateFrom,
-        compareDateTo: req.body.compareDateTo,
-        compareDateFrom: req.body.compareDateFrom,
-      }).toString()}`,
-    )
-  }
+  GET_CASE_NOTES = this.GET_BASE('staff-profile-personal-officer/case-notes/view', true)
 
   POST = async (req: Request, res: Response) => res.redirect(req.get('Referrer')!)
 }

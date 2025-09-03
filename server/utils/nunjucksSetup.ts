@@ -3,7 +3,7 @@ import path from 'path'
 import nunjucks from 'nunjucks'
 import express from 'express'
 import fs from 'fs'
-import { initialiseName, policyAware, policyString } from './utils'
+import { getQueryEntries, initialiseName, policyAware, policyString, toQueryString } from './utils'
 import config from '../config'
 import logger from '../../logger'
 import {
@@ -106,4 +106,6 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('takeFirstWord', (val: string) => val.split(' ')[0])
   njkEnv.addFilter('possessiveComma', possessiveComma)
   njkEnv.addFilter('policyString', policyString)
+  njkEnv.addFilter('getQueryEntries', getQueryEntries)
+  njkEnv.addFilter('toQueryString', toQueryString)
 }

@@ -1,0 +1,5 @@
+{% macro hiddenInputs(queryEntries) %}
+  {% for entry in queryEntries %}
+    <input type="hidden" name="{{ entry[0] }}" value="{{ entry[1] }}"/>
+  {% endfor %}
+{% endmacro %}

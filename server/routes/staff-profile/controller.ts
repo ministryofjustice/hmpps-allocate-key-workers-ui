@@ -4,11 +4,6 @@ import { ChangeStaffController } from '../base/changeStaffController'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import { prisonerProfileBacklink } from '../../utils/utils'
 
-type CaseNoteSorter = (
-  a: { createdAt: string; occurredAt: string },
-  b: { createdAt: string; occurredAt: string },
-) => number
-
 export class StaffProfileController extends ChangeStaffController {
   GET_BASE =
     (view: string, withCaseNotes: boolean) =>
@@ -76,18 +71,4 @@ export class StaffProfileController extends ChangeStaffController {
   GET_CASE_NOTES = this.GET_BASE('staff-profile/case-notes/view', true)
 
   POST = async (req: Request, res: Response) => res.redirect(req.get('Referrer')!)
-
-  getCaseNoteSorter = (sort?: string): CaseNoteSorter => {
-    switch (sort) {
-      case 'createdAt,DESC':
-        return (a, b) => -a.createdAt.localeCompare(b.createdAt)
-      case 'createdAt,ASC':
-        return (a, b) => a.createdAt.localeCompare(b.createdAt)
-      case 'occurredAt,ASC':
-        return (a, b) => a.occurredAt.localeCompare(b.occurredAt)
-      case 'occurredAt,DESC':
-      default:
-        return (a, b) => -a.occurredAt.localeCompare(b.occurredAt)
-    }
-  }
 }
