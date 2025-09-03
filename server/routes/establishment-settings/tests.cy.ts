@@ -1,6 +1,7 @@
 import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
 import AuthorisedRoles from '../../authentication/authorisedRoles'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
+import { historyToBase64 } from '../../utils/testUtils'
 
 context('/establishment-settings', () => {
   const getCapacityInput = (policyName: string = 'key worker') =>
@@ -279,6 +280,9 @@ context('/establishment-settings', () => {
 
   const navigateToTestPage = (policy: string = 'key-worker') => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/${policy}/establishment-settings`, { failOnStatusCode: false })
+    cy.visit(
+      `/${policy}/establishment-settings?history=${encodeURIComponent(historyToBase64([`/${policy}`, `/${policy}/establishment-settings`]))}`,
+      { failOnStatusCode: false },
+    )
   }
 })
