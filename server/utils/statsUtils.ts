@@ -52,7 +52,16 @@ export const formatChangeWithHighlight = (change: number, type: string = 'number
   return formatted
 }
 
-export function getHighlightedStatChange(current?: number, previous?: number, type: string = 'number') {
+export function getHighlightedStatChange(
+  current?: number,
+  previous?: number,
+  requiresHighlighting?: boolean,
+  type: string = 'number',
+) {
   if (type === 'incomplete') return 'No data can be shown for the selected date range.'
-  return formatChangeWithHighlight((current || 0) - (previous || 0), type)
+
+  if (requiresHighlighting) {
+    return formatChangeWithHighlight((current || 0) - (previous || 0), type)
+  }
+  return formatChange((current || 0) - (previous || 0), type)
 }
