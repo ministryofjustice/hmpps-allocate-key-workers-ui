@@ -39,7 +39,7 @@ context('Update capacity, status and working pattern', () => {
     cy.findByRole('link', { name: 'Back to key worker profile' })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('match', new RegExp(`/key-worker/staff-profile/488095\\?history=${history}`))
+      .and('match', new RegExp(`/key-worker/staff-profile/488095\\?history=${encodeURIComponent(history)}`))
 
     cy.contains('dt', 'Status').next().should('include.text', 'Inactive')
     cy.contains('dt', 'Maximum capacity').next().should('include.text', '6')

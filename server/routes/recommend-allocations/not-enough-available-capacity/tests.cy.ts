@@ -1,4 +1,5 @@
 import AuthorisedRoles from '../../../authentication/authorisedRoles'
+import { historyToBase64 } from '../../../utils/testUtils'
 
 context('/recommend-allocations not enough capacity interrupt card', () => {
   beforeEach(() => {
@@ -60,7 +61,7 @@ context('/recommend-allocations not enough capacity interrupt card', () => {
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(
-      `/key-worker/recommend-allocations?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL2FsbG9jYXRlIiwiL2tleS13b3JrZXIvYWxsb2NhdGU%2FcXVlcnk9JmNlbGxMb2NhdGlvblByZWZpeD0xJmV4Y2x1ZGVBY3RpdmVBbGxvY2F0aW9ucz10cnVlIiwiL2tleS13b3JrZXIvcmVjb21tZW5kLWFsbG9jYXRpb25zIl0%3D`,
+      `/key-worker/recommend-allocations?history=${encodeURIComponent(historyToBase64(['/key-worker', '/key-worker/allocate', '/key-worker/allocate?query=&cellLocationPrefix=1&excludeActiveAllocations=true', '/key-worker/recommend-allocations']))}`,
       {
         failOnStatusCode: false,
       },

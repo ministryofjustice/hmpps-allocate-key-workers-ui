@@ -279,6 +279,6 @@ context('/establishment-settings', () => {
 
   const navigateToTestPage = (policy: string = 'key-worker') => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/${policy}/establishment-settings?history=WyIva2V5LXdvcmtlciJd`, { failOnStatusCode: false })
+    cy.visit(`/${policy}/establishment-settings`, { failOnStatusCode: false })
   }
 })

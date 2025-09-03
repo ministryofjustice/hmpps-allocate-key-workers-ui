@@ -3,6 +3,7 @@ import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBa
 import AuthorisedRoles from '../../authentication/authorisedRoles'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import { createMock } from '../../testutils/mockObjects'
+import { historyToBase64 } from '../../utils/testUtils'
 
 context('Profile Info', () => {
   beforeEach(() => {
@@ -216,7 +217,7 @@ context('Profile Info', () => {
   const navigateToTestPage = (jsParam: boolean = true, onBeforeLoad?: (win: Window) => void) => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(
-      `/key-worker/staff-profile/488095?js=${jsParam}&history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL21hbmFnZSIsIi9rZXktd29ya2VyL3N0YWZmLXByb2ZpbGUvMzQzNTMiXQ%3D%3D`,
+      `/key-worker/staff-profile/488095?js=${jsParam}&history=${encodeURIComponent(historyToBase64(['/key-worker', '/key-worker/manage', '/key-worker/staff-profile/34353']))}`,
       {
         failOnStatusCode: false,
         ...(onBeforeLoad ? { onBeforeLoad } : {}),

@@ -1,3 +1,5 @@
+import { historyToBase64 } from '../../../utils/testUtils'
+
 context('Case notes', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -20,7 +22,7 @@ context('Case notes', () => {
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(
-      `/key-worker/staff-profile/488095/case-notes?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL21hbmFnZSIsIi9rZXktd29ya2VyL3N0YWZmLXByb2ZpbGUvMzQzNTMiXQ%3D%3D`,
+      `/key-worker/staff-profile/488095/case-notes?history=${encodeURIComponent(historyToBase64(['/key-worker', '/key-worker/manage', '/key-worker/staff-profile/34353']))}`,
       {
         failOnStatusCode: false,
       },
