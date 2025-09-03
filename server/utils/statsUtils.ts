@@ -4,6 +4,8 @@ export const formatNumber = (value: string | number, type?: string): number => {
 }
 
 export const formatValue = (value?: number | null, type: string = 'number'): string | number => {
+  if (type === 'incomplete') return 'Incomplete data'
+
   if (value === undefined || value === null) return '-'
 
   if (type === 'percentage') {
@@ -51,5 +53,6 @@ export const formatChangeWithHighlight = (change: number, type: string = 'number
 }
 
 export function getHighlightedStatChange(current?: number, previous?: number, type: string = 'number') {
+  if (type === 'incomplete') return 'No data can be shown for the selected date range.'
   return formatChangeWithHighlight((current || 0) - (previous || 0), type)
 }
