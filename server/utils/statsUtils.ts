@@ -52,7 +52,7 @@ export const formatChangeWithHighlight = (change: number, type: string = 'number
   return formatted
 }
 
-export function getHighlightedStatChange(
+export function getFormattedStatChange(
   current?: number,
   previous?: number,
   requiresHighlighting?: boolean,

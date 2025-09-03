@@ -6,6 +6,7 @@
   {% set previousValue = stat.previousValue %}
   {% set calculationMethod = stat.calculationMethod | policyAware(policyStaff) %}
   {% set format = stat.type or 'number' %}
+  {% set requiresHighlighting = stat.requiresHighlighting %}
 
   <div class="key-worker-data-stat-card left-aligned govuk-!-margin-bottom-4 govuk-!-margin-top-4">
     <div class="heading-area-fixed-height">
@@ -17,7 +18,7 @@
     }) }}
     <div class="key-worker-data-stats">
       <p class="govuk-!-margin-bottom-1 govuk-!-padding-top-6 govuk-heading-l">{{ currentValue | formatValue(format) }}</p>
-      <p class="govuk-!-padding-bottom-6">{{ currentValue | getHighlightedStatChange(previousValue, format) | safe }}</p>
+      <p class="govuk-!-padding-bottom-6">{{ currentValue | getFormattedStatChange(previousValue, requiresHighlighting, format) | safe }}</p>
     </div>
   </div>
 {% endmacro %}
