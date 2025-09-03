@@ -1,4 +1,5 @@
 import AuthorisedRoles from '../authentication/authorisedRoles'
+import { historyToBase64 } from '../utils/testUtils'
 
 context('test / homepage', () => {
   beforeEach(() => {
@@ -187,7 +188,7 @@ context('test / homepage', () => {
       .and(
         'have.attr',
         'href',
-        '/key-worker/allocate?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL2FsbG9jYXRlIl0%3D&js=true',
+        `/key-worker/allocate?history=${historyToBase64(['/key-worker', '/key-worker/allocate'], true)}&js=true`,
       )
     cy.get('.card__description')
       .eq(0)
@@ -198,7 +199,11 @@ context('test / homepage', () => {
     cy.get('h2 > .card__link')
       .eq(1)
       .should('contain.text', 'Manage key workers')
-      .and('have.attr', 'href', '/key-worker/manage?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL21hbmFnZSJd&js=true')
+      .and(
+        'have.attr',
+        'href',
+        `/key-worker/manage?history=${historyToBase64(['/key-worker', '/key-worker/manage'], true)}&js=true`,
+      )
     cy.get('.card__description')
       .eq(1)
       .should(
@@ -208,7 +213,11 @@ context('test / homepage', () => {
     cy.get('h2 > .card__link')
       .eq(2)
       .should('contain.text', 'View key worker data')
-      .and('have.attr', 'href', '/key-worker/data?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL2RhdGEiXQ%3D%3D&js=true')
+      .and(
+        'have.attr',
+        'href',
+        `/key-worker/data?history=${historyToBase64(['/key-worker', '/key-worker/data'], true)}&js=true`,
+      )
     cy.get('.card__description').eq(2).should('contain.text', 'View key worker data for your establishment.')
 
     if (!readonly) {
@@ -218,7 +227,7 @@ context('test / homepage', () => {
         .and(
           'have.attr',
           'href',
-          '/key-worker/manage-roles?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL21hbmFnZS1yb2xlcyJd&js=true',
+          `/key-worker/manage-roles?history=${historyToBase64(['/key-worker', '/key-worker/manage-roles'], true)}&js=true`,
         )
       cy.get('.card__description')
         .eq(3)
@@ -229,7 +238,7 @@ context('test / homepage', () => {
         .and(
           'have.attr',
           'href',
-          '/key-worker/establishment-settings?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL2VzdGFibGlzaG1lbnQtc2V0dGluZ3MiXQ%3D%3D&js=true',
+          `/key-worker/establishment-settings?history=${historyToBase64(['/key-worker', '/key-worker/establishment-settings'], true)}&js=true`,
         )
       cy.get('.card__description')
         .eq(4)
@@ -261,7 +270,7 @@ context('test / homepage', () => {
     cy.findByRole('link', { name: 'Manage your establishment’s key worker settings' }).should(
       'have.attr',
       'href',
-      '/key-worker/establishment-settings?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL2VzdGFibGlzaG1lbnQtc2V0dGluZ3MiXQ%3D%3D&js=true',
+      `/key-worker/establishment-settings?history=${historyToBase64(['/key-worker', '/key-worker/establishment-settings'], true)}&js=true`,
     )
   })
 
@@ -279,7 +288,7 @@ context('test / homepage', () => {
     cy.findByRole('link', { name: 'My key worker allocations' }).should(
       'have.attr',
       'href',
-      '/key-worker/staff-profile/1234?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL3N0YWZmLXByb2ZpbGUvMTIzNCJd&js=true',
+      `/key-worker/staff-profile/1234?history=${historyToBase64(['/key-worker', '/key-worker/staff-profile/1234'], true)}&js=true`,
     )
   })
 
@@ -288,7 +297,7 @@ context('test / homepage', () => {
     cy.task('stubEnabledPrison')
 
     cy.signIn({ failOnStatusCode: false })
-    cy.visit('/key-worker?history=WyIva2V5LXdvcmtlciJdr', { failOnStatusCode: false })
+    cy.visit('/key-worker', { failOnStatusCode: false })
 
     cy.get('.govuk-phase-banner__text').should(
       'contain',

@@ -1,6 +1,7 @@
 import { defaultKeyworkerDetails } from '../../../integration_tests/mockApis/keyworkerApi'
 import AuthorisedRoles from '../../authentication/authorisedRoles'
 import { createMock } from '../../testutils/mockObjects'
+import { historyToBase64 } from '../../utils/testUtils'
 
 context('Personal Officer Profile Info', () => {
   beforeEach(() => {
@@ -235,7 +236,7 @@ context('Personal Officer Profile Info', () => {
   const navigateToTestPage = (jsParam: boolean = true) => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(
-      `/personal-officer/staff-profile/488095?js=${jsParam}&history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL21hbmFnZSIsIi9rZXktd29ya2VyL3N0YWZmLXByb2ZpbGUvMzQzNTMiXQ%3D%3D`,
+      `/personal-officer/staff-profile/488095?js=${jsParam}&history=${historyToBase64(['/key-worker', '/key-worker/manage', '/key-worker/staff-profile/34353'], true)}`,
       { failOnStatusCode: false },
     )
   }

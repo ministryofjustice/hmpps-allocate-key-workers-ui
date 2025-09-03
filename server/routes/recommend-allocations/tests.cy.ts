@@ -1,6 +1,7 @@
 import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
 import AuthorisedRoles from '../../authentication/authorisedRoles'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
+import { historyToBase64 } from '../../utils/testUtils'
 
 context('/recommend-allocations', () => {
   beforeEach(() => {
@@ -355,7 +356,7 @@ context('/recommend-allocations', () => {
   const navigateToTestPage = (allowPartialAllocation: boolean = true, jsParam: boolean = true) => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(
-      `/key-worker/recommend-allocations?allowPartialAllocation=${allowPartialAllocation}&js=${jsParam}&history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL2FsbG9jYXRlIiwiL2tleS13b3JrZXIvYWxsb2NhdGU%2FcXVlcnk9JmNlbGxMb2NhdGlvblByZWZpeD0xJmV4Y2x1ZGVBY3RpdmVBbGxvY2F0aW9ucz10cnVlIiwiL2tleS13b3JrZXIvcmVjb21tZW5kLWFsbG9jYXRpb25zIl0%3D`,
+      `/key-worker/recommend-allocations?allowPartialAllocation=${allowPartialAllocation}&js=${jsParam}&history=${historyToBase64(['/key-worker', '/key-worker/allocate', '/key-worker/allocate?query=&cellLocationPrefix=1&excludeActiveAllocations=true', '/key-worker/recommend-allocations'], true)}`,
       { failOnStatusCode: false },
     )
   }

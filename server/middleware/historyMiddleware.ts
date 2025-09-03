@@ -3,7 +3,7 @@ import { sentenceCase } from '../utils/formatUtils'
 import { Breadcrumbs, type Breadcrumb } from './breadcrumbs'
 import { Page } from '../services/auditService'
 
-function deserialiseHistory(b64String: string = '') {
+export function deserialiseHistory(b64String: string = ''): string[] {
   try {
     return JSON.parse(Buffer.from(b64String || '', 'base64').toString() || '[]')
   } catch {
@@ -200,4 +200,12 @@ function getHistoryFromReferer(req: Request) {
   }
 
   return refererHistory
+}
+
+export function createBackUrlFor(b64History: string, matcher: RegExp, fallback: string) {
+  const history = deserialiseHistory(b64History)
+  const last = history.findLast(o => matcher.test(o)) || fallback
+  const searchParams = new URLSearchParams(last.split('?')[1] || '')
+  searchParams.set('history', serialiseHistory(history))
+  return `${last.split('?')[0]}?${searchParams.toString()}`
 }

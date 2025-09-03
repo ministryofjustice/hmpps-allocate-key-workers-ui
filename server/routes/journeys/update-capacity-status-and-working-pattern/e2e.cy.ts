@@ -3,6 +3,7 @@ import { createMock } from '../../../testutils/mockObjects'
 import { defaultKeyworkerDetails } from '../../../../integration_tests/mockApis/keyworkerApi'
 import { verifyRoleBasedAccess } from '../../../../integration_tests/support/roleBasedAccess'
 import { UserPermissionLevel } from '../../../interfaces/hmppsUser'
+import { historyToBase64 } from '../../../utils/testUtils'
 
 context('/update-capacity-status-and-working-pattern/** journey', () => {
   let journeyId = uuidV4()
@@ -149,6 +150,26 @@ context('/update-capacity-status-and-working-pattern/** journey', () => {
         reactivateOn: '2071-09-09T00:00:00.000Z',
       },
     )
+  })
+
+  it('should construct backUrl correctly', () => {
+    cy.task('stubSearchAllocatableStaffStatusActive')
+    cy.task('stubKeyworkerDetails')
+    cy.task('stubSearchCaseNotes')
+    cy.signIn({ failOnStatusCode: false })
+    cy.visit(`/key-worker/staff-profile/488095?history=${historyToBase64(['/key-worker', '/key-worker/manage'])}`)
+    cy.get('a[href*="/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern"]').click()
+
+    cy.findByRole('link', { name: 'Back to key worker profile' }).click()
+    cy.url().should('match', /\/key-worker\/staff-profile\/488095\?/)
+
+    cy.findByRole('link', { name: 'View recent case notes' }).click()
+    cy.url().should('match', /\/key-worker\/staff-profile\/488095\/case-notes/)
+
+    cy.get('a[href*="/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern"]').click()
+
+    cy.findByRole('link', { name: 'Back to key worker profile' }).click()
+    cy.url().should('match', /\/key-worker\/staff-profile\/488095\/case-notes/)
   })
 
   const beginJourney = () => {
