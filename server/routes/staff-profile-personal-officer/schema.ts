@@ -7,6 +7,7 @@ export const schema = createSchema({
   dateTo: transformOptionalDate,
   compareDateFrom: transformOptionalDate,
   compareDateTo: transformOptionalDate,
+  sort: z.string().optional(),
 })
 
 type SchemaType = z.infer<typeof schema>

@@ -11,6 +11,11 @@ import {
 } from '../../utils/constants'
 import { SelectKeyworkerSchemaType } from './selectKeyworkerSchema'
 
+type CaseNoteSorter = (
+  a: { createdAt: string; occurredAt: string },
+  b: { createdAt: string; occurredAt: string },
+) => number
+
 export class ChangeStaffController {
   constructor(readonly allocationsApiService: AllocationsApiService) {}
 
@@ -93,4 +98,18 @@ export class ChangeStaffController {
 
       next()
     }
+
+  getCaseNoteSorter = (sort?: string): CaseNoteSorter => {
+    switch (sort) {
+      case 'createdAt,DESC':
+        return (a, b) => -a.createdAt.localeCompare(b.createdAt)
+      case 'createdAt,ASC':
+        return (a, b) => a.createdAt.localeCompare(b.createdAt)
+      case 'occurredAt,ASC':
+        return (a, b) => a.occurredAt.localeCompare(b.occurredAt)
+      case 'occurredAt,DESC':
+      default:
+        return (a, b) => -a.occurredAt.localeCompare(b.occurredAt)
+    }
+  }
 }

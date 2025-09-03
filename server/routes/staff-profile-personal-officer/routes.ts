@@ -19,7 +19,12 @@ export const POStaffProfileRoutes = (services: Services) => {
     validateOnGET(schema, 'dateFrom', 'dateTo', 'compareDateFrom', 'compareDateTo'),
     controller.GET,
   )
-  post('/filter', controller.filter)
+  get(
+    '/case-notes',
+    Page.STAFF_CASE_NOTES,
+    validateOnGET(schema, 'dateFrom', 'dateTo', 'compareDateFrom', 'compareDateTo'),
+    controller.GET_CASE_NOTES,
+  )
   post(
     '/',
     requireRole(UserPermissionLevel.ALLOCATE),

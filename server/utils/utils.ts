@@ -61,3 +61,9 @@ export const prisonerProfileBacklink = (req: Request, res: Response, personIdent
   })
   return `${config.serviceUrls.prisonerProfile}/save-backlink?${searchParams.toString()}`
 }
+
+export const getQueryEntries = (query: object | undefined | null, keys: string[]) =>
+  query ? Object.entries(query).filter(([key]) => keys.includes(key)) : []
+
+export const toQueryString = (entries: [string, string]) =>
+  entries.length ? `?${entries.map(([key, val]) => `${key}=${encodeURIComponent(val ?? '')}`).join('&')}` : ''
