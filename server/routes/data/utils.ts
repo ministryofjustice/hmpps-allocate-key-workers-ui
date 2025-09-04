@@ -8,115 +8,152 @@ function sessionEntry(req: Request, plural: boolean = false) {
   return plural ? 'sessions' : 'session'
 }
 
+const createDataItem = (
+  heading: string,
+  type: string,
+  currentValue: string | number | undefined,
+  previousValue: string | number | undefined,
+  calculationMethod: string,
+  requiresHighlighting: boolean = true,
+  inverseStat: boolean = false,
+) => {
+  const hasPreviousWithoutCurrent = previousValue !== null && currentValue === null
+  const hasNoData = previousValue === null && currentValue === null
+
+  if (hasPreviousWithoutCurrent || hasNoData) {
+    return {
+      heading,
+      type: 'incomplete',
+      currentValue: null,
+      previousValue: null,
+      calculationMethod,
+      requiresHighlighting,
+      inverseStat,
+    }
+  }
+
+  return {
+    heading,
+    type,
+    currentValue,
+    previousValue,
+    calculationMethod,
+    requiresHighlighting,
+    inverseStat,
+  }
+}
+
 export const getEstablishmentData = (stats: components['schemas']['PrisonStats'], req: Request) =>
   stats.current
     ? [
         ...(req.middleware!.policy !== 'PERSONAL_OFFICER'
           ? [
-              {
-                heading: 'Number of recorded [staff] sessions',
-                type: 'number',
-                currentValue: stats.current.recordedEvents?.find(o => o.type === 'SESSION')?.count || 0,
-                previousValue: stats.previous?.recordedEvents?.find(o => o.type === 'SESSION')?.count || 0,
-                calculationMethod:
-                  'This figure displays the total number of [staff] sessions that happened in the selected date range. It is calculated using the date recorded in [staff] session case notes.',
-              },
+              createDataItem(
+                'Number of recorded [staff] sessions',
+                'number',
+                stats.current.recordedEvents?.find(o => o.type === 'SESSION')?.count || 0,
+                stats.previous?.recordedEvents?.find(o => o.type === 'SESSION')?.count || 0,
+                'This figure displays the total number of [staff] sessions that happened in the selected date range. It is calculated using the date recorded in [staff] session case notes.',
+              ),
             ]
           : []),
-        {
-          heading: 'Number of recorded [staff] entries',
-          type: 'number',
-          currentValue: stats.current.recordedEvents?.find(o => o.type === 'ENTRY')?.count || 0,
-          previousValue: stats.previous?.recordedEvents?.find(o => o.type === 'ENTRY')?.count || 0,
-          calculationMethod:
-            'This figure displays the total number of [staff] entries that happened in the selected date range. It is calculated using the date recorded in [staff] entry case notes.',
-        },
-        {
-          heading: 'Total number of prisoners',
-          type: 'number',
-          currentValue: stats.current.totalPrisoners,
-          previousValue: stats.previous?.totalPrisoners,
-          calculationMethod:
-            'This figure displays the average number of prisoners in the establishment during the selected date range.',
-        },
+        createDataItem(
+          'Number of recorded [staff] entries',
+          'number',
+          stats.current.recordedEvents?.find(o => o.type === 'ENTRY')?.count || 0,
+          stats.previous?.recordedEvents?.find(o => o.type === 'ENTRY')?.count || 0,
+          'This figure displays the total number of [staff] entries that happened in the selected date range. It is calculated using the date recorded in [staff] entry case notes.',
+        ),
+        createDataItem(
+          'Total number of prisoners',
+          'number',
+          stats.current.totalPrisoners,
+          stats.previous?.totalPrisoners,
+          'This figure displays the average number of prisoners in the establishment during the selected date range.',
+          false,
+        ),
         ...(req.middleware!.prisonConfiguration!.hasPrisonersWithHighComplexityNeeds
           ? [
-              {
-                heading: 'Total number of high complexity prisoners',
-                type: 'number',
-                currentValue: stats.current.highComplexityOfNeedPrisoners,
-                previousValue: stats.previous?.highComplexityOfNeedPrisoners,
-                calculationMethod:
-                  'This figure displays the average number of high complexity prisoners in the establishment during the selected date range.',
-              },
+              createDataItem(
+                'Total number of high complexity prisoners',
+                'number',
+                stats.current.highComplexityOfNeedPrisoners,
+                stats.previous?.highComplexityOfNeedPrisoners,
+                'This figure displays the average number of high complexity prisoners in the establishment during the selected date range.',
+                false,
+              ),
             ]
           : []),
-        {
-          heading: 'Percentage of prisoners with an allocated [staff]',
-          type: 'percentage',
-          currentValue: stats.current.percentageAssigned,
-          previousValue: stats.previous?.percentageAssigned,
-          calculationMethod:
-            'This figure is calculated by dividing the total number of prisoners in the establishment by the total number of prisoners who have been allocated a [staff].',
-        },
-        {
-          heading: 'Total number of active [staffs]',
-          type: 'number',
-          currentValue: stats.current.eligibleStaff,
-          previousValue: stats.previous?.eligibleStaff,
-          calculationMethod:
-            'This figure displays the average total number of active [staffs] in the establishment during the selected date range. This does not include [staffs] with an unavailable or inactive status.',
-        },
+        createDataItem(
+          'Percentage of prisoners with an allocated [staff]',
+          'percentage',
+          stats.current.percentageAssigned,
+          stats.previous?.percentageAssigned,
+          'This figure is calculated by dividing the total number of prisoners in the establishment by the total number of prisoners who have been allocated a [staff].',
+        ),
+        createDataItem(
+          'Total number of active [staffs]',
+          'number',
+          stats.current.eligibleStaff,
+          stats.previous?.eligibleStaff,
+          'This figure displays the average total number of active [staffs] in the establishment during the selected date range. This does not include [staffs] with an unavailable or inactive status.',
+        ),
         req.middleware!.prisonConfiguration!.hasPrisonersWithHighComplexityNeeds
-          ? {
-              heading: `Average time from eligibility to first [staff] ${sessionEntry(req)}`,
-              type: 'day',
-              currentValue: stats.current.avgReceptionToRecordedEventDays,
-              previousValue: stats.previous?.avgReceptionToRecordedEventDays,
-              calculationMethod: `This figure displays the average time between prisoners becoming eligible for ${req.middleware!.policy === 'KEY_WORKER' ? 'key work' : '[staff] entries'} and the first recorded [staff] ${sessionEntry(req)} for ${sessionEntry(req, true)} recorded in the selected date range.`,
-            }
-          : {
-              heading: `Average time from reception to first [staff] ${sessionEntry(req)}`,
-              type: 'day',
-              currentValue: stats.current.avgReceptionToRecordedEventDays,
-              previousValue: stats.previous?.avgReceptionToRecordedEventDays,
-              calculationMethod: `This figure displays the average time between reception and the first recorded [staff] ${sessionEntry(req)} for ${sessionEntry(req, true)} recorded in the selected date range.`,
-            },
+          ? createDataItem(
+              `Average time from eligibility to first [staff] ${sessionEntry(req)}`,
+              'day',
+              stats.current.avgReceptionToRecordedEventDays,
+              stats.previous?.avgReceptionToRecordedEventDays,
+              `This figure displays the average time between prisoners becoming eligible for ${req.middleware!.policy === 'KEY_WORKER' ? 'key work' : '[staff] entries'} and the first recorded [staff] ${sessionEntry(req)} for ${sessionEntry(req, true)} recorded in the selected date range.`,
+              true,
+              true,
+            )
+          : createDataItem(
+              `Average time from reception to first [staff] ${sessionEntry(req)}`,
+              'day',
+              stats.current.avgReceptionToRecordedEventDays,
+              stats.previous?.avgReceptionToRecordedEventDays,
+              `This figure displays the average time between reception and the first recorded [staff] ${sessionEntry(req)} for ${sessionEntry(req, true)} recorded in the selected date range.`,
+              true,
+              true,
+            ),
         req.middleware!.prisonConfiguration!.hasPrisonersWithHighComplexityNeeds
-          ? {
-              heading: 'Average time from eligibility to [staff] allocation',
-              type: 'day',
-              currentValue: stats.current.avgReceptionToAllocationDays,
-              previousValue: stats.previous?.avgReceptionToAllocationDays,
-              calculationMethod: `This figure displays the average time between prisoners becoming eligible for ${req.middleware!.policy === 'KEY_WORKER' ? 'key work' : '[staff] entries'} and [staff] allocation for allocations made in the selected date range.`,
-            }
-          : {
-              heading: 'Average time from reception to [staff] allocation',
-              type: 'day',
-              currentValue: stats.current.avgReceptionToAllocationDays,
-              previousValue: stats.previous?.avgReceptionToAllocationDays,
-              calculationMethod:
-                'This figure displays the average time between reception and [staff] allocation for allocations made in the selected date range.',
-            },
+          ? createDataItem(
+              'Average time from eligibility to [staff] allocation',
+              'day',
+              stats.current.avgReceptionToAllocationDays,
+              stats.previous?.avgReceptionToAllocationDays,
+              `This figure displays the average time between prisoners becoming eligible for ${req.middleware!.policy === 'KEY_WORKER' ? 'key work' : '[staff] entries'} and [staff] allocation for allocations made in the selected date range.`,
+              true,
+              true,
+            )
+          : createDataItem(
+              'Average time from reception to [staff] allocation',
+              'day',
+              stats.current.avgReceptionToAllocationDays,
+              stats.previous?.avgReceptionToAllocationDays,
+              'This figure displays the average time between reception and [staff] allocation for allocations made in the selected date range.',
+              true,
+              true,
+            ),
         ...(req.middleware!.policy !== 'PERSONAL_OFFICER'
           ? [
-              {
-                heading: `Delivery rate against frequency of a session every ${req.middleware!.prisonConfiguration!.frequencyInWeeks === 1 ? 'week' : `${req.middleware!.prisonConfiguration!.frequencyInWeeks} weeks`}`,
-                type: 'percentage',
-                currentValue: stats.current.recordedEventComplianceRate,
-                previousValue: stats.previous?.recordedEventComplianceRate,
-                calculationMethod:
-                  'This figure is calculated by comparing the number of recorded [staff] sessions against the number of projected [staff] sessions. <br /> <br />' +
+              createDataItem(
+                `Delivery rate against frequency of a session every ${req.middleware!.prisonConfiguration!.frequencyInWeeks === 1 ? 'week' : `${req.middleware!.prisonConfiguration!.frequencyInWeeks} weeks`}`,
+                'percentage',
+                stats.current.recordedEventComplianceRate,
+                stats.previous?.recordedEventComplianceRate,
+                'This figure is calculated by comparing the number of recorded [staff] sessions against the number of projected [staff] sessions. <br /> <br />' +
                   'The number of projected [staff] sessions is calculated by taking the total number of prisoners with an allocated [staff] and comparing it to the expected frequency of [staff] sessions.',
-              },
-              {
-                heading: 'Number of projected [staff] sessions',
-                type: 'number',
-                currentValue: stats.current.projectedRecordedEvents,
-                previousValue: stats.previous?.projectedRecordedEvents,
-                calculationMethod:
-                  'This figure is calculated by taking the total number of prisoners with an allocated [staff] and comparing it to the expected frequency of [staff] sessions.',
-              },
+              ),
+              createDataItem(
+                'Number of projected [staff] sessions',
+                'number',
+                stats.current.projectedRecordedEvents,
+                stats.previous?.projectedRecordedEvents,
+                'This figure is calculated by taking the total number of prisoners with an allocated [staff] and comparing it to the expected frequency of [staff] sessions.',
+                false,
+              ),
             ]
           : []),
       ]

@@ -57,7 +57,6 @@ context('Key workers data', () => {
         cy.get('h2').should('have.text', 'Total number of prisoners')
         cy.get('.govuk-heading-l').should('have.text', '1172')
         cy.get('p').eq(1).should('have.text', '+3 increase')
-        cy.get('span.stat-change--increase').should('have.text', '+3')
       })
     cy.get('.key-worker-data-stat-card')
       .eq(3)
@@ -109,7 +108,6 @@ context('Key workers data', () => {
         cy.get('h2').should('have.text', 'Number of projected key worker sessions')
         cy.get('.govuk-heading-l').should('have.text', '3851')
         cy.get('p').eq(1).should('have.text', '+3684 increase')
-        cy.get('span.stat-change--increase').should('have.text', '+3684')
       })
 
     verifyStatsChange()
@@ -158,7 +156,6 @@ context('Key workers data', () => {
         cy.get('h2').should('have.text', 'Total number of prisoners')
         cy.get('.govuk-heading-l').should('have.text', '1172')
         cy.get('p').eq(1).should('have.text', '+3 increase')
-        cy.get('span.stat-change--increase').should('have.text', '+3')
       })
     cy.get('.key-worker-data-stat-card')
       .eq(3)
@@ -203,7 +200,6 @@ context('Key workers data', () => {
         cy.get('h2').should('have.text', 'Number of projected key worker sessions')
         cy.get('.govuk-heading-l').should('have.text', '3851')
         cy.get('p').eq(1).should('have.text', '+3684 increase')
-        cy.get('span.stat-change--increase').should('have.text', '+3684')
       })
   })
 
@@ -260,7 +256,6 @@ context('Key workers data', () => {
       })
     cy.get('.key-worker-data-stats').eq(2).children().eq(0).should('have.text', '1172')
     cy.get('.key-worker-data-stats').eq(2).children().eq(1).should('have.text', '+3 increase')
-    cy.get('.key-worker-data-stats').eq(2).children().eq(1).find('span.stat-change--increase').should('have.text', '+3')
 
     cy.get('.key-worker-data-stat-card')
       .eq(4)
@@ -289,7 +284,6 @@ context('Key workers data', () => {
       })
     cy.get('.key-worker-data-stats').eq(5).children().eq(0).should('have.text', '11')
     cy.get('.key-worker-data-stats').eq(5).children().eq(1).should('have.text', '+3 increase')
-    cy.get('.key-worker-data-stats').eq(5).children().eq(1).find('span.stat-change--increase').should('have.text', '+3')
 
     cy.get('.key-worker-data-stat-card')
       .eq(6)
@@ -316,7 +310,7 @@ context('Key workers data', () => {
       .eq(7)
       .children()
       .eq(1)
-      .find('span.stat-change--increase')
+      .find('span.stat-change--decrease')
       .should('have.text', '+66 days')
 
     cy.get('.key-worker-data-stat-card')
@@ -345,14 +339,66 @@ context('Key workers data', () => {
         expect(text.trim()).to.equal('Number of projected key worker sessions')
       })
     cy.get('.key-worker-data-stats').eq(9).children().eq(0).should('have.text', '3851')
-    cy.get('.key-worker-data-stats').eq(9).children().eq(1).should('have.text', '+3684 increase')
-    cy.get('.key-worker-data-stats')
-      .eq(9)
-      .children()
-      .eq(1)
-      .find('span.stat-change--increase')
-      .should('have.text', '+3684')
   }
+
+  it('show stats - key worker - handles incomplete data', () => {
+    cy.task('stubEnabledPrison')
+    cy.task('stubKeyWorkerStatsWithNullCurrentValues')
+
+    navigateToTestPage()
+
+    cy.get('.key-worker-data-stat-card')
+      .eq(0)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Number of recorded key worker sessions')
+        cy.get('.govuk-heading-l').should('have.text', '1')
+        cy.get('p').eq(1).should('have.text', '+1 increase')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(1)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Number of recorded key worker entries')
+        cy.get('.govuk-heading-l').should('have.text', '0')
+        cy.get('p').eq(1).should('have.text', 'No change')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(2)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Total number of prisoners')
+        cy.get('.govuk-heading-l').should('have.text', '1172')
+        cy.get('p').eq(1).should('have.text', '+3 increase')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(3)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Percentage of prisoners with an allocated key worker')
+        cy.get('.govuk-heading-l').should('have.text', 'Incomplete data')
+        cy.get('p').eq(1).should('have.text', 'No data can be shown for the selected date range.')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(4)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Total number of active key workers')
+        cy.get('.govuk-heading-l').should('have.text', '11')
+        cy.get('p').eq(1).should('have.text', '+3 increase')
+      })
+
+    cy.get('.key-worker-data-stat-card')
+      .eq(5)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Average time from reception to first key worker session')
+        cy.get('.govuk-heading-l').should('have.text', 'Incomplete data')
+        cy.get('p').eq(1).should('have.text', 'No data can be shown for the selected date range.')
+      })
+
+    cy.get('.key-worker-data-stat-card')
+      .eq(6)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Average time from reception to key worker allocation')
+        cy.get('.govuk-heading-l').should('have.text', 'Incomplete data')
+        cy.get('p').eq(1).should('have.text', 'No data can be shown for the selected date range.')
+      })
+  })
 
   const verifyErrorMessages = () => {
     cy.findByRole('textbox', { name: /From/ }).clear().type('aa/bb/cccc')
