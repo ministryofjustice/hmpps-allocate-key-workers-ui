@@ -139,6 +139,17 @@ const stubKeyworkerApiStatsNoData = () =>
     previous: undefined,
   })
 
+const stubKeyWorkerStatsWithNullCurrentValues = () =>
+  createKeyworkerStatsStub('.+', '.+', {
+    ...keyworkerStatisticsResponse,
+    current: {
+      ...keyworkerStatisticsResponse.current,
+      avgReceptionToAllocationDays: null,
+      avgReceptionToRecordedEventDays: null,
+      percentageAssigned: null,
+    },
+  })
+
 const stubSearchAllocatableStaffAll = () =>
   createHttpStub(
     'POST',
@@ -880,4 +891,5 @@ export default {
   stubUpsertStaffDetails,
   stubGetPolicies,
   stubPutPolicies,
+  stubKeyWorkerStatsWithNullCurrentValues,
 }

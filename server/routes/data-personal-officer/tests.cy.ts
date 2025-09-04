@@ -127,6 +127,58 @@ context('Personal officer data', () => {
       })
   })
 
+  it('show stats - personal officer - handles incomplete data', () => {
+    cy.task('stubEnabledPrison')
+    cy.task('stubKeyWorkerStatsWithNullCurrentValues')
+
+    navigateToTestPage()
+
+    cy.get('.key-worker-data-stat-card')
+      .eq(0)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Number of recorded personal officer entries')
+        cy.get('.govuk-heading-l').should('have.text', '0')
+        cy.get('p').eq(1).should('have.text', 'No change')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(1)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Total number of prisoners')
+        cy.get('.govuk-heading-l').should('have.text', '1172')
+        cy.get('p').eq(1).should('have.text', '+3 increase')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(2)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Percentage of prisoners with an allocated personal officer')
+        cy.get('.govuk-heading-l').should('have.text', 'Incomplete data')
+        cy.get('p').eq(1).should('have.text', 'No data can be shown for the selected date range.')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(3)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Total number of active personal officers')
+        cy.get('.govuk-heading-l').should('have.text', '11')
+        cy.get('p').eq(1).should('have.text', '+3 increase')
+        cy.get('span.stat-change--increase').should('have.text', '+3')
+      })
+    cy.get('.key-worker-data-stat-card')
+      .eq(4)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Average time from reception to first personal officer entry')
+        cy.get('.govuk-heading-l').should('have.text', 'Incomplete data')
+        cy.get('p').eq(1).should('have.text', 'No data can be shown for the selected date range.')
+      })
+
+    cy.get('.key-worker-data-stat-card')
+      .eq(5)
+      .within(() => {
+        cy.get('h2').should('have.text', 'Average time from reception to personal officer allocation')
+        cy.get('.govuk-heading-l').should('have.text', 'Incomplete data')
+        cy.get('p').eq(1).should('have.text', 'No data can be shown for the selected date range.')
+      })
+  })
+
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(`/personal-officer/data`, { failOnStatusCode: false })
