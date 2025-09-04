@@ -16,9 +16,10 @@ const createDataItem = (
   previousValue: any,
   calculationMethod: string,
   requiresHighlighting: boolean = true,
+  inverseStat: boolean = false,
 ) => {
-  const hasPreviousWithoutCurrent = previousValue && !currentValue
-  const hasNoData = !previousValue && !currentValue
+  const hasPreviousWithoutCurrent = previousValue !== null && currentValue === null
+  const hasNoData = previousValue === null && currentValue === null
 
   if (hasPreviousWithoutCurrent || hasNoData) {
     return {
@@ -28,6 +29,7 @@ const createDataItem = (
       previousValue: null,
       calculationMethod,
       requiresHighlighting,
+      inverseStat,
     }
   }
 
@@ -38,6 +40,7 @@ const createDataItem = (
     previousValue,
     calculationMethod,
     requiresHighlighting,
+    inverseStat,
   }
 }
 
@@ -103,6 +106,8 @@ export const getEstablishmentData = (stats: components['schemas']['PrisonStats']
               stats.current.avgReceptionToRecordedEventDays,
               stats.previous?.avgReceptionToRecordedEventDays,
               `This figure displays the average time between prisoners becoming eligible for ${req.middleware!.policy === 'KEY_WORKER' ? 'key work' : '[staff] entries'} and the first recorded [staff] ${sessionEntry(req)} for ${sessionEntry(req, true)} recorded in the selected date range.`,
+              true,
+              true,
             )
           : createDataItem(
               `Average time from reception to first [staff] ${sessionEntry(req)}`,
@@ -110,6 +115,8 @@ export const getEstablishmentData = (stats: components['schemas']['PrisonStats']
               stats.current.avgReceptionToRecordedEventDays,
               stats.previous?.avgReceptionToRecordedEventDays,
               `This figure displays the average time between reception and the first recorded [staff] ${sessionEntry(req)} for ${sessionEntry(req, true)} recorded in the selected date range.`,
+              true,
+              true,
             ),
         req.middleware!.prisonConfiguration!.hasPrisonersWithHighComplexityNeeds
           ? createDataItem(
@@ -118,6 +125,8 @@ export const getEstablishmentData = (stats: components['schemas']['PrisonStats']
               stats.current.avgReceptionToAllocationDays,
               stats.previous?.avgReceptionToAllocationDays,
               `This figure displays the average time between prisoners becoming eligible for ${req.middleware!.policy === 'KEY_WORKER' ? 'key work' : '[staff] entries'} and [staff] allocation for allocations made in the selected date range.`,
+              true,
+              true,
             )
           : createDataItem(
               'Average time from reception to [staff] allocation',
@@ -125,6 +134,8 @@ export const getEstablishmentData = (stats: components['schemas']['PrisonStats']
               stats.current.avgReceptionToAllocationDays,
               stats.previous?.avgReceptionToAllocationDays,
               'This figure displays the average time between reception and [staff] allocation for allocations made in the selected date range.',
+              true,
+              true,
             ),
         ...(req.middleware!.policy !== 'PERSONAL_OFFICER'
           ? [

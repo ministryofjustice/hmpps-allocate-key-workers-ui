@@ -28,18 +28,22 @@ export function getStatChange(current?: number, previous?: number, type: string 
   return formatChange((current || 0) - (previous || 0), type)
 }
 
-export const formatChangeWithHighlight = (change: number, type: string = 'number'): string | number => {
+export const formatChangeWithHighlight = (
+  change: number,
+  inverseStat: boolean,
+  type: string = 'number',
+): string | number => {
   const formatted = formatValue(change, type)
   let className = ''
   let formattedValue = ''
   let changeType = ''
 
   if (change > 0) {
-    className = 'stat-change--increase'
+    className = inverseStat ? 'stat-change--decrease' : 'stat-change--increase'
     formattedValue = `+${formatted}`
     changeType = 'increase'
   } else if (change < 0) {
-    className = 'stat-change--decrease'
+    className = inverseStat ? 'stat-change--increase' : 'stat-change--decrease'
     formattedValue = `${formatted}`
     changeType = 'decrease'
   } else {
@@ -56,12 +60,13 @@ export function getFormattedStatChange(
   current?: number,
   previous?: number,
   requiresHighlighting?: boolean,
+  inverseStat: boolean = false,
   type: string = 'number',
 ) {
   if (type === 'incomplete') return 'No data can be shown for the selected date range.'
 
   if (requiresHighlighting) {
-    return formatChangeWithHighlight((current || 0) - (previous || 0), type)
+    return formatChangeWithHighlight((current || 0) - (previous || 0), inverseStat, type)
   }
   return formatChange((current || 0) - (previous || 0), type)
 }
