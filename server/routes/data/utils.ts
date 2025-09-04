@@ -8,12 +8,11 @@ function sessionEntry(req: Request, plural: boolean = false) {
   return plural ? 'sessions' : 'session'
 }
 
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 const createDataItem = (
   heading: string,
   type: string,
-  currentValue: any,
-  previousValue: any,
+  currentValue: string | number | undefined,
+  previousValue: string | number | undefined,
   calculationMethod: string,
   requiresHighlighting: boolean = true,
   inverseStat: boolean = false,
