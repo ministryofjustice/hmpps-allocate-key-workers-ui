@@ -32,7 +32,6 @@ context('Personal officer data', () => {
         cy.get('h2').should('have.text', 'Total number of prisoners')
         cy.get('.govuk-heading-l').should('have.text', '1172')
         cy.get('p').eq(1).should('have.text', '+3 increase')
-        cy.get('span.stat-change--increase').should('have.text', '+3')
       })
     cy.get('.key-worker-data-stat-card')
       .eq(2)
@@ -69,6 +68,7 @@ context('Personal officer data', () => {
         cy.get('h2').should('have.text', 'Average time from eligibility to personal officer allocation')
         cy.get('.govuk-heading-l').should('have.text', '66 days')
         cy.get('p').eq(1).should('have.text', '+66 days increase')
+        cy.get('span.stat-change--decrease').should('have.text', '+66 days')
       })
   })
 
@@ -94,7 +94,6 @@ context('Personal officer data', () => {
         cy.get('h2').should('have.text', 'Total number of prisoners')
         cy.get('.govuk-heading-l').should('have.text', '1172')
         cy.get('p').eq(1).should('have.text', '+3 increase')
-        cy.get('span.stat-change--increase').should('have.text', '+3')
       })
     cy.get('.key-worker-data-stat-card')
       .eq(2)
@@ -124,6 +123,7 @@ context('Personal officer data', () => {
         cy.get('h2').should('have.text', 'Average time from reception to personal officer allocation')
         cy.get('.govuk-heading-l').should('have.text', '66 days')
         cy.get('p').eq(1).should('have.text', '+66 days increase')
+        cy.get('span.stat-change--decrease').should('have.text', '+66 days')
       })
   })
 
