@@ -34,6 +34,7 @@ describe('historyMiddleware', () => {
       journeyCompleted: true,
       instanceUnixEpoch: Date.now(),
     }
+    req.originalUrl = '/key-worker/3e680f74-8986-42f9-8dca-99725fdb46b6/manage-roles/remove/page'
 
     preventNavigationToExpiredJourneys()(req, res, next)
 
@@ -42,8 +43,9 @@ describe('historyMiddleware', () => {
     )
   })
 
-  it('should do nothing is journey is not completed', () => {
+  it('should do nothing if journey is not completed', () => {
     const res = createRes()
+    req.originalUrl = '/key-worker/3e680f74-8986-42f9-8dca-99725fdb46b6/manage-roles/remove/page'
     req.journeyData = {
       b64History: historyToBase64([
         '/key-worker',
@@ -61,6 +63,26 @@ describe('historyMiddleware', () => {
     expect(res.redirect).not.toHaveBeenCalled()
   })
 
+  it('should do nothing if on journey confirmation page', () => {
+    const res = createRes()
+    req.journeyData = {
+      b64History: historyToBase64([
+        '/key-worker',
+        '/key-worker/manage-roles',
+        '/key-worker/manage-roles/remove',
+        '/key-worker/3e680f74-8986-42f9-8dca-99725fdb46b6/manage-roles/remove',
+      ]),
+      journeyCompleted: false,
+      instanceUnixEpoch: Date.now(),
+    }
+    req.originalUrl = '/key-worker/3e680f74-8986-42f9-8dca-99725fdb46b6/manage-roles/remove/confirmation'
+
+    preventNavigationToExpiredJourneys()(req, res, next)
+
+    expect(next).toHaveBeenCalled()
+    expect(res.redirect).not.toHaveBeenCalled()
+  })
+
   it('should use homepage as fallback when history is invalid', () => {
     const res = createRes()
     req.journeyData = {
@@ -68,6 +90,7 @@ describe('historyMiddleware', () => {
       journeyCompleted: true,
       instanceUnixEpoch: Date.now(),
     }
+    req.originalUrl = '/key-worker/3e680f74-8986-42f9-8dca-99725fdb46b6/manage-roles/remove/page'
 
     preventNavigationToExpiredJourneys()(req, res, next)
 
