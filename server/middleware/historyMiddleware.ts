@@ -205,9 +205,9 @@ function getHistoryFromReferer(req: Request) {
 export function createBackUrlFor(b64History: string, matcher: RegExp, fallback: string) {
   const history = deserialiseHistory(b64History)
   const last = history.findLast(o => matcher.test(o)) || fallback
-  const prnedHistory = pruneHistory(last, history)
+  const prunedHistory = pruneHistory(last, history)
   const searchParams = new URLSearchParams(last.split('?')[1] || '')
-  searchParams.set('history', serialiseHistory(prnedHistory))
+  searchParams.set('history', serialiseHistory(prunedHistory))
   return `${last.split('?')[0]}?${searchParams.toString()}`
 }
 
