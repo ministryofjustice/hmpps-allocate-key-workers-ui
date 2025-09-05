@@ -33,7 +33,7 @@ context('/manage-roles/remove/** journey', () => {
   })
 
   describe('Role based access', () => {
-    verifyRoleBasedAccess(`/key-worker/${journeyId}/manage-roles/remove`, UserPermissionLevel.ALLOCATE)
+    verifyRoleBasedAccess(`/key-worker/${uuidV4()}/manage-roles/remove`, UserPermissionLevel.ALLOCATE)
   })
 
   it('should remove role to staff member', () => {

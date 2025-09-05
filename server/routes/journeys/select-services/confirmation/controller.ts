@@ -4,6 +4,7 @@ import { restoreHistoryFromJourneyData } from '../../../../middleware/historyMid
 export class SelectServicesConfirmationController {
   GET = async (req: Request, res: Response) => {
     restoreHistoryFromJourneyData(req, res)
+    req.journeyData.journeyCompleted = true
     res.render('select-services/confirmation/view', {
       showBreadcrumbs: true,
       services: req.journeyData.selectServices!.services,

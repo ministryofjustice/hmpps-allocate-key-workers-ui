@@ -4,7 +4,7 @@ import { POLICIES } from '../../../../../middleware/policyMiddleware'
 import AuthorisedRoles from '../../../../../authentication/authorisedRoles'
 
 context('/manage-roles/assign/check-answers', () => {
-  const journeyId = uuidV4()
+  let journeyId = uuidV4()
 
   beforeEach(() => {
     cy.task('reset')
@@ -82,6 +82,7 @@ context('/manage-roles/assign/check-answers', () => {
   }
 
   const navigateToTestPage = (policyPath: string = 'key-worker') => {
+    journeyId = uuidV4()
     cy.signIn({ failOnStatusCode: false })
     cy.visit(`/${policyPath}/${journeyId}/manage-roles/assign`, {
       failOnStatusCode: false,

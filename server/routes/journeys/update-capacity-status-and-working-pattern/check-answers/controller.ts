@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 import AllocationsApiService from '../../../../services/allocationsApi/allocationsApiService'
 import { FLASH_KEY__SUCCESS_MESSAGE } from '../../../../utils/constants'
-import { resetJourneyAndReloadKeyWorkerDetails } from '../common/utils'
 import { possessiveComma } from '../../../../utils/formatUtils'
+import { startNewJourney } from '../common/utils'
 
 export class UpdateStatusCheckAnswersController {
   constructor(private readonly allocationsApiService: AllocationsApiService) {}
@@ -51,7 +51,6 @@ export class UpdateStatusCheckAnswersController {
         FLASH_KEY__SUCCESS_MESSAGE,
         `You have updated this ${possessiveComma(res.locals.policyStaff!)} status to ${status!.description}.`,
       )
-
       next()
     } catch (e) {
       next(e)
@@ -59,8 +58,7 @@ export class UpdateStatusCheckAnswersController {
   }
 
   POST = async (req: Request, res: Response) => {
-    await resetJourneyAndReloadKeyWorkerDetails(this.allocationsApiService, req, res)
-    res.redirect('../update-capacity-status-and-working-pattern')
+    await startNewJourney(req, res)
   }
 
   private getBackUrl = (statusCode: string) => {

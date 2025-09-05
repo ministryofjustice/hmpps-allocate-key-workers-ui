@@ -3,12 +3,16 @@ import { createMock } from '../../../testutils/mockObjects'
 import { defaultKeyworkerDetails } from '../../../../integration_tests/mockApis/keyworkerApi'
 import { verifyRoleBasedAccess } from '../../../../integration_tests/support/roleBasedAccess'
 import { UserPermissionLevel } from '../../../interfaces/hmppsUser'
+import { historyToBase64 } from '../../../utils/testUtils'
 
 context('Update capacity, status and working pattern', () => {
   const journeyId = uuidV4()
-  const history = Buffer.from(
-    JSON.stringify(['/key-worker', '/key-worker/manage', '/key-worker/staff-profile/488095']),
-  ).toString('base64')
+  const history = historyToBase64([
+    '/key-worker',
+    '/key-worker/manage',
+    '/key-worker/staff-profile/488095',
+    '/key-worker/start-update-staff/488105?proceedTo=update-capacity-status-and-working-pattern',
+  ])
 
   beforeEach(() => {
     cy.task('reset')
@@ -39,7 +43,12 @@ context('Update capacity, status and working pattern', () => {
     cy.findByRole('link', { name: 'Back to key worker profile' })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('match', new RegExp(`/key-worker/staff-profile/488095\\?history=${encodeURIComponent(history)}`))
+      .and(
+        'match',
+        new RegExp(
+          `/key-worker/staff-profile/488095\\?history=${historyToBase64(['/key-worker', '/key-worker/manage', '/key-worker/staff-profile/488095'], true)}`,
+        ),
+      )
 
     cy.contains('dt', 'Status').next().should('include.text', 'Inactive')
     cy.contains('dt', 'Maximum capacity').next().should('include.text', '6')

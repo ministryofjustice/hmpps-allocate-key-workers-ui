@@ -2,7 +2,7 @@ import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../../integration_tests/support/commands'
 
 context('/manage-roles/remove/remove-role', () => {
-  const journeyId = uuidV4()
+  let journeyId = uuidV4()
 
   beforeEach(() => {
     cy.task('reset')
@@ -62,6 +62,7 @@ context('/manage-roles/remove/remove-role', () => {
   }
 
   const navigateToTestPage = (policyPath: string = 'key-worker', allocated: number = 12) => {
+    journeyId = uuidV4()
     cy.signIn({ failOnStatusCode: false })
     cy.visit(`/${policyPath}/${journeyId}/manage-roles/remove`, {
       failOnStatusCode: false,

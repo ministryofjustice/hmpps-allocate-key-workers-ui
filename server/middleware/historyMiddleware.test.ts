@@ -167,7 +167,9 @@ describe('historyMiddleware', () => {
       '/key-worker/start-update-staff/488095',
     ])
     const backUrl = createBackUrlFor(b64History, /staff-profile/, `default`)
-    expect(backUrl).toBe(`/key-worker/staff-profile/488095/case-notes?history=${b64History}`)
+    expect(backUrl).toBe(
+      `/key-worker/staff-profile/488095/case-notes?history=${historyToBase64(['/key-worker', '/key-worker/allocate', '/key-worker/staff-profile/488095', '/key-worker/staff-profile/488095/case-notes'], true)}`,
+    )
   })
 
   it('should use fallback value when history is invalid', () => {

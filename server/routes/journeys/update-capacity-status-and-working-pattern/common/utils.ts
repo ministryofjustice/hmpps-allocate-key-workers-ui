@@ -1,17 +1,8 @@
 import { Request, Response } from 'express'
-import AllocationsApiService from '../../../../services/allocationsApi/allocationsApiService'
 
-export const resetJourneyAndReloadKeyWorkerDetails = async (
-  service: AllocationsApiService,
-  req: Request,
-  res: Response,
-) => {
-  delete req.journeyData.updateStaffDetails
-  delete req.journeyData.isCheckAnswers
-  req.journeyData.staffDetails = await service.getStaffDetails(
-    req as Request,
-    res.locals.user.getActiveCaseloadId()!,
-    req.journeyData.staffDetails!.staffId,
-    false,
+export const startNewJourney = async (req: Request, res: Response) => {
+  req.journeyData.journeyCompleted = true
+  return res.redirect(
+    `/${res.locals.policyPath}/start-update-staff/${req.journeyData.staffDetails?.staffId}?proceedTo=update-capacity-status-and-working-pattern&history=${req.journeyData.b64History}`,
   )
 }
