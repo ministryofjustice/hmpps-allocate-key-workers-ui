@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import AllocationsApiService from '../../../../services/allocationsApi/allocationsApiService'
 import { FLASH_KEY__SUCCESS_MESSAGE } from '../../../../utils/constants'
-import { resetJourneyAndReloadKeyWorkerDetails } from '../common/utils'
+import { startNewJourney } from '../common/utils'
 import { possessiveComma } from '../../../../utils/formatUtils'
 
 export class UpdateStatusInactiveController {
@@ -34,7 +34,6 @@ export class UpdateStatusInactiveController {
   }
 
   POST = async (req: Request, res: Response) => {
-    await resetJourneyAndReloadKeyWorkerDetails(this.allocationsApiService, req, res)
-    res.redirect('../update-capacity-status-and-working-pattern')
+    await startNewJourney(req, res)
   }
 }

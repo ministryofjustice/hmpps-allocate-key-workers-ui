@@ -1,10 +1,9 @@
-import { Services } from '../../../../services'
 import { JourneyRouter } from '../../../base/routes'
 import { CancelUpdateStatusController } from './controller'
 
-export const CancelUpdateStatusRoutes = ({ allocationsApiService }: Services) => {
+export const CancelUpdateStatusRoutes = () => {
   const { router, get } = JourneyRouter()
-  const controller = new CancelUpdateStatusController(allocationsApiService)
+  const controller = new CancelUpdateStatusController()
 
   get('/', controller.GET)
 

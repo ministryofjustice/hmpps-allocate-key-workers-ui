@@ -33,7 +33,7 @@ export const UpdateCapacityAndStatusRoutes = (services: Services) => {
   router.use('/update-status-unavailable', UpdateStatusUnavailableRoutes())
   router.use('/update-status-inactive', UpdateStatusInactiveRoutes(services))
   router.use('/update-status-annual-leave-return', UpdateStatusReturnDateRoutes())
-  router.use('/cancel', CancelUpdateStatusRoutes(services))
+  router.use('/cancel', CancelUpdateStatusRoutes())
   router.use('/check-answers', UpdateStatusCheckAnswersRoutes(services))
 
   return router

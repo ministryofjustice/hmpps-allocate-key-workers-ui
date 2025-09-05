@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { FLASH_KEY__SUCCESS_MESSAGE } from '../../../../utils/constants'
 import AllocationsApiService from '../../../../services/allocationsApi/allocationsApiService'
-import { resetJourneyAndReloadKeyWorkerDetails } from '../common/utils'
+import { startNewJourney } from '../common/utils'
 import { SchemaType } from './schema'
 import { possessiveComma } from '../../../../utils/formatUtils'
 
@@ -33,7 +33,6 @@ export class UpdateCapacityController {
   }
 
   POST = async (req: Request, res: Response) => {
-    await resetJourneyAndReloadKeyWorkerDetails(this.allocationsApiService, req, res)
-    res.redirect('../update-capacity-status-and-working-pattern')
+    await startNewJourney(req, res)
   }
 }

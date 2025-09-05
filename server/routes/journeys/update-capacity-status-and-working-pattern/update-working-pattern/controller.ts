@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import { FLASH_KEY__SUCCESS_MESSAGE } from '../../../../utils/constants'
 import AllocationsApiService from '../../../../services/allocationsApi/allocationsApiService'
 import { SchemaType } from '../../manage-roles/assign/working-pattern/schema'
-import { resetJourneyAndReloadKeyWorkerDetails } from '../common/utils'
+import { startNewJourney } from '../common/utils'
 import { possessiveComma } from '../../../../utils/formatUtils'
 
 export class UpdateWorkingPatternController {
@@ -38,7 +38,6 @@ export class UpdateWorkingPatternController {
   }
 
   POST = async (req: Request, res: Response) => {
-    await resetJourneyAndReloadKeyWorkerDetails(this.allocationsApiService, req, res)
-    res.redirect('../update-capacity-status-and-working-pattern')
+    await startNewJourney(req, res)
   }
 }
