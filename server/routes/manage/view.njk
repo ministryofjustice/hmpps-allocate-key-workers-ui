@@ -96,7 +96,9 @@
         {{ mojPagination(records.length) }}
 
         {{ govukTable({
-            attributes: {
+          caption: "Column headers with buttons are sortable.",
+          captionClasses: "govuk-visually-hidden",
+          attributes: {
               "data-module": "moj-sortable-table"
             },
             head: [
