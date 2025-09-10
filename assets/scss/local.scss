@@ -113,3 +113,8 @@ div.moj-action-bar__filter::after {
 .no-margin {
   margin: 0;
 }
+
+.disable-link {
+  pointer-events: none;
+  cursor: default;
+}
