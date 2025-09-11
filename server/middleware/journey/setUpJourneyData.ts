@@ -9,6 +9,11 @@ export default function setUpJourneyData(store: CacheInterface<JourneyData>) {
 
     const cached = await store.get(key)
     req.journeyData = cached ?? req.journeyData ?? { instanceUnixEpoch: Date.now() }
+
+    if (res.locals.b64History && !req.journeyData?.b64History) {
+      req.journeyData.b64History = res.locals.b64History
+    }
+
     res.prependOnceListener('close', async () => {
       await store.set(key, req.journeyData, 20 * 60 * 60)
     })

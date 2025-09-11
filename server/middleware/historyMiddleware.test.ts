@@ -9,6 +9,9 @@ describe('historyMiddleware', () => {
 
   function createRes(): Response {
     return {
+      setAuditDetails: {
+        suppress: () => {},
+      },
       locals: {
         policyPath: 'key-worker',
         policyStaff: 'key worker',

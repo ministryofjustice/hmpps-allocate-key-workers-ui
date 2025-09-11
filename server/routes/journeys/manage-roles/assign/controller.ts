@@ -59,7 +59,6 @@ export class AssignStaffRoleController {
       return res.redirect('../assign')
     }
     req.journeyData.assignStaffRole!.staff = staff
-    req.journeyData.b64History = getHistoryParamForPOST(req as Request)
     return res.redirect(res.locals['policyPath'] === 'personal-officer' ? 'working-pattern' : 'role')
   }
 }

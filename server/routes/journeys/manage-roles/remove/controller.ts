@@ -57,7 +57,6 @@ export class RemoveStaffRoleController {
   selectStaff = async (req: Request<unknown, unknown, unknown, { staffId?: string }>, res: Response) => {
     const staffId = Number(req.query.staffId)
     const staff = req.journeyData.removeStaffRole!.searchResults?.find(item => item.staffId === staffId)
-    req.journeyData.b64History = getHistoryParamForPOST(req as Request)
     if (staff) {
       req.journeyData.removeStaffRole!.staff = staff
       res.redirect('remove-role')
