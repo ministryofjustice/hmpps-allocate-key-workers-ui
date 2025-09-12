@@ -1,4 +1,4 @@
-import { gzipSync } from 'node:zlib'
+import { gzipSync } from 'zlib'
 import { formatDateConcise, getDateInReadableFormat } from './datetimeUtils'
 
 const getLastFullMonthAsIsoDateString = () => {

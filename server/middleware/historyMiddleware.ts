@@ -1,5 +1,5 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express'
-import { gzipSync, unzipSync } from 'node:zlib'
+import { gzipSync, unzipSync } from 'zlib'
 import { sentenceCase } from '../utils/formatUtils'
 import { Breadcrumbs, type Breadcrumb } from './breadcrumbs'
 import { Page } from '../services/auditService'

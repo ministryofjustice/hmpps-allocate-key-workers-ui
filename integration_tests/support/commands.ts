@@ -72,3 +72,25 @@ Cypress.Commands.add('navigateWithHistory', (url: string, history: string[]) => 
 Cypress.Commands.add('verifyHistoryLink', { prevSubject: 'element' }, (subject, urlRegex: RegExp) => {
   return cy.wrap(subject).should('have.attr', 'href').should('match', urlRegex)
 })
+
+Cypress.Commands.add('shouldContainHistoryParam', { prevSubject: 'element' }, (element, history) => {
+  cy.wrap(element)
+    .invoke('attr', 'href')
+    .then(href => {
+      const url = new URLSearchParams(href!.split('?')[1])
+      const historyParam = url.get('history')
+
+      cy.task('gzipDecompress', historyParam).then(decompressedText => {
+        const actualArray = decompressedText as string
+        expect(actualArray).to.deep.equal(JSON.stringify(history))
+      })
+    })
+})
+
+Cypress.Commands.add('visitWithHistory', (url: string, history: string[]) => {
+  cy.task('gzipCompress', JSON.stringify(history)).then(b64 => {
+    const searchParams = new URLSearchParams(url.split('?')[1] || '')
+    searchParams.set('history', b64 as string)
+    return cy.visit(`${url.split('?')[0]}?${searchParams.toString()}`, { failOnStatusCode: false })
+  })
+})

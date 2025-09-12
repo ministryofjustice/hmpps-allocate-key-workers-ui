@@ -1,5 +1,4 @@
 import AuthorisedRoles from '../authentication/authorisedRoles'
-import { historyToBase64 } from '../utils/testUtils'
 
 context('test / homepage', () => {
   beforeEach(() => {
@@ -35,13 +34,6 @@ context('test / homepage', () => {
         {
           who: 'USER1',
           subjectType: 'NOT_APPLICABLE',
-          details: '{"pageUrl":"/key-worker/not-authorised","activeCaseLoadId":"LEI"}',
-          what: 'PAGE_VIEW_ACCESS_ATTEMPT',
-          service: 'DPS023',
-        },
-        {
-          who: 'USER1',
-          subjectType: 'NOT_APPLICABLE',
           details: '{"pageUrl":"/key-worker","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
           what: 'PAGE_VIEW_ACCESS_ATTEMPT',
           service: 'DPS023',
@@ -67,13 +59,6 @@ context('test / homepage', () => {
       validateTiles(true)
 
       cy.verifyAuditEvents([
-        {
-          who: 'USER1',
-          subjectType: 'NOT_APPLICABLE',
-          details: '{"pageUrl":"/key-worker","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
-          what: 'PAGE_VIEW_ACCESS_ATTEMPT',
-          service: 'DPS023',
-        },
         {
           who: 'USER1',
           subjectType: 'NOT_APPLICABLE',
@@ -185,11 +170,7 @@ context('test / homepage', () => {
     cy.get('h2 > .card__link')
       .eq(0)
       .should('contain.text', 'Allocate key workers to prisoners')
-      .and(
-        'have.attr',
-        'href',
-        `/key-worker/allocate?history=${historyToBase64(['/key-worker', '/key-worker/allocate'], true)}&js=true`,
-      )
+      .shouldContainHistoryParam(['/key-worker', '/key-worker/allocate'])
     cy.get('.card__description')
       .eq(0)
       .should(
@@ -199,11 +180,7 @@ context('test / homepage', () => {
     cy.get('h2 > .card__link')
       .eq(1)
       .should('contain.text', 'Manage key workers')
-      .and(
-        'have.attr',
-        'href',
-        `/key-worker/manage?history=${historyToBase64(['/key-worker', '/key-worker/manage'], true)}&js=true`,
-      )
+      .shouldContainHistoryParam(['/key-worker', '/key-worker/manage'])
     cy.get('.card__description')
       .eq(1)
       .should(
@@ -213,33 +190,21 @@ context('test / homepage', () => {
     cy.get('h2 > .card__link')
       .eq(2)
       .should('contain.text', 'View key worker data')
-      .and(
-        'have.attr',
-        'href',
-        `/key-worker/data?history=${historyToBase64(['/key-worker', '/key-worker/data'], true)}&js=true`,
-      )
+      .shouldContainHistoryParam(['/key-worker', '/key-worker/data'])
     cy.get('.card__description').eq(2).should('contain.text', 'View key worker data for your establishment.')
 
     if (!readonly) {
       cy.get('h2 > .card__link')
         .eq(3)
         .should('contain.text', 'Manage key worker role')
-        .and(
-          'have.attr',
-          'href',
-          `/key-worker/manage-roles?history=${historyToBase64(['/key-worker', '/key-worker/manage-roles'], true)}&js=true`,
-        )
+        .shouldContainHistoryParam(['/key-worker', '/key-worker/manage-roles'])
       cy.get('.card__description')
         .eq(3)
         .should('contain.text', 'Assign or remove the key worker role for prison officers in your establishment.')
       cy.get('h2 > .card__link')
         .eq(4)
         .should('contain.text', 'Manage your establishment’s key worker settings')
-        .and(
-          'have.attr',
-          'href',
-          `/key-worker/establishment-settings?history=${historyToBase64(['/key-worker', '/key-worker/establishment-settings'], true)}&js=true`,
-        )
+        .shouldContainHistoryParam(['/key-worker', '/key-worker/establishment-settings'])
       cy.get('.card__description')
         .eq(4)
         .should(
@@ -267,11 +232,10 @@ context('test / homepage', () => {
     navigateToTestPage()
     cy.title().should('equal', 'Key workers - DPS')
     cy.get('h2 > .card__link').should('have.length', 1)
-    cy.findByRole('link', { name: 'Manage your establishment’s key worker settings' }).should(
-      'have.attr',
-      'href',
-      `/key-worker/establishment-settings?history=${historyToBase64(['/key-worker', '/key-worker/establishment-settings'], true)}&js=true`,
-    )
+    cy.findByRole('link', { name: 'Manage your establishment’s key worker settings' }).shouldContainHistoryParam([
+      '/key-worker',
+      '/key-worker/establishment-settings',
+    ])
   })
 
   it('should show my allocations tile to user who has allocation job responsibility', () => {
@@ -285,11 +249,10 @@ context('test / homepage', () => {
     navigateToTestPage()
     cy.title().should('equal', 'Key workers - DPS')
     cy.get('h2 > .card__link').should('have.length', 1)
-    cy.findByRole('link', { name: 'My key worker allocations' }).should(
-      'have.attr',
-      'href',
-      `/key-worker/staff-profile/1234?history=${historyToBase64(['/key-worker', '/key-worker/staff-profile/1234'], true)}&js=true`,
-    )
+    cy.findByRole('link', { name: 'My key worker allocations' }).shouldContainHistoryParam([
+      '/key-worker',
+      '/key-worker/staff-profile/1234',
+    ])
   })
 
   it('should show key worker beta banner', () => {

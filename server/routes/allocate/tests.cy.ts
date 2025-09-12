@@ -81,7 +81,7 @@ context('/allocate', () => {
       .should('have.attr', 'href')
       .should(
         'equal',
-        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FAAA1234&returnPath=%2Fallocate%3Fquery%3DALL%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dfalse%26history%3DWyIva2V5LXdvcmtlci9hbGxvY2F0ZT9xdWVyeT1BTEwmY2VsbExvY2F0aW9uUHJlZml4PSZleGNsdWRlQWN0aXZlQWxsb2NhdGlvbnM9ZmFsc2UiXQ%253D%253D%26js%3Dfalse',
+        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FAAA1234&returnPath=%2Fallocate%3Fquery%3DALL%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dfalse%26js%3Dfalse%26history%3DH4sIAAAAAAAAE4tW0s9OrdQtzy%252FKTi3ST8zJyU9OLEm1LyxNLaq0dfTxUUtOzcnxAQlm5ucFFKWmZVbYqqVWJOeUpqQ6JpdklqU6QvRk5ucV26Yl5hSnqmVBGUo6tDQ8FgCvsDrouwAAAA%253D%253D',
       )
 
     // Prisoner profile alerts back link
@@ -89,7 +89,7 @@ context('/allocate', () => {
       .should('have.attr', 'href')
       .should(
         'equal',
-        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FAAA1234%2Falerts%2Factive&returnPath=%2Fallocate%3Fquery%3DALL%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dfalse%26history%3DWyIva2V5LXdvcmtlci9hbGxvY2F0ZT9xdWVyeT1BTEwmY2VsbExvY2F0aW9uUHJlZml4PSZleGNsdWRlQWN0aXZlQWxsb2NhdGlvbnM9ZmFsc2UiXQ%253D%253D%26js%3Dfalse',
+        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FAAA1234%2Falerts%2Factive&returnPath=%2Fallocate%3Fquery%3DALL%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dfalse%26js%3Dfalse%26history%3DH4sIAAAAAAAAE4tW0s9OrdQtzy%252FKTi3ST8zJyU9OLEm1LyxNLaq0dfTxUUtOzcnxAQlm5ucFFKWmZVbYqqVWJOeUpqQ6JpdklqU6QvRk5ucV26Yl5hSnqmVBGUo6tDQ8FgCvsDrouwAAAA%253D%253D',
       )
 
     checkPageContentsNoFilter()

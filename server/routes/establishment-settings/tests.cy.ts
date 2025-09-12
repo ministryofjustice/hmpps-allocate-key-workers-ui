@@ -1,7 +1,6 @@
 import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
 import AuthorisedRoles from '../../authentication/authorisedRoles'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
-import { historyToBase64 } from '../../utils/testUtils'
 
 context('/establishment-settings', () => {
   const getCapacityInput = (policyName: string = 'key worker') =>
@@ -109,13 +108,6 @@ context('/establishment-settings', () => {
     cy.findByRole('button', { name: 'Save' }).click()
 
     cy.verifyAuditEvents([
-      {
-        who: 'USER1',
-        subjectType: 'NOT_APPLICABLE',
-        details: '{"pageUrl":"/key-worker","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
-        what: 'PAGE_VIEW_ACCESS_ATTEMPT',
-        service: 'DPS023',
-      },
       {
         who: 'USER1',
         subjectType: 'NOT_APPLICABLE',
@@ -280,9 +272,6 @@ context('/establishment-settings', () => {
 
   const navigateToTestPage = (policy: string = 'key-worker') => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(
-      `/${policy}/establishment-settings?history=${historyToBase64([`/${policy}`, `/${policy}/establishment-settings`], true)}`,
-      { failOnStatusCode: false },
-    )
+    cy.visit(`/${policy}/establishment-settings`, { failOnStatusCode: false })
   }
 })

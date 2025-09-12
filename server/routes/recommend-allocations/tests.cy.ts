@@ -1,7 +1,6 @@
 import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
 import AuthorisedRoles from '../../authentication/authorisedRoles'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
-import { historyToBase64 } from '../../utils/testUtils'
 
 context('/recommend-allocations', () => {
   beforeEach(() => {
@@ -327,7 +326,7 @@ context('/recommend-allocations', () => {
       .should('have.attr', 'href')
       .should(
         'equal',
-        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FG7189VT&returnPath=%2Frecommend-allocations%3FallowPartialAllocation%3Dtrue%26js%3Dtrue%26history%3DWyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL2FsbG9jYXRlIiwiL2tleS13b3JrZXIvYWxsb2NhdGU%252FcXVlcnk9JmNlbGxMb2NhdGlvblByZWZpeD0xJmV4Y2x1ZGVBY3RpdmVBbGxvY2F0aW9ucz10cnVlIiwiL2tleS13b3JrZXIvcmVjb21tZW5kLWFsbG9jYXRpb25zIl0%253D',
+        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FG7189VT&returnPath=%2Frecommend-allocations%3FallowPartialAllocation%3Dtrue%26js%3Dtrue%26history%3DH4sIAAAAAAAAE4tW0s9OrdQtzy%252FKTi1S0kHm6Sfm5OQnJ5ak4hC2LyxNLaq0VUtOzcnxAYlk5ucFFKWmZVbYGqqlViTnlKakOiaXZJalOkJ0ZObnFduWFJWiG1iUmpyfm5ual6KbiFCoFAsA2mGZ3JsAAAA%253D',
       )
 
     // Prisoner profile alerts back link
@@ -335,7 +334,7 @@ context('/recommend-allocations', () => {
       .should('have.attr', 'href')
       .should(
         'equal',
-        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FG7189VT%2Falerts%2Factive&returnPath=%2Frecommend-allocations%3FallowPartialAllocation%3Dtrue%26js%3Dtrue%26history%3DWyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL2FsbG9jYXRlIiwiL2tleS13b3JrZXIvYWxsb2NhdGU%252FcXVlcnk9JmNlbGxMb2NhdGlvblByZWZpeD0xJmV4Y2x1ZGVBY3RpdmVBbGxvY2F0aW9ucz10cnVlIiwiL2tleS13b3JrZXIvcmVjb21tZW5kLWFsbG9jYXRpb25zIl0%253D',
+        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FG7189VT%2Falerts%2Factive&returnPath=%2Frecommend-allocations%3FallowPartialAllocation%3Dtrue%26js%3Dtrue%26history%3DH4sIAAAAAAAAE4tW0s9OrdQtzy%252FKTi1S0kHm6Sfm5OQnJ5ak4hC2LyxNLaq0VUtOzcnxAYlk5ucFFKWmZVbYGqqlViTnlKakOiaXZJalOkJ0ZObnFduWFJWiG1iUmpyfm5ual6KbiFCoFAsA2mGZ3JsAAAA%253D',
       )
   }
 
@@ -355,9 +354,14 @@ context('/recommend-allocations', () => {
 
   const navigateToTestPage = (allowPartialAllocation: boolean = true, jsParam: boolean = true) => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(
-      `/key-worker/recommend-allocations?allowPartialAllocation=${allowPartialAllocation}&js=${jsParam}&history=${historyToBase64(['/key-worker', '/key-worker/allocate', '/key-worker/allocate?query=&cellLocationPrefix=1&excludeActiveAllocations=true', '/key-worker/recommend-allocations'], true)}`,
-      { failOnStatusCode: false },
+    cy.visitWithHistory(
+      `/key-worker/recommend-allocations?allowPartialAllocation=${allowPartialAllocation}&js=${jsParam}`,
+      [
+        '/key-worker',
+        '/key-worker/allocate',
+        '/key-worker/allocate?query=&cellLocationPrefix=1&excludeActiveAllocations=true',
+        '/key-worker/recommend-allocations',
+      ],
     )
   }
 })

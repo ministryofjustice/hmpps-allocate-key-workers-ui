@@ -116,4 +116,29 @@ describe('historyMiddleware', () => {
     const backUrl = createBackUrlFor(res as Response, /staff-profile/, `default`)
     expect(backUrl).toBe(`default?history=${historyToBase64([], true)}`)
   })
+
+  it('should inject history when a POST redirect GET is made without explicitly setting it', () => {
+    const res = createRes()
+
+    req.query = {
+      history: historyToBase64(['/key-worker']),
+    }
+
+    req.originalUrl = `/key-worker/allocate`
+    req.method = 'GET'
+    req.get = jest.fn().mockReturnValue('localhost')
+
+    const originalRedirect = res.redirect
+    historyMiddleware()(req, res, next)
+
+    // POST isnt explicit here - this just simulates a redirect on a POST endpoint (the same works for GET)
+    res.redirect('/key-worker/allocate?excludeActiveAllocations=true')
+
+    expect(originalRedirect).toHaveBeenCalledWith(
+      302,
+      `undefined://localhost/key-worker/allocate?excludeActiveAllocations=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?excludeActiveAllocations=true'], true)}`,
+    )
+
+    expect(next).toHaveBeenCalled()
+  })
 })
