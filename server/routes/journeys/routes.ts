@@ -9,7 +9,7 @@ import { RemoveStaffRoleRoutes } from './manage-roles/remove/routes'
 import { SelectServicesRoutes } from './select-services/routes'
 import { minRequireAdmin, minRequireAllocate } from '../permissions'
 import preventNavigationToExpiredJourneys from '../../middleware/journey/preventNavigationToExpiredJourneys'
-import { checkJourneyIdSetup } from '../../middleware/journey/checkJourneyIdSetup'
+import { captureJourneyPaths } from '../../middleware/journey/captureJourneyPaths'
 
 export const REDIRECTED_JOURNEY_PATHS = [
   'start-update-staff',
@@ -24,7 +24,7 @@ export default function JourneyRoutes({ cacheStore }: DataAccess, services: Serv
   router.use(setUpJourneyData(cacheStore('journey')))
   router.use(preventNavigationToExpiredJourneys())
 
-  checkJourneyIdSetup(router, REDIRECTED_JOURNEY_PATHS)
+  captureJourneyPaths(router)
 
   router.use('/start-update-staff/:staffId', minRequireAllocate, StartUpdateStaffRoutes(services))
   router.use('/update-capacity-status-and-working-pattern', minRequireAllocate, UpdateCapacityAndStatusRoutes(services))
