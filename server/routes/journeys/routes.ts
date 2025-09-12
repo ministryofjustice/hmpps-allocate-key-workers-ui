@@ -10,11 +10,31 @@ import { SelectServicesRoutes } from './select-services/routes'
 import { minRequireAdmin, minRequireAllocate } from '../permissions'
 import preventNavigationToExpiredJourneys from '../../middleware/journey/preventNavigationToExpiredJourneys'
 
+export const REDIRECTED_JOURNEY_PATHS = [
+  'start-update-staff',
+  'update-capacity-status-and-working-pattern',
+  'manage-roles',
+  'manage-roles',
+  'select-services',
+]
+
 export default function JourneyRoutes({ cacheStore }: DataAccess, services: Services) {
   const router = Router({ mergeParams: true })
 
   router.use(setUpJourneyData(cacheStore('journey')))
   router.use(preventNavigationToExpiredJourneys())
+
+  const routerUse = router.use
+  router.use = (...params: unknown[]) => {
+    if (typeof params[0] === 'string') {
+      const path = params[0].split('/')[1] ?? params[0]
+      if (!REDIRECTED_JOURNEY_PATHS.includes(path)) {
+        throw new Error(`Path: ${path} is not covered by insertJourneyIdentifier middleware.`)
+      }
+    }
+    // @ts-expect-error unspecified router.use param types
+    return routerUse.call(router, ...params)
+  }
 
   router.use('/start-update-staff/:staffId', minRequireAllocate, StartUpdateStaffRoutes(services))
   router.use('/update-capacity-status-and-working-pattern', minRequireAllocate, UpdateCapacityAndStatusRoutes(services))

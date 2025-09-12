@@ -6,7 +6,7 @@ import { AllocateStaffRoutes } from './allocate/routes'
 import { PrisonerAllocationHistoryRoutes } from './prisoner-allocation-history/routes'
 import removeTrailingSlashMiddleware from '../middleware/removeTrailingSlashMiddleware'
 import insertJourneyIdentifier from '../middleware/journey/insertJourneyIdentifier'
-import JourneyRoutes from './journeys/routes'
+import JourneyRoutes, { REDIRECTED_JOURNEY_PATHS } from './journeys/routes'
 import { dataAccess } from '../data'
 import { EstablishmentSettingsRoutes } from './establishment-settings/routes'
 import { RecommendStaffAutomaticallyRoutes } from './recommend-allocations/routes'
@@ -57,7 +57,8 @@ export default function routes(services: Services) {
 
   router.use('/manage-roles', minRequireAllocate, ManageRolesRoutes())
   router.use('/recommend-allocations', minRequireAllocate, RecommendStaffAutomaticallyRoutes(services))
-  router.use(insertJourneyIdentifier())
+
+  router.use(new RegExp(`/(${REDIRECTED_JOURNEY_PATHS.join('|')})`), insertJourneyIdentifier())
   router.use('/:journeyId', JourneyRoutes(dataAccess(), services))
 
   return router
