@@ -11,13 +11,6 @@ import { minRequireAdmin, minRequireAllocate } from '../permissions'
 import preventNavigationToExpiredJourneys from '../../middleware/journey/preventNavigationToExpiredJourneys'
 import { captureJourneyPaths } from '../../middleware/journey/captureJourneyPaths'
 
-export const REDIRECTED_JOURNEY_PATHS = [
-  'start-update-staff',
-  'update-capacity-status-and-working-pattern',
-  'manage-roles',
-  'select-services',
-]
-
 export default function JourneyRoutes({ cacheStore }: DataAccess, services: Services) {
   const router = Router({ mergeParams: true })
 
