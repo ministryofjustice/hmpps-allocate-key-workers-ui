@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import AllocationsApiService from '../../../../services/allocationsApi/allocationsApiService'
 import { components } from '../../../../@types/keyWorker'
-import { getHistoryParamForPOST } from '../../../../middleware/historyMiddleware'
 
 export class RemoveStaffRoleController {
   constructor(private readonly allocationsApiService: AllocationsApiService) {}
@@ -51,7 +50,7 @@ export class RemoveStaffRoleController {
   POST = async (req: Request, res: Response) => {
     req.journeyData.removeStaffRole!.query = req.body.query
     delete req.journeyData.removeStaffRole!.searchResults
-    res.redirect(`remove?history=${getHistoryParamForPOST(req)}`)
+    res.redirect(`remove`)
   }
 
   selectStaff = async (req: Request<unknown, unknown, unknown, { staffId?: string }>, res: Response) => {

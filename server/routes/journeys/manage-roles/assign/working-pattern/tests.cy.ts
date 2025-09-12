@@ -73,7 +73,6 @@ context('/manage-roles/assign/working-pattern', () => {
     })
 
     cy.injectJourneyDataAndReload<PartialJourneyData>(journeyId, {
-      b64History: history,
       assignStaffRole: {
         staff: {
           staffId: 1001,

@@ -17,7 +17,7 @@ export const AssignStaffRoleRoutes = (services: Services) => {
   const { allocationsApiService } = services
   const controller = new AssignStaffRoleController(allocationsApiService)
 
-  router.use(redirectCheckAnswersMiddleware([/assign$/, /not-prison-officer$/, /check-answers$/]))
+  router.use(redirectCheckAnswersMiddleware([/assign$/, /not-prison-officer$/, /check-answers/]))
 
   get('*any', Page.UPDATE_STAFF_JOB_CLASSIFICATION, (req, res, next) => {
     if (req.journeyData.assignStaffRole?.staff?.staffId) {

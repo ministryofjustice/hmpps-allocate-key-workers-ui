@@ -34,8 +34,8 @@ export default function routes(services: Services) {
   router.use(populateUserPermissionsAndPrisonConfig())
   router.use(breadcrumbs())
 
-  const uuidMatcher = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i
-  router.use(historyMiddleware(uuidMatcher))
+  // const uuidMatcher = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i
+  router.use(historyMiddleware())
   get('/', Page.HOMEPAGE, minRequireAdminOrSelf, controller.GET)
 
   router.use(removeTrailingSlashMiddleware)

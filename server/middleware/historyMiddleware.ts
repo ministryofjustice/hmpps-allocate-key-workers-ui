@@ -1,4 +1,5 @@
-import { Request, RequestHandler, Response } from 'express'
+import { NextFunction, Request, RequestHandler, Response } from 'express'
+import { gzipSync, unzipSync } from 'node:zlib'
 import { sentenceCase } from '../utils/formatUtils'
 import { Breadcrumbs, type Breadcrumb } from './breadcrumbs'
 import { Page } from '../services/auditService'
@@ -11,11 +12,6 @@ type Landmark = {
 
 function getLandmarks(res: Response): Landmark[] {
   return [
-    {
-      matcher: new RegExp(`^/${res.locals.policyPath}/?$`, 'i'),
-      text: sentenceCase(res.locals.policyStaffs!, true),
-      alias: Page.HOMEPAGE,
-    },
     { matcher: /\/allocate/g, text: `Allocate ${res.locals.policyStaffs!}`, alias: Page.ALLOCATE },
     {
       matcher: /recommend-allocations/g,
@@ -37,8 +33,49 @@ function getLandmarks(res: Response): Landmark[] {
   ]
 }
 
+function replaceResRedirect(req: Request, res: Response, history: string[]) {
+  const originalRedirect = res.redirect
+  res.redirect = (param1: string | number, param2?: string | number) => {
+    const url = (typeof param1 === 'string' ? param1 : param2) as string
+    // eslint-disable-next-line no-nested-ternary
+    const status = typeof param1 === 'number' ? param1 : typeof param2 === 'number' ? param2 : undefined
+
+    const baseUrl = `${req.protocol}://${req.get('host')}`
+    const builtUrl = new URL(url, `${baseUrl}${req.originalUrl}`)
+    const prunedHistory = pruneHistory(builtUrl.pathname + builtUrl.search, history)
+    prunedHistory.push(noHistoryParam(builtUrl.pathname + builtUrl.search))
+    builtUrl.searchParams.set('history', serialiseHistory(prunedHistory))
+
+    return originalRedirect.call(res, status || 302, builtUrl.toString())
+  }
+}
+
+function handlePOSTRedirect(req: Request, res: Response, next: NextFunction) {
+  // POSTs should have the history maintained in the referrer header
+  // and optionally the originalUrl IF not POSTing to a custom location (ie, /filter)
+  const url = new URL(req.headers['referer'] || `http://0.0.0.0${req.originalUrl}`)
+  const history = deserialiseHistory(url.searchParams.get('history') as string)
+
+  if (!history.length) {
+    return next()
+  }
+
+  res.locals.history = history
+  res.locals.b64History = url.searchParams.get('history') as string
+  res.locals.breadcrumbs = new Breadcrumbs(res)
+  res.locals.breadcrumbs.addItems(...getBreadcrumbs(req, res))
+
+  replaceResRedirect(req, res, history)
+
+  return next()
+}
+
 export function historyMiddleware(...excludeUrls: RegExp[]): RequestHandler {
   return (req, res, next) => {
+    if (req.method === 'POST') {
+      return handlePOSTRedirect(req, res, next)
+    }
+
     if (req.method !== 'GET') {
       return next()
     }
@@ -71,40 +108,44 @@ export function historyMiddleware(...excludeUrls: RegExp[]): RequestHandler {
     }
 
     const history = pruneHistory(req.originalUrl, queryHistory)
-    history.push(noHistoryParam(req.originalUrl))
 
     res.locals.history = history
     res.locals.b64History = serialiseHistory(history)
 
     res.locals.historyBackUrl =
-      getLastDifferentPage(req, res) || req.headers?.['referer'] || `/${res.locals.policyPath || ''}`
+      getLastDifferentPage(history) || req.headers?.['referer'] || `/${res.locals.policyPath || ''}`
 
     res.locals.breadcrumbs = new Breadcrumbs(res)
     res.locals.breadcrumbs.addItems(...getBreadcrumbs(req, res))
+
+    replaceResRedirect(req, res, history)
 
     return next()
   }
 }
 
+function compressSync(text: string) {
+  const buffer = Buffer.from(text, 'utf-8')
+  const compressed = gzipSync(buffer)
+  return compressed.toString('base64')
+}
+
+function decompressSync(base64: string) {
+  const buffer = Buffer.from(base64, 'base64')
+  const decompressed = unzipSync(buffer)
+  return decompressed.toString('utf-8')
+}
+
 export function deserialiseHistory(b64String: string = ''): string[] {
   try {
-    return JSON.parse(Buffer.from(b64String || '', 'base64').toString() || '[]')
+    return JSON.parse(decompressSync(b64String || '') || '[]')
   } catch {
     return []
   }
 }
 
 function serialiseHistory(history: string[]) {
-  return Buffer.from(JSON.stringify(history)).toString('base64')
-}
-
-export function restoreHistoryFromJourneyData(req: Request, res: Response) {
-  const history = deserialiseHistory(req.journeyData.b64History)
-  res.locals.history = history
-  res.locals.b64History = req.journeyData.b64History!
-
-  res.locals.breadcrumbs = new Breadcrumbs(res)
-  res.locals.breadcrumbs.addItems(...getBreadcrumbs(req, res))
+  return compressSync(JSON.stringify(history))
 }
 
 export function getHistoryParamForPOST(
@@ -126,24 +167,11 @@ export function getHistoryParamForPOST(
 }
 
 function pruneHistory(url: string, history: string[]) {
-  const deduplicatedHistory = removeDuplicateConsecutiveUrls(history)
-  const historyBefore = getHistoryBefore(deduplicatedHistory, url)
-  const targetUrlNoQuery = url.split('?')[0]
-  const lastIndex = historyBefore.findLastIndex(o => o.split('?')[0] === targetUrlNoQuery)
-  if (lastIndex === -1 || lastIndex === historyBefore.length - 1) return historyBefore
-  return historyBefore.slice(0, lastIndex + 1)
-}
+  const targetUrlNoQuery = url.split('?')[0]!
+  const lastIndex = history.slice(0, history.length - 1).findLastIndex(o => o.split('?')[0] === targetUrlNoQuery)
+  if (lastIndex === -1 || lastIndex === history.length - 1) return history
 
-function removeDuplicateConsecutiveUrls(history: string[]) {
-  const historyWithoutDuplicates: string[] = []
-  for (let i = 0; i < history.length; i += 1) {
-    const url = history[i]!.split('?')[0]!
-    const prev = history[i - 1]?.split('?')[0] || ''
-    if (i === 0 || (url !== prev && url)) {
-      historyWithoutDuplicates.push(history[i]!)
-    }
-  }
-  return historyWithoutDuplicates
+  return [...history.slice(0, lastIndex), noHistoryParam(url)]
 }
 
 export function getBreadcrumbs(req: Request, res: Response) {
@@ -151,7 +179,7 @@ export function getBreadcrumbs(req: Request, res: Response) {
 
   const itemsToAdd = new Map<string, Breadcrumb>()
 
-  for (const [i, url] of (res.locals.history || []).entries()) {
+  for (const [i, url] of (res.locals.history?.slice(0, res.locals.history.length - 1) || []).entries()) {
     const matched = getLandmarks(res).find(mapping => url.split('?')[0]!.match(mapping.matcher))
     if (matched) {
       const historyUpUntil = res.locals.history!.slice(0, i + 1)
@@ -181,23 +209,9 @@ export function noHistoryParam(url: string) {
   return `${baseUrl}?${noHistorySearchParams.toString()}`.replace(/\?$/g, '')
 }
 
-function getHistoryBefore(history: string[], url: string) {
-  const urlNoHistory = url.split('?')[0]
-  const newHistory = [...history]
-  for (let i = history.length - 1; i >= 0; i -= 1) {
-    if (history[i]!.split('?')[0] === urlNoHistory) {
-      newHistory.splice(i, 1)
-    } else {
-      break
-    }
-  }
-
-  return newHistory
-}
-
-export function getLastDifferentPage(req: Request, res: Response) {
-  if (!res.locals.history) return ''
-  return [...res.locals.history].reverse().find(url => url.split('?')[0] !== req.originalUrl.split('?')[0])
+export function getLastDifferentPage(history: string[]) {
+  if (!history?.length) return ''
+  return [...history].reverse().find(url => url.split('?')[0] !== history[history.length - 1]!.split('?')[0])
 }
 
 function getHistoryFromReferer(req: Request) {
@@ -213,8 +227,8 @@ function getHistoryFromReferer(req: Request) {
   return refererHistory
 }
 
-export function createBackUrlFor(b64History: string, matcher: RegExp, fallback: string) {
-  const history = deserialiseHistory(b64History)
+export function createBackUrlFor(res: Response, matcher: RegExp, fallback: string) {
+  const history = deserialiseHistory(res.locals.b64History!)
   const last = history.findLast(o => matcher.test(o)) || fallback
   const prunedHistory = pruneHistory(last, history)
   const searchParams = new URLSearchParams(last.split('?')[1] || '')
@@ -222,8 +236,8 @@ export function createBackUrlFor(b64History: string, matcher: RegExp, fallback: 
   return `${last.split('?')[0]}?${searchParams.toString()}`
 }
 
-export function getLastNonJourneyPage(b64History: string, fallbackUrl: string) {
+export function getLastNonJourneyPage(res: Response, fallbackUrl: string) {
   const nonJourneyPageMatcher =
     /^\/[A-Za-z-]+\/(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})/
-  return createBackUrlFor(b64History, nonJourneyPageMatcher, fallbackUrl)
+  return createBackUrlFor(res, nonJourneyPageMatcher, fallbackUrl)
 }

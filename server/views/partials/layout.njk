@@ -15,24 +15,70 @@
   {% endfor %}
 
   <script nonce="{{ cspNonce }}">
-    document.addEventListener('DOMContentLoaded', function () {
-      try { const history = JSON.parse(atob("{{ b64History }}") || '[]');
-      if (!history.length) {
-        return
-      }
+    // Helper functions to convert between Uint8Array and base64
+    function uint8ArrayToBase64(bytes) {
+      let binary = '';
+      bytes.forEach(b => binary += String.fromCharCode(b));
+      return btoa(binary);
+    }
 
-      document.querySelectorAll('a[href]')
-        .forEach(function (link) {
-          if (link.href.startsWith(window.location.origin)) {
-            const url = new URL(link.href, window.location.origin);
-            if (!url.searchParams.get('history')) {
-              const urlHistory = [...history, link.href.replace(window.location.origin, '')]
-              url.searchParams.set('history', btoa(JSON.stringify(urlHistory)))
+    async function compressToBase64(text) {
+      const stream = new Blob([text]).stream();
+      const compressedStream = stream.pipeThrough(new CompressionStream("gzip"));
+      const compressedBlob = await new Response(compressedStream).blob();
+      const buffer = await compressedBlob.arrayBuffer();
+      const base64String = btoa(String.fromCharCode(...new Uint8Array(buffer)));
+      return base64String;
+    }
+
+    async function decompressFromBase64(base64) {
+      const binaryString = atob(base64);
+      const bytes = Uint8Array.from(binaryString, c => c.charCodeAt(0));
+      const blob = new Blob([bytes]);
+      const decompressedStream = blob.stream().pipeThrough(new DecompressionStream("gzip"));
+      const decompressedResponse = await new Response(decompressedStream).text();
+      return decompressedResponse;
+    }
+
+    document.addEventListener('DOMContentLoaded', async function () {
+      try { 
+        const b64EncHistory = "{{ b64History }}"
+        const history = JSON.parse(await decompressFromBase64(b64EncHistory));
+        if (!history.length) {
+          return
+        }
+
+        console.log(`History passed from server through b64History`)
+        console.log(JSON.stringify(history, null, 2))
+
+        console.log(`History passed from current URL`)
+        const b64EncHistoryFromURL = decodeURIComponent(window.location.search.match(/history=([^&]+)/)?.[1])
+        const historyFromURL = JSON.parse(await decompressFromBase64(b64EncHistoryFromURL))
+        console.log(JSON.stringify(historyFromURL, null, 2))
+        const b64HistoryDecompressed = await btoa(JSON.stringify(historyFromURL))
+        console.log(`Zlib length: ${b64EncHistory.length} vs ${b64HistoryDecompressed.length} (saving ${b64HistoryDecompressed.length - b64EncHistory.length} bytes)`)
+        console.log('getLastDifferentPage: {{ historyBackUrl }}')
+
+        function pruneHistory(history) {
+          const lastPage = history[history.length - 1];
+          const earliestIndex = history.indexOf(lastPage);
+          return history.slice(0, earliestIndex);
+        }
+
+        document.querySelectorAll('a[href]')
+          .forEach(async function (link) {
+            if (link.href.startsWith(window.location.origin)) {
+              const url = new URL(link.href, window.location.origin);
+              if (!url.searchParams.get('history')) {
+                const urlNoOrigin = link.href.replace(window.location.origin, '')
+                const urlHistory = [...history, urlNoOrigin]
+                const prunedHistory = pruneHistory(urlHistory)
+                url.searchParams.set('history', await compressToBase64(JSON.stringify(urlHistory)))
+              }
+              url.searchParams.set('js', 'true')
+              link.href = url.pathname + url.search + url.hash;
             }
-            url.searchParams.set('js', 'true')
-            link.href = url.pathname + url.search + url.hash;
-          }
-        });
+          });
       } catch(e) {
         console.error(`Error decoding history: ${e}`)
       }

@@ -29,7 +29,6 @@ export type JourneyData = {
   assignStaffRole?: AssignStaffRoleJourney
   removeStaffRole?: RemoveStaffRoleJourney
   selectServices?: SelectServicesJourney
-  b64History?: string | undefined
 }
 
 export type UpdateStaffDetailsJourney = Partial<{
