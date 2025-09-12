@@ -26,6 +26,7 @@ import {
   minRequireSelfProfile,
   minRequireView,
 } from './permissions'
+import { journeyPaths } from '../middleware/journey/captureJourneyPaths'
 
 export default function routes(services: Services) {
   const { router, get, useForPolicies } = JourneyRouter()
@@ -57,8 +58,9 @@ export default function routes(services: Services) {
 
   router.use('/manage-roles', minRequireAllocate, ManageRolesRoutes())
   router.use('/recommend-allocations', minRequireAllocate, RecommendStaffAutomaticallyRoutes(services))
-  router.use(insertJourneyIdentifier())
+
   router.use('/:journeyId', JourneyRoutes(dataAccess(), services))
+  router.use(new RegExp(`/(${journeyPaths.join('|')})`), insertJourneyIdentifier())
 
   return router
 }

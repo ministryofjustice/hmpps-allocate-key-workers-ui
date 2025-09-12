@@ -12,7 +12,7 @@ describe('removeTrailingSlashMiddleware', () => {
   it('remove slash at the end of the url', () => {
     removeTrailingSlashMiddleware(
       {
-        url: '/bulk-alerts/start/',
+        originalUrl: '/bulk-alerts/start/',
       } as Request,
       res,
       next,
@@ -24,7 +24,7 @@ describe('removeTrailingSlashMiddleware', () => {
   it('do not remove slash at the end of the url if it is part of a query string', () => {
     removeTrailingSlashMiddleware(
       {
-        url: '/bulk-alerts/start?query=o/',
+        originalUrl: '/bulk-alerts/start?query=o/',
       } as Request,
       res,
       next,
@@ -36,7 +36,7 @@ describe('removeTrailingSlashMiddleware', () => {
   it('remove slash at the end of the path when it is followed by a query string', () => {
     removeTrailingSlashMiddleware(
       {
-        url: '/bulk-alerts/start/?query=test',
+        originalUrl: '/bulk-alerts/start/?query=test',
       } as Request,
       res,
       next,
