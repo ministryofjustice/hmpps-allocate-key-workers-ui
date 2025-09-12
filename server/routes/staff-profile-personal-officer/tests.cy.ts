@@ -1,7 +1,6 @@
 import { defaultKeyworkerDetails } from '../../../integration_tests/mockApis/keyworkerApi'
 import AuthorisedRoles from '../../authentication/authorisedRoles'
 import { createMock } from '../../testutils/mockObjects'
-import { historyToBase64 } from '../../utils/testUtils'
 
 context('Personal Officer Profile Info', () => {
   beforeEach(() => {
@@ -68,13 +67,6 @@ context('Personal Officer Profile Info', () => {
     validatePageContents()
 
     cy.verifyAuditEvents([
-      {
-        who: 'USER1',
-        subjectType: 'NOT_APPLICABLE',
-        details: '{"pageUrl":"/key-worker","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
-        what: 'PAGE_VIEW_ACCESS_ATTEMPT',
-        service: 'DPS023',
-      },
       {
         who: 'USER1',
         subjectType: 'SEARCH_TERM',
@@ -235,10 +227,11 @@ context('Personal Officer Profile Info', () => {
 
   const navigateToTestPage = (jsParam: boolean = true) => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(
-      `/personal-officer/staff-profile/488095?js=${jsParam}&history=${historyToBase64(['/key-worker', '/key-worker/manage', '/key-worker/staff-profile/34353'], true)}`,
-      { failOnStatusCode: false },
-    )
+    cy.visitWithHistory(`/personal-officer/staff-profile/488095?js=${jsParam}`, [
+      '/key-worker',
+      '/key-worker/manage',
+      '/key-worker/staff-profile/34353',
+    ])
   }
 
   const validatePageContents = (readonly = false) => {
@@ -316,7 +309,7 @@ context('Personal Officer Profile Info', () => {
       cy.get('[data-sort-value="John, Doe"] > .govuk-link--no-visited-state').should(
         'have.attr',
         'href',
-        'http://localhost:3001/save-backlink?service=allocate-personal-officers&redirectPath=%2Fprisoner%2FA4288DZ&returnPath=%2Fstaff-profile%2F488095%3Fjs%3Dtrue%26history%3DWyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL21hbmFnZSIsIi9rZXktd29ya2VyL3N0YWZmLXByb2ZpbGUvMzQzNTMiXQ%253D%253D',
+        'http://localhost:3001/save-backlink?service=allocate-personal-officers&redirectPath=%2Fprisoner%2FA4288DZ&returnPath=%2Fstaff-profile%2F488095%3Fjs%3Dtrue%26history%3DH4sIAAAAAAAAE4tW0s9OrdQtzy%252FKTi1S0kHm6ecm5iWmp6IJFpckpqXpFhTlp2XmpOobmxibGivFAgDjnHMYRgAAAA%253D%253D',
       )
 
       cy.findByRole('button', { name: 'Save changes' }).should('be.visible')

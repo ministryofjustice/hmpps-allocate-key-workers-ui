@@ -28,6 +28,6 @@ context('/update-capacity-status-and-working-pattern/cancel', () => {
 
     cy.visit(`/key-worker/${journeyId}/update-capacity-status-and-working-pattern/cancel`)
 
-    cy.url().should('match', /\/update-capacity-status-and-working-pattern$/)
+    cy.url().should('match', /\/update-capacity-status-and-working-pattern\?/)
   })
 })
