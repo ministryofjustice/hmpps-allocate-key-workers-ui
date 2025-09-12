@@ -148,24 +148,6 @@ function serialiseHistory(history: string[]) {
   return compressSync(JSON.stringify(history))
 }
 
-export function getHistoryParamForPOST(
-  req: Request,
-  targetPage?: string,
-  newSearchParams: URLSearchParams = new URLSearchParams(),
-) {
-  const refererHistory = getHistoryFromReferer(req)
-  if (targetPage) {
-    const refererUrl = new URL(req.headers['referer'] || `http://0.0.0.0${req.originalUrl}`)
-    const history = pruneHistory(refererUrl.pathname, refererHistory)
-    const destUrl = `${targetPage}?${newSearchParams.toString()}`.replace(/\?$/g, '')
-    history.push(destUrl)
-    return serialiseHistory(history)
-  }
-  refererHistory.push(noHistoryParam(req.originalUrl))
-  const history = pruneHistory(req.originalUrl, refererHistory)
-  return serialiseHistory(history)
-}
-
 function pruneHistory(url: string, history: string[]) {
   const targetUrlNoQuery = url.split('?')[0]!
   const lastIndex = history.slice(0, history.length - 1).findLastIndex(o => o.split('?')[0] === targetUrlNoQuery)

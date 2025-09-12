@@ -62,17 +62,6 @@ Cypress.Commands.add('verifyAuditEvents', (events: object[]) => {
   return cy.wrap(getSentAuditEvents()).should('deep.equal', events)
 })
 
-Cypress.Commands.add('navigateWithHistory', (url: string, history: string[]) => {
-  const historyString = btoa(JSON.stringify(history))
-  const newUrl = new URL(`http://0.0.0.0${url}`)
-  newUrl.searchParams.set('history', historyString)
-  cy.visit(`${url.split('?')[0]}?${newUrl.searchParams.toString()}`, { failOnStatusCode: false })
-})
-
-Cypress.Commands.add('verifyHistoryLink', { prevSubject: 'element' }, (subject, urlRegex: RegExp) => {
-  return cy.wrap(subject).should('have.attr', 'href').should('match', urlRegex)
-})
-
 Cypress.Commands.add('shouldContainHistoryParam', { prevSubject: 'element' }, (element, history) => {
   cy.wrap(element)
     .invoke('attr', 'href')

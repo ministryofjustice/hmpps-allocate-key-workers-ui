@@ -12,8 +12,6 @@ declare namespace Cypress {
     /** Verify that a POST request to the given URL with the given body results in a not authorised redirect */
     verifyPostRedirectsToNotAuthorised(options: { body: object; url?: string }): Cypress.Chainable<number>
     verifyAuditEvents(events: object[]): Chainable<unknown>
-    navigateWithHistory(url: string, history: string[]): Chainable<unknown>
-    verifyHistoryLink(urlRegex: RegExp): Chainable<Subject>
     /**
      * Custom command to verify that an API matching the parameter was called the expected number of times.
      * @param matching a wiremock request to /requests/find. For options see: https://wiremock.org/docs/standalone/admin-api-reference/#tag/Requests/operation/removeRequestsByMetadata
