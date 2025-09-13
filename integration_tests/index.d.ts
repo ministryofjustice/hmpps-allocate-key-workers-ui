@@ -18,7 +18,7 @@ declare namespace Cypress {
      * @param expected the number of requests expected
      */
     verifyAPIWasCalled(matching: string | object, expected: number): Chainable<*>
-    shouldContainHistoryParam(history: string[]): Chainable<Subject>
+    shouldContainHistoryParam(history: (string | RegExp)[]): Chainable<Subject>
     visitWithHistory(url: string, history: string[]): Chainable<unknown>
   }
 }

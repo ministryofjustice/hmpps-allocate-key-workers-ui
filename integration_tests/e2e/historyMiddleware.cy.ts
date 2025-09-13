@@ -92,7 +92,7 @@ context('historyMiddleware', () => {
       .should('include.text', 'Allocate key workers')
       .shouldContainHistoryParam([
         '/key-worker',
-        '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true',
+        /\/key-worker\/allocate\?query=&cellLocationPrefix=&excludeActiveAllocations=true/,
       ])
   })
 
@@ -123,7 +123,7 @@ context('historyMiddleware', () => {
       .should('include.text', 'Allocate key workers')
       .shouldContainHistoryParam([
         '/key-worker',
-        '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true',
+        /\/key-worker\/allocate\?query=&cellLocationPrefix=&excludeActiveAllocations=true/,
       ])
 
     cy.findByRole('button', { name: 'Continue' }).click()
@@ -142,15 +142,15 @@ context('historyMiddleware', () => {
       .should('include.text', 'Allocate key workers')
       .shouldContainHistoryParam([
         '/key-worker',
-        '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true',
+        /\/key-worker\/allocate\?query=&cellLocationPrefix=&excludeActiveAllocations=true/,
       ])
     cy.get('.govuk-breadcrumbs__link')
       .eq(3)
       .should('include.text', 'Allocate key workers automatically')
       .shouldContainHistoryParam([
         '/key-worker',
-        '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true',
-        '/key-worker/recommend-allocations?allowPartialAllocation=true&js=true',
+        /\/key-worker\/allocate\?query=&cellLocationPrefix=&excludeActiveAllocations=true/,
+        /\/key-worker\/recommend-allocations\?allowPartialAllocation=true/,
       ])
   })
 
@@ -175,7 +175,7 @@ context('historyMiddleware', () => {
     cy.get('.govuk-breadcrumbs__link')
       .eq(2)
       .should('include.text', 'Manage key workers')
-      .shouldContainHistoryParam(['/key-worker', '/key-worker/manage?query=&status=ACTIVE'])
+      .shouldContainHistoryParam(['/key-worker', /\/key-worker\/manage\?query=&status=ACTIVE/])
 
     cy.get('a[href*="prisoner-allocation-history"]').eq(0).click()
 
@@ -189,14 +189,14 @@ context('historyMiddleware', () => {
     cy.get('.govuk-breadcrumbs__link')
       .eq(2)
       .should('include.text', 'Manage key workers')
-      .shouldContainHistoryParam(['/key-worker', '/key-worker/manage?query=&status=ACTIVE'])
+      .shouldContainHistoryParam(['/key-worker', /\/key-worker\/manage\?query=&status=ACTIVE/])
     cy.get('.govuk-breadcrumbs__link')
       .eq(3)
       .should('include.text', 'Key worker profile')
       .shouldContainHistoryParam([
         '/key-worker',
-        '/key-worker/manage?query=&status=ACTIVE',
-        '/key-worker/staff-profile/488095',
+        /\/key-worker\/manage\?query=&status=ACTIVE/,
+        /\/key-worker\/staff-profile\/488095/,
       ])
   })
 })

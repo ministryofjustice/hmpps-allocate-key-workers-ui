@@ -149,11 +149,31 @@ function serialiseHistory(history: string[]) {
 }
 
 function pruneHistory(url: string, history: string[]) {
+  const dedupedHistory = deduplicateHistory(history)
   const targetUrlNoQuery = url.split('?')[0]!
-  const lastIndex = history.slice(0, history.length - 1).findLastIndex(o => o.split('?')[0] === targetUrlNoQuery)
-  if (lastIndex === -1 || lastIndex === history.length - 1) return history
+  const lastIndex = dedupedHistory
+    .slice(0, dedupedHistory.length - 1)
+    .findLastIndex(o => o.split('?')[0] === targetUrlNoQuery)
+  if (lastIndex === -1 || lastIndex === dedupedHistory.length - 1) return dedupedHistory
 
-  return [...history.slice(0, lastIndex), noHistoryParam(url)]
+  return [...dedupedHistory.slice(0, lastIndex), noHistoryParam(url)]
+}
+
+function deduplicateHistory(history: string[]) {
+  // De-duplicate consecutive history items without query params
+  if (history.length < 2) return history
+
+  const newHistory = []
+  let comparer = history[history.length - 1]!
+  newHistory.push(comparer)
+  for (let i = history.length - 1; i >= 0; i -= 1) {
+    const item = history[i]!
+    if (item.split('?')[0] !== comparer.split('?')[0]) {
+      newHistory.push(item)
+      comparer = item
+    }
+  }
+  return newHistory.reverse()
 }
 
 export function getBreadcrumbs(req: Request, res: Response) {

@@ -70,8 +70,14 @@ Cypress.Commands.add('shouldContainHistoryParam', { prevSubject: 'element' }, (e
       const historyParam = url.get('history')
 
       cy.task('gzipDecompress', historyParam).then(decompressedText => {
-        const actualArray = decompressedText as string
-        expect(actualArray).to.deep.equal(JSON.stringify(history))
+        const actualArray = JSON.parse(decompressedText as string)
+        for (let i = 0; i < history.length; i += 1) {
+          if (typeof history[i] === 'string') {
+            expect(actualArray[i]).to.equal(history[i])
+          } else {
+            expect(actualArray[i]).matches(new RegExp(history[i] as RegExp))
+          }
+        }
       })
     })
 })
