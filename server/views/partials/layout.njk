@@ -15,13 +15,6 @@
   {% endfor %}
 
   <script nonce="{{ cspNonce }}">
-    // Helper functions to convert between Uint8Array and base64
-    function uint8ArrayToBase64(bytes) {
-      let binary = '';
-      bytes.forEach(b => binary += String.fromCharCode(b));
-      return btoa(binary);
-    }
-
     async function compressToBase64(text) {
       const stream = new Blob([text]).stream();
       const compressedStream = stream.pipeThrough(new CompressionStream("gzip"));
@@ -42,22 +35,11 @@
 
     document.addEventListener('DOMContentLoaded', async function () {
       try { 
-        const b64EncHistory = "{{ b64History }}"
-        const history = JSON.parse(await decompressFromBase64(b64EncHistory));
+        const b64CompressedHistory = "{{ b64History }}"
+        const history = JSON.parse(await decompressFromBase64(b64CompressedHistory));
         if (!history.length) {
           return
         }
-
-        console.log(`History passed from server through b64History`)
-        console.log(JSON.stringify(history, null, 2))
-
-        console.log(`History passed from current URL`)
-        const b64EncHistoryFromURL = decodeURIComponent(window.location.search.match(/history=([^&]+)/)?.[1])
-        const historyFromURL = JSON.parse(await decompressFromBase64(b64EncHistoryFromURL))
-        console.log(JSON.stringify(historyFromURL, null, 2))
-        const b64HistoryDecompressed = await btoa(JSON.stringify(historyFromURL))
-        console.log(`Zlib length: ${b64EncHistory.length} vs ${b64HistoryDecompressed.length} (saving ${b64HistoryDecompressed.length - b64EncHistory.length} bytes)`)
-        console.log('getLastDifferentPage: {{ historyBackUrl }}')
 
         function pruneHistory(history) {
           const lastPage = history[history.length - 1];
