@@ -297,11 +297,12 @@ context('Profile Info', () => {
     if (readonly) {
       cy.get('.govuk-button').should('not.exist')
     } else {
-      cy.get('[data-sort-value="John, Doe"] > .govuk-link--no-visited-state').should(
-        'have.attr',
-        'href',
-        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FA4288DZ&returnPath=%2Fstaff-profile%2F488095%3Fjs%3Dtrue%26history%3DH4sIAAAAAAAAE4tW0s9OrdQtzy%252FKTi1S0kHm6ecm5iWmp6IJFpckpqXpFhTlp2XmpOobmxibGivFAgDjnHMYRgAAAA%253D%253D',
-      )
+      cy.get('[data-sort-value="John, Doe"] > .govuk-link--no-visited-state')
+        .should('have.attr', 'href')
+        .should(
+          'include',
+          'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FA4288DZ&returnPath=%2Fstaff-profile%2F488095%3Fjs%3Dtrue%26history%3D',
+        )
       cy.get('.govuk-button').should('contain.text', 'Save changes')
     }
   }

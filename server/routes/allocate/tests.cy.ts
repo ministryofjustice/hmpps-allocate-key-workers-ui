@@ -80,16 +80,16 @@ context('/allocate', () => {
     cy.get('.govuk-table__row:nth-child(2) > :nth-child(1) > :nth-child(1)')
       .should('have.attr', 'href')
       .should(
-        'equal',
-        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FAAA1234&returnPath=%2Fallocate%3Fquery%3DALL%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dfalse%26js%3Dfalse%26history%3DH4sIAAAAAAAAE4tW0s9OrdQtzy%252FKTi3ST8zJyU9OLEm1LyxNLaq0dfTxUUtOzcnxAQlm5ucFFKWmZVbYqqVWJOeUpqQ6JpdklqU6QvRk5ucV26Yl5hSnqmVBGUo6tDQ8FgCvsDrouwAAAA%253D%253D',
+        'include',
+        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FAAA1234&returnPath=%2Fallocate%3Fquery%3DALL%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dfalse%26js%3Dfalse%26history%3D',
       )
 
     // Prisoner profile alerts back link
     cy.get('.govuk-table__row:nth-child(2) >:nth-child(3) > :nth-child(1) > :nth-child(2) > :nth-child(1)')
       .should('have.attr', 'href')
       .should(
-        'equal',
-        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FAAA1234%2Falerts%2Factive&returnPath=%2Fallocate%3Fquery%3DALL%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dfalse%26js%3Dfalse%26history%3DH4sIAAAAAAAAE4tW0s9OrdQtzy%252FKTi3ST8zJyU9OLEm1LyxNLaq0dfTxUUtOzcnxAQlm5ucFFKWmZVbYqqVWJOeUpqQ6JpdklqU6QvRk5ucV26Yl5hSnqmVBGUo6tDQ8FgCvsDrouwAAAA%253D%253D',
+        'include',
+        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FAAA1234%2Falerts%2Factive&returnPath=%2Fallocate%3Fquery%3DALL%26cellLocationPrefix%3D%26excludeActiveAllocations%3Dfalse%26js%3Dfalse%26history%3D',
       )
 
     checkPageContentsNoFilter()

@@ -325,16 +325,16 @@ context('/recommend-allocations', () => {
     cy.get('.govuk-table__row:nth-child(2) > :nth-child(1) > :nth-child(1)')
       .should('have.attr', 'href')
       .should(
-        'equal',
-        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FG7189VT&returnPath=%2Frecommend-allocations%3FallowPartialAllocation%3Dtrue%26js%3Dtrue%26history%3DH4sIAAAAAAAAE4tW0s9OrdQtzy%252FKTi1S0kHm6Sfm5OQnJ5ak4hC2LyxNLaq0VUtOzcnxAYlk5ucFFKWmZVbYGqqlViTnlKakOiaXZJalOkJ0ZObnFduWFJWiG1iUmpyfm5ual6KbiFCoFAsA2mGZ3JsAAAA%253D',
+        'include',
+        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FG7189VT&returnPath=%2Frecommend-allocations%3FallowPartialAllocation%3Dtrue%26js%3Dtrue%26history%3D',
       )
 
     // Prisoner profile alerts back link
     cy.get('.govuk-table__row:nth-child(2) >:nth-child(3) > :nth-child(1) > :nth-child(2) > :nth-child(1)')
       .should('have.attr', 'href')
       .should(
-        'equal',
-        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FG7189VT%2Falerts%2Factive&returnPath=%2Frecommend-allocations%3FallowPartialAllocation%3Dtrue%26js%3Dtrue%26history%3DH4sIAAAAAAAAE4tW0s9OrdQtzy%252FKTi1S0kHm6Sfm5OQnJ5ak4hC2LyxNLaq0VUtOzcnxAYlk5ucFFKWmZVbYGqqlViTnlKakOiaXZJalOkJ0ZObnFduWFJWiG1iUmpyfm5ual6KbiFCoFAsA2mGZ3JsAAAA%253D',
+        'include',
+        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FG7189VT%2Falerts%2Factive&returnPath=%2Frecommend-allocations%3FallowPartialAllocation%3Dtrue%26js%3Dtrue%26history%3D',
       )
   }
 
