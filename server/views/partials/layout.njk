@@ -15,24 +15,52 @@
   {% endfor %}
 
   <script nonce="{{ cspNonce }}">
-    document.addEventListener('DOMContentLoaded', function () {
-      try { const history = JSON.parse(atob("{{ b64History }}") || '[]');
-      if (!history.length) {
-        return
-      }
+    async function compressToBase64(text) {
+      const stream = new Blob([text]).stream();
+      const compressedStream = stream.pipeThrough(new CompressionStream("gzip"));
+      const compressedBlob = await new Response(compressedStream).blob();
+      const buffer = await compressedBlob.arrayBuffer();
+      const base64String = btoa(String.fromCharCode(...new Uint8Array(buffer)));
+      return base64String;
+    }
 
-      document.querySelectorAll('a[href]')
-        .forEach(function (link) {
-          if (link.href.startsWith(window.location.origin)) {
-            const url = new URL(link.href, window.location.origin);
-            if (!url.searchParams.get('history')) {
-              const urlHistory = [...history, link.href.replace(window.location.origin, '')]
-              url.searchParams.set('history', btoa(JSON.stringify(urlHistory)))
+    async function decompressFromBase64(base64) {
+      const binaryString = atob(base64);
+      const bytes = Uint8Array.from(binaryString, c => c.charCodeAt(0));
+      const blob = new Blob([bytes]);
+      const decompressedStream = blob.stream().pipeThrough(new DecompressionStream("gzip"));
+      const decompressedResponse = await new Response(decompressedStream).text();
+      return decompressedResponse;
+    }
+
+    document.addEventListener('DOMContentLoaded', async function () {
+      try { 
+        const b64CompressedHistory = "{{ b64History }}"
+        const history = JSON.parse(await decompressFromBase64(b64CompressedHistory));
+        if (!history.length) {
+          return
+        }
+
+        function pruneHistory(history) {
+          const lastPage = history[history.length - 1];
+          const earliestIndex = history.indexOf(lastPage);
+          return history.slice(0, earliestIndex);
+        }
+
+        document.querySelectorAll('a[href]')
+          .forEach(async function (link) {
+            if (link.href.startsWith(window.location.origin)) {
+              const url = new URL(link.href, window.location.origin);
+              if (!url.searchParams.get('history')) {
+                const urlNoOrigin = link.href.replace(window.location.origin, '')
+                const urlHistory = [...history, urlNoOrigin]
+                const prunedHistory = pruneHistory(urlHistory)
+                url.searchParams.set('history', await compressToBase64(JSON.stringify(urlHistory)))
+              }
+              url.searchParams.set('js', 'true')
+              link.href = url.pathname + url.search + url.hash;
             }
-            url.searchParams.set('js', 'true')
-            link.href = url.pathname + url.search + url.hash;
-          }
-        });
+          });
       } catch(e) {
         console.error(`Error decoding history: ${e}`)
       }

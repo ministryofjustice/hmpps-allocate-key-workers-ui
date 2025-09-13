@@ -1,6 +1,7 @@
 import { defineConfig } from 'cypress'
 import coverageTask from '@cypress/code-coverage/task'
 import { GenerateCtrfReport } from 'cypress-ctrf-json-reporter'
+import { gunzipSync, gzipSync } from 'zlib'
 import { resetStubs } from './integration_tests/mockApis/wiremock'
 import auth from './integration_tests/mockApis/auth'
 import tokenVerification from './integration_tests/mockApis/tokenVerification'
@@ -32,6 +33,16 @@ export default defineConfig({
         ...componentsApi,
         ...locationsApi,
         ...prisonerSearchApi,
+        gzipCompress: text => {
+          const buffer = Buffer.from(text, 'utf-8')
+          const compressed = gzipSync(buffer)
+          return compressed.toString('base64')
+        },
+        gzipDecompress: text => {
+          const buffer = Buffer.from(text, 'base64')
+          const decompressed = gunzipSync(buffer)
+          return decompressed.toString('utf-8')
+        },
       })
       // eslint-disable-next-line no-new
       new GenerateCtrfReport({

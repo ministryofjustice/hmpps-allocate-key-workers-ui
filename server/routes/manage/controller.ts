@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 import AllocationsApiService from '../../services/allocationsApi/allocationsApiService'
 import { sanitizeQueryName, sanitizeSelectValue } from '../../middleware/validationMiddleware'
 import { components } from '../../@types/keyWorker'
-import { getHistoryParamForPOST } from '../../middleware/historyMiddleware'
 
 export class ManageController {
   constructor(private readonly allocationsApiService: AllocationsApiService) {}
@@ -54,7 +53,6 @@ export class ManageController {
       query: req.body.query,
       status: req.body.status,
     })
-    queryParams.set('history', getHistoryParamForPOST(req, `/${res.locals.policyPath}/manage`, queryParams))
     res.redirect(`manage?${queryParams.toString()}`)
   }
 }

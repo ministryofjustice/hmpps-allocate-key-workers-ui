@@ -23,7 +23,7 @@ context('/update-capacity-status-and-working-pattern/check-answers', () => {
         },
       },
     })
-    cy.url().should('match', /\/check-answers$/)
+    cy.url().should('match', /\/check-answers/)
 
     verifyPageCommonContent()
 
@@ -32,7 +32,7 @@ context('/update-capacity-status-and-working-pattern/check-answers', () => {
     cy.findByRole('link', { name: /Change the new status/i })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('to.match', /update-status$/)
+      .and('to.match', /update-status/)
 
     proceedToNextPage('Active')
   })
@@ -47,7 +47,7 @@ context('/update-capacity-status-and-working-pattern/check-answers', () => {
         deactivateActiveAllocations: false,
       },
     })
-    cy.url().should('match', /\/check-answers$/)
+    cy.url().should('match', /\/check-answers/)
 
     verifyPageCommonContent()
 
@@ -57,12 +57,12 @@ context('/update-capacity-status-and-working-pattern/check-answers', () => {
     cy.findByRole('link', { name: /Change the new status/i })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('to.match', /update-status$/)
+      .and('to.match', /update-status/)
 
     cy.findByRole('link', { name: /Change whether to deallocate current prisoners/i })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('to.match', /update-status-unavailable$/)
+      .and('to.match', /update-status-unavailable/)
 
     proceedToNextPage('Unavailable (long-term absence)')
   })
@@ -78,7 +78,7 @@ context('/update-capacity-status-and-working-pattern/check-answers', () => {
         reactivateOn: '2070-09-05T00:00:00.000Z',
       },
     })
-    cy.url().should('match', /\/check-answers$/)
+    cy.url().should('match', /\/check-answers/)
 
     verifyPageCommonContent()
 
@@ -89,17 +89,17 @@ context('/update-capacity-status-and-working-pattern/check-answers', () => {
     cy.findByRole('link', { name: /Change the new status/i })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('to.match', /update-status$/)
+      .and('to.match', /update-status/)
 
     cy.findByRole('link', { name: /Change the return date/i })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('to.match', /update-status-annual-leave-return$/)
+      .and('to.match', /update-status-annual-leave-return/)
 
     cy.findByRole('link', { name: /Change whether to deallocate current prisoners/i })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('to.match', /update-status-unavailable$/)
+      .and('to.match', /update-status-unavailable/)
 
     proceedToNextPage('Unavailable (annual leave)')
   })
@@ -113,7 +113,7 @@ context('/update-capacity-status-and-working-pattern/check-answers', () => {
 
   const proceedToNextPage = (statusDescription: string) => {
     cy.findByRole('button', { name: 'Confirm and submit' }).click()
-    cy.url().should('match', /\/update-capacity-status-and-working-pattern$/)
+    cy.url().should('match', /\/update-capacity-status-and-working-pattern\?/)
     cy.get('.govuk-notification-banner__heading')
       .should('be.visible')
       .and('contain.text', `You have updated this key worker’s status to ${statusDescription}.`)

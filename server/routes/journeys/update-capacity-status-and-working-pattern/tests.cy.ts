@@ -3,16 +3,9 @@ import { createMock } from '../../../testutils/mockObjects'
 import { defaultKeyworkerDetails } from '../../../../integration_tests/mockApis/keyworkerApi'
 import { verifyRoleBasedAccess } from '../../../../integration_tests/support/roleBasedAccess'
 import { UserPermissionLevel } from '../../../interfaces/hmppsUser'
-import { historyToBase64 } from '../../../utils/testUtils'
 
 context('Update capacity, status and working pattern', () => {
   const journeyId = uuidV4()
-  const history = historyToBase64([
-    '/key-worker',
-    '/key-worker/manage',
-    '/key-worker/staff-profile/488095',
-    '/key-worker/start-update-staff/488105?proceedTo=update-capacity-status-and-working-pattern',
-  ])
 
   beforeEach(() => {
     cy.task('reset')
@@ -34,7 +27,7 @@ context('Update capacity, status and working pattern', () => {
 
   it('should show staff details and change links', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/update-capacity-status-and-working-pattern$/)
+    cy.url().should('match', /\/update-capacity-status-and-working-pattern\?/)
 
     cy.findByRole('heading', {
       name: 'Available-Active Key-Worker – update capacity, status or working pattern',
@@ -42,13 +35,10 @@ context('Update capacity, status and working pattern', () => {
 
     cy.findByRole('link', { name: 'Back to key worker profile' })
       .should('be.visible')
-      .and('have.attr', 'href')
-      .and(
-        'match',
-        new RegExp(
-          `/key-worker/staff-profile/488095\\?history=${historyToBase64(['/key-worker', '/key-worker/manage', '/key-worker/staff-profile/488095'], true)}`,
-        ),
-      )
+      .shouldContainHistoryParam([
+        `/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern`,
+        `/key-worker/${journeyId}/update-capacity-status-and-working-pattern`,
+      ])
 
     cy.contains('dt', 'Status').next().should('include.text', 'Inactive')
     cy.contains('dt', 'Maximum capacity').next().should('include.text', '6')
@@ -57,21 +47,21 @@ context('Update capacity, status and working pattern', () => {
     cy.findByRole('link', { name: /Update status/i })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('to.match', /update-status$/)
+      .and('to.match', /update-status/)
     cy.findByRole('link', { name: /Update maximum capacity/i })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('to.match', /update-capacity$/)
+      .and('to.match', /update-capacity/)
     cy.findByRole('link', { name: /Update working pattern/i })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('to.match', /update-working-pattern$/)
+      .and('to.match', /update-working-pattern/)
   })
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(
-      `/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern&history=${history}`,
+      `/key-worker/${journeyId}/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern`,
       {
         failOnStatusCode: false,
       },

@@ -1,7 +1,6 @@
 import { v4 as uuidV4 } from 'uuid'
 import { verifyRoleBasedAccess } from '../../../../../integration_tests/support/roleBasedAccess'
 import { UserPermissionLevel } from '../../../../interfaces/hmppsUser'
-import { historyToBase64 } from '../../../../utils/testUtils'
 
 context('/manage-roles/remove', () => {
   const journeyId = uuidV4()
@@ -78,11 +77,10 @@ context('/manage-roles/remove', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(
-      `/key-worker/${journeyId}/manage-roles/remove?history=${historyToBase64(['/key-worker', '/key-worker/manage-roles', '/key-worker/manage-roles/assign'], true)}`,
-      {
-        failOnStatusCode: false,
-      },
-    )
+    cy.visitWithHistory(`/key-worker/${journeyId}/manage-roles/remove`, [
+      '/key-worker',
+      '/key-worker/manage-roles',
+      '/key-worker/manage-roles/assign',
+    ])
   }
 })

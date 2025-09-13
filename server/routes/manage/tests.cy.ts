@@ -39,20 +39,6 @@ context('Manage key workers', () => {
     cy.verifyAuditEvents([
       {
         who: 'USER1',
-        subjectType: 'NOT_APPLICABLE',
-        details: '{"pageUrl":"/key-worker","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
-        what: 'PAGE_VIEW_ACCESS_ATTEMPT',
-        service: 'DPS023',
-      },
-      {
-        who: 'USER1',
-        subjectType: 'NOT_APPLICABLE',
-        details: '{"pageUrl":"/key-worker/manage?query=test+term+","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
-        what: 'PAGE_VIEW_ACCESS_ATTEMPT',
-        service: 'DPS023',
-      },
-      {
-        who: 'USER1',
         subjectType: 'SEARCH_TERM',
         details:
           '{"pageUrl":"/key-worker/manage?query=test+term+","pageName":"MANAGE_ALLOCATABLE_STAFF","query":"test term","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',

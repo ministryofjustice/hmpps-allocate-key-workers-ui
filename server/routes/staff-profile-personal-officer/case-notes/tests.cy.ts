@@ -25,13 +25,11 @@ context('Case notes', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(
-      `/personal-officer/staff-profile/488095/case-notes?history=WyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL21hbmFnZSIsIi9rZXktd29ya2VyL3N0YWZmLXByb2ZpbGUvMzQzNTMiXQ%3D%3D`,
-      {
-        failOnStatusCode: false,
-      },
-    )
-
+    cy.visitWithHistory(`/personal-officer/staff-profile/488095/case-notes`, [
+      '/personal-officer',
+      '/personal-officer/manage',
+      '/personal-officer/staff-profile/34353',
+    ])
     cy.get('.case-note-details').eq(0).click()
     cy.get('.case-note-details').eq(1).click()
   }
@@ -41,7 +39,7 @@ context('Case notes', () => {
     cy.findByRole('heading', { name: /^AVAILABLE-ACTIVE KEY-WORKER$/i }).should('be.visible')
 
     cy.get('.govuk-breadcrumbs__list-item').eq(0).should('include.text', 'Digital Prison Services')
-    cy.get('.govuk-breadcrumbs__list-item').eq(1).should('include.text', 'Manage personal officers')
+    cy.get('.govuk-breadcrumbs__list-item').eq(1).should('include.text', 'Personal officers')
 
     cy.get('.status-tag').eq(0).should('have.text', 'Active')
 

@@ -4,7 +4,7 @@ import { SchemaType } from './schema'
 export class SelectPrisonOfficerRoleController {
   GET = async (req: Request, res: Response) => {
     res.render('manage-roles/assign/role/view', {
-      backUrl: `../assign?history=${req.journeyData.b64History}`,
+      backUrl: `../assign`,
       isPrisonOfficer: req.journeyData.assignStaffRole!.isPrisonOfficer,
     })
   }

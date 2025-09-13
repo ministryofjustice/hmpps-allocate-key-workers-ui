@@ -14,7 +14,7 @@ context('/manage-roles/remove/confirmation', () => {
 
   it('should render confirmation page', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/confirmation$/)
+    cy.url().should('match', /\/confirmation/)
 
     cy.title().should('equal', 'Confirmation - Key workers - DPS')
     cy.findByText('Key worker role removed').should('be.visible')
@@ -23,7 +23,7 @@ context('/manage-roles/remove/confirmation', () => {
     cy.findByRole('link', { name: /Return to key workers homepage/ })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('match', /\/key-worker$/)
+      .and('match', /\/key-worker/)
   })
 
   const navigateToTestPage = () => {

@@ -1,5 +1,3 @@
-import { historyToBase64 } from '../../../utils/testUtils'
-
 context('Case notes', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -21,12 +19,11 @@ context('Case notes', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(
-      `/key-worker/staff-profile/488095/case-notes?history=${historyToBase64(['/key-worker', '/key-worker/manage', '/key-worker/staff-profile/34353'], true)}`,
-      {
-        failOnStatusCode: false,
-      },
-    )
+    cy.visitWithHistory(`/key-worker/staff-profile/488095/case-notes`, [
+      '/key-worker',
+      '/key-worker/manage',
+      '/key-worker/staff-profile/34353',
+    ])
 
     cy.get('.case-note-details').eq(0).click()
     cy.get('.case-note-details').eq(1).click()

@@ -16,7 +16,7 @@ export const UpdateCapacityAndStatusRoutes = (services: Services) => {
   const { router, get } = JourneyRouter()
   const controller = new UpdateCapacityAndStatusController()
 
-  router.use(redirectCheckAnswersMiddleware([/update-capacity-status-and-working-pattern$/, /check-answers$/]))
+  router.use(redirectCheckAnswersMiddleware([/update-capacity-status-and-working-pattern$/, /check-answers/]))
 
   get('*any', Page.UPDATE_STAFF_CONFIGURATION, (req, res, next) => {
     if (req.journeyData.staffDetails?.staffId) {

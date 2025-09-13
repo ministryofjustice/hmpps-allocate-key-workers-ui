@@ -4,7 +4,7 @@ import { getLastNonJourneyPage } from '../historyMiddleware'
 export default function preventNavigationToExpiredJourneys() {
   return (req: Request, res: Response, next: NextFunction): void => {
     if (req.journeyData?.journeyCompleted && !req.originalUrl?.match(/\/confirmation(\/?$|\?)/)) {
-      const url = getLastNonJourneyPage(req.journeyData.b64History!, `/${res.locals.policyPath}`)
+      const url = getLastNonJourneyPage(res, `/${res.locals.policyPath}`)
       return res.redirect(url)
     }
 

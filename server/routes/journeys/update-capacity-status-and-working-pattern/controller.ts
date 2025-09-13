@@ -8,7 +8,7 @@ export class UpdateCapacityAndStatusController {
     const staffDetails = req.journeyData.staffDetails!
 
     const backUrl = createBackUrlFor(
-      req.journeyData.b64History!,
+      res,
       /staff-profile/,
       `/${res.locals.policyPath}/staff-profile/${staffDetails.staffId}`,
     )

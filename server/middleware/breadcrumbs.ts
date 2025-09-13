@@ -1,4 +1,6 @@
 import type { Request, Response, NextFunction, RequestHandler } from 'express'
+import { Page } from '../services/auditService'
+import { sentenceCase } from '../utils/formatUtils'
 
 export type Breadcrumb = { href: string; text: string; alias?: string }
 
@@ -10,6 +12,11 @@ export class Breadcrumbs {
       {
         text: 'Digital Prison Services',
         href: res.locals.digitalPrisonServicesUrl,
+      },
+      {
+        alias: Page.HOMEPAGE,
+        href: `/${res.locals.policyPath || ''}`,
+        text: sentenceCase(res.locals.policyStaffs!, true),
       },
     ]
   }

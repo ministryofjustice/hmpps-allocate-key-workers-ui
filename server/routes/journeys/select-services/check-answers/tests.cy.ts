@@ -18,7 +18,7 @@ context('/select-services/check-answers', () => {
 
   it(`should try all cases`, () => {
     navigateToTestPage()
-    cy.url().should('match', /\/check-answers$/)
+    cy.url().should('match', /\/check-answers/)
 
     verifyPageContent()
 
@@ -28,12 +28,12 @@ context('/select-services/check-answers', () => {
     cy.findByRole('link', { name: /Change the services to be active/i })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('to.match', /select-services$/)
+      .and('to.match', /select-services/)
 
     cy.findByRole('link', { name: /Change the services to be inactive/i })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('to.match', /select-services$/)
+      .and('to.match', /select-services/)
 
     proceedToNextPage()
 
@@ -62,7 +62,7 @@ context('/select-services/check-answers', () => {
 
   const proceedToNextPage = () => {
     cy.findByRole('button', { name: 'Save' }).click()
-    cy.url().should('match', /\/confirmation$/)
+    cy.url().should('match', /\/confirmation/)
   }
 
   const navigateToTestPage = () => {

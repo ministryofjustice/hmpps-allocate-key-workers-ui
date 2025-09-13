@@ -5,7 +5,6 @@ import { ChangeStaffController } from '../base/changeStaffController'
 import { schemaFactory } from './schema'
 import { FLASH_KEY__ALLOCATE_RESULT } from '../../utils/constants'
 import { deduplicateFieldErrors } from '../../middleware/validationMiddleware'
-import { getHistoryParamForPOST } from '../../middleware/historyMiddleware'
 import { prisonerProfileBacklink } from '../../utils/utils'
 
 export class AllocateStaffController extends ChangeStaffController {
@@ -90,7 +89,6 @@ export class AllocateStaffController extends ChangeStaffController {
       cellLocationPrefix: req.body.cellLocationPrefix || '',
       excludeActiveAllocations: req.body.excludeActiveAllocations || false,
     })
-    params.set('history', getHistoryParamForPOST(req, `/${res.locals.policyPath}/allocate`, params))
     params.set('js', req.body.js === 'true' ? 'true' : 'false')
     return res.redirect(`/${res.locals.policyPath}/allocate?${params.toString()}`)
   }

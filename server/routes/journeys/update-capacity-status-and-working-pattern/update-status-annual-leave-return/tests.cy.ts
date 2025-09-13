@@ -21,7 +21,7 @@ context('/update-capacity-status-and-working-pattern/update-status-unavailable',
 
   it('should try all cases', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/update-status-annual-leave-return$/)
+    cy.url().should('match', /\/update-status-annual-leave-return/)
 
     verifyPageContent()
 
@@ -46,7 +46,7 @@ context('/update-capacity-status-and-working-pattern/update-status-unavailable',
     cancelButton()
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('match', /cancel$/)
+      .and('match', /cancel/)
   }
 
   const verifyValidationErrors = () => {
@@ -62,7 +62,7 @@ context('/update-capacity-status-and-working-pattern/update-status-unavailable',
   const proceedToNextPage = () => {
     yearInput().type('2070')
     continueButton().click()
-    cy.url().should('match', /\/check-answers$/)
+    cy.url().should('match', /\/check-answers/)
   }
 
   const verifyInputValuesArePersisted = () => {

@@ -4,7 +4,6 @@ import AllocationsApiService from '../../services/allocationsApi/allocationsApiS
 import { formatDateConcise } from '../../utils/datetimeUtils'
 import { ResQuerySchemaType } from './schema'
 import { getEstablishmentData } from './utils'
-import { getHistoryParamForPOST } from '../../middleware/historyMiddleware'
 
 export class StaffDataController {
   constructor(private readonly allocationsApiService: AllocationsApiService) {}
@@ -62,7 +61,6 @@ export class StaffDataController {
     const searchParams = new URLSearchParams({
       dateFrom: req.body.dateFrom,
       dateTo: req.body.dateTo,
-      history: getHistoryParamForPOST(req),
     })
     res.redirect(`data?${searchParams.toString()}`)
   }

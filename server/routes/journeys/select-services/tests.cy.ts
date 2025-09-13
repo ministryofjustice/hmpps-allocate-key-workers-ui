@@ -21,7 +21,7 @@ context('/select-services', () => {
 
   it('should try all cases', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/select-services$/)
+    cy.url().should('match', /\/select-services/)
 
     verifyPageContent()
 
@@ -47,7 +47,7 @@ context('/select-services', () => {
     cy.findByRole('link', { name: 'Back' })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('match', /establishment-settings$/)
+      .and('match', /establishment-settings/)
   }
 
   const verifyValidationErrors = () => {
@@ -61,7 +61,7 @@ context('/select-services', () => {
   const proceedToNextPage = () => {
     kwRadio().click()
     continueButton().click()
-    cy.url().should('match', /\/check-answers$/)
+    cy.url().should('match', /\/check-answers/)
   }
 
   const verifyInputValuesArePersisted = () => {

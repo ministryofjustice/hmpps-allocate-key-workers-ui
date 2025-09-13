@@ -16,7 +16,7 @@ context('/update-capacity-status-and-working-pattern/update-status-inactive', ()
 
   it('should try all cases', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/update-status-inactive$/)
+    cy.url().should('match', /\/update-status-inactive/)
 
     verifyPageContent()
 
@@ -42,12 +42,12 @@ context('/update-capacity-status-and-working-pattern/update-status-inactive', ()
     cy.findByRole('button', { name: 'No, return to key worker profile' })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('match', /cancel$/)
+      .and('match', /cancel/)
   }
 
   const proceedToNextPage = () => {
     cy.findByRole('button', { name: 'Yes, save this change' }).click()
-    cy.url().should('match', /\/update-capacity-status-and-working-pattern$/)
+    cy.url().should('match', /\/update-capacity-status-and-working-pattern\?/)
     cy.get('.govuk-notification-banner__heading')
       .should('be.visible')
       .and('contain.text', 'You have updated this key worker’s status to Inactive.')

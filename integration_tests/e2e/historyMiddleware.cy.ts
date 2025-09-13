@@ -1,8 +1,3 @@
-const historyToBase64 = (history: string[], urlEncode: boolean = false) => {
-  const base64 = Buffer.from(JSON.stringify(history)).toString('base64')
-  return urlEncode ? encodeURIComponent(base64) : base64
-}
-
 context('historyMiddleware', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -91,19 +86,14 @@ context('historyMiddleware', () => {
       .should('include.text', 'Digital Prison Services')
       .and('have.attr', 'href')
       .should('equal', 'http://localhost:3001')
-    cy.get('.govuk-breadcrumbs__link')
-      .eq(1)
-      .should('include.text', 'Key worker')
-      .and('have.attr', 'href')
-      .should('equal', `/key-worker?history=${historyToBase64(['/key-worker'], true)}&js=true`)
+    cy.get('.govuk-breadcrumbs__link').eq(1).should('include.text', 'Key worker')
     cy.get('.govuk-breadcrumbs__link')
       .eq(2)
       .should('include.text', 'Allocate key workers')
-      .and('have.attr', 'href')
-      .should(
-        'equal',
-        `/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true'], true)}`,
-      )
+      .shouldContainHistoryParam([
+        '/key-worker',
+        /\/key-worker\/allocate\?query=&cellLocationPrefix=&excludeActiveAllocations=true/,
+      ])
   })
 
   it('should show correct breadcrumbs when prisoner-allocation-history accessed from recommend allocate route', () => {
@@ -127,19 +117,14 @@ context('historyMiddleware', () => {
       .should('include.text', 'Digital Prison Services')
       .and('have.attr', 'href')
       .should('equal', 'http://localhost:3001')
-    cy.get('.govuk-breadcrumbs__link')
-      .eq(1)
-      .should('include.text', 'Key worker')
-      .and('have.attr', 'href')
-      .should('equal', `/key-worker?history=${historyToBase64(['/key-worker'], true)}&js=true`)
+    cy.get('.govuk-breadcrumbs__link').eq(1).should('include.text', 'Key worker')
     cy.get('.govuk-breadcrumbs__link')
       .eq(2)
       .should('include.text', 'Allocate key workers')
-      .and('have.attr', 'href')
-      .should(
-        'equal',
-        `/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true'], true)}`,
-      )
+      .shouldContainHistoryParam([
+        '/key-worker',
+        /\/key-worker\/allocate\?query=&cellLocationPrefix=&excludeActiveAllocations=true/,
+      ])
 
     cy.findByRole('button', { name: 'Continue' }).click()
 
@@ -151,27 +136,22 @@ context('historyMiddleware', () => {
       .should('include.text', 'Digital Prison Services')
       .and('have.attr', 'href')
       .should('equal', 'http://localhost:3001')
-    cy.get('.govuk-breadcrumbs__link')
-      .eq(1)
-      .should('include.text', 'Key worker')
-      .and('have.attr', 'href')
-      .should('equal', `/key-worker?history=${historyToBase64(['/key-worker'], true)}&js=true`)
+    cy.get('.govuk-breadcrumbs__link').eq(1).should('include.text', 'Key worker')
     cy.get('.govuk-breadcrumbs__link')
       .eq(2)
       .should('include.text', 'Allocate key workers')
-      .and('have.attr', 'href')
-      .should(
-        'equal',
-        `/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true'], true)}`,
-      )
+      .shouldContainHistoryParam([
+        '/key-worker',
+        /\/key-worker\/allocate\?query=&cellLocationPrefix=&excludeActiveAllocations=true/,
+      ])
     cy.get('.govuk-breadcrumbs__link')
       .eq(3)
       .should('include.text', 'Allocate key workers automatically')
-      .and('have.attr', 'href')
-      .should(
-        'equal',
-        `/key-worker/recommend-allocations?allowPartialAllocation=true&js=true&history=${historyToBase64(['/key-worker', '/key-worker/allocate?query=&cellLocationPrefix=&excludeActiveAllocations=true&js=true', '/key-worker/recommend-allocations?allowPartialAllocation=true&js=true'], true)}`,
-      )
+      .shouldContainHistoryParam([
+        '/key-worker',
+        /\/key-worker\/allocate\?query=&cellLocationPrefix=&excludeActiveAllocations=true/,
+        /\/key-worker\/recommend-allocations\?allowPartialAllocation=true/,
+      ])
   })
 
   it('should show correct breadcrumbs when prisoner-allocation-history accessed from staff-profile route', () => {
@@ -191,19 +171,11 @@ context('historyMiddleware', () => {
       .should('include.text', 'Digital Prison Services')
       .and('have.attr', 'href')
       .should('equal', 'http://localhost:3001')
-    cy.get('.govuk-breadcrumbs__link')
-      .eq(1)
-      .should('include.text', 'Key worker')
-      .and('have.attr', 'href')
-      .should('equal', `/key-worker?history=${historyToBase64(['/key-worker'], true)}&js=true`)
+    cy.get('.govuk-breadcrumbs__link').eq(1).should('include.text', 'Key worker')
     cy.get('.govuk-breadcrumbs__link')
       .eq(2)
       .should('include.text', 'Manage key workers')
-      .and('have.attr', 'href')
-      .should(
-        'equal',
-        `/key-worker/manage?query=&status=ACTIVE&history=${historyToBase64(['/key-worker', '/key-worker/manage?query=&status=ACTIVE'], true)}&js=true`,
-      )
+      .shouldContainHistoryParam(['/key-worker', /\/key-worker\/manage\?query=&status=ACTIVE/])
 
     cy.get('a[href*="prisoner-allocation-history"]').eq(0).click()
 
@@ -213,26 +185,18 @@ context('historyMiddleware', () => {
       .should('include.text', 'Digital Prison Services')
       .and('have.attr', 'href')
       .should('equal', 'http://localhost:3001')
-    cy.get('.govuk-breadcrumbs__link')
-      .eq(1)
-      .should('include.text', 'Key worker')
-      .and('have.attr', 'href')
-      .should('equal', `/key-worker?history=${historyToBase64(['/key-worker'], true)}&js=true`)
+    cy.get('.govuk-breadcrumbs__link').eq(1).should('include.text', 'Key worker')
     cy.get('.govuk-breadcrumbs__link')
       .eq(2)
       .should('include.text', 'Manage key workers')
-      .and('have.attr', 'href')
-      .should(
-        'equal',
-        `/key-worker/manage?query=&status=ACTIVE&history=${historyToBase64(['/key-worker', '/key-worker/manage?query=&status=ACTIVE'], true)}&js=true`,
-      )
+      .shouldContainHistoryParam(['/key-worker', /\/key-worker\/manage\?query=&status=ACTIVE/])
     cy.get('.govuk-breadcrumbs__link')
       .eq(3)
       .should('include.text', 'Key worker profile')
-      .and('have.attr', 'href')
-      .should(
-        'equal',
-        `/key-worker/staff-profile/488095?js=true&history=${historyToBase64(['/key-worker', '/key-worker/manage?query=&status=ACTIVE', '/key-worker/staff-profile/488095?js=true'], true)}`,
-      )
+      .shouldContainHistoryParam([
+        '/key-worker',
+        /\/key-worker\/manage\?query=&status=ACTIVE/,
+        /\/key-worker\/staff-profile\/488095/,
+      ])
   })
 })

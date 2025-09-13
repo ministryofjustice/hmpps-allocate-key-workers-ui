@@ -9,6 +9,7 @@ export default function setUpJourneyData(store: CacheInterface<JourneyData>) {
 
     const cached = await store.get(key)
     req.journeyData = cached ?? req.journeyData ?? { instanceUnixEpoch: Date.now() }
+
     res.prependOnceListener('close', async () => {
       await store.set(key, req.journeyData, 20 * 60 * 60)
     })

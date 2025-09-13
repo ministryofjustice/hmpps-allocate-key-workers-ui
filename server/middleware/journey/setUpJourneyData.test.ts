@@ -18,6 +18,7 @@ beforeEach(() => {
   journeyId = uuidV4()
 
   res = {
+    locals: {},
     callback: () => null,
     redirect: jest.fn(),
     prependOnceListener: (_: string, cb: () => void) => {

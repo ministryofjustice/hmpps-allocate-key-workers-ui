@@ -2,7 +2,6 @@ import { defaultPrisonerAllocation } from '../../../integration_tests/mockApis/k
 import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import { createMock } from '../../testutils/mockObjects'
-import { historyToBase64 } from '../../utils/testUtils'
 
 context('Prisoner Allocation History', () => {
   beforeEach(() => {
@@ -73,13 +72,6 @@ context('Prisoner Allocation History', () => {
       })
 
     cy.verifyAuditEvents([
-      {
-        who: 'USER1',
-        subjectType: 'NOT_APPLICABLE',
-        details: '{"pageUrl":"/key-worker","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
-        what: 'PAGE_VIEW_ACCESS_ATTEMPT',
-        service: 'DPS023',
-      },
       {
         who: 'USER1',
         subjectType: 'PRISONER_ID',
@@ -180,10 +172,12 @@ context('Prisoner Allocation History', () => {
   describe('Personal officer', () => {
     it('happy path', () => {
       cy.signIn({ failOnStatusCode: false })
-      cy.visit(
-        `/personal-officer/prisoner-allocation-history/A9965EA?history=${historyToBase64(['/personal-officer', '/personal-officer/manage?query=Dom&status=ACTIVE', '/personal-officer/staff-profile/485572'], true)}`,
-        { failOnStatusCode: false },
-      )
+      cy.visitWithHistory(`/personal-officer/prisoner-allocation-history/A9965EA`, [
+        '/personal-officer',
+        '/personal-officer/manage?query=Dom&status=ACTIVE',
+        '/personal-officer/staff-profile/485572',
+        '/personal-officer/prisoner-allocation-history/A9965EA',
+      ])
 
       cy.verifyLastAPICall(
         {
@@ -232,9 +226,11 @@ context('Prisoner Allocation History', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(
-      `/key-worker/prisoner-allocation-history/A9965EA?history=${historyToBase64(['/key-worker', '/key-worker/manage?query=Dom&status=ACTIVE', '/key-worker/staff-profile/485572'], true)}`,
-      { failOnStatusCode: false },
-    )
+    cy.visitWithHistory(`/key-worker/prisoner-allocation-history/A9965EA`, [
+      '/key-worker',
+      '/key-worker/manage?query=Dom&status=ACTIVE',
+      '/key-worker/staff-profile/485572',
+      '/key-worker/prisoner-allocation-history/A9965EA',
+    ])
   }
 })
