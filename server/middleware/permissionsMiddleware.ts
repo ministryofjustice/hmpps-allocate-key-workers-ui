@@ -1,5 +1,5 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express'
-import { services } from '../services'
+import { Services } from '../services'
 import logger from '../../logger'
 import { HmppsUser, UserPermissionLevel } from '../interfaces/hmppsUser'
 import { POLICIES } from './policyMiddleware'
@@ -63,9 +63,7 @@ export const requirePermissionsAndConfig =
     }
   }
 
-export function populateUserPermissionsAndPrisonConfig(): RequestHandler {
-  const { allocationsApiService } = services()
-
+export function populateUserPermissionsAndPrisonConfig({ allocationsApiService }: Services): RequestHandler {
   return async (req, res, next) => {
     try {
       const prisonCode = res.locals.user.getActiveCaseloadId()!
