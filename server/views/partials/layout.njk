@@ -49,7 +49,7 @@
 
     document.addEventListener('DOMContentLoaded', async function () {
       try { 
-        const history = getHistory()
+        const history = await getHistory()
         if (!history.length) {
           return
         }
