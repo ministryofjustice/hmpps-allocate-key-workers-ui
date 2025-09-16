@@ -15,6 +15,7 @@
   {% endfor %}
 
   <script nonce="{{ cspNonce }}">
+    const b64CompressedHistory = "{{ b64History }}"
     async function compressToBase64(text) {
       const stream = new Blob([text]).stream();
       const compressedStream = stream.pipeThrough(new CompressionStream("gzip"));
@@ -33,31 +34,24 @@
       return decompressedResponse;
     }
 
-    async function getHistoryFromUrl() {
-      const url = new URL(window.location.href);
-      const history = url.searchParams.get('history');
-      if (history) {
-        return JSON.parse(await decompressFromBase64(history));
+    async function getHistory() {
+      if (b64CompressedHistory) {
+        return JSON.parse(await decompressFromBase64(b64CompressedHistory));
       }
       return [];
     }
 
-    async function getZlibbedHistory(history) {
-      return compressToBase64(JSON.stringify(history))
+    function pruneHistory(history) {
+      const lastPage = history[history.length - 1].split('?')[0]
+      const earliestIndex = history.findIndex(o => o.split('?')[0] === lastPage);
+      return earliestIndex === -1 ? history : history.slice(0, earliestIndex + 1);
     }
 
     document.addEventListener('DOMContentLoaded', async function () {
       try { 
-        const b64CompressedHistory = "{{ b64History }}"
-        const history = JSON.parse(await decompressFromBase64(b64CompressedHistory));
+        const history = getHistory()
         if (!history.length) {
           return
-        }
-
-        function pruneHistory(history) {
-          const lastPage = history[history.length - 1];
-          const earliestIndex = history.indexOf(lastPage);
-          return history.slice(0, earliestIndex);
         }
 
         document.querySelectorAll('a[href]')
@@ -68,7 +62,7 @@
                 const urlNoOrigin = link.href.replace(window.location.origin, '')
                 const urlHistory = [...history, urlNoOrigin]
                 const prunedHistory = pruneHistory(urlHistory)
-                url.searchParams.set('history', await compressToBase64(JSON.stringify(urlHistory)))
+                url.searchParams.set('history', await compressToBase64(JSON.stringify(prunedHistory)))
               }
               url.searchParams.set('js', 'true')
               link.href = url.pathname + url.search + url.hash;
