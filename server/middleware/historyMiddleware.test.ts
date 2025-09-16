@@ -146,4 +146,38 @@ describe('historyMiddleware', () => {
 
     expect(next).toHaveBeenCalled()
   })
+
+  it('should not add a breadcrumb for the current page', () => {
+    const res = {
+      locals: {
+        policyStaff: 'key worker',
+        policyStaffs: 'key workers',
+        policyPath: 'key-worker',
+        history: [
+          '/key-worker',
+          '/key-worker/allocate',
+          '/key-worker/staff-profile/488095',
+          '/key-worker/staff-profile/488095/case-notes',
+        ],
+      },
+    }
+
+    req.originalUrl = `/key-worker/staff-profile/488095/case-notes`
+    req.method = 'GET'
+    req.get = jest.fn().mockReturnValue('localhost')
+
+    const breadcrumbs = getBreadcrumbs(req, res as Response)
+    expect(breadcrumbs).toEqual([
+      {
+        alias: 'HOMEPAGE',
+        href: '/key-worker?history=H4sIAAAAAAAAE4tW0s9OrdQtzy%2FKTi1SigUAMcSdpA8AAAA%3D',
+        text: 'Key workers',
+      },
+      {
+        alias: 'ALLOCATE',
+        href: `/key-worker/allocate?history=${historyToBase64(['/key-worker', '/key-worker/allocate'], true)}`,
+        text: 'Allocate key workers',
+      },
+    ])
+  })
 })

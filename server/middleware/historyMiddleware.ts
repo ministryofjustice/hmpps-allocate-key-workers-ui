@@ -31,7 +31,7 @@ function getLandmarks(res: Response): Landmark[] {
     { matcher: /\/manage([^-]|$)/g, text: `Manage ${res.locals.policyStaffs!}`, alias: Page.MANAGE_ALLOCATABLE_STAFF },
     { matcher: /\/manage-roles([^/]|$)/g, text: `Manage roles`, alias: Page.MANAGE_ROLES },
     {
-      matcher: /\/staff-profile/g,
+      matcher: /\/staff-profile\/[^/]+(\/case-notes)?/g,
       text: `${sentenceCase(res.locals.policyStaff!)} profile`,
       alias: Page.STAFF_PROFILE,
     },
@@ -197,9 +197,10 @@ export function getBreadcrumbs(req: Request, res: Response) {
 
   const itemsToAdd = new Map<string, Breadcrumb>()
 
-  for (const [i, url] of (res.locals.history?.slice(0, res.locals.history.length - 1) || []).entries()) {
-    const matched = getLandmarks(res).find(mapping => url.split('?')[0]!.match(mapping.matcher))
-    if (matched) {
+  for (const [i, url] of (res.locals.history || []).entries()) {
+    const urlNoQuery = url.split('?')[0]!
+    const matched = getLandmarks(res).find(mapping => urlNoQuery.match(mapping.matcher))
+    if (matched && !req.originalUrl.split('?')[0]!.match(matched.matcher)) {
       const historyUpUntil = res.locals.history!.slice(0, i + 1)
       const urlWithParams = new URLSearchParams(url.split('?')[1] || '')
       urlWithParams.set('history', serialiseHistory(historyUpUntil))
@@ -212,9 +213,7 @@ export function getBreadcrumbs(req: Request, res: Response) {
   }
 
   for (const breadcrumb of itemsToAdd.values()) {
-    if (noHistoryParam(breadcrumb.href) !== noHistoryParam(req.originalUrl)) {
-      breadcrumbs.push(breadcrumb)
-    }
+    breadcrumbs.push(breadcrumb)
   }
 
   return breadcrumbs
