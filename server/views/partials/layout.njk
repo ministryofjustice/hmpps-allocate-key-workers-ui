@@ -33,6 +33,19 @@
       return decompressedResponse;
     }
 
+    async function getHistoryFromUrl() {
+      const url = new URL(window.location.href);
+      const history = url.searchParams.get('history');
+      if (history) {
+        return JSON.parse(await decompressFromBase64(history));
+      }
+      return [];
+    }
+
+    async function getZlibbedHistory(history) {
+      return compressToBase64(JSON.stringify(history))
+    }
+
     document.addEventListener('DOMContentLoaded', async function () {
       try { 
         const b64CompressedHistory = "{{ b64History }}"

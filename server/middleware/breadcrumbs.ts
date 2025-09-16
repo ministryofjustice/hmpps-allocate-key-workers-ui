@@ -26,7 +26,14 @@ export class Breadcrumbs {
   }
 
   addItems(...items: Breadcrumb[]): void {
-    this.breadcrumbs.push(...items)
+    for (const item of items) {
+      const existingIndex = this.breadcrumbs.findIndex(o => o.alias === item.alias)
+      if (existingIndex === -1) {
+        this.breadcrumbs.push(item)
+      } else {
+        this.breadcrumbs.splice(existingIndex, 1, item)
+      }
+    }
   }
 
   get items(): readonly Breadcrumb[] {

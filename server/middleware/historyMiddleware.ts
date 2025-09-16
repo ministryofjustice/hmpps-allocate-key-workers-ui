@@ -12,6 +12,11 @@ type Landmark = {
 
 function getLandmarks(res: Response): Landmark[] {
   return [
+    {
+      matcher: new RegExp(`^/${res.locals.policyPath}/?$`, 'i'),
+      text: sentenceCase(res.locals.policyStaffs!, true),
+      alias: Page.HOMEPAGE,
+    },
     { matcher: /\/allocate/g, text: `Allocate ${res.locals.policyStaffs!}`, alias: Page.ALLOCATE },
     {
       matcher: /recommend-allocations/g,
@@ -103,6 +108,17 @@ export function historyMiddleware(...excludeUrls: RegExp[]): RequestHandler {
 
       searchParams.set('history', serialiseHistory(history))
       const str = searchParams.toString()
+
+      if (req.originalUrl.toString().match(new RegExp(`^/${res.locals.policyPath}/?$`, 'i'))) {
+        // If homepage don't bother redirecting
+        res.locals.history = [`/${res.locals.policyPath}`]
+        res.locals.b64History = serialiseHistory(history)
+
+        res.locals.breadcrumbs = new Breadcrumbs(res)
+        res.locals.breadcrumbs.addItems(...getBreadcrumbs(req, res))
+        return next()
+      }
+
       res.setAuditDetails.suppress(true)
       return res.redirect(`${req.originalUrl.split('?')[0]}?${str}`)
     }
@@ -144,7 +160,7 @@ export function deserialiseHistory(b64String: string = ''): string[] {
   }
 }
 
-function serialiseHistory(history: string[]) {
+export function serialiseHistory(history: string[]) {
   return compressSync(JSON.stringify(history))
 }
 
