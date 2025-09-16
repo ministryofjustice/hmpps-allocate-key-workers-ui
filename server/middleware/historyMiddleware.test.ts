@@ -84,7 +84,7 @@ describe('historyMiddleware', () => {
     expect(getBreadcrumbs(req, res)).toEqual([
       {
         alias: 'HOMEPAGE',
-        href: '/key-worker?history=H4sIAAAAAAAAE4tW0s9OrdQtzy%2FKTi1SigUAMcSdpA8AAAA%3D',
+        href: `/key-worker?history=${historyToBase64(['/key-worker'], true)}`,
         text: 'Key workers',
       },
       {
@@ -170,7 +170,7 @@ describe('historyMiddleware', () => {
     expect(breadcrumbs).toEqual([
       {
         alias: 'HOMEPAGE',
-        href: '/key-worker?history=H4sIAAAAAAAAE4tW0s9OrdQtzy%2FKTi1SigUAMcSdpA8AAAA%3D',
+        href: `/key-worker?history=${historyToBase64(['/key-worker'], true)}`,
         text: 'Key workers',
       },
       {
