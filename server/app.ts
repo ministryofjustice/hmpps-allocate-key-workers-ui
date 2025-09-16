@@ -63,7 +63,7 @@ export default function createApp(services: Services): express.Application {
   app.use(authorisationMiddleware())
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
-  app.use(populateClientToken())
+  app.use(populateClientToken(services.hmppsAuthClient))
   app.get('/prisoner-image/:prisonerNumber', new PrisonerImageRoutes(services.prisonApiService).GET)
   app.get(
     /(.*)/,

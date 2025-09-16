@@ -7,7 +7,6 @@ import { PrisonerAllocationHistoryRoutes } from './prisoner-allocation-history/r
 import removeTrailingSlashMiddleware from '../middleware/removeTrailingSlashMiddleware'
 import insertJourneyIdentifier from '../middleware/journey/insertJourneyIdentifier'
 import JourneyRoutes from './journeys/routes'
-import { dataAccess } from '../data'
 import { EstablishmentSettingsRoutes } from './establishment-settings/routes'
 import { RecommendStaffAutomaticallyRoutes } from './recommend-allocations/routes'
 import { StaffDataRoutes } from './data/routes'
@@ -31,7 +30,7 @@ export default function routes(services: Services) {
   const { router, get, useForPolicies } = JourneyRouter()
   const controller = new HomePageController()
 
-  router.use(populateUserPermissionsAndPrisonConfig())
+  router.use(populateUserPermissionsAndPrisonConfig(services))
   router.use(breadcrumbs())
 
   router.use(historyMiddleware())
@@ -57,7 +56,7 @@ export default function routes(services: Services) {
   router.use('/manage-roles', minRequireAllocate, ManageRolesRoutes())
   router.use('/recommend-allocations', minRequireAllocate, RecommendStaffAutomaticallyRoutes(services))
   router.use(insertJourneyIdentifier())
-  router.use('/:journeyId', JourneyRoutes(dataAccess(), services))
+  router.use('/:journeyId', JourneyRoutes(services))
 
   return router
 }
