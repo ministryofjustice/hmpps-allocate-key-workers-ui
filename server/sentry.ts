@@ -6,5 +6,6 @@ if (config.sentry.dsn) {
     dsn: config.sentry.dsn,
     environment: config.sentry.environment,
     tracesSampleRate: config.sentry.tracesSampleRate,
+    skipOpenTelemetrySetup: true,
   })
 }
