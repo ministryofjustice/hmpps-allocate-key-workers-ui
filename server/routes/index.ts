@@ -25,6 +25,7 @@ import {
   minRequireSelfProfile,
   minRequireView,
 } from './permissions'
+import populateValidationErrors from '../middleware/populateValidationErrors'
 
 export default function routes(services: Services) {
   const { router, get, useForPolicies } = JourneyRouter()
@@ -34,6 +35,8 @@ export default function routes(services: Services) {
   router.use(breadcrumbs())
 
   router.use(historyMiddleware())
+  router.use(populateValidationErrors())
+
   get('/', Page.HOMEPAGE, minRequireAdminOrSelf, controller.GET)
 
   router.use(removeTrailingSlashMiddleware)
