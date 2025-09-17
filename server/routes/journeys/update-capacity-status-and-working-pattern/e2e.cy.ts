@@ -3,7 +3,6 @@ import { createMock } from '../../../testutils/mockObjects'
 import { defaultKeyworkerDetails } from '../../../../integration_tests/mockApis/keyworkerApi'
 import { verifyRoleBasedAccess } from '../../../../integration_tests/support/roleBasedAccess'
 import { UserPermissionLevel } from '../../../interfaces/hmppsUser'
-import { historyToBase64 } from '../../../utils/testUtils'
 
 context('/update-capacity-status-and-working-pattern/** journey', () => {
   let journeyId = uuidV4()
@@ -157,7 +156,11 @@ context('/update-capacity-status-and-working-pattern/** journey', () => {
     cy.task('stubKeyworkerDetails')
     cy.task('stubSearchCaseNotes')
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/key-worker/staff-profile/488095?history=${historyToBase64(['/key-worker', '/key-worker/manage'])}`)
+    cy.visitWithHistory(`/key-worker/staff-profile/488095`, [
+      '/key-worker',
+      '/key-worker/manage',
+      '/key-worker/staff-profile/488095',
+    ])
     cy.get('a[href*="/start-update-staff/488095?proceedTo=update-capacity-status-and-working-pattern"]').click()
 
     cy.findByRole('link', { name: 'Back to key worker profile' }).click()

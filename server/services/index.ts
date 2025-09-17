@@ -1,17 +1,18 @@
 import { AuthenticationClient } from '@ministryofjustice/hmpps-auth-clients'
 import { PermissionsService } from '@ministryofjustice/hmpps-prison-permissions-lib'
+import logger from '../../logger'
 import { dataAccess } from '../data'
 import AuditService from './auditService'
 import AllocationsApiService from './allocationsApi/allocationsApiService'
 import LocationsInsidePrisonApiService from './locationsInsidePrisonApi/locationsInsidePrisonApiService'
 import PrisonApiService from './prisonApi/prisonApiService'
 import PrisonerSearchApiService from './prisonerSearch/prisonerSearchApiService'
-import logger from '../../logger'
 import config from '../config'
 
 export const services = () => {
   const {
     applicationInfo,
+    hmppsAuthClient,
     hmppsAuditClient,
     keyworkerApiClient,
     prisonApiClient,
@@ -21,7 +22,6 @@ export const services = () => {
     tokenStore,
     cacheStore,
   } = dataAccess()
-
   const auditService = new AuditService(hmppsAuditClient)
   const allocationsApiService = new AllocationsApiService(keyworkerApiClient, cacheStore)
   const prisonApiService = new PrisonApiService(prisonApiClient)
@@ -38,6 +38,7 @@ export const services = () => {
 
   return {
     applicationInfo,
+    hmppsAuthClient,
     auditService,
     allocationsApiService,
     prisonApiService,
@@ -45,6 +46,7 @@ export const services = () => {
     prisonerSearchApiService,
     prisonPermissionsService,
     authenticationClient,
+    cacheStore,
   }
 }
 

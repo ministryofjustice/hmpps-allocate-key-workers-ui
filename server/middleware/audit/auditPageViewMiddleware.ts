@@ -39,10 +39,16 @@ export const auditPageViewMiddleware =
       staffId: (staffId: number | string) => {
         res.locals.auditEvent.details!.staffId = String(staffId)
       },
+      suppress: (suppress: boolean = false) => {
+        res.locals.auditEvent.suppress = suppress
+      },
     }
 
     // Send page view attempt event when the request closes
     res.prependOnceListener('close', () => {
+      if (res.locals.auditEvent?.suppress) {
+        return
+      }
       auditService.logAuditEvent(res.getPageViewEvent(true))
     })
 

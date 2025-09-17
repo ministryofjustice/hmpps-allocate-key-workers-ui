@@ -1,15 +1,15 @@
 import express from 'express'
-import * as Sentry from '@sentry/node'
 import {
   getFrontendComponents,
   retrieveCaseLoadData,
   retrieveAllocationJobResponsibilities,
 } from '@ministryofjustice/hmpps-connect-dps-components'
+import * as Sentry from '@sentry/node'
+import './sentry'
 
 // @ts-expect-error Import untyped middleware for cypress coverage
 import cypressCoverage from '@cypress/code-coverage/middleware/express'
 
-import './sentry'
 import config from './config'
 
 import nunjucksSetup from './utils/nunjucksSetup'
@@ -31,8 +31,6 @@ import sentryMiddleware from './middleware/sentryMiddleware'
 import routes from './routes'
 import type { Services } from './services'
 import populateClientToken from './middleware/populateSystemClientToken'
-import populateValidationErrors from './middleware/populateValidationErrors'
-import PrisonerImageRoutes from './routes/prisonerImageRoutes'
 import { handleApiError } from './middleware/handleApiError'
 import { auditPageViewMiddleware } from './middleware/audit/auditPageViewMiddleware'
 import { auditApiCallMiddleware } from './middleware/audit/auditApiCallMiddleware'
@@ -63,8 +61,8 @@ export default function createApp(services: Services): express.Application {
   app.use(authorisationMiddleware())
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
-  app.use(populateClientToken())
-  app.get('/prisoner-image/:prisonerNumber', new PrisonerImageRoutes(services.prisonApiService).GET)
+  app.use(populateClientToken(services.hmppsAuthClient))
+
   app.get(
     /(.*)/,
     getFrontendComponents({
@@ -94,7 +92,6 @@ export default function createApp(services: Services): express.Application {
       authenticationClient: services.authenticationClient,
     }),
   )
-  app.use(populateValidationErrors())
 
   app.get('/:policy/not-authorised', (req, res) => {
     res.status(403)

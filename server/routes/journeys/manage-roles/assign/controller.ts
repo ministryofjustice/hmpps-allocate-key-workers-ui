@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import AllocationsApiService from '../../../../services/allocationsApi/allocationsApiService'
 import { components } from '../../../../@types/keyWorker'
-import { getHistoryParamForPOST } from '../../../../middleware/historyMiddleware'
 
 export class AssignStaffRoleController {
   constructor(private readonly allocationsApiService: AllocationsApiService) {}
@@ -49,7 +48,7 @@ export class AssignStaffRoleController {
   POST = async (req: Request, res: Response) => {
     req.journeyData.assignStaffRole!.query = req.body.query
     delete req.journeyData.assignStaffRole!.searchResults
-    res.redirect(`assign?history=${getHistoryParamForPOST(req)}`)
+    res.redirect(`assign`)
   }
 
   selectStaff = async (req: Request<unknown, unknown, unknown, { staffId?: string }>, res: Response) => {
@@ -59,7 +58,6 @@ export class AssignStaffRoleController {
       return res.redirect('../assign')
     }
     req.journeyData.assignStaffRole!.staff = staff
-    req.journeyData.b64History = getHistoryParamForPOST(req as Request)
     return res.redirect(res.locals['policyPath'] === 'personal-officer' ? 'working-pattern' : 'role')
   }
 }

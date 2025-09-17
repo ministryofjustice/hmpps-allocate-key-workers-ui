@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import { DataAccess } from '../../data'
 import { Services } from '../../services'
 import setUpJourneyData from '../../middleware/journey/setUpJourneyData'
 import { StartUpdateStaffRoutes } from './start-update-staff/routes'
@@ -11,10 +10,10 @@ import { minRequireAdmin, minRequireAllocate } from '../permissions'
 import preventNavigationToExpiredJourneys from '../../middleware/journey/preventNavigationToExpiredJourneys'
 import { captureJourneyPaths } from '../../middleware/journey/captureJourneyPaths'
 
-export default function JourneyRoutes({ cacheStore }: DataAccess, services: Services) {
+export default function JourneyRoutes(services: Services) {
   const router = Router({ mergeParams: true })
 
-  router.use(setUpJourneyData(cacheStore('journey')))
+  router.use(setUpJourneyData(services.cacheStore('journey')))
   router.use(preventNavigationToExpiredJourneys())
 
   captureJourneyPaths(router)

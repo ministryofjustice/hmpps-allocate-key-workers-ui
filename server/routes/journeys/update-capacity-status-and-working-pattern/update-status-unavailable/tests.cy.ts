@@ -20,26 +20,26 @@ context('/update-capacity-status-and-working-pattern/update-status-unavailable',
 
   it('should try non-annual-leave case', () => {
     navigateToTestPage('UNAVAILABLE_LONG_TERM_ABSENCE', 'Unavailable - long-term absence')
-    cy.url().should('match', /\/update-status-unavailable$/)
+    cy.url().should('match', /\/update-status-unavailable/)
 
     verifyPageContent()
 
     verifyValidationErrors()
 
-    proceedToNextPage(/\/check-answers$/)
+    proceedToNextPage(/\/check-answers/)
 
     verifyInputValuesArePersisted()
   })
 
   it('should try annual-leave case', () => {
     navigateToTestPage('UNAVAILABLE_ANNUAL_LEAVE', 'Unavailable - annual leave')
-    cy.url().should('match', /\/update-status-unavailable$/)
+    cy.url().should('match', /\/update-status-unavailable/)
 
     verifyPageContent()
 
     verifyValidationErrors()
 
-    proceedToNextPage(/\/update-status-annual-leave-return$/)
+    proceedToNextPage(/\/update-status-annual-leave-return/)
 
     verifyInputValuesArePersisted()
   })
@@ -57,7 +57,7 @@ context('/update-capacity-status-and-working-pattern/update-status-unavailable',
     cancelButton()
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('match', /cancel$/)
+      .and('match', /cancel/)
   }
 
   const verifyValidationErrors = () => {

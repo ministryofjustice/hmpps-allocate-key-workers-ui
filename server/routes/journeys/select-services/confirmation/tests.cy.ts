@@ -17,7 +17,7 @@ context('/select-services/confirmation', () => {
 
   it(`should try all cases`, () => {
     navigateToTestPage()
-    cy.url().should('match', /\/confirmation$/)
+    cy.url().should('match', /\/confirmation/)
 
     cy.title().should('match', /Confirmation - Key workers - DPS/i)
     cy.findByRole('heading', { name: 'Key worker activated and personal officer deactivated in Leeds (HMP)' }).should(
@@ -29,12 +29,12 @@ context('/select-services/confirmation', () => {
     cy.findByRole('link', { name: /Manage your establishment’s key worker settings/i })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('to.match', /\/key-worker\/establishment-settings$/)
+      .and('to.match', /\/key-worker\/establishment-settings/)
 
     cy.findByRole('link', { name: /Manage your establishment’s personal officer settings/i })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('to.match', /\/personal-officer\/establishment-settings$/)
+      .and('to.match', /\/personal-officer\/establishment-settings/)
   })
 
   const navigateToTestPage = () => {

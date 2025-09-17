@@ -7,7 +7,6 @@ context('/manage-roles/assign/working-pattern', () => {
   const continueButton = () => cy.findByRole('button', { name: 'Continue' })
 
   const journeyId = uuidV4()
-  const history = Buffer.from(JSON.stringify(['/key-worker', '/key-worker/manage-roles'])).toString('base64')
 
   beforeEach(() => {
     cy.task('reset')
@@ -18,7 +17,7 @@ context('/manage-roles/assign/working-pattern', () => {
 
   it('should try all cases', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/assign\/working-pattern$/)
+    cy.url().should('match', /\/assign\/working-pattern/)
 
     verifyPageContent()
 
@@ -40,10 +39,7 @@ context('/manage-roles/assign/working-pattern', () => {
     partTimeRadio().should('exist')
     continueButton().should('be.visible')
 
-    cy.findByRole('link', { name: 'Back' })
-      .should('be.visible')
-      .and('have.attr', 'href')
-      .and('match', new RegExp(`role\\?history=${history}`))
+    cy.findByRole('link', { name: 'Back' }).should('be.visible').and('have.attr', 'href').and('match', /role/)
   }
 
   const verifyValidationErrors = () => {
@@ -57,7 +53,7 @@ context('/manage-roles/assign/working-pattern', () => {
   const proceedToNextPage = () => {
     fullTimeRadio().click()
     continueButton().click()
-    cy.url().should('match', /\/capacity$/)
+    cy.url().should('match', /\/capacity/)
   }
 
   const verifyInputValuesArePersisted = () => {
@@ -73,7 +69,6 @@ context('/manage-roles/assign/working-pattern', () => {
     })
 
     cy.injectJourneyDataAndReload<PartialJourneyData>(journeyId, {
-      b64History: history,
       assignStaffRole: {
         staff: {
           staffId: 1001,

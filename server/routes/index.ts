@@ -7,7 +7,6 @@ import { PrisonerAllocationHistoryRoutes } from './prisoner-allocation-history/r
 import removeTrailingSlashMiddleware from '../middleware/removeTrailingSlashMiddleware'
 import insertJourneyIdentifier from '../middleware/journey/insertJourneyIdentifier'
 import JourneyRoutes from './journeys/routes'
-import { dataAccess } from '../data'
 import { EstablishmentSettingsRoutes } from './establishment-settings/routes'
 import { RecommendStaffAutomaticallyRoutes } from './recommend-allocations/routes'
 import { StaffDataRoutes } from './data/routes'
@@ -27,16 +26,18 @@ import {
   minRequireView,
 } from './permissions'
 import { journeyPaths } from '../middleware/journey/captureJourneyPaths'
+import populateValidationErrors from '../middleware/populateValidationErrors'
 
 export default function routes(services: Services) {
   const { router, get, useForPolicies } = JourneyRouter()
   const controller = new HomePageController()
 
-  router.use(populateUserPermissionsAndPrisonConfig())
+  router.use(populateUserPermissionsAndPrisonConfig(services))
   router.use(breadcrumbs())
 
-  const uuidMatcher = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i
-  router.use(historyMiddleware(uuidMatcher))
+  router.use(historyMiddleware())
+  router.use(populateValidationErrors())
+
   get('/', Page.HOMEPAGE, minRequireAdminOrSelf, controller.GET)
 
   router.use(removeTrailingSlashMiddleware)
@@ -59,7 +60,7 @@ export default function routes(services: Services) {
   router.use('/manage-roles', minRequireAllocate, ManageRolesRoutes())
   router.use('/recommend-allocations', minRequireAllocate, RecommendStaffAutomaticallyRoutes(services))
 
-  router.use('/:journeyId', JourneyRoutes(dataAccess(), services))
+  router.use('/:journeyId', JourneyRoutes(services))
   router.use(new RegExp(`/(${journeyPaths.join('|')})`), insertJourneyIdentifier())
 
   return router
