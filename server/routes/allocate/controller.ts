@@ -26,7 +26,7 @@ export class AllocateStaffController extends ChangeStaffController {
       res.setAuditDetails.searchTerm(sanitisedQuery.query)
     }
 
-    const { allowAutoAllocation, allocationOrder } = req.middleware!.prisonConfiguration!
+    const { allowAutoAllocation } = req.middleware!.prisonConfiguration!
     const prisonCode = res.locals.user.getActiveCaseloadId()!
     const locations = await this.locationsApiService.getResidentialLocations(req, prisonCode)
     const locationsValues = locations.map(o => ({ text: o.localName || o.fullLocationPath, value: o.fullLocationPath }))
@@ -44,7 +44,6 @@ export class AllocateStaffController extends ChangeStaffController {
         showBreadcrumbs: true,
         allowAutoAllocation,
         allocationResult,
-        allocationOrder,
         jsEnabled: req.query['js'] === 'true',
       })
     }
@@ -58,7 +57,6 @@ export class AllocateStaffController extends ChangeStaffController {
         showBreadcrumbs: true,
         allowAutoAllocation,
         allocationResult,
-        allocationOrder,
         jsEnabled: req.query['js'] === 'true',
       })
     }
@@ -79,7 +77,6 @@ export class AllocateStaffController extends ChangeStaffController {
       showBreadcrumbs: true,
       allowAutoAllocation,
       allocationResult,
-      allocationOrder,
       jsEnabled: req.query['js'] === 'true',
     })
   }

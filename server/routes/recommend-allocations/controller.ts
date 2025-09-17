@@ -10,7 +10,6 @@ import {
 import { lastNameCommaFirstName } from '../../utils/formatUtils'
 import { Page } from '../../services/auditService'
 import { prisonerProfileBacklink } from '../../utils/utils'
-import { components } from '../../@types/keyWorker'
 
 export class RecommendStaffAutomaticallyController extends ChangeStaffController {
   GET = async (req: Request, res: Response): Promise<void> => {
@@ -27,7 +26,6 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
         records: [],
         count: req.flash(FLASH_KEY__COUNT)[0],
         apiError: req.flash(FLASH_KEY__API_ERROR)[0],
-        allocationOrder,
       })
     }
 
@@ -69,7 +67,7 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
       })
     }
 
-    const dropdownOptions = this.getDropdownOptions(recommendations.staff)
+    const dropdownOptions = this.getDropdownOptions(recommendations.staff, allocationOrder)
 
     const matchedPrisoners = records.map(o => {
       const match = recommendations.allocations.find(a => a.personIdentifier === o.personIdentifier)
@@ -87,52 +85,22 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
         profileHref: prisonerProfileBacklink(req, res, o.personIdentifier),
         alertsHref: prisonerProfileBacklink(req, res, o.personIdentifier, '/alerts/active'),
         recommendation: match?.staff.staffId,
-        kwDropdown: this.sortDropdownOptions(
-          dropdownOptions.filter(x => !x.onlyFor || x.onlyFor === o.personIdentifier),
-          allocationOrder,
-        ),
+        kwDropdown: dropdownOptions.filter(x => !x.onlyFor || x.onlyFor === o.personIdentifier),
         recommendedText: match
           ? `${lastNameCommaFirstName(match!.staff)} (allocations: ${match!.staff.allocated})`
           : '',
       }
     })
 
-    const sortedStaffOptions = this.sortDropdownOptions(dropdownOptions, allocationOrder)
-
     return res.render('recommend-allocations/view', {
       showBreadcrumbs: true,
       records: matchedPrisoners,
-      staff: sortedStaffOptions,
+      staff: dropdownOptions,
       count: req.flash(FLASH_KEY__COUNT)[0],
       apiError: req.flash(FLASH_KEY__API_ERROR)[0],
-      allocationOrder,
       jsEnabled: req.query['js'] === 'true',
     })
   }
 
   POST = async (_req: Request, res: Response) => res.redirect('allocate')
-
-  private sortDropdownOptions(
-    options: { text: string; value: string }[],
-    allocationOrder: components['schemas']['PrisonConfigResponse']['allocationOrder'],
-  ) {
-    const sortedStaff = [...options]
-
-    function extractAllocationCount(text: string): number {
-      const match = text.match(/\(allocations:\s*(\d+)\)/)
-      return match?.[1] ? parseInt(match[1], 10) : 0
-    }
-
-    if (allocationOrder === 'BY_NAME') {
-      return sortedStaff.sort((a, b) => a.text.localeCompare(b.text))
-    }
-    if (allocationOrder === 'BY_ALLOCATIONS') {
-      return sortedStaff.sort((a, b) => {
-        const aCount = extractAllocationCount(a.text)
-        const bCount = extractAllocationCount(b.text)
-        return aCount - bCount
-      })
-    }
-    return sortedStaff
-  }
 }

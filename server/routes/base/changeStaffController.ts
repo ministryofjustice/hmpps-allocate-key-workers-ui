@@ -1,13 +1,13 @@
-import { Request, Response, NextFunction } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import AllocationsApiService from '../../services/allocationsApi/allocationsApiService'
 import { lastNameCommaFirstName } from '../../utils/formatUtils'
 import { components } from '../../@types/keyWorker'
 import {
-  FLASH_KEY__COUNT,
-  FLASH_KEY__API_ERROR,
-  FLASH_KEY__ALLOCATE_RESULT,
-  AllocateResultType,
   AllocateResult,
+  AllocateResultType,
+  FLASH_KEY__ALLOCATE_RESULT,
+  FLASH_KEY__API_ERROR,
+  FLASH_KEY__COUNT,
 } from '../../utils/constants'
 import { SelectKeyworkerSchemaType } from './selectKeyworkerSchema'
 
@@ -20,31 +20,30 @@ export class ChangeStaffController {
   constructor(readonly allocationsApiService: AllocationsApiService) {}
 
   getChangeData = async (req: Request, res: Response) => {
+    const { allocationOrder } = req.middleware!.prisonConfiguration!
     const staff = await this.allocationsApiService.searchAllocatableStaff(req, res, { status: 'ACTIVE' }, false)
-    const mappedStaff = this.getDropdownOptions(staff.content)
+    const mappedStaff = this.getDropdownOptions(staff.content, allocationOrder)
 
     return {
       count: req.flash(FLASH_KEY__COUNT)[0],
       apiError: req.flash(FLASH_KEY__API_ERROR)[0],
       staff: mappedStaff,
+      allocationOrder,
     }
   }
 
   getDropdownOptions = <T extends { allocated: number; staffId: number; firstName: string; lastName: string }>(
     staff: T[],
+    allocationOrder: components['schemas']['PrisonConfigResponse']['allocationOrder'],
   ) => {
-    return staff
-      .sort((a, b) =>
-        a.allocated === b.allocated
-          ? `${a.lastName},${a.firstName}`.localeCompare(`${b.lastName},${b.firstName}`)
-          : a.allocated - b.allocated,
-      )
-      .map(o => {
-        return {
-          text: `${lastNameCommaFirstName(o)} (allocations: ${o.allocated})`,
-          value: `allocate:${o.staffId}`,
-        } as { text: string; value: string; onlyFor?: string }
-      })
+    const mappedOptions = staff.map(o => {
+      return {
+        text: `${lastNameCommaFirstName(o)} (allocations: ${o.allocated})`,
+        value: `allocate:${o.staffId}`,
+      } as { text: string; value: string; onlyFor?: string }
+    })
+
+    return this.sortDropdownOptions(mappedOptions, allocationOrder)
   }
 
   submitToApi =
@@ -111,5 +110,29 @@ export class ChangeStaffController {
       default:
         return (a, b) => -a.occurredAt.localeCompare(b.occurredAt)
     }
+  }
+
+  private sortDropdownOptions<T extends { text: string; value: string; onlyFor?: string }>(
+    options: T[],
+    allocationOrder: components['schemas']['PrisonConfigResponse']['allocationOrder'],
+  ): T[] {
+    const sortedStaff = [...options]
+
+    function extractAllocationCount(text: string): number {
+      const match = text.match(/\(allocations:\s*(\d+)\)/)
+      return match?.[1] ? parseInt(match[1], 10) : 0
+    }
+
+    if (allocationOrder === 'BY_NAME') {
+      return sortedStaff.sort((a, b) => a.text.localeCompare(b.text))
+    }
+    if (allocationOrder === 'BY_ALLOCATIONS') {
+      return sortedStaff.sort((a, b) => {
+        const aCount = extractAllocationCount(a.text)
+        const bCount = extractAllocationCount(b.text)
+        return aCount - bCount
+      })
+    }
+    return sortedStaff
   }
 }
