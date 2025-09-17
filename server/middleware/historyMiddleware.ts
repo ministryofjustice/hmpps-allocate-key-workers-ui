@@ -42,8 +42,7 @@ function replaceResRedirect(req: Request, res: Response, history: string[]) {
   const originalRedirect = res.redirect
   res.redirect = (param1: string | number, param2?: string | number) => {
     const url = (typeof param1 === 'string' ? param1 : param2) as string
-    // eslint-disable-next-line no-nested-ternary
-    const status = typeof param1 === 'number' ? param1 : typeof param2 === 'number' ? param2 : undefined
+    const status = typeof param1 === 'number' ? param1 : 302
 
     const baseUrl = `${req.protocol}://${req.get('host')}`
     const builtUrl = new URL(url, `${baseUrl}${req.originalUrl}`)
@@ -51,7 +50,7 @@ function replaceResRedirect(req: Request, res: Response, history: string[]) {
     prunedHistory.push(noHistoryParam(builtUrl.pathname + builtUrl.search))
     builtUrl.searchParams.set('history', serialiseHistory(prunedHistory))
 
-    return originalRedirect.call(res, status || 302, builtUrl.toString())
+    return originalRedirect.call(res, status, builtUrl.toString())
   }
 }
 
