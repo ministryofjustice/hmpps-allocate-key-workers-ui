@@ -779,6 +779,8 @@ export interface components {
       /** Format: int32 */
       frequencyInWeeks: number
       hasPrisonersWithHighComplexityNeeds?: boolean
+      /** @enum {string} */
+      allocationOrder: 'BY_ALLOCATIONS' | 'BY_NAME'
     }
     PrisonConfigResponse: {
       isEnabled: boolean
@@ -788,6 +790,8 @@ export interface components {
       capacity: number
       /** Format: int32 */
       frequencyInWeeks: number
+      /** @enum {string} */
+      allocationOrder: 'BY_ALLOCATIONS' | 'BY_NAME'
     }
     ErrorResponse: {
       /** Format: int32 */
@@ -1095,6 +1099,7 @@ export interface components {
         | 'CHANGE_IN_COMPLEXITY_OF_NEED'
         | 'NO_LONGER_IN_PRISON'
         | 'PRISON_USES_KEY_WORK'
+        | 'MIGRATION'
     }
     SarAllocation: {
       /** Format: date-time */
@@ -1252,7 +1257,7 @@ export interface components {
     CurrentAllocation: {
       policy: components['schemas']['CodedDescription']
       prison: components['schemas']['CodedDescription']
-      staffMember: components['schemas']['StaffSummary']
+      staffMember: components['schemas']['CurrentStaffSummary']
     }
     CurrentPersonStaffAllocation: {
       prisonNumber: string
@@ -1260,6 +1265,13 @@ export interface components {
       allocations: components['schemas']['CurrentAllocation'][]
       latestRecordedEvents: components['schemas']['RecordedEvent'][]
       policies: components['schemas']['PolicyEnabled'][]
+    }
+    CurrentStaffSummary: {
+      /** Format: int64 */
+      staffId: number
+      firstName: string
+      lastName: string
+      emailAddresses: string[]
     }
     RecordedEvent: {
       prison: components['schemas']['CodedDescription']
@@ -2717,7 +2729,9 @@ export interface operations {
   }
   getCurrentAllocation: {
     parameters: {
-      query?: never
+      query?: {
+        includeContactDetails?: boolean
+      }
       header?: never
       path: {
         personIdentifier: string
