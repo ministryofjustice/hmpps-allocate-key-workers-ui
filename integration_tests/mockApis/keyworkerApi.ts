@@ -894,4 +894,5 @@ export default {
   stubGetPolicies,
   stubPutPolicies,
   stubKeyWorkerStatsWithNullCurrentValues,
+  stubKeyworkerPrisonConfigNameSort: () => stubKeyworkerPrisonConfig(true, false, false, 'BY_NAME'),
 }
