@@ -1,10 +1,18 @@
-import type { Request, Response } from 'express'
+import type { Request, RequestHandler, Response } from 'express'
 
-import { createBackUrlFor, getBreadcrumbs, historyMiddleware } from './historyMiddleware'
+import { createBackUrlFor, historyMiddleware } from './historyMiddleware'
 import { historyToBase64 } from '../utils/testUtils'
+import { Breadcrumbs } from './breadcrumbs'
 
 describe('historyMiddleware', () => {
-  const req: Request = {} as jest.Mocked<Request>
+  const mockGetLandmarks = () => [
+    { matcher: /^\/key-worker\/?$/i, text: 'Key workers', alias: 'HOMEPAGE' },
+    { matcher: /\/allocate/g, text: `Allocate key workers`, alias: 'ALLOCATE' },
+    { matcher: /recommend-allocations/g, text: `automatic`, alias: 'RECOMMENDED_ALLOCATIONS' },
+    { matcher: /prisoner-allocation-history/g, text: 'allocation history', alias: 'HISTORY' },
+  ]
+  let middleware: RequestHandler
+  let req: Request
   const next = jest.fn()
 
   function createRes(): Response {
@@ -22,8 +30,13 @@ describe('historyMiddleware', () => {
     } as unknown as Response
   }
 
+  beforeAll(() => {
+    middleware = historyMiddleware(mockGetLandmarks)
+  })
+
   beforeEach(() => {
     jest.resetAllMocks()
+    req = {} as jest.Mocked<Request>
   })
 
   it('should redirect to the same page with a history query param added when called with no history', () => {
@@ -33,7 +46,7 @@ describe('historyMiddleware', () => {
     req.query = {}
     req.originalUrl = '/key-worker/allocate'
     req.method = 'GET'
-    historyMiddleware()(req, res, next)
+    middleware(req, res, next)
 
     expect(res.redirect).toHaveBeenCalledWith(
       `/key-worker/allocate?history=${historyToBase64(['/key-worker', '/key-worker/allocate'], true)}`,
@@ -46,7 +59,7 @@ describe('historyMiddleware', () => {
     req.query = { history: historyToBase64(['/key-worker']) }
     req.originalUrl = `/key-worker/allocate?history=${historyToBase64(['/key-worker'])}`
     req.method = 'PUT'
-    historyMiddleware()(req, res, next)
+    middleware(req, res, next)
 
     expect(next).toHaveBeenCalled()
     expect(res.locals.history).toEqual([])
@@ -58,7 +71,7 @@ describe('historyMiddleware', () => {
     req.query = { history: historyToBase64(['/key-worker']) }
     req.originalUrl = `/key-worker/allocate?history=${historyToBase64(['/key-worker'])}`
     req.method = 'GET'
-    historyMiddleware(/\/key-worker\/allocate/)(req, res, next)
+    historyMiddleware(mockGetLandmarks, /\/key-worker\/allocate/)(req, res, next)
 
     expect(next).toHaveBeenCalled()
     expect(res.locals.history).toEqual(['/key-worker'])
@@ -77,11 +90,11 @@ describe('historyMiddleware', () => {
     }
     req.originalUrl = `/key-worker/prisoner-allocation-history/A0262EA?history=${req.query['history']}}`
     req.method = 'GET'
-    historyMiddleware()(req, res, next)
+    middleware(req, res, next)
 
     expect(next).toHaveBeenCalled()
 
-    expect(getBreadcrumbs(req, res)).toEqual([
+    expect(res.locals.breadcrumbs.items.slice(1)).toEqual([
       {
         alias: 'HOMEPAGE',
         href: `/key-worker?history=${historyToBase64(['/key-worker'], true)}`,
@@ -95,7 +108,7 @@ describe('historyMiddleware', () => {
       {
         alias: 'RECOMMENDED_ALLOCATIONS',
         href: `/key-worker/recommend-allocations?history=${historyToBase64(['/key-worker', '/key-worker/allocate?excludeActiveAllocations=true', '/key-worker/recommend-allocations'], true)}`,
-        text: 'Allocate key workers automatically',
+        text: 'automatic',
       },
     ])
   })
@@ -134,7 +147,7 @@ describe('historyMiddleware', () => {
     req.get = jest.fn().mockReturnValue('localhost')
 
     const originalRedirect = res.redirect
-    historyMiddleware()(req, res, next)
+    middleware(req, res, next)
 
     // POST isnt explicit here - this just simulates a redirect on a POST endpoint (the same works for GET)
     res.redirect('/key-worker/allocate?excludeActiveAllocations=true')
@@ -148,26 +161,29 @@ describe('historyMiddleware', () => {
   })
 
   it('should not add a breadcrumb for the current page', () => {
+    const history = [
+      '/key-worker',
+      '/key-worker/allocate',
+      '/key-worker/staff-profile/488095',
+      '/key-worker/staff-profile/488095/case-notes',
+    ]
     const res = {
       locals: {
+        breadcrumbs: undefined as unknown as Breadcrumbs,
         policyStaff: 'key worker',
         policyStaffs: 'key workers',
         policyPath: 'key-worker',
-        history: [
-          '/key-worker',
-          '/key-worker/allocate',
-          '/key-worker/staff-profile/488095',
-          '/key-worker/staff-profile/488095/case-notes',
-        ],
+        history,
       },
     }
 
     req.originalUrl = `/key-worker/staff-profile/488095/case-notes`
     req.method = 'GET'
     req.get = jest.fn().mockReturnValue('localhost')
+    req.query = { history: historyToBase64(history) }
 
-    const breadcrumbs = getBreadcrumbs(req, res as Response)
-    expect(breadcrumbs).toEqual([
+    middleware(req, res as Response, next)
+    expect(res.locals.breadcrumbs.items.slice(1)).toEqual([
       {
         alias: 'HOMEPAGE',
         href: `/key-worker?history=${historyToBase64(['/key-worker'], true)}`,
