@@ -25,6 +25,7 @@ import {
   minRequireSelfProfile,
   minRequireView,
 } from './permissions'
+import { sentenceCase } from '../utils/formatUtils'
 
 export default function routes(services: Services) {
   const { router, get, useForPolicies } = JourneyRouter()
@@ -33,7 +34,40 @@ export default function routes(services: Services) {
   router.use(populateUserPermissionsAndPrisonConfig(services))
   router.use(breadcrumbs())
 
-  router.use(historyMiddleware())
+  router.use(
+    historyMiddleware((_req, res) => {
+      return [
+        {
+          matcher: new RegExp(`^/${res.locals.policyPath}/?$`, 'i'),
+          text: sentenceCase(res.locals.policyStaffs!, true),
+          alias: Page.HOMEPAGE,
+        },
+        { matcher: /\/allocate/g, text: `Allocate ${res.locals.policyStaffs!}`, alias: Page.ALLOCATE },
+        {
+          matcher: /recommend-allocations/g,
+          text: `Allocate ${res.locals.policyStaffs!} automatically`,
+          alias: Page.RECOMMENDED_ALLOCATIONS,
+        },
+        {
+          matcher: /prisoner-allocation-history/g,
+          text: 'Prisoner allocation history',
+          alias: Page.PRISONER_ALLOCATION_HISTORY,
+        },
+        {
+          matcher: /\/manage([^-]|$)/g,
+          text: `Manage ${res.locals.policyStaffs!}`,
+          alias: Page.MANAGE_ALLOCATABLE_STAFF,
+        },
+        { matcher: /\/manage-roles([^/]|$)/g, text: `Manage roles`, alias: Page.MANAGE_ROLES },
+        {
+          matcher: /\/staff-profile\/[^/]+(\/case-notes)?/g,
+          text: `${sentenceCase(res.locals.policyStaff!)} profile`,
+          alias: Page.STAFF_PROFILE,
+        },
+      ]
+    }),
+  )
+
   get('/', Page.HOMEPAGE, minRequireAdminOrSelf, controller.GET)
 
   router.use(removeTrailingSlashMiddleware)
