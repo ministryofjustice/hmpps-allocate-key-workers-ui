@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { subMonths, subDays, differenceInDays, format } from 'date-fns'
+import { differenceInDays, format, subDays, subMonths } from 'date-fns'
 import { ChangeStaffController } from '../base/changeStaffController'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import { prisonerProfileBacklink } from '../../utils/utils'
@@ -18,6 +18,7 @@ export class StaffProfileController extends ChangeStaffController {
         return res.redirect(`/${res.locals.policyPath}/not-authorised`)
       }
 
+      const { allocationOrder } = req.middleware!.prisonConfiguration!
       const to = new Date()
       const from = subMonths(to, 1)
       const comparisonTo = subDays(from, 1)
@@ -50,6 +51,7 @@ export class StaffProfileController extends ChangeStaffController {
         staffMember: { firstName: staffDetails.firstName, lastName: staffDetails.lastName },
         ...(await this.getChangeData(req, res)),
         showBreadcrumbs: true,
+        allocationOrder,
         jsEnabled: req.query['js'] === 'true',
         sort: req.query['sort'],
         caseNotes:
