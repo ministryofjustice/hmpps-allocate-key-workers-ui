@@ -1,3 +1,4 @@
+import { gzipSync } from 'zlib'
 import { formatDateConcise, getDateInReadableFormat } from './datetimeUtils'
 
 const getLastFullMonthAsIsoDateString = () => {
@@ -29,7 +30,13 @@ export const dateTo = getDateInReadableFormat(formatDateConcise(nowSpan.end)!)
 export const comparisonDateFrom = getDateInReadableFormat(formatDateConcise(previousSpan.start)!)
 export const comparisonDateTo = getDateInReadableFormat(formatDateConcise(previousSpan.end)!)
 
+function compressSync(text: string) {
+  const buffer = Buffer.from(text, 'utf-8')
+  const compressed = gzipSync(buffer)
+  return compressed.toString('base64')
+}
+
 export const historyToBase64 = (history: string[], urlEncode: boolean = false) => {
-  const base64 = Buffer.from(JSON.stringify(history)).toString('base64')
+  const base64 = compressSync(JSON.stringify(history))
   return urlEncode ? encodeURIComponent(base64) : base64
 }

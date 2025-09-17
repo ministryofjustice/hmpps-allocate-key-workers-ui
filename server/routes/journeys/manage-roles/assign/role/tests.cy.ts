@@ -7,7 +7,6 @@ context('/manage-roles/assign/role', () => {
   const continueButton = () => cy.findByRole('button', { name: 'Continue' })
 
   const journeyId = uuidV4()
-  const history = Buffer.from(JSON.stringify(['/key-worker', '/key-worker/manage-roles'])).toString('base64')
 
   beforeEach(() => {
     cy.task('reset')
@@ -18,7 +17,7 @@ context('/manage-roles/assign/role', () => {
 
   it('should try all cases proceeding to next page', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/assign\/role$/)
+    cy.url().should('match', /\/assign\/role/)
 
     verifyPageContent()
 
@@ -31,12 +30,12 @@ context('/manage-roles/assign/role', () => {
 
   it('should proceed to Not Prison Officer error page', () => {
     navigateToTestPage()
-    cy.url().should('match', /\/assign\/role$/)
+    cy.url().should('match', /\/assign\/role/)
 
     noRadio().click()
     continueButton().click()
 
-    cy.url().should('match', /\/assign\/not-prison-officer$/)
+    cy.url().should('match', /\/assign\/not-prison-officer/)
   })
 
   const verifyPageContent = () => {
@@ -53,7 +52,7 @@ context('/manage-roles/assign/role', () => {
     cy.findByRole('link', { name: 'Back' })
       .should('be.visible')
       .and('have.attr', 'href')
-      .and('match', new RegExp(`assign\\?history=${history}`))
+      .and('match', /assign/)
   }
 
   const verifyValidationErrors = () => {
@@ -67,7 +66,7 @@ context('/manage-roles/assign/role', () => {
   const proceedToNextPage = () => {
     yesRadio().click()
     continueButton().click()
-    cy.url().should('match', /\/working-pattern$/)
+    cy.url().should('match', /\/working-pattern/)
   }
 
   const verifyInputValuesArePersisted = () => {
@@ -83,7 +82,6 @@ context('/manage-roles/assign/role', () => {
     })
 
     cy.injectJourneyDataAndReload<PartialJourneyData>(journeyId, {
-      b64History: history,
       assignStaffRole: {
         staff: {
           staffId: 1001,

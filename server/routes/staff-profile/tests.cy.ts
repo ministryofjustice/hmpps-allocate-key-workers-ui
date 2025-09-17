@@ -3,7 +3,6 @@ import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBa
 import AuthorisedRoles from '../../authentication/authorisedRoles'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import { createMock } from '../../testutils/mockObjects'
-import { historyToBase64 } from '../../utils/testUtils'
 
 context('Profile Info', () => {
   beforeEach(() => {
@@ -49,13 +48,6 @@ context('Profile Info', () => {
     validatePageContents()
 
     cy.verifyAuditEvents([
-      {
-        who: 'USER1',
-        subjectType: 'NOT_APPLICABLE',
-        details: '{"pageUrl":"/key-worker","pageName":"HOMEPAGE","activeCaseLoadId":"LEI","policy":"KEY_WORKER"}',
-        what: 'PAGE_VIEW_ACCESS_ATTEMPT',
-        service: 'DPS023',
-      },
       {
         who: 'USER1',
         subjectType: 'SEARCH_TERM',
@@ -214,15 +206,13 @@ context('Profile Info', () => {
     })
   })
 
-  const navigateToTestPage = (jsParam: boolean = true, onBeforeLoad?: (win: Window) => void) => {
+  const navigateToTestPage = (jsParam: boolean = true) => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(
-      `/key-worker/staff-profile/488095?js=${jsParam}&history=${historyToBase64(['/key-worker', '/key-worker/manage', '/key-worker/staff-profile/34353'], true)}`,
-      {
-        failOnStatusCode: false,
-        ...(onBeforeLoad ? { onBeforeLoad } : {}),
-      },
-    )
+    cy.visitWithHistory(`/key-worker/staff-profile/488095?js=${jsParam}`, [
+      '/key-worker',
+      '/key-worker/manage',
+      '/key-worker/staff-profile/34353',
+    ])
   }
 
   const validatePageContents = (readonly = false) => {
@@ -307,11 +297,12 @@ context('Profile Info', () => {
     if (readonly) {
       cy.get('.govuk-button').should('not.exist')
     } else {
-      cy.get('[data-sort-value="John, Doe"] > .govuk-link--no-visited-state').should(
-        'have.attr',
-        'href',
-        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FA4288DZ&returnPath=%2Fstaff-profile%2F488095%3Fjs%3Dtrue%26history%3DWyIva2V5LXdvcmtlciIsIi9rZXktd29ya2VyL21hbmFnZSIsIi9rZXktd29ya2VyL3N0YWZmLXByb2ZpbGUvMzQzNTMiXQ%253D%253D',
-      )
+      cy.get('[data-sort-value="John, Doe"] > .govuk-link--no-visited-state')
+        .should('have.attr', 'href')
+        .should(
+          'include',
+          'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FA4288DZ&returnPath=%2Fstaff-profile%2F488095%3Fjs%3Dtrue%26history%3D',
+        )
       cy.get('.govuk-button').should('contain.text', 'Save changes')
     }
   }

@@ -56,7 +56,7 @@ context('/manage-roles/assign/** journey', () => {
     noRadio().click()
     continueButton().click()
 
-    cy.url().should('match', /\/assign\/not-prison-officer$/)
+    cy.url().should('match', /\/assign\/not-prison-officer/)
     cy.title().should('equal', 'Not a prison officer - Key workers - DPS')
     cy.findByRole('heading', {
       name: 'You cannot make this person a key worker',
@@ -83,7 +83,7 @@ context('/manage-roles/assign/** journey', () => {
     noRadio().click()
     continueButton().click()
 
-    cy.url().should('match', /\/assign\/not-prison-officer$/)
+    cy.url().should('match', /\/assign\/not-prison-officer/)
     cy.title().should('equal', 'Not a prison officer - Key workers - DPS')
     cy.findByRole('heading', {
       name: 'You cannot make this person a key worker',

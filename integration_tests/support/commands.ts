@@ -62,13 +62,30 @@ Cypress.Commands.add('verifyAuditEvents', (events: object[]) => {
   return cy.wrap(getSentAuditEvents()).should('deep.equal', events)
 })
 
-Cypress.Commands.add('navigateWithHistory', (url: string, history: string[]) => {
-  const historyString = btoa(JSON.stringify(history))
-  const newUrl = new URL(`http://0.0.0.0${url}`)
-  newUrl.searchParams.set('history', historyString)
-  cy.visit(`${url.split('?')[0]}?${newUrl.searchParams.toString()}`, { failOnStatusCode: false })
+Cypress.Commands.add('shouldContainHistoryParam', { prevSubject: 'element' }, (element, history) => {
+  cy.wrap(element)
+    .invoke('attr', 'href')
+    .then(href => {
+      const url = new URLSearchParams(href!.split('?')[1])
+      const historyParam = url.get('history')
+
+      cy.task('gzipDecompress', historyParam).then(decompressedText => {
+        const actualArray = JSON.parse(decompressedText as string)
+        for (let i = 0; i < history.length; i += 1) {
+          if (typeof history[i] === 'string') {
+            expect(actualArray[i]).to.equal(history[i])
+          } else {
+            expect(actualArray[i]).matches(new RegExp(history[i] as RegExp))
+          }
+        }
+      })
+    })
 })
 
-Cypress.Commands.add('verifyHistoryLink', { prevSubject: 'element' }, (subject, urlRegex: RegExp) => {
-  return cy.wrap(subject).should('have.attr', 'href').should('match', urlRegex)
+Cypress.Commands.add('visitWithHistory', (url: string, history: string[]) => {
+  cy.task('gzipCompress', JSON.stringify(history)).then(b64 => {
+    const searchParams = new URLSearchParams(url.split('?')[1] || '')
+    searchParams.set('history', b64 as string)
+    return cy.visit(`${url.split('?')[0]}?${searchParams.toString()}`, { failOnStatusCode: false })
+  })
 })

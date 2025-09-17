@@ -24,13 +24,13 @@ describe('historyMiddleware', () => {
 
   it('should ignore most recent journey page when redirecting when journey has been marked completed', () => {
     const res = createRes()
+    res.locals.b64History = historyToBase64([
+      '/key-worker',
+      '/key-worker/manage-roles',
+      '/key-worker/manage-roles/remove',
+      '/key-worker/3e680f74-8986-42f9-8dca-99725fdb46b6/manage-roles/remove',
+    ])
     req.journeyData = {
-      b64History: historyToBase64([
-        '/key-worker',
-        '/key-worker/manage-roles',
-        '/key-worker/manage-roles/remove',
-        '/key-worker/3e680f74-8986-42f9-8dca-99725fdb46b6/manage-roles/remove',
-      ]),
       journeyCompleted: true,
       instanceUnixEpoch: Date.now(),
     }
@@ -45,14 +45,14 @@ describe('historyMiddleware', () => {
 
   it('should do nothing if journey is not completed', () => {
     const res = createRes()
+    res.locals.b64History = historyToBase64([
+      '/key-worker',
+      '/key-worker/manage-roles',
+      '/key-worker/manage-roles/remove',
+      '/key-worker/3e680f74-8986-42f9-8dca-99725fdb46b6/manage-roles/remove',
+    ])
     req.originalUrl = '/key-worker/3e680f74-8986-42f9-8dca-99725fdb46b6/manage-roles/remove/page'
     req.journeyData = {
-      b64History: historyToBase64([
-        '/key-worker',
-        '/key-worker/manage-roles',
-        '/key-worker/manage-roles/remove',
-        '/key-worker/3e680f74-8986-42f9-8dca-99725fdb46b6/manage-roles/remove',
-      ]),
       journeyCompleted: false,
       instanceUnixEpoch: Date.now(),
     }
@@ -65,13 +65,13 @@ describe('historyMiddleware', () => {
 
   it('should do nothing if on journey confirmation page', () => {
     const res = createRes()
+    res.locals.b64History = historyToBase64([
+      '/key-worker',
+      '/key-worker/manage-roles',
+      '/key-worker/manage-roles/remove',
+      '/key-worker/3e680f74-8986-42f9-8dca-99725fdb46b6/manage-roles/remove',
+    ])
     req.journeyData = {
-      b64History: historyToBase64([
-        '/key-worker',
-        '/key-worker/manage-roles',
-        '/key-worker/manage-roles/remove',
-        '/key-worker/3e680f74-8986-42f9-8dca-99725fdb46b6/manage-roles/remove',
-      ]),
       journeyCompleted: false,
       instanceUnixEpoch: Date.now(),
     }
@@ -85,8 +85,8 @@ describe('historyMiddleware', () => {
 
   it('should use homepage as fallback when history is invalid', () => {
     const res = createRes()
+    res.locals.b64History = 'NOT A BASE64 HISTORY'
     req.journeyData = {
-      b64History: 'NOT A BASE64 HISTORY',
       journeyCompleted: true,
       instanceUnixEpoch: Date.now(),
     }

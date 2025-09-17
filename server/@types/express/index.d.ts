@@ -29,7 +29,6 @@ export type JourneyData = {
   assignStaffRole?: AssignStaffRoleJourney
   removeStaffRole?: RemoveStaffRoleJourney
   selectServices?: SelectServicesJourney
-  b64History?: string | undefined
 }
 
 export type UpdateStaffDetailsJourney = Partial<{
@@ -109,6 +108,7 @@ export declare global {
         prisonNumber(prisonNumber: string): void
         searchTerm(searchTerm: string): void
         staffId(staffId: number | string): void
+        suppress(suppress: boolean): void
       }
       sendApiEvent?: (apiUrl: string, isAttempt: boolean) => void
     }
@@ -148,6 +148,7 @@ export declare global {
         correlationId: string
         subjectId?: string
         subjectType?: string
+        suppress?: boolean
         details?: {
           activeCaseLoadId?: string
           pageUrl: string

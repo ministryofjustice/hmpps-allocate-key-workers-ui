@@ -1,49 +1,85 @@
-import { Request, RequestHandler, Response } from 'express'
+import { NextFunction, Request, RequestHandler, Response } from 'express'
+import { gzipSync, unzipSync } from 'zlib'
 import { sentenceCase } from '../utils/formatUtils'
 import { Breadcrumbs, type Breadcrumb } from './breadcrumbs'
 import { Page } from '../services/auditService'
 
-export function deserialiseHistory(b64String: string = ''): string[] {
-  try {
-    return JSON.parse(Buffer.from(b64String || '', 'base64').toString() || '[]')
-  } catch {
-    return []
+type Landmark = {
+  matcher: RegExp
+  text: string
+  alias: string
+}
+
+function getLandmarks(res: Response): Landmark[] {
+  return [
+    {
+      matcher: new RegExp(`^/${res.locals.policyPath}/?$`, 'i'),
+      text: sentenceCase(res.locals.policyStaffs!, true),
+      alias: Page.HOMEPAGE,
+    },
+    { matcher: /\/allocate/g, text: `Allocate ${res.locals.policyStaffs!}`, alias: Page.ALLOCATE },
+    {
+      matcher: /recommend-allocations/g,
+      text: `Allocate ${res.locals.policyStaffs!} automatically`,
+      alias: Page.RECOMMENDED_ALLOCATIONS,
+    },
+    {
+      matcher: /prisoner-allocation-history/g,
+      text: 'Prisoner allocation history',
+      alias: Page.PRISONER_ALLOCATION_HISTORY,
+    },
+    { matcher: /\/manage([^-]|$)/g, text: `Manage ${res.locals.policyStaffs!}`, alias: Page.MANAGE_ALLOCATABLE_STAFF },
+    { matcher: /\/manage-roles([^/]|$)/g, text: `Manage roles`, alias: Page.MANAGE_ROLES },
+    {
+      matcher: /\/staff-profile\/[^/]+(\/case-notes)?/g,
+      text: `${sentenceCase(res.locals.policyStaff!)} profile`,
+      alias: Page.STAFF_PROFILE,
+    },
+  ]
+}
+
+function replaceResRedirect(req: Request, res: Response, history: string[]) {
+  const originalRedirect = res.redirect
+  res.redirect = (param1: string | number, param2?: string | number) => {
+    const url = (typeof param1 === 'string' ? param1 : param2) as string
+    const status = typeof param1 === 'number' ? param1 : 302
+
+    const baseUrl = `${req.protocol}://${req.get('host')}`
+    const builtUrl = new URL(url, `${baseUrl}${req.originalUrl}`)
+    const prunedHistory = pruneHistory(builtUrl.pathname + builtUrl.search, history)
+    prunedHistory.push(noHistoryParam(builtUrl.pathname + builtUrl.search))
+    builtUrl.searchParams.set('history', serialiseHistory(prunedHistory))
+
+    return originalRedirect.call(res, status, builtUrl.toString())
   }
 }
 
-function serialiseHistory(history: string[]) {
-  return Buffer.from(JSON.stringify(history)).toString('base64')
-}
+function handlePOSTRedirect(req: Request, res: Response, next: NextFunction) {
+  // POSTs should have the history maintained in the referrer header
+  // and optionally the originalUrl IF not POSTing to a custom location (ie, /filter)
+  const url = new URL(req.headers['referer'] || `http://0.0.0.0${req.originalUrl}`)
+  const history = deserialiseHistory(url.searchParams.get('history') as string)
 
-export function restoreHistoryFromJourneyData(req: Request, res: Response) {
-  const history = deserialiseHistory(req.journeyData.b64History)
+  if (!history.length) {
+    return next()
+  }
+
   res.locals.history = history
-  res.locals.b64History = req.journeyData.b64History!
-
+  res.locals.b64History = url.searchParams.get('history') as string
   res.locals.breadcrumbs = new Breadcrumbs(res)
   res.locals.breadcrumbs.addItems(...getBreadcrumbs(req, res))
-}
 
-export function getHistoryParamForPOST(
-  req: Request,
-  targetPage?: string,
-  newSearchParams: URLSearchParams = new URLSearchParams(),
-) {
-  const refererHistory = getHistoryFromReferer(req)
-  if (targetPage) {
-    const refererUrl = new URL(req.headers['referer'] || `http://0.0.0.0${req.originalUrl}`)
-    const history = pruneHistory(refererUrl.pathname, refererHistory)
-    const destUrl = `${targetPage}?${newSearchParams.toString()}`.replace(/\?$/g, '')
-    history.push(destUrl)
-    return serialiseHistory(history)
-  }
-  refererHistory.push(noHistoryParam(req.originalUrl))
-  const history = pruneHistory(req.originalUrl, refererHistory)
-  return serialiseHistory(history)
+  replaceResRedirect(req, res, history)
+
+  return next()
 }
 
 export function historyMiddleware(...excludeUrls: RegExp[]): RequestHandler {
   return (req, res, next) => {
+    if (req.method === 'POST') {
+      return handlePOSTRedirect(req, res, next)
+    }
+
     if (req.method !== 'GET') {
       return next()
     }
@@ -71,78 +107,99 @@ export function historyMiddleware(...excludeUrls: RegExp[]): RequestHandler {
 
       searchParams.set('history', serialiseHistory(history))
       const str = searchParams.toString()
+
+      if (req.originalUrl.toString().match(new RegExp(`^/${res.locals.policyPath}/?$`, 'i'))) {
+        // If homepage don't bother redirecting
+        res.locals.history = [`/${res.locals.policyPath}`]
+        res.locals.b64History = serialiseHistory(history)
+
+        res.locals.breadcrumbs = new Breadcrumbs(res)
+        res.locals.breadcrumbs.addItems(...getBreadcrumbs(req, res))
+        return next()
+      }
+
+      res.setAuditDetails.suppress(true)
       return res.redirect(`${req.originalUrl.split('?')[0]}?${str}`)
     }
 
     const history = pruneHistory(req.originalUrl, queryHistory)
-    history.push(noHistoryParam(req.originalUrl))
 
     res.locals.history = history
     res.locals.b64History = serialiseHistory(history)
 
     res.locals.historyBackUrl =
-      getLastDifferentPage(req, res) || req.headers?.['referer'] || `/${res.locals.policyPath || ''}`
+      getLastDifferentPage(history) || req.headers?.['referer'] || `/${res.locals.policyPath || ''}`
 
     res.locals.breadcrumbs = new Breadcrumbs(res)
     res.locals.breadcrumbs.addItems(...getBreadcrumbs(req, res))
+
+    replaceResRedirect(req, res, history)
 
     return next()
   }
 }
 
-function pruneHistory(url: string, history: string[]) {
-  const deduplicatedHistory = removeDuplicateConsecutiveUrls(history)
-  const historyBefore = getHistoryBefore(deduplicatedHistory, url)
-  const targetUrlNoQuery = url.split('?')[0]
-  const lastIndex = historyBefore.findLastIndex(o => o.split('?')[0] === targetUrlNoQuery)
-  if (lastIndex === -1 || lastIndex === historyBefore.length - 1) return historyBefore
-  return historyBefore.slice(0, lastIndex + 1)
+function compressSync(text: string) {
+  const buffer = Buffer.from(text, 'utf-8')
+  const compressed = gzipSync(buffer)
+  return compressed.toString('base64')
 }
 
-function removeDuplicateConsecutiveUrls(history: string[]) {
-  const historyWithoutDuplicates: string[] = []
-  for (let i = 0; i < history.length; i += 1) {
-    if (i === 0 || (history[i] !== history[i - 1] && history[i])) {
-      historyWithoutDuplicates.push(history[i]!)
+function decompressSync(base64: string) {
+  const buffer = Buffer.from(base64, 'base64')
+  const decompressed = unzipSync(buffer)
+  return decompressed.toString('utf-8')
+}
+
+export function deserialiseHistory(b64String: string = ''): string[] {
+  try {
+    return JSON.parse(decompressSync(b64String || '') || '[]')
+  } catch {
+    return []
+  }
+}
+
+export function serialiseHistory(history: string[]) {
+  return compressSync(JSON.stringify(history))
+}
+
+function pruneHistory(url: string, history: string[]) {
+  const dedupedHistory = deduplicateHistory(history)
+  const targetUrlNoQuery = url.split('?')[0]!
+  const lastIndex = dedupedHistory
+    .slice(0, dedupedHistory.length - 1)
+    .findLastIndex(o => o.split('?')[0] === targetUrlNoQuery)
+  if (lastIndex === -1 || lastIndex === dedupedHistory.length - 1) return dedupedHistory
+
+  return [...dedupedHistory.slice(0, lastIndex), noHistoryParam(url)]
+}
+
+function deduplicateHistory(history: string[]) {
+  // De-duplicate consecutive history items without query params
+  if (history.length < 2) return history
+
+  const newHistory = []
+  let comparer = history[history.length - 1]!
+  newHistory.push(comparer)
+  for (let i = history.length - 1; i >= 0; i -= 1) {
+    const item = history[i]!
+    if (item.split('?')[0] !== comparer.split('?')[0]) {
+      newHistory.push(item)
+      comparer = item
     }
   }
-  return historyWithoutDuplicates
+  return newHistory.reverse()
 }
 
 export function getBreadcrumbs(req: Request, res: Response) {
-  const URL_MAPPINGS: { matcher: RegExp; text: string; alias: string }[] = [
-    {
-      matcher: new RegExp(`^/${res.locals.policyPath}([^/]|$)`, 'i'),
-      text: sentenceCase(res.locals.policyStaffs!, true),
-      alias: Page.HOMEPAGE,
-    },
-    { matcher: /\/allocate/g, text: `Allocate ${res.locals.policyStaffs!}`, alias: Page.ALLOCATE },
-    {
-      matcher: /recommend-allocations/g,
-      text: `Allocate ${res.locals.policyStaffs!} automatically`,
-      alias: Page.RECOMMENDED_ALLOCATIONS,
-    },
-    {
-      matcher: /prisoner-allocation-history/g,
-      text: 'Prisoner allocation history',
-      alias: Page.PRISONER_ALLOCATION_HISTORY,
-    },
-    { matcher: /\/manage([^-]|$)/g, text: `Manage ${res.locals.policyStaffs!}`, alias: Page.MANAGE_ALLOCATABLE_STAFF },
-    { matcher: /\/manage-roles([^/]|$)/g, text: `Manage roles`, alias: Page.MANAGE_ROLES },
-    {
-      matcher: /\/staff-profile/g,
-      text: `${sentenceCase(res.locals.policyStaff!)} profile`,
-      alias: Page.STAFF_PROFILE,
-    },
-  ]
-
   const breadcrumbs: Breadcrumb[] = []
 
   const itemsToAdd = new Map<string, Breadcrumb>()
 
   for (const [i, url] of (res.locals.history || []).entries()) {
-    const matched = URL_MAPPINGS.find(mapping => noHistoryParam(url).match(mapping.matcher))
-    if (matched) {
+    const urlNoQuery = url.split('?')[0]!
+    const matched = getLandmarks(res).find(mapping => urlNoQuery.match(mapping.matcher))
+    if (matched && !req.originalUrl.split('?')[0]!.match(matched.matcher)) {
       const historyUpUntil = res.locals.history!.slice(0, i + 1)
       const urlWithParams = new URLSearchParams(url.split('?')[1] || '')
       urlWithParams.set('history', serialiseHistory(historyUpUntil))
@@ -155,9 +212,7 @@ export function getBreadcrumbs(req: Request, res: Response) {
   }
 
   for (const breadcrumb of itemsToAdd.values()) {
-    if (noHistoryParam(breadcrumb.href) !== noHistoryParam(req.originalUrl)) {
-      breadcrumbs.push(breadcrumb)
-    }
+    breadcrumbs.push(breadcrumb)
   }
 
   return breadcrumbs
@@ -170,23 +225,9 @@ export function noHistoryParam(url: string) {
   return `${baseUrl}?${noHistorySearchParams.toString()}`.replace(/\?$/g, '')
 }
 
-function getHistoryBefore(history: string[], url: string) {
-  const urlNoHistory = url.split('?')[0]
-  const newHistory = [...history]
-  for (let i = history.length - 1; i >= 0; i -= 1) {
-    if (history[i]!.split('?')[0] === urlNoHistory) {
-      newHistory.splice(i, 1)
-    } else {
-      break
-    }
-  }
-
-  return newHistory
-}
-
-export function getLastDifferentPage(req: Request, res: Response) {
-  if (!res.locals.history) return ''
-  return [...res.locals.history].reverse().find(url => url.split('?')[0] !== req.originalUrl.split('?')[0])
+export function getLastDifferentPage(history: string[]) {
+  if (!history?.length) return ''
+  return [...history].reverse().find(url => url.split('?')[0] !== history[history.length - 1]!.split('?')[0])
 }
 
 function getHistoryFromReferer(req: Request) {
@@ -202,8 +243,8 @@ function getHistoryFromReferer(req: Request) {
   return refererHistory
 }
 
-export function createBackUrlFor(b64History: string, matcher: RegExp, fallback: string) {
-  const history = deserialiseHistory(b64History)
+export function createBackUrlFor(res: Response, matcher: RegExp, fallback: string) {
+  const history = deserialiseHistory(res.locals.b64History!)
   const last = history.findLast(o => matcher.test(o)) || fallback
   const prunedHistory = pruneHistory(last, history)
   const searchParams = new URLSearchParams(last.split('?')[1] || '')
@@ -211,8 +252,8 @@ export function createBackUrlFor(b64History: string, matcher: RegExp, fallback: 
   return `${last.split('?')[0]}?${searchParams.toString()}`
 }
 
-export function getLastNonJourneyPage(b64History: string, fallbackUrl: string) {
+export function getLastNonJourneyPage(res: Response, fallbackUrl: string) {
   const nonJourneyPageMatcher =
     /^\/[A-Za-z-]+\/(?![0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})/
-  return createBackUrlFor(b64History, nonJourneyPageMatcher, fallbackUrl)
+  return createBackUrlFor(res, nonJourneyPageMatcher, fallbackUrl)
 }

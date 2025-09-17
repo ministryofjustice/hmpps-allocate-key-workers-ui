@@ -1,4 +1,6 @@
 import type { Request, Response, NextFunction, RequestHandler } from 'express'
+import { Page } from '../services/auditService'
+import { sentenceCase } from '../utils/formatUtils'
 
 export type Breadcrumb = { href: string; text: string; alias?: string }
 
@@ -11,6 +13,11 @@ export class Breadcrumbs {
         text: 'Digital Prison Services',
         href: res.locals.digitalPrisonServicesUrl,
       },
+      {
+        alias: Page.HOMEPAGE,
+        href: `/${res.locals.policyPath || ''}`,
+        text: sentenceCase(res.locals.policyStaffs!, true),
+      },
     ]
   }
 
@@ -19,7 +26,14 @@ export class Breadcrumbs {
   }
 
   addItems(...items: Breadcrumb[]): void {
-    this.breadcrumbs.push(...items)
+    for (const item of items) {
+      const existingIndex = this.breadcrumbs.findIndex(o => o.alias === item.alias)
+      if (existingIndex === -1) {
+        this.breadcrumbs.push(item)
+      } else {
+        this.breadcrumbs.splice(existingIndex, 1, item)
+      }
+    }
   }
 
   get items(): readonly Breadcrumb[] {

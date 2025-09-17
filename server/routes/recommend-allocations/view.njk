@@ -150,7 +150,7 @@
   {% if jsEnabled %}
     <script nonce="{{ cspNonce }}">
       window.onload = function () {
-        window.initialiseDropdown('{{ policyStaff }}', {{ staff | dump | safe }})
+        window.initialiseDropdown?.('{{ policyStaff }}', {{ staff | dump | safe }})
       }
     </script>
     {% endif %}
