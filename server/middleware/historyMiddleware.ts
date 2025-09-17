@@ -1,41 +1,11 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { gzipSync, unzipSync } from 'zlib'
-import { sentenceCase } from '../utils/formatUtils'
 import { Breadcrumbs, type Breadcrumb } from './breadcrumbs'
-import { Page } from '../services/auditService'
 
 type Landmark = {
   matcher: RegExp
   text: string
   alias: string
-}
-
-function getLandmarks(res: Response): Landmark[] {
-  return [
-    {
-      matcher: new RegExp(`^/${res.locals.policyPath}/?$`, 'i'),
-      text: sentenceCase(res.locals.policyStaffs!, true),
-      alias: Page.HOMEPAGE,
-    },
-    { matcher: /\/allocate/g, text: `Allocate ${res.locals.policyStaffs!}`, alias: Page.ALLOCATE },
-    {
-      matcher: /recommend-allocations/g,
-      text: `Allocate ${res.locals.policyStaffs!} automatically`,
-      alias: Page.RECOMMENDED_ALLOCATIONS,
-    },
-    {
-      matcher: /prisoner-allocation-history/g,
-      text: 'Prisoner allocation history',
-      alias: Page.PRISONER_ALLOCATION_HISTORY,
-    },
-    { matcher: /\/manage([^-]|$)/g, text: `Manage ${res.locals.policyStaffs!}`, alias: Page.MANAGE_ALLOCATABLE_STAFF },
-    { matcher: /\/manage-roles([^/]|$)/g, text: `Manage roles`, alias: Page.MANAGE_ROLES },
-    {
-      matcher: /\/staff-profile\/[^/]+(\/case-notes)?/g,
-      text: `${sentenceCase(res.locals.policyStaff!)} profile`,
-      alias: Page.STAFF_PROFILE,
-    },
-  ]
 }
 
 function replaceResRedirect(req: Request, res: Response, history: string[]) {
@@ -54,27 +24,57 @@ function replaceResRedirect(req: Request, res: Response, history: string[]) {
   }
 }
 
-function handlePOSTRedirect(req: Request, res: Response, next: NextFunction) {
-  // POSTs should have the history maintained in the referrer header
-  // and optionally the originalUrl IF not POSTing to a custom location (ie, /filter)
-  const url = new URL(req.headers['referer'] || `http://0.0.0.0${req.originalUrl}`)
-  const history = deserialiseHistory(url.searchParams.get('history') as string)
+export function historyMiddleware(
+  getLandmarks: (req: Request, res: Response) => Landmark[],
+  ...excludeUrls: RegExp[]
+): RequestHandler {
+  const handlePOSTRedirect = (req: Request, res: Response, next: NextFunction) => {
+    // POSTs should have the history maintained in the referrer header
+    // and optionally the originalUrl IF not POSTing to a custom location (ie, /filter)
+    const url = new URL(req.headers['referer'] || `http://0.0.0.0${req.originalUrl}`)
+    const history = deserialiseHistory(url.searchParams.get('history') as string)
 
-  if (!history.length) {
+    if (!history.length) {
+      return next()
+    }
+
+    res.locals.history = history
+    res.locals.b64History = url.searchParams.get('history') as string
+    res.locals.breadcrumbs = new Breadcrumbs(res)
+    res.locals.breadcrumbs.addItems(...getBreadcrumbs(req, res))
+
+    replaceResRedirect(req, res, history)
+
     return next()
   }
 
-  res.locals.history = history
-  res.locals.b64History = url.searchParams.get('history') as string
-  res.locals.breadcrumbs = new Breadcrumbs(res)
-  res.locals.breadcrumbs.addItems(...getBreadcrumbs(req, res))
+  const getBreadcrumbs = (req: Request, res: Response) => {
+    const breadcrumbs: Breadcrumb[] = []
 
-  replaceResRedirect(req, res, history)
+    const itemsToAdd = new Map<string, Breadcrumb>()
 
-  return next()
-}
+    for (const [i, url] of (res.locals.history || []).entries()) {
+      const urlNoQuery = url.split('?')[0]!
+      const matched = getLandmarks(req, res).find(mapping => urlNoQuery.match(mapping.matcher))
+      if (matched && !req.originalUrl.split('?')[0]!.match(matched.matcher)) {
+        const historyUpUntil = res.locals.history!.slice(0, i + 1)
+        const urlWithParams = new URLSearchParams(url.split('?')[1] || '')
+        urlWithParams.set('history', serialiseHistory(historyUpUntil))
+        itemsToAdd.set(matched.text, {
+          alias: matched.alias,
+          text: matched.text,
+          href: `${url.split('?')[0]}?${urlWithParams.toString()}`,
+        })
+      }
+    }
 
-export function historyMiddleware(...excludeUrls: RegExp[]): RequestHandler {
+    for (const breadcrumb of itemsToAdd.values()) {
+      breadcrumbs.push(breadcrumb)
+    }
+
+    return breadcrumbs
+  }
+
   return (req, res, next) => {
     if (req.method === 'POST') {
       return handlePOSTRedirect(req, res, next)
@@ -189,33 +189,6 @@ function deduplicateHistory(history: string[]) {
     }
   }
   return newHistory.reverse()
-}
-
-export function getBreadcrumbs(req: Request, res: Response) {
-  const breadcrumbs: Breadcrumb[] = []
-
-  const itemsToAdd = new Map<string, Breadcrumb>()
-
-  for (const [i, url] of (res.locals.history || []).entries()) {
-    const urlNoQuery = url.split('?')[0]!
-    const matched = getLandmarks(res).find(mapping => urlNoQuery.match(mapping.matcher))
-    if (matched && !req.originalUrl.split('?')[0]!.match(matched.matcher)) {
-      const historyUpUntil = res.locals.history!.slice(0, i + 1)
-      const urlWithParams = new URLSearchParams(url.split('?')[1] || '')
-      urlWithParams.set('history', serialiseHistory(historyUpUntil))
-      itemsToAdd.set(matched.text, {
-        alias: matched.alias,
-        text: matched.text,
-        href: `${url.split('?')[0]}?${urlWithParams.toString()}`,
-      })
-    }
-  }
-
-  for (const breadcrumb of itemsToAdd.values()) {
-    breadcrumbs.push(breadcrumb)
-  }
-
-  return breadcrumbs
 }
 
 export function noHistoryParam(url: string) {
