@@ -1,8 +1,19 @@
 import type { Request, RequestHandler, Response } from 'express'
 
+import { gzipSync } from 'zlib'
 import { createBackUrlFor, historyMiddleware } from './historyMiddleware'
-import { historyToBase64 } from '../utils/testUtils'
 import { Breadcrumbs } from './breadcrumbs'
+
+function compressSync(text: string) {
+  const buffer = Buffer.from(text, 'utf-8')
+  const compressed = gzipSync(buffer)
+  return compressed.toString('base64')
+}
+
+export const historyToBase64 = (history: string[], urlEncode: boolean = false) => {
+  const base64 = compressSync(JSON.stringify(history))
+  return urlEncode ? encodeURIComponent(base64) : base64
+}
 
 describe('historyMiddleware', () => {
   const mockGetLandmarks = () => [
