@@ -597,8 +597,8 @@ context('/allocate', () => {
   }
 
   const checkSelectSorting = () => {
-    cy.get('#selectStaffMember').eq(0).children().eq(1).should('contain.text', 'Key-Worker, Available-Active2')
-    cy.get('#selectStaffMember').eq(0).children().eq(2).should('contain.text', 'Key-Worker2, Available-Active')
+    cy.get('#selectStaffMember').eq(0).children().eq(1).should('contain.text', 'Key-Worker2, Available-Active (allocations: 32)')
+    cy.get('#selectStaffMember').eq(0).children().eq(2).should('contain.text', 'Key-Worker, Available-Active2 (allocations: 32)')
   }
 
   const checkResidentialLocationFilter = (readonly = false) => {
