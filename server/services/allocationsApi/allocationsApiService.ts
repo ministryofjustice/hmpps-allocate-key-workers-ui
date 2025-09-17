@@ -51,6 +51,7 @@ export default class AllocationsApiService {
     allowAutoAllocation: boolean,
     maximumCapacity: number,
     frequencyInWeeks?: number,
+    allocationOrder?: 'BY_ALLOCATIONS' | 'BY_NAME',
   ) {
     const config = req.middleware!.prisonConfiguration!
 
@@ -60,6 +61,7 @@ export default class AllocationsApiService {
       allowAutoAllocation,
       capacity: maximumCapacity,
       frequencyInWeeks: frequencyInWeeks ?? config.frequencyInWeeks,
+      allocationOrder: allocationOrder ?? config.allocationOrder,
     }
 
     const result = await this.keyworkerApiClientBuilder(req, res).updatePrisonConfig(

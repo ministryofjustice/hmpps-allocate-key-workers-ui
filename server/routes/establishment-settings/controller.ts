@@ -38,7 +38,7 @@ export class EstablishmentSettingsController {
   }
 
   submitToApi = async (req: Request<unknown, unknown, SchemaType>, res: Response, next: NextFunction) => {
-    const { allowAutoAllocation, maximumCapacity, frequencyInWeeks } = req.body
+    const { allowAutoAllocation, maximumCapacity, frequencyInWeeks, allocationOrder } = req.body
 
     try {
       await this.allocationsApiService.updatePrisonConfig(
@@ -47,6 +47,7 @@ export class EstablishmentSettingsController {
         allowAutoAllocation,
         maximumCapacity,
         frequencyInWeeks,
+        allocationOrder,
       )
       req.flash(FLASH_KEY__SUCCESS_MESSAGE, 'Establishment settings updated')
       next()
