@@ -58,8 +58,9 @@ export default function routes(services: Services) {
 
   router.use('/manage-roles', minRequireAllocate, ManageRolesRoutes())
   router.use('/recommend-allocations', minRequireAllocate, RecommendStaffAutomaticallyRoutes(services))
-  router.use(insertJourneyIdentifier())
+
   router.use('/:journeyId', JourneyRoutes(services))
+  router.use(insertJourneyIdentifier())
 
   return router
 }
