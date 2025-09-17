@@ -109,7 +109,7 @@
     "@sentry/node": "^10.11.0",
     "@types/cypress__code-coverage": "^3.10.2",
     "agentkeepalive": "^4.6.0",
-    "applicationinsights": "^2.9.6",
+    "applicationinsights": "^2.9.7",
     "body-parser": "^2.2.0",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
