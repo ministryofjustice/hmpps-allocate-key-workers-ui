@@ -25,6 +25,7 @@ import {
   minRequireSelfProfile,
   minRequireView,
 } from './permissions'
+import populateValidationErrors from '../middleware/populateValidationErrors'
 
 export default function routes(services: Services) {
   const { router, get, useForPolicies } = JourneyRouter()
@@ -35,6 +36,8 @@ export default function routes(services: Services) {
 
   const uuidMatcher = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i
   router.use(historyMiddleware(uuidMatcher))
+  router.use(populateValidationErrors())
+
   get('/', Page.HOMEPAGE, minRequireAdminOrSelf, controller.GET)
 
   router.use(removeTrailingSlashMiddleware)
