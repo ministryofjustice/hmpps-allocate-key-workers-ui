@@ -107,6 +107,7 @@ const stubKeyworkerPrisonConfig = (
   isEnabled: boolean,
   hasPrisonersWithHighComplexityNeeds: boolean,
   allowAutoAllocation = true,
+  allocationOrder: 'BY_ALLOCATIONS' | 'BY_NAME' = 'BY_ALLOCATIONS',
 ) =>
   stubFor({
     request: {
@@ -121,6 +122,7 @@ const stubKeyworkerPrisonConfig = (
         allowAutoAllocation,
         capacity: 6,
         frequencyInWeeks: 1,
+        allocationOrder,
       },
       headers: {
         'Content-Type': 'application/json',
