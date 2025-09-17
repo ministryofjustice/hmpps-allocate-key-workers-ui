@@ -25,7 +25,6 @@ import {
   minRequireSelfProfile,
   minRequireView,
 } from './permissions'
-import { journeyPaths } from '../middleware/journey/captureJourneyPaths'
 import populateValidationErrors from '../middleware/populateValidationErrors'
 
 export default function routes(services: Services) {
@@ -61,7 +60,7 @@ export default function routes(services: Services) {
   router.use('/recommend-allocations', minRequireAllocate, RecommendStaffAutomaticallyRoutes(services))
 
   router.use('/:journeyId', JourneyRoutes(services))
-  router.use(new RegExp(`/(${journeyPaths.join('|')})`), insertJourneyIdentifier())
+  router.use(insertJourneyIdentifier())
 
   return router
 }

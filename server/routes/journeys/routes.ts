@@ -8,7 +8,7 @@ import { RemoveStaffRoleRoutes } from './manage-roles/remove/routes'
 import { SelectServicesRoutes } from './select-services/routes'
 import { minRequireAdmin, minRequireAllocate } from '../permissions'
 import preventNavigationToExpiredJourneys from '../../middleware/journey/preventNavigationToExpiredJourneys'
-import { captureJourneyPaths } from '../../middleware/journey/captureJourneyPaths'
+import { captureJourneyPaths } from '../../middleware/journey/insertJourneyIdentifier'
 
 export default function JourneyRoutes(services: Services) {
   const router = Router({ mergeParams: true })
