@@ -44,6 +44,7 @@ export class AllocateStaffController extends ChangeStaffController {
         showBreadcrumbs: true,
         allowAutoAllocation,
         allocationResult,
+        staff: [],
         jsEnabled: req.query['js'] === 'true',
       })
     }
