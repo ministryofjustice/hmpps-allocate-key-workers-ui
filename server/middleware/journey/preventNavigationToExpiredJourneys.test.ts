@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express'
-import { historyToBase64 } from '../../utils/testUtils'
 import preventNavigationToExpiredJourneys from './preventNavigationToExpiredJourneys'
+import { historyToBase64 } from '../historyMiddleware.test'
 
 describe('historyMiddleware', () => {
   const req: Request = {} as jest.Mocked<Request>
