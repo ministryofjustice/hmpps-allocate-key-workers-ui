@@ -24,6 +24,7 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
       return res.render('recommend-allocations/view', {
         showBreadcrumbs: true,
         records: [],
+        staff: [],
         count: req.flash(FLASH_KEY__COUNT)[0],
         apiError: req.flash(FLASH_KEY__API_ERROR)[0],
       })
