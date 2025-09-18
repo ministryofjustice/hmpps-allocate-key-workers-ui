@@ -1,4 +1,4 @@
-export function initialiseDropdown(policyStaff, staff, allocationOrder) {
+export function initialiseDropdown(policyStaff, staff, allocationOrder = 'BY_ALLOCATIONS') {
   function createOption(text, value, selected) {
     const option = document.createElement('option')
     option.text = text
