@@ -14,6 +14,7 @@ import { prisonerProfileBacklink } from '../../utils/utils'
 export class RecommendStaffAutomaticallyController extends ChangeStaffController {
   GET = async (req: Request, res: Response): Promise<void> => {
     const { allowPartialAllocation } = req.query
+    const { allocationOrder } = req.middleware!.prisonConfiguration!
 
     const prisonCode = res.locals.user.getActiveCaseloadId()!
 
@@ -66,7 +67,7 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
       })
     }
 
-    const dropdownOptions = this.getDropdownOptions(recommendations.staff)
+    const dropdownOptions = this.getDropdownOptions(recommendations.staff, allocationOrder)
 
     const matchedPrisoners = records.map(o => {
       const match = recommendations.allocations.find(a => a.personIdentifier === o.personIdentifier)

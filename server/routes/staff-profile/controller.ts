@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { subMonths, subDays, differenceInDays, format } from 'date-fns'
+import { differenceInDays, format, subDays, subMonths } from 'date-fns'
 import { ChangeStaffController } from '../base/changeStaffController'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import { prisonerProfileBacklink } from '../../utils/utils'

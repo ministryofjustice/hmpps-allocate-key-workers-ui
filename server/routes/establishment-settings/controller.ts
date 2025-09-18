@@ -1,14 +1,14 @@
-import { Request, Response, NextFunction } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import AllocationsApiService from '../../services/allocationsApi/allocationsApiService'
 import { FLASH_KEY__SUCCESS_MESSAGE } from '../../utils/constants'
-import { SchemaType, parseFrequencyInWeeks } from './schema'
+import { parseFrequencyInWeeks, SchemaType } from './schema'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 
 export class EstablishmentSettingsController {
   constructor(private readonly allocationsApiService: AllocationsApiService) {}
 
   GET = async (req: Request, res: Response) => {
-    const { allowAutoAllocation, capacity, frequencyInWeeks } = req.middleware!.prisonConfiguration!
+    const { allowAutoAllocation, capacity, frequencyInWeeks, allocationOrder } = req.middleware!.prisonConfiguration!
 
     const policyStatus = await this.allocationsApiService.getPolicies(req, res.locals.user.getActiveCaseloadId()!)
 
@@ -30,11 +30,15 @@ export class EstablishmentSettingsController {
       personalOfficerEnabled: policyStatus.policies.find(
         ({ enabled, policy }) => enabled && policy === 'PERSONAL_OFFICER',
       ),
+      allocationOrder:
+        res.locals.formResponses?.['allocationOrder'] === undefined
+          ? allocationOrder
+          : res.locals.formResponses?.['allocationOrder'],
     })
   }
 
   submitToApi = async (req: Request<unknown, unknown, SchemaType>, res: Response, next: NextFunction) => {
-    const { allowAutoAllocation, maximumCapacity, frequencyInWeeks } = req.body
+    const { allowAutoAllocation, maximumCapacity, frequencyInWeeks, allocationOrder } = req.body
 
     try {
       await this.allocationsApiService.updatePrisonConfig(
@@ -43,6 +47,7 @@ export class EstablishmentSettingsController {
         allowAutoAllocation,
         maximumCapacity,
         frequencyInWeeks,
+        allocationOrder,
       )
       req.flash(FLASH_KEY__SUCCESS_MESSAGE, 'Establishment settings updated')
       next()

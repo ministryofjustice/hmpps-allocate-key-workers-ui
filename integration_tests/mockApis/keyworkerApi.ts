@@ -107,6 +107,7 @@ const stubKeyworkerPrisonConfig = (
   isEnabled: boolean,
   hasPrisonersWithHighComplexityNeeds: boolean,
   allowAutoAllocation = true,
+  allocationOrder: 'BY_ALLOCATIONS' | 'BY_NAME' = 'BY_ALLOCATIONS',
 ) =>
   stubFor({
     request: {
@@ -121,6 +122,7 @@ const stubKeyworkerPrisonConfig = (
         allowAutoAllocation,
         capacity: 6,
         frequencyInWeeks: 1,
+        allocationOrder,
       },
       headers: {
         'Content-Type': 'application/json',
@@ -861,7 +863,7 @@ export default {
   stubSearchAllocatableStaffError,
   stubEnabledPrisonWithHighComplexityNeedsPrisoners: () => stubKeyworkerPrisonConfig(true, true),
   stubEnabledPrison: (allowAutoAllocation: boolean = true) =>
-    stubKeyworkerPrisonConfig(true, false, allowAutoAllocation),
+    stubKeyworkerPrisonConfig(true, false, allowAutoAllocation, 'BY_ALLOCATIONS'),
   stubPrisonNotEnabled: () => stubKeyworkerPrisonConfig(false, false),
   stubKeyworkerDetails,
   stubKeyworkerDetailsWithoutStats,
@@ -892,4 +894,5 @@ export default {
   stubGetPolicies,
   stubPutPolicies,
   stubKeyWorkerStatsWithNullCurrentValues,
+  stubKeyworkerPrisonConfigNameSort: () => stubKeyworkerPrisonConfig(true, false, false, 'BY_NAME'),
 }

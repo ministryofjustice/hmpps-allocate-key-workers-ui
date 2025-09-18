@@ -37,6 +37,10 @@ export const schemaFactory = async (_req: Request, res: Response) =>
             .enum(['1WK', '2WK', '3WK', '4WK'], { message: 'Select how often sessions should take place' })
             .transform(parseFrequencyInWeeks)
         : z.number().optional(),
+    allocationOrder:
+      res.locals.user.permissions >= UserPermissionLevel.ADMIN
+        ? z.enum(['BY_ALLOCATIONS', 'BY_NAME'], { message: `Select how ${res.locals.policyStaffs} should be ordered` })
+        : z.enum(['BY_ALLOCATIONS', 'BY_NAME']),
   })
 
 export type SchemaType = z.infer<Awaited<ReturnType<typeof schemaFactory>>>

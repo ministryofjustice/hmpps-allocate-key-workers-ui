@@ -95,6 +95,37 @@
             }
           }) }}
 
+          {{ govukRadios({
+            classes: "govuk-!-margin-bottom-6",
+            name: "allocationOrder",
+            errorMessage: validationErrors | findError('allocationOrder'),
+            fieldset: {
+              legend: {
+                text: "How should " + policyStaffs + " be displayed in dropdown menus?",
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--m"
+              }
+            },
+            items: [
+              {
+                value: "BY_NAME",
+                text: "Alphabetically by last name",
+                hint: {
+                  text: policyStaffs | sentenceCase + " will be displayed alphabetically, regardless of how many allocations they have."
+                },
+                checked: allocationOrder === 'BY_NAME'
+              },
+              {
+                value: "BY_ALLOCATIONS",
+                text: "By number of current allocations",
+                hint: {
+                  text: policyStaffs | sentenceCase + " will be displayed by the number of allocations they have. Those with the fewest allocations will appear first."
+                },
+                checked: allocationOrder === 'BY_ALLOCATIONS'
+              }
+            ]
+          }) }}
+
           {% if isAdmin and policyPath == 'key-worker' %}
             {{ govukSelect({
               id: "frequencyInWeeks",

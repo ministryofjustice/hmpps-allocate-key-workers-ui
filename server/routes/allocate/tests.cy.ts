@@ -420,6 +420,32 @@ context('/allocate', () => {
       cy.get('.placeholder-select').eq(1).focus()
       cy.get('.placeholder-select').eq(1).children().should('have.length', 3)
     })
+
+    it('should sort dropdowns when client side JS is disabled', () => {
+      cy.signIn({ failOnStatusCode: false })
+      cy.task('stubKeyworkerPrisonConfigNameSort')
+      cy.visit('/key-worker/allocate?query=ALL&js=false')
+
+      cy.get('.placeholder-select').eq(1).children().should('have.length', 4)
+      cy.get('#selectStaffMember')
+        .eq(0)
+        .children()
+        .eq(1)
+        .should('contain.text', 'Key-Worker, Available-Active2 (allocations: 32)')
+    })
+
+    it('should sort dropdowns when client side JS is enabled', () => {
+      cy.signIn({ failOnStatusCode: false })
+      cy.task('stubKeyworkerPrisonConfigNameSort')
+      cy.visit('/key-worker/allocate?query=ALL&js=true')
+
+      cy.get('.placeholder-select').eq(0).children().should('have.length', 3)
+      cy.get('#selectStaffMember')
+        .eq(0)
+        .children()
+        .eq(1)
+        .should('contain.text', 'Key-Worker, Available-Active2 (allocations: 32)')
+    })
   })
 
   const checkPageContentsNoFilter = (readonly = false, allowAutoAllocation = true) => {
@@ -597,8 +623,16 @@ context('/allocate', () => {
   }
 
   const checkSelectSorting = () => {
-    cy.get('#selectStaffMember').eq(0).children().eq(1).should('contain.text', 'Key-Worker, Available-Active2')
-    cy.get('#selectStaffMember').eq(0).children().eq(2).should('contain.text', 'Key-Worker2, Available-Active')
+    cy.get('#selectStaffMember')
+      .eq(0)
+      .children()
+      .eq(1)
+      .should('contain.text', 'Key-Worker2, Available-Active (allocations: 32)')
+    cy.get('#selectStaffMember')
+      .eq(0)
+      .children()
+      .eq(2)
+      .should('contain.text', 'Key-Worker, Available-Active2 (allocations: 32)')
   }
 
   const checkResidentialLocationFilter = (readonly = false) => {
