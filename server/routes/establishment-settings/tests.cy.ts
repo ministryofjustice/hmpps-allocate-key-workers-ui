@@ -57,6 +57,7 @@ context('/establishment-settings', () => {
         allowAutoAllocation: false,
         capacity: 12,
         frequencyInWeeks: 3,
+        allocationOrder: 'BY_ALLOCATIONS',
       },
     )
   })
@@ -93,6 +94,7 @@ context('/establishment-settings', () => {
         allowAutoAllocation: false,
         capacity: 12,
         frequencyInWeeks: 1,
+        allocationOrder: 'BY_ALLOCATIONS',
       },
     )
   })
@@ -193,6 +195,7 @@ context('/establishment-settings', () => {
         allowAutoAllocation: false,
         capacity: 12,
         frequencyInWeeks: 1,
+        allocationOrder: 'BY_ALLOCATIONS',
       },
     )
   })
@@ -240,6 +243,7 @@ context('/establishment-settings', () => {
         allowAutoAllocation: false,
         capacity: 12,
         frequencyInWeeks: 1,
+        allocationOrder: 'BY_ALLOCATIONS',
       },
     )
   })
@@ -252,6 +256,7 @@ context('/establishment-settings', () => {
     cy.title().should('equal', `Manage your establishment’s ${policyStaff} settings - ${policyName} - DPS`)
     cy.findByRole('heading', { name: 'Establishment settings for Leeds (HMP)' }).should('be.visible')
     cy.findByRole('radio', { name: 'Yes' }).should('exist').and('be.checked')
+    cy.findByRole('radio', { name: 'By number of current allocations' }).should('exist').and('be.checked')
     getCapacityInput(policyStaff).should('be.visible').and('have.value', '6')
     cy.findByRole('button', { name: 'Save' }).should('be.visible')
     cy.findByRole('button', { name: 'Cancel' })
