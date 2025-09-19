@@ -262,7 +262,7 @@
   {% if jsEnabled %}
     <script nonce="{{ cspNonce }}">
       window.onload = function () {
-        window.initialiseDropdown('{{ policyStaff }}', {{ staff | dump | safe }}, '{{ allocationOrder }}')
+        window.initialiseDropdown?.('{{ policyStaff }}', {{ staff | dump | safe }})
         window.initAllocateStickyAction()
       }
     </script>
