@@ -28,7 +28,6 @@ export class ChangeStaffController {
       count: req.flash(FLASH_KEY__COUNT)[0],
       apiError: req.flash(FLASH_KEY__API_ERROR)[0],
       staff: mappedStaff,
-      allocationOrder,
     }
   }
 

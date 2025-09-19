@@ -30,10 +30,7 @@ export class EstablishmentSettingsController {
       personalOfficerEnabled: policyStatus.policies.find(
         ({ enabled, policy }) => enabled && policy === 'PERSONAL_OFFICER',
       ),
-      allocationOrder:
-        res.locals.formResponses?.['allocationOrder'] === undefined
-          ? allocationOrder
-          : res.locals.formResponses?.['allocationOrder'],
+      allocationOrder: res.locals.formResponses?.['allocationOrder'] ?? allocationOrder,
     })
   }
 
