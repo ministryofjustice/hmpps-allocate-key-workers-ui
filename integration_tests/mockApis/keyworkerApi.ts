@@ -329,6 +329,19 @@ const keyworkerManageResponse = {
     },
     {
       staffId: 488096,
+      firstName: 'AVAILABLE-ACTIVE1',
+      lastName: 'HARD KEY-WORKER',
+      status: {
+        code: 'ACT',
+        description: 'Active',
+      },
+      capacity: 28,
+      allocated: 55,
+      autoAllocationAllowed: true,
+      numberOfKeyworkerSessions: 0,
+    },
+    {
+      staffId: 488096,
       firstName: 'UNAVAILABLE-ANNUAL-LEAVE',
       lastName: 'KEY-WORKER',
       status: {

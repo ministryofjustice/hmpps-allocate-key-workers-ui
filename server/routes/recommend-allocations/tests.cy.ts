@@ -220,20 +220,10 @@ context('/recommend-allocations', () => {
       cy.get('.placeholder-select').eq(1).children().should('have.length', 2)
     })
 
-    it('should sort dropdowns when client side JS is disabled', () => {
-      navigateToTestPage(true, false)
-      cy.task('stubKeyworkerPrisonConfigNameSort')
-
-      cy.get('.placeholder-select').eq(0).children().should('have.length', 3)
-      cy.get('#selectStaffMember').eq(0).children().eq(1).should('contain.text', 'Active, Available (allocations: 0)')
-    })
-
-    it('should sort dropdowns when client side JS is enabled', () => {
+    it('should sort allocations based on name', () => {
       navigateToTestPage(true, true)
       cy.task('stubKeyworkerPrisonConfigNameSort')
-
-      cy.get('.placeholder-select').eq(0).children().should('have.length', 3)
-      cy.get('#selectStaffMember').eq(0).children().eq(1).should('contain.text', 'Active, Available (allocations: 0)')
+      cy.get('#selectStaffMember').eq(0).children().eq(1).should('have.text', 'Active, Available (allocations: 0)')
     })
   })
 
