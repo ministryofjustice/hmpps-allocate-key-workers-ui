@@ -1,4 +1,4 @@
-export function initialiseDropdown(policyStaff, staff, allocationOrder) {
+export function initialiseDropdown(policyStaff, staff) {
   function createOption(text, value, selected) {
     const option = document.createElement('option')
     option.text = text
@@ -7,27 +7,6 @@ export function initialiseDropdown(policyStaff, staff, allocationOrder) {
       option.selected = selected
     }
     return option
-  }
-
-  function sortStaff(staffList, order) {
-    const sortedStaff = [...staffList]
-
-    function extractAllocationCount(text) {
-      const match = text.match(/\(allocations:\s*(\d+)\)/)
-      return match ? parseInt(match[1], 10) : 0
-    }
-
-    if (order === 'BY_NAME') {
-      return sortedStaff.sort((a, b) => a.text.localeCompare(b.text))
-    } else if (order === 'BY_ALLOCATIONS') {
-      return sortedStaff.sort((a, b) => {
-        const aCount = extractAllocationCount(a.text)
-        const bCount = extractAllocationCount(b.text)
-        return aCount - bCount
-      })
-    } else {
-      return sortedStaff
-    }
   }
 
   function conditionallyPopulateSelect(select) {
@@ -50,9 +29,7 @@ export function initialiseDropdown(policyStaff, staff, allocationOrder) {
       select.appendChild(createOption('Deallocate', `${personId}:deallocate:${staffId}`))
     }
 
-    const sortedStaff = sortStaff(staff, allocationOrder)
-
-    sortedStaff.forEach(option => {
+    staff.forEach(option => {
       if (option.onlyFor && option.onlyFor !== personId) return
       if (!option.onlyFor && option.value.endsWith(`:${recommendedId}`)) return
 

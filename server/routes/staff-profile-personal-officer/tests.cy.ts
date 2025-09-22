@@ -213,7 +213,7 @@ context('Personal Officer Profile Info', () => {
     it('should populate dropdowns through nunjucks when client side JS is disabled', () => {
       navigateToTestPage(false)
 
-      cy.get('.placeholder-select').eq(1).children().should('have.length', 4)
+      cy.get('.placeholder-select').eq(1).children().should('have.length', 5)
     })
 
     it('should populate dropdowns through client side JS when available', () => {
@@ -221,7 +221,17 @@ context('Personal Officer Profile Info', () => {
       // Nunjucks prepopulates with one item (or two if on recommend allocations page) and then JS populates the rest on focus
       cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
       cy.get('.placeholder-select').eq(1).focus()
-      cy.get('.placeholder-select').eq(1).children().should('have.length', 3)
+      cy.get('.placeholder-select').eq(1).children().should('have.length', 4)
+    })
+
+    it('should sort allocations based on name', () => {
+      cy.task('stubKeyworkerPrisonConfigNameSort')
+      navigateToTestPage(true)
+      cy.get('.placeholder-select')
+        .eq(0)
+        .children()
+        .eq(2)
+        .should('have.text', 'Hard Key-Worker, Available-Active1 (allocations: 55)')
     })
   })
 

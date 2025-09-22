@@ -409,7 +409,7 @@ context('/allocate', () => {
       cy.signIn({ failOnStatusCode: false })
       cy.visit('/key-worker/allocate?query=ALL&js=false')
 
-      cy.get('.placeholder-select').eq(1).children().should('have.length', 4)
+      cy.get('.placeholder-select').eq(1).children().should('have.length', 5)
     })
 
     it('should populate dropdowns through client side JS when available', () => {
@@ -418,33 +418,20 @@ context('/allocate', () => {
       // Nunjucks prepopulates with one item (or two if on recommend allocations page) and then JS populates the rest on focus
       cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
       cy.get('.placeholder-select').eq(1).focus()
-      cy.get('.placeholder-select').eq(1).children().should('have.length', 3)
-    })
-
-    it('should sort dropdowns when client side JS is disabled', () => {
-      cy.signIn({ failOnStatusCode: false })
-      cy.task('stubKeyworkerPrisonConfigNameSort')
-      cy.visit('/key-worker/allocate?query=ALL&js=false')
-
       cy.get('.placeholder-select').eq(1).children().should('have.length', 4)
-      cy.get('#selectStaffMember')
-        .eq(0)
-        .children()
-        .eq(1)
-        .should('contain.text', 'Key-Worker, Available-Active2 (allocations: 32)')
     })
 
-    it('should sort dropdowns when client side JS is enabled', () => {
+    it('should sort dropdowns by name', () => {
       cy.signIn({ failOnStatusCode: false })
       cy.task('stubKeyworkerPrisonConfigNameSort')
       cy.visit('/key-worker/allocate?query=ALL&js=true')
 
-      cy.get('.placeholder-select').eq(0).children().should('have.length', 3)
+      cy.get('.placeholder-select').eq(0).children().should('have.length', 4)
       cy.get('#selectStaffMember')
         .eq(0)
         .children()
         .eq(1)
-        .should('contain.text', 'Key-Worker, Available-Active2 (allocations: 32)')
+        .should('contain.text', 'Hard Key-Worker, Available-Active1 (allocations: 55)')
     })
   })
 
