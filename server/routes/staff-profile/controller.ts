@@ -62,7 +62,12 @@ export class StaffProfileController extends ChangeStaffController {
               dateRange.from,
               dateRange.to,
             )
-          ).recordedEvents.sort(this.getCaseNoteSorter(req.query['sort'] as string)),
+          ).recordedEvents
+            .sort(this.getCaseNoteSorter(req.query['sort'] as string))
+            .map(caseNote => ({
+              ...caseNote,
+              profileHref: prisonerProfileBacklink(req, res, caseNote.prisoner.prisonerNumber),
+            })),
       })
     }
 

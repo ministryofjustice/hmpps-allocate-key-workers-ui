@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { subMonths, subDays, differenceInDays, format, startOfMonth, endOfMonth } from 'date-fns'
+import { differenceInDays, endOfMonth, format, startOfMonth, subDays, subMonths } from 'date-fns'
 import { ChangeStaffController } from '../base/changeStaffController'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import { ResQuerySchemaType } from './schema'
@@ -117,7 +117,12 @@ export class POStaffProfileController extends ChangeStaffController {
               dateRange.from,
               dateRange.to,
             )
-          ).recordedEvents.sort(this.getCaseNoteSorter(req.query['sort'] as string)),
+          ).recordedEvents
+            .sort(this.getCaseNoteSorter(req.query['sort'] as string))
+            .map(caseNote => ({
+              ...caseNote,
+              profileHref: prisonerProfileBacklink(req, res, caseNote.prisoner.prisonerNumber),
+            })),
       })
     }
 
