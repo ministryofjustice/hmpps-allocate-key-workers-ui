@@ -56,7 +56,7 @@
 
       <div class="govuk-body">
         {% for note in caseNotes %}
-          {{ recordedEvent(note, note.prisoner | firstNameSpaceLastName, note.prisoner.prisonerNumber) }}
+          {{ recordedEvent(note, note.prisoner | firstNameSpaceLastName, note.prisoner.prisonerNumber, note.profileHref) }}
         {% endfor %}
       </div>
     {% endif %}
