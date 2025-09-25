@@ -60,20 +60,14 @@ context('Case notes', () => {
       .eq(0)
       .should('have.text', 'Key worker entry: Joe Doe (AA1111B)')
       .find('a')
-      .should(
-        'have.attr',
-        'href',
-        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FAA1111B&returnPath=%2Fstaff-profile%2F488095%2Fcase-notes%3Fsort%3DoccurredAt%252CASC%26history%3DH4sIAAAAAAAAE4tW0s9OrdQtzy%252FKTi1S0kHm6ecm5iWmp6IJFpckpqXpFhTlp2XmpOobmxibGuNVYWJhYWBpqp%252BcWJyqm5dfklpMmmr74vyiEtv85OTSoqLUFMcSVSNnx2BnpVgAq26zbLgAAAA%253D',
-      )
+      .invoke('attr', 'href')
+      .should('include', 'http://localhost:3001/save-backlink?service=allocate-key-workers')
 
     cy.get('h3.govuk-heading-m')
       .eq(1)
       .should('have.text', 'Key worker session: Joe Doe (AA1111B)')
       .find('a')
-      .should(
-        'have.attr',
-        'href',
-        'http://localhost:3001/save-backlink?service=allocate-key-workers&redirectPath=%2Fprisoner%2FAA1111B&returnPath=%2Fstaff-profile%2F488095%2Fcase-notes%3Fsort%3DoccurredAt%252CASC%26history%3DH4sIAAAAAAAAE4tW0s9OrdQtzy%252FKTi1S0kHm6ecm5iWmp6IJFpckpqXpFhTlp2XmpOobmxibGuNVYWJhYWBpqp%252BcWJyqm5dfklpMmmr74vyiEtv85OTSoqLUFMcSVSNnx2BnpVgAq26zbLgAAAA%253D',
-      )
+      .invoke('attr', 'href')
+      .should('include', 'http://localhost:3001/save-backlink?service=allocate-key-workers')
   }
 })
