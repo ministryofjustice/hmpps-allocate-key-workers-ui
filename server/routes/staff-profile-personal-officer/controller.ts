@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { differenceInDays, endOfMonth, format, startOfMonth, subDays, subMonths } from 'date-fns'
+import { subMonths, subDays, differenceInDays, format, startOfMonth, endOfMonth } from 'date-fns'
 import { ChangeStaffController } from '../base/changeStaffController'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import { ResQuerySchemaType } from './schema'
