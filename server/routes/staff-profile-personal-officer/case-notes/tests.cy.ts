@@ -22,6 +22,8 @@ context('Case notes', () => {
     validatePageContents()
 
     validateSorting()
+
+    validateLinks()
   })
 
   const navigateToTestPage = () => {
@@ -58,5 +60,21 @@ context('Case notes', () => {
 
     cy.get('h3.govuk-heading-m').eq(0).should('have.text', 'Key worker entry: Joe Doe (AA1111B)')
     cy.get('h3.govuk-heading-m').eq(1).should('have.text', 'Key worker session: Joe Doe (AA1111B)')
+  }
+
+  const validateLinks = () => {
+    cy.get('h3.govuk-heading-m')
+      .eq(0)
+      .should('have.text', 'Key worker entry: Joe Doe (AA1111B)')
+      .find('a')
+      .invoke('attr', 'href')
+      .should('include', 'http://localhost:3001/save-backlink?service=allocate-personal-officers')
+
+    cy.get('h3.govuk-heading-m')
+      .eq(1)
+      .should('have.text', 'Key worker session: Joe Doe (AA1111B)')
+      .find('a')
+      .invoke('attr', 'href')
+      .should('include', 'http://localhost:3001/save-backlink?service=allocate-personal-officers')
   }
 })

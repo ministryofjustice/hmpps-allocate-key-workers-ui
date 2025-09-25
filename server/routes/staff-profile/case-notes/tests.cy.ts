@@ -17,6 +17,8 @@ context('Case notes', () => {
     validatePageContents()
 
     validateSorting()
+
+    validateLinks()
   })
 
   const navigateToTestPage = () => {
@@ -50,10 +52,25 @@ context('Case notes', () => {
   const validateSorting = () => {
     cy.get('h3.govuk-heading-m').eq(0).should('have.text', 'Key worker session: Joe Doe (AA1111B)')
     cy.get('h3.govuk-heading-m').eq(1).should('have.text', 'Key worker entry: Joe Doe (AA1111B)')
-
     cy.findByRole('combobox', { name: 'Sort by' }).select('Happened (oldest)')
 
     cy.get('h3.govuk-heading-m').eq(0).should('have.text', 'Key worker entry: Joe Doe (AA1111B)')
     cy.get('h3.govuk-heading-m').eq(1).should('have.text', 'Key worker session: Joe Doe (AA1111B)')
+  }
+
+  const validateLinks = () => {
+    cy.get('h3.govuk-heading-m')
+      .eq(0)
+      .should('have.text', 'Key worker entry: Joe Doe (AA1111B)')
+      .find('a')
+      .invoke('attr', 'href')
+      .should('include', 'http://localhost:3001/save-backlink?service=allocate-key-workers')
+
+    cy.get('h3.govuk-heading-m')
+      .eq(1)
+      .should('have.text', 'Key worker session: Joe Doe (AA1111B)')
+      .find('a')
+      .invoke('attr', 'href')
+      .should('include', 'http://localhost:3001/save-backlink?service=allocate-key-workers')
   }
 })
