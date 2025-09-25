@@ -21,6 +21,8 @@ context('Case notes', () => {
     validatePageContents()
 
     validateSorting()
+
+    validateLinks()
   })
 
   const navigateToTestPage = () => {
@@ -56,5 +58,27 @@ context('Case notes', () => {
 
     cy.get('h3.govuk-heading-m').eq(0).should('have.text', 'Key worker entry: Joe Doe (AA1111B)')
     cy.get('h3.govuk-heading-m').eq(1).should('have.text', 'Key worker session: Joe Doe (AA1111B)')
+  }
+
+  const validateLinks = () => {
+    cy.get('h3.govuk-heading-m')
+      .eq(0)
+      .should('have.text', 'Key worker entry: Joe Doe (AA1111B)')
+      .find('a')
+      .should(
+        'have.attr',
+        'href',
+        'http://localhost:3001/save-backlink?service=allocate-personal-officers&redirectPath=%2Fprisoner%2FAA1111B&returnPath=%2Fstaff-profile%2F488095%2Fcase-notes%3Fsort%3DoccurredAt%252CASC%26history%3DH4sIAAAAAAAAE4tW0i9ILSrOz0vM0c1PS8tMTi1S0sEU089NzEtMT8UqVVySmJamW1CUn5aZk6pvbGJsakyEOhMLCwNLU%252F3kxOJU3bz8ktRicvTYF%252BcXldjmJyeXFhWlpjiWqBo5OwY7K8UCABJPhQDWAAAA',
+      )
+
+    cy.get('h3.govuk-heading-m')
+      .eq(1)
+      .should('have.text', 'Key worker session: Joe Doe (AA1111B)')
+      .find('a')
+      .should(
+        'have.attr',
+        'href',
+        'http://localhost:3001/save-backlink?service=allocate-personal-officers&redirectPath=%2Fprisoner%2FAA1111B&returnPath=%2Fstaff-profile%2F488095%2Fcase-notes%3Fsort%3DoccurredAt%252CASC%26history%3DH4sIAAAAAAAAE4tW0i9ILSrOz0vM0c1PS8tMTi1S0sEU089NzEtMT8UqVVySmJamW1CUn5aZk6pvbGJsakyEOhMLCwNLU%252F3kxOJU3bz8ktRicvTYF%252BcXldjmJyeXFhWlpjiWqBo5OwY7K8UCABJPhQDWAAAA',
+      )
   }
 })
