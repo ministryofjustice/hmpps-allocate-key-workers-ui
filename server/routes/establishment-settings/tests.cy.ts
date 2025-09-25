@@ -1,3 +1,4 @@
+import { checkAxeAccessibility } from '../../../integration_tests/support/accessibilityViolations'
 import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
 import AuthorisedRoles from '../../authentication/authorisedRoles'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
@@ -292,5 +293,6 @@ context('/establishment-settings', () => {
   const navigateToTestPage = (policy: string = 'key-worker') => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(`/${policy}/establishment-settings`, { failOnStatusCode: false })
+    checkAxeAccessibility()
   }
 })

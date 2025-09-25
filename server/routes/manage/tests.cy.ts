@@ -1,3 +1,4 @@
+import { checkAxeAccessibility } from '../../../integration_tests/support/accessibilityViolations'
 import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 
@@ -342,5 +343,6 @@ context('Manage key workers', () => {
   const navigateToTestPage = (query: string = '') => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(`/key-worker/manage${query}`, { failOnStatusCode: false })
+    checkAxeAccessibility()
   }
 })

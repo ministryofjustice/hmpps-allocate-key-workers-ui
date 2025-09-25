@@ -1,5 +1,6 @@
 import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../../integration_tests/support/commands'
+import { checkAxeAccessibility } from '../../../../../../integration_tests/support/accessibilityViolations'
 
 context('/manage-roles/assign/working-pattern', () => {
   const fullTimeRadio = () => cy.findByRole('radio', { name: 'Full-time' })
@@ -81,5 +82,6 @@ context('/manage-roles/assign/working-pattern', () => {
     })
 
     cy.visit(`/key-worker/${journeyId}/manage-roles/assign/working-pattern`)
+    checkAxeAccessibility()
   }
 })

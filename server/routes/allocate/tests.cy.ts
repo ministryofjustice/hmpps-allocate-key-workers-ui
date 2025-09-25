@@ -2,6 +2,7 @@ import { components } from '../../@types/keyWorker'
 import AuthorisedRoles from '../../authentication/authorisedRoles'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
+import { checkAxeAccessibility } from '../../../integration_tests/support/accessibilityViolations'
 
 context('/allocate', () => {
   beforeEach(() => {
@@ -663,5 +664,6 @@ context('/allocate', () => {
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit('/key-worker/allocate?query=ALL', { failOnStatusCode: false })
+    checkAxeAccessibility()
   }
 })

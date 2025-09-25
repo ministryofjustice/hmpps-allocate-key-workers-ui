@@ -1,3 +1,5 @@
+import { checkAxeAccessibility } from '../../../../integration_tests/support/accessibilityViolations'
+
 context('Case notes', () => {
   beforeEach(() => {
     cy.task('reset')
@@ -27,6 +29,7 @@ context('Case notes', () => {
 
     cy.get('.case-note-details').eq(0).click()
     cy.get('.case-note-details').eq(1).click()
+    checkAxeAccessibility()
   }
 
   const validatePageContents = () => {

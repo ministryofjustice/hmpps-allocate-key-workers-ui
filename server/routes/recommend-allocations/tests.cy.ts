@@ -1,3 +1,4 @@
+import { checkAxeAccessibility } from '../../../integration_tests/support/accessibilityViolations'
 import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
 import AuthorisedRoles from '../../authentication/authorisedRoles'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
@@ -369,5 +370,6 @@ context('/recommend-allocations', () => {
         '/key-worker/recommend-allocations',
       ],
     )
+    checkAxeAccessibility()
   }
 })

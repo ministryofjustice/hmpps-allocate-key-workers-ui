@@ -3,6 +3,7 @@ import { createMock } from '../../../testutils/mockObjects'
 import { defaultKeyworkerDetails } from '../../../../integration_tests/mockApis/keyworkerApi'
 import { verifyRoleBasedAccess } from '../../../../integration_tests/support/roleBasedAccess'
 import { UserPermissionLevel } from '../../../interfaces/hmppsUser'
+import { checkAxeAccessibility } from '../../../../integration_tests/support/accessibilityViolations'
 
 context('Update capacity, status and working pattern', () => {
   const journeyId = uuidV4()
@@ -66,5 +67,6 @@ context('Update capacity, status and working pattern', () => {
         failOnStatusCode: false,
       },
     )
+    checkAxeAccessibility()
   }
 })

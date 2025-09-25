@@ -164,7 +164,8 @@
               html: 'Not applicable - high complexity of need' if item.hasHighComplexityOfNeeds else govukSelect({
                 attributes: {
                   'staff-id': item.staffMember.staffId or '',
-                  'person-id': item.personIdentifier
+                  'person-id': item.personIdentifier,
+                  'aria-label': 'Select ' + policyStaff
                 },
                 id: "selectStaffMember",
                 classes: 'placeholder-select',

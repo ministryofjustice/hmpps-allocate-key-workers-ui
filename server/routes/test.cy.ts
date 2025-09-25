@@ -1,3 +1,4 @@
+import { checkAxeAccessibility } from '../../integration_tests/support/accessibilityViolations'
 import AuthorisedRoles from '../authentication/authorisedRoles'
 
 context('test / homepage', () => {
@@ -294,5 +295,6 @@ context('test / homepage', () => {
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit('/key-worker?history=WyIva2V5LXdvcmtlciJdr', { failOnStatusCode: false })
+    checkAxeAccessibility()
   }
 })
