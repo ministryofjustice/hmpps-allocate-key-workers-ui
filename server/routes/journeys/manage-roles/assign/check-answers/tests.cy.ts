@@ -2,6 +2,7 @@ import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../../integration_tests/support/commands'
 import { POLICIES } from '../../../../../middleware/policyMiddleware'
 import AuthorisedRoles from '../../../../../authentication/authorisedRoles'
+import { checkAxeAccessibility } from '../../../../../../integration_tests/support/accessibilityViolations'
 
 context('/manage-roles/assign/check-answers', () => {
   let journeyId = uuidV4()
@@ -104,5 +105,6 @@ context('/manage-roles/assign/check-answers', () => {
     })
 
     cy.visit(`/${policyPath}/${journeyId}/manage-roles/assign/check-answers`, { failOnStatusCode: false })
+    checkAxeAccessibility()
   }
 })

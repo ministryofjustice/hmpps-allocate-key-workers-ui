@@ -1,5 +1,6 @@
 import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../../integration_tests/support/commands'
+import { checkAxeAccessibility } from '../../../../../../integration_tests/support/accessibilityViolations'
 
 context('/manage-roles/assign/confirmation', () => {
   const journeyId = uuidV4()
@@ -56,5 +57,6 @@ context('/manage-roles/assign/confirmation', () => {
     })
 
     cy.visit(`/key-worker/${journeyId}/manage-roles/assign/confirmation`)
+    checkAxeAccessibility()
   }
 })

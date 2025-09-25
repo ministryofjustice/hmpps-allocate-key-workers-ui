@@ -4,7 +4,7 @@
     <h3 class="govuk-heading-m">{{ event.type.description }}: {{ staffName }} ({{ staffId }})</h3>
     <span class="case-note-truncated">{{ event.text }}</span>
     <details class="no-margin upward case-note-details">
-      <summary class="govuk-details__summary-text"></summary>
+      <summary aria-label="show case note" class="govuk-details__summary-text"></summary>
       <div class="case-note-full">{{ event.text | nl2br | safe }}
         {% if event.amendments.length %}
           <div class="hmpps-case-note-card-list-item__amendments-header">More details added:</div>

@@ -1,5 +1,6 @@
 import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../../integration_tests/support/commands'
+import { checkAxeAccessibility } from '../../../../../../integration_tests/support/accessibilityViolations'
 
 context('/manage-roles/remove/remove-role', () => {
   let journeyId = uuidV4()
@@ -87,5 +88,6 @@ context('/manage-roles/remove/remove-role', () => {
     })
 
     cy.visit(`/${policyPath}/${journeyId}/manage-roles/remove/remove-role`)
+    checkAxeAccessibility()
   }
 })

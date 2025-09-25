@@ -1,3 +1,4 @@
+import { checkAxeAccessibility } from '../../../../integration_tests/support/accessibilityViolations'
 import AuthorisedRoles from '../../../authentication/authorisedRoles'
 
 context('Case notes', () => {
@@ -32,6 +33,7 @@ context('Case notes', () => {
     ])
     cy.get('.case-note-details').eq(0).click()
     cy.get('.case-note-details').eq(1).click()
+    checkAxeAccessibility()
   }
 
   const validatePageContents = () => {

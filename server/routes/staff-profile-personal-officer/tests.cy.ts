@@ -1,4 +1,5 @@
 import { defaultKeyworkerDetails } from '../../../integration_tests/mockApis/keyworkerApi'
+import { checkAxeAccessibility } from '../../../integration_tests/support/accessibilityViolations'
 import AuthorisedRoles from '../../authentication/authorisedRoles'
 import { createMock } from '../../testutils/mockObjects'
 
@@ -242,6 +243,7 @@ context('Personal Officer Profile Info', () => {
       '/key-worker/manage',
       '/key-worker/staff-profile/34353',
     ])
+    checkAxeAccessibility()
   }
 
   const validatePageContents = (readonly = false) => {

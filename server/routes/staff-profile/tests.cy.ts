@@ -1,4 +1,5 @@
 import { defaultKeyworkerDetails } from '../../../integration_tests/mockApis/keyworkerApi'
+import { checkAxeAccessibility } from '../../../integration_tests/support/accessibilityViolations'
 import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
 import AuthorisedRoles from '../../authentication/authorisedRoles'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
@@ -223,6 +224,7 @@ context('Profile Info', () => {
       '/key-worker/manage',
       '/key-worker/staff-profile/34353',
     ])
+    checkAxeAccessibility()
   }
 
   const validatePageContents = (readonly = false) => {

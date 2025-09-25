@@ -75,7 +75,8 @@
             html: govukSelect({
               attributes: {
                 'staff-id': staffId or '',
-                'person-id': item.prisoner.prisonNumber
+                'person-id': item.prisoner.prisonNumber,
+                'aria-label': 'Select ' + policyStaff
               },
               id: "selectStaffMember",
               classes: 'placeholder-select',

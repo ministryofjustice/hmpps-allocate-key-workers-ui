@@ -1,6 +1,7 @@
 import { v4 as uuidV4 } from 'uuid'
 import { createMock } from '../../../../testutils/mockObjects'
 import { defaultKeyworkerDetails } from '../../../../../integration_tests/mockApis/keyworkerApi'
+import { checkAxeAccessibility } from '../../../../../integration_tests/support/accessibilityViolations'
 
 context('/update-capacity-status-and-working-pattern/update-status', () => {
   const activeRadio = () => cy.findByRole('radio', { name: 'Active' })
@@ -106,5 +107,6 @@ context('/update-capacity-status-and-working-pattern/update-status', () => {
     )
 
     cy.visit(`/key-worker/${journeyId}/update-capacity-status-and-working-pattern/update-status`)
+    checkAxeAccessibility()
   }
 })

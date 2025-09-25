@@ -1,5 +1,6 @@
 import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../integration_tests/support/commands'
+import { checkAxeAccessibility } from '../../../../../integration_tests/support/accessibilityViolations'
 
 context('/update-capacity-status-and-working-pattern/check-answers', () => {
   let journeyId = uuidV4()
@@ -133,5 +134,6 @@ context('/update-capacity-status-and-working-pattern/check-answers', () => {
     cy.injectJourneyDataAndReload<PartialJourneyData>(journeyId, journeyData)
 
     cy.visit(`/key-worker/${journeyId}/update-capacity-status-and-working-pattern/check-answers`)
+    checkAxeAccessibility()
   }
 })

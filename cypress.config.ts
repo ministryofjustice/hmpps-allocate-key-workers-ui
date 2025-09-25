@@ -10,6 +10,7 @@ import componentsApi from './integration_tests/mockApis/componentsApi'
 import keyworkerApi from './integration_tests/mockApis/keyworkerApi'
 import locationsApi from './integration_tests/mockApis/locationsApi'
 import prisonerSearchApi from './integration_tests/mockApis/prisonerSearchApi'
+import logAccessibilityViolations from './integration_tests/support/accessibilityViolations'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -33,6 +34,7 @@ export default defineConfig({
         ...componentsApi,
         ...locationsApi,
         ...prisonerSearchApi,
+        ...logAccessibilityViolations,
         gzipCompress: text => {
           const buffer = Buffer.from(text, 'utf-8')
           const compressed = gzipSync(buffer)

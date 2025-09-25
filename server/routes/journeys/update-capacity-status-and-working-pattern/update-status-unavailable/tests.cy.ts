@@ -1,5 +1,6 @@
 import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../integration_tests/support/commands'
+import { checkAxeAccessibility } from '../../../../../integration_tests/support/accessibilityViolations'
 
 context('/update-capacity-status-and-working-pattern/update-status-unavailable', () => {
   const notDeallocateRadio = () => cy.findByRole('radio', { name: 'Do not deallocate their current prisoners' })
@@ -102,5 +103,6 @@ context('/update-capacity-status-and-working-pattern/update-status-unavailable',
     })
 
     cy.visit(`/key-worker/${journeyId}/update-capacity-status-and-working-pattern/update-status-unavailable`)
+    checkAxeAccessibility()
   }
 })

@@ -1,6 +1,7 @@
 import { v4 as uuidV4 } from 'uuid'
 import { verifyRoleBasedAccess } from '../../../../../integration_tests/support/roleBasedAccess'
 import { UserPermissionLevel } from '../../../../interfaces/hmppsUser'
+import { checkAxeAccessibility } from '../../../../../integration_tests/support/accessibilityViolations'
 
 context('/manage-roles/remove', () => {
   const journeyId = uuidV4()
@@ -82,5 +83,6 @@ context('/manage-roles/remove', () => {
       '/key-worker/manage-roles',
       '/key-worker/manage-roles/assign',
     ])
+    checkAxeAccessibility()
   }
 })
