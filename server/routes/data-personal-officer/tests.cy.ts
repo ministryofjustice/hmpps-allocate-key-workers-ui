@@ -1,3 +1,4 @@
+import { checkAxeAccessibility } from '../../../integration_tests/support/accessibilityViolations'
 import AuthorisedRoles from '../../authentication/authorisedRoles'
 
 context('Personal officer data', () => {
@@ -182,5 +183,6 @@ context('Personal officer data', () => {
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit(`/personal-officer/data`, { failOnStatusCode: false })
+    checkAxeAccessibility()
   }
 })

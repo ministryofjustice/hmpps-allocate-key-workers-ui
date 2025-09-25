@@ -1,5 +1,6 @@
 import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../integration_tests/support/commands'
+import { checkAxeAccessibility } from '../../../../../integration_tests/support/accessibilityViolations'
 
 context('/update-capacity-status-and-working-pattern/update-status-unavailable', () => {
   const dayInput = () => cy.findByRole('textbox', { name: 'Day' })
@@ -92,5 +93,6 @@ context('/update-capacity-status-and-working-pattern/update-status-unavailable',
     })
 
     cy.visit(`/key-worker/${journeyId}/update-capacity-status-and-working-pattern/update-status-annual-leave-return`)
+    checkAxeAccessibility()
   }
 })

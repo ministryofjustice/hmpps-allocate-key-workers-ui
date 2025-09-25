@@ -1,6 +1,7 @@
 import { v4 as uuidV4 } from 'uuid'
 import { PartialJourneyData } from '../../../../../integration_tests/support/commands'
 import AuthorisedRoles from '../../../../authentication/authorisedRoles'
+import { checkAxeAccessibility } from '../../../../../integration_tests/support/accessibilityViolations'
 
 context('/select-services/confirmation', () => {
   const journeyId = uuidV4()
@@ -52,5 +53,6 @@ context('/select-services/confirmation', () => {
     })
 
     cy.visit(`/key-worker/${journeyId}/select-services/confirmation`, { failOnStatusCode: false })
+    checkAxeAccessibility()
   }
 })

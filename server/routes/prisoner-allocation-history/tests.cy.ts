@@ -1,4 +1,5 @@
 import { defaultPrisonerAllocation } from '../../../integration_tests/mockApis/keyworkerApi'
+import { checkAxeAccessibility } from '../../../integration_tests/support/accessibilityViolations'
 import { verifyRoleBasedAccess } from '../../../integration_tests/support/roleBasedAccess'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import { createMock } from '../../testutils/mockObjects'
@@ -232,5 +233,6 @@ context('Prisoner Allocation History', () => {
       '/key-worker/staff-profile/485572',
       '/key-worker/prisoner-allocation-history/A9965EA',
     ])
+    checkAxeAccessibility()
   }
 })

@@ -1,4 +1,5 @@
 import { v4 as uuidV4 } from 'uuid'
+import { checkAxeAccessibility } from '../../../../../integration_tests/support/accessibilityViolations'
 
 context('/update-capacity-status-and-working-pattern/update-capacity', () => {
   const journeyId = uuidV4()
@@ -79,5 +80,6 @@ context('/update-capacity-status-and-working-pattern/update-capacity', () => {
     )
 
     cy.visit(`/key-worker/${journeyId}/update-capacity-status-and-working-pattern/update-capacity`)
+    checkAxeAccessibility()
   }
 })

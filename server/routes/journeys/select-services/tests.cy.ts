@@ -1,5 +1,6 @@
 import { v4 as uuidV4 } from 'uuid'
 import AuthorisedRoles from '../../../authentication/authorisedRoles'
+import { checkAxeAccessibility } from '../../../../integration_tests/support/accessibilityViolations'
 
 context('/select-services', () => {
   const kwRadio = () => cy.findByRole('radio', { name: 'Key worker' })
@@ -75,5 +76,6 @@ context('/select-services', () => {
     cy.visit(`/key-worker/${journeyId}/select-services`, {
       failOnStatusCode: false,
     })
+    checkAxeAccessibility()
   }
 })
