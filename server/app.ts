@@ -34,6 +34,7 @@ import populateClientToken from './middleware/populateSystemClientToken'
 import { handleApiError } from './middleware/handleApiError'
 import { auditPageViewMiddleware } from './middleware/audit/auditPageViewMiddleware'
 import { auditApiCallMiddleware } from './middleware/audit/auditApiCallMiddleware'
+import { AccessibilityStatementRoutes } from './routes/accessibility-statement/routes'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -98,6 +99,7 @@ export default function createApp(services: Services): express.Application {
     res.render('not-authorised', { showBreadcrumbs: true, policyStaff: req.params['policy'].replace('-', ' ') })
   })
 
+  app.use('/accessibility-statement', AccessibilityStatementRoutes())
   app.use('/:policy', routes(services))
 
   if (config.sentry.dsn) Sentry.setupExpressErrorHandler(app)

@@ -12,3 +12,4 @@ server/routes/establishment-settings/view.njk
 server/routes/journeys/select-services/view.njk
 server/routes/journeys/select-services/check-answers/view.njk
 server/routes/journeys/select-services/confirmation/view.njk
+server/routes/accessibility-statement/view.njk

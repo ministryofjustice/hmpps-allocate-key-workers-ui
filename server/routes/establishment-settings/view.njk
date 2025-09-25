@@ -45,7 +45,7 @@
           {{ govukInsetText({
             html: insetText
           }) }}
-        {% else %}
+        {% elseif policyPath == 'key-worker' %}
           <p>{{policyStaff | sentenceCase}} sessions at {{ prisonName }} take place every {{ frequencyInWeeks }} {{ "week" if frequencyInWeeks === 1 else "weeks" }}.</p>
           <p class="govuk-!-margin-bottom-7">If you think this is incorrect or have any questions about session frequency, please contact <a href="mailto:omicenquiries@justice.gov.uk">omicenquiries@justice.gov.uk</a>.</p>
         {% endif %}

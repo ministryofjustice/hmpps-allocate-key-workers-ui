@@ -201,6 +201,20 @@ context('/establishment-settings', () => {
     )
   })
 
+  it('should test personal officer non-admin view', () => {
+    cy.task('stubEnabledPrison')
+    cy.task('stubSignIn', {
+      roles: [AuthorisedRoles.PERSONAL_OFFICER_ALLOCATE],
+    })
+
+    navigateToTestPage('personal-officer')
+    cy.url().should('match', /\/establishment-settings/)
+
+    verifyPageCommonContent('personal officer', 'personal-officer', 'Personal officers')
+
+    cy.findByText('Personal officer sessions at Leeds (HMP) take place every 1 week.').should('not.exist')
+  })
+
   it('should allow admin to enable service in a prison', () => {
     cy.task('stubPrisonNotEnabled')
     cy.task('stubSignIn', {
