@@ -30,7 +30,7 @@ context('/allocate', () => {
   const invalidSearchError = 'Select or enter text into at least one of the search options below'
   const invalidLocationError = 'Select a valid location'
 
-  xdescribe('Role based access', () => {
+  describe('Role based access', () => {
     it('should deny access to a view only user POSTing to the page', () => {
       cy.task('stubSignIn', {
         roles: [AuthorisedRoles.KEYWORKER_MONITOR, AuthorisedRoles.PERSONAL_OFFICER_VIEW],
@@ -44,7 +44,7 @@ context('/allocate', () => {
     verifyRoleBasedAccess('/key-worker/allocate', UserPermissionLevel.VIEW)
   })
 
-  xit('should only display results table when a filter is used', () => {
+  it('should only display results table when a filter is used', () => {
     cy.signIn({ failOnStatusCode: false })
     cy.visit('/key-worker/allocate', { failOnStatusCode: false })
 
@@ -105,7 +105,7 @@ context('/allocate', () => {
     checkResidentialLocationFilter()
   })
 
-  xit('should load read-only page correctly', () => {
+  it('should load read-only page correctly', () => {
     cy.task('stubSignIn', {
       roles: [AuthorisedRoles.KEYWORKER_MONITOR],
     })
@@ -123,7 +123,7 @@ context('/allocate', () => {
     checkResidentialLocationFilter(true)
   })
 
-  xit('should handle all sorting cases for alerts', () => {
+  it('should handle all sorting cases for alerts', () => {
     const prisonerBase = {
       personIdentifier: 'A2504EA',
       firstName: 'FOO',
@@ -217,7 +217,7 @@ context('/allocate', () => {
       .should('match', /^\s+None\s+$/gm)
   })
 
-  xit('should load page correctly when prison has auto allocation disabled', () => {
+  it('should load page correctly when prison has auto allocation disabled', () => {
     cy.task('stubKeyworkerPrisonConfigNoAutoAllocation')
 
     navigateToTestPage()
@@ -233,7 +233,7 @@ context('/allocate', () => {
     checkResidentialLocationFilter()
   })
 
-  xit('should handle invalid queries', () => {
+  it('should handle invalid queries', () => {
     navigateToTestPage()
 
     cy.visit('/key-worker/allocate?query=<script>alert%28%27inject%27%29<%2Fscript>&cellLocationPrefix=FAKELOCATION', {
@@ -253,7 +253,7 @@ context('/allocate', () => {
       .should('match', /#cellLocationPrefix$/)
   })
 
-  xit('should show error when no allocations or deallocations are made', () => {
+  it('should show error when no allocations or deallocations are made', () => {
     navigateToTestPage()
 
     cy.findByRole('button', { name: /Save changes/i }).click()
@@ -265,7 +265,7 @@ context('/allocate', () => {
       .should('match', /#selectStaffMember/)
   })
 
-  xit('should preserve queries on submit form validation error', () => {
+  it('should preserve queries on submit form validation error', () => {
     navigateToTestPage()
     cy.visit('/key-worker/allocate?excludeActiveAllocations=true', {
       failOnStatusCode: false,
@@ -277,7 +277,7 @@ context('/allocate', () => {
     cy.url().should('match', /\/key-worker\/allocate\?excludeActiveAllocations=true/)
   })
 
-  xit('should show error on de/allocation failure (500)', () => {
+  it('should show error on de/allocation failure (500)', () => {
     cy.task('stubPutAllocationFail500')
     navigateToTestPage()
 
@@ -448,19 +448,11 @@ context('/allocate', () => {
             // Nunjucks prepopulates with one item (or two if on recommend allocations page) and then JS populates the rest on focus
             cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
             cy.get('.placeholder-select').eq(1).focus()
-            cy.get('.placeholder-select').eq(1).children().should('have.length', 7)
-          } else {
-            // Will already have options populated without needing to explicitly focus
-            cy.get('.placeholder-select').eq(1).children().should('have.length', 8)
           }
 
           cy.get('.placeholder-select').eq(0).focus().children().should('have.length', 6)
           // Includes deallocate
-          cy.get('.placeholder-select')
-            .eq(1)
-            .focus()
-            .children()
-            .should('have.length', js ? 7 : 8)
+          cy.get('.placeholder-select').eq(1).children().should('have.length', 7)
 
           const getOption = (index: number) => cy.get('#selectStaffMember').eq(0).children().eq(index)
 

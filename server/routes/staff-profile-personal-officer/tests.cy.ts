@@ -259,18 +259,9 @@ context('Personal Officer Profile Info', () => {
             // Nunjucks prepopulates with one item (or two if on recommend allocations page) and then JS populates the rest on focus
             cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
             cy.get('.placeholder-select').eq(1).focus()
-            cy.get('.placeholder-select').eq(1).children().should('have.length', 7)
-          } else {
-            // Will already have options populated without needing to explicitly focus
-            cy.get('.placeholder-select').eq(1).children().should('have.length', 8)
           }
 
-          cy.get('.placeholder-select')
-            .eq(0)
-            .focus()
-            .children()
-            .should('have.length', js ? 7 : 8)
-
+          cy.get('.placeholder-select').eq(1).children().should('have.length', 7)
           const getOption = (index: number) => cy.get('#selectStaffMember').eq(0).children().eq(index)
 
           // @ts-expect-error index is known

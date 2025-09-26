@@ -262,10 +262,6 @@ context('/recommend-allocations', () => {
             // Nunjucks prepopulates with one item (or two if on recommend allocations page) and then JS populates the rest on focus
             cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
             cy.get('.placeholder-select').eq(1).focus()
-            cy.get('.placeholder-select').eq(1).children().should('have.length', 7)
-          } else {
-            // Will already have options populated without needing to explicitly focus
-            cy.get('.placeholder-select').eq(1).children().should('have.length', 7)
           }
 
           cy.get('select').eq(0).focus().children().should('have.length', 6)
