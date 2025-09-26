@@ -52,11 +52,7 @@ export const excludeDeallocate = (items: SelectOption[]): SelectOption[] => {
 export const conditionallyAddDeallocate = (items: SelectOption[], currentKeyworkerStaffId: string): SelectOption[] => {
   if (!currentKeyworkerStaffId) return items
 
-  return [
-    { text: 'Deallocate', value: `deallocate:${currentKeyworkerStaffId}`, selected: false },
-    ...items,
-    { text: '', value: '', selected: false, attributes: { hidden: 'hidden' } },
-  ]
+  return [{ text: 'Deallocate', value: `deallocate:${currentKeyworkerStaffId}`, selected: false }, ...items]
 }
 
 export const mergePrisonerKeyworkerIds = (items: SelectOption[], prisonerId: string): SelectOption[] => {
