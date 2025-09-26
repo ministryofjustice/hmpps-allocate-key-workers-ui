@@ -210,29 +210,73 @@ context('Personal Officer Profile Info', () => {
     cy.findByText('You have successfully made changes to 2 prisoners.').should('exist')
   })
 
-  describe('JS Dropdown', () => {
-    it('should populate dropdowns through nunjucks when client side JS is disabled', () => {
-      navigateToTestPage(false)
+  describe('Dropdown', () => {
+    const mockKeyworkers = [
+      { firstName: 'BFirstName', lastName: 'BLastName', staffId: 488021, allocated: 1 },
+      { firstName: 'ZFirstName', lastName: 'ALastName', staffId: 488022, allocated: 2 },
+      { firstName: 'XFirstName', lastName: 'ALastName', staffId: 488023, allocated: 1 },
+      { firstName: 'CFirstName', lastName: 'CLastName', staffId: 488024, allocated: 4 },
+      { firstName: 'AFirstName', lastName: 'ALastName', staffId: 488025, allocated: 5 },
+    ]
 
-      cy.get('.placeholder-select').eq(1).children().should('have.length', 5)
-    })
+    const jsStates = [true, false]
+    const sortOrders = {
+      name: [
+        'Deallocate',
+        'Alastname, Afirstname (allocations: 5)',
+        'Alastname, Xfirstname (allocations: 1)',
+        'Alastname, Zfirstname (allocations: 2)',
+        'Blastname, Bfirstname (allocations: 1)',
+        'Clastname, Cfirstname (allocations: 4)',
+      ],
+      allocations: [
+        'Deallocate',
+        'Alastname, Xfirstname (allocations: 1)',
+        'Blastname, Bfirstname (allocations: 1)',
+        'Alastname, Zfirstname (allocations: 2)',
+        'Clastname, Cfirstname (allocations: 4)',
+        'Alastname, Afirstname (allocations: 5)',
+      ],
+    }
 
-    it('should populate dropdowns through client side JS when available', () => {
-      navigateToTestPage(true)
-      // Nunjucks prepopulates with one item (or two if on recommend allocations page) and then JS populates the rest on focus
-      cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
-      cy.get('.placeholder-select').eq(1).focus()
-      cy.get('.placeholder-select').eq(1).children().should('have.length', 4)
-    })
+    Object.keys(sortOrders).forEach(sort => {
+      jsStates.forEach(js => {
+        it(`should sort dropdowns by ${sort} (${js ? 'client side JS' : 'no JS'})`, () => {
+          cy.task('stubSearchAllocatableStaff', mockKeyworkers)
+          cy.signIn({ failOnStatusCode: false })
 
-    it('should sort allocations based on name', () => {
-      cy.task('stubKeyworkerPrisonConfigNameSort')
-      navigateToTestPage(true)
-      cy.get('.placeholder-select')
-        .eq(0)
-        .children()
-        .eq(2)
-        .should('have.text', 'Hard Key-Worker, Available-Active1 (allocations: 55)')
+          if (sort === 'name') {
+            cy.task('stubKeyworkerPrisonConfigNameSort')
+          }
+
+          cy.visitWithHistory(`/personal-officer/staff-profile/488095?js=${js}`, [
+            '/personal-officer',
+            '/personal-officer/manage',
+            '/personal-officer/staff-profile/34353',
+          ])
+
+          if (js) {
+            // Nunjucks prepopulates with one item (or two if on recommend allocations page) and then JS populates the rest on focus
+            cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
+            cy.get('.placeholder-select').eq(1).focus()
+            cy.get('.placeholder-select').eq(1).children().should('have.length', 7)
+          } else {
+            // Will already have options populated without needing to explicitly focus
+            cy.get('.placeholder-select').eq(1).children().should('have.length', 8)
+          }
+
+          cy.get('.placeholder-select')
+            .eq(0)
+            .focus()
+            .children()
+            .should('have.length', js ? 7 : 8)
+
+          const getOption = (index: number) => cy.get('#selectStaffMember').eq(0).children().eq(index)
+
+          // @ts-expect-error index is known
+          sortOrders[sort].forEach((text, index) => getOption(index + 1).should('contain.text', text))
+        })
+      })
     })
   })
 

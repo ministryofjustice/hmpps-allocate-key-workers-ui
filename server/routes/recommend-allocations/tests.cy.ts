@@ -206,25 +206,78 @@ context('/recommend-allocations', () => {
     ).should('exist')
   })
 
-  describe('JS Dropdown', () => {
-    it('should populate dropdowns through nunjucks when client side JS is disabled', () => {
-      navigateToTestPage(true, false)
+  describe('Dropdown', () => {
+    const mockKeyworkers = [
+      { firstName: 'BFirstName', lastName: 'BLastName', staffId: 488021, allocated: 1 },
+      { firstName: 'ZFirstName', lastName: 'ALastName', staffId: 488022, allocated: 2 },
+      { firstName: 'XFirstName', lastName: 'ALastName', staffId: 488023, allocated: 1 },
+      { firstName: 'CFirstName', lastName: 'CLastName', staffId: 488024, allocated: 4 },
+      { firstName: 'AFirstName', lastName: 'ALastName', staffId: 488025, allocated: 5 },
+    ]
+    const mockKeyworkerUnavailable = { firstName: 'UFirstName', lastName: 'ULastName', staffId: 488026, allocated: 1 }
 
-      cy.get('.placeholder-select').eq(1).children().should('have.length', 2)
-    })
+    const jsStates = [true, false]
+    const sortOrders = {
+      name: [
+        'Alastname, Afirstname (allocations: 5)',
+        'Alastname, Xfirstname (allocations: 1)',
+        'Alastname, Zfirstname (allocations: 2)',
+        'Blastname, Bfirstname (allocations: 1)',
+        'Clastname, Cfirstname (allocations: 4)',
+      ],
+      allocations: [
+        'Alastname, Xfirstname (allocations: 1)',
+        'Blastname, Bfirstname (allocations: 1)',
+        'Alastname, Zfirstname (allocations: 2)',
+        'Clastname, Cfirstname (allocations: 4)',
+        'Alastname, Afirstname (allocations: 5)',
+      ],
+    }
 
-    it('should populate dropdowns through client side JS when available', () => {
-      navigateToTestPage(true, true)
-      // Nunjucks prepopulates with one item (or two if on recommend allocations page) and then JS populates the rest on focus
-      cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
-      cy.get('.placeholder-select').eq(1).focus()
-      cy.get('.placeholder-select').eq(1).children().should('have.length', 2)
-    })
+    Object.keys(sortOrders).forEach(sort => {
+      jsStates.forEach(js => {
+        it(`should sort dropdowns by ${sort} (${js ? 'client side JS' : 'no JS'})`, () => {
+          cy.task('stubSearchAllocatableStaff', mockKeyworkers)
+          cy.task('stubAllocationRecommendations', {
+            allocations: [
+              { personIdentifier: 'A2504EA', staff: mockKeyworkers[0] },
+              { personIdentifier: 'G7189VT', staff: mockKeyworkerUnavailable },
+            ],
+            staff: mockKeyworkers,
+          })
+          cy.signIn({ failOnStatusCode: false })
 
-    it('should sort allocations based on name', () => {
-      navigateToTestPage(true, true)
-      cy.task('stubKeyworkerPrisonConfigNameSort')
-      cy.get('#selectStaffMember').eq(0).children().eq(1).should('have.text', 'Active, Available (allocations: 0)')
+          if (sort === 'name') {
+            cy.task('stubKeyworkerPrisonConfigNameSort')
+          }
+
+          cy.visitWithHistory(`/key-worker/recommend-allocations?allowPartialAllocation=true&js=${js}`, [
+            '/key-worker',
+            '/key-worker/allocate',
+            '/key-worker/allocate?query=&cellLocationPrefix=1&excludeActiveAllocations=true',
+            '/key-worker/recommend-allocations',
+          ])
+
+          if (js) {
+            // Nunjucks prepopulates with one item (or two if on recommend allocations page) and then JS populates the rest on focus
+            cy.get('.placeholder-select').eq(1).children().should('have.length', 1)
+            cy.get('.placeholder-select').eq(1).focus()
+            cy.get('.placeholder-select').eq(1).children().should('have.length', 7)
+          } else {
+            // Will already have options populated without needing to explicitly focus
+            cy.get('.placeholder-select').eq(1).children().should('have.length', 7)
+          }
+
+          cy.get('select').eq(0).focus().children().should('have.length', 6)
+          // Has an extra option as their recommended staff member is unique to them
+          cy.get('select').eq(1).focus().children().should('have.length', 7)
+
+          const getOption = (index: number) => cy.get('#selectStaffMember').eq(0).children().eq(index)
+
+          // @ts-expect-error index is known
+          sortOrders[sort].forEach((text, index) => getOption(index + 1).should('contain.text', text))
+        })
+      })
     })
   })
 
