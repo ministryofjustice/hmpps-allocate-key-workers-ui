@@ -26,7 +26,6 @@ import setUpStaticResources from './middleware/setUpStaticResources'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import setUpWebSecurity from './middleware/setUpWebSecurity'
 import setUpWebSession from './middleware/setUpWebSession'
-import sentryMiddleware from './middleware/sentryMiddleware'
 
 import routes from './routes'
 import type { Services } from './services'
@@ -48,7 +47,6 @@ export default function createApp(services: Services): express.Application {
   app.set('port', process.env.PORT || 3000)
 
   app.use(express.urlencoded({ extended: true, parameterLimit: 10000 }))
-  app.use(sentryMiddleware())
   app.use(appInsightsMiddleware())
   app.use(setUpHealthChecks(services.applicationInfo))
   app.use(setUpWebSecurity())
