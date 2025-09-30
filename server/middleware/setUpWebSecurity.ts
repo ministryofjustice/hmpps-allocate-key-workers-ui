@@ -31,7 +31,7 @@ export default function setUpWebSecurity(): Router {
             (_req: IncomingMessage, res: ServerResponse) => `'nonce-${(res as Response).locals.cspNonce}'`,
           ],
           connectSrc: [
-            "'self' https://*.sentry.io https://northeurope-0.in.applicationinsights.azure.com https://js.monitor.azure.com",
+            "'self' https://*.sentry.io https://*.sentry-cdn.com https://northeurope-0.in.applicationinsights.azure.com https://js.monitor.azure.com",
           ],
           workerSrc: ["'self' blob:"],
           styleSrc: [
