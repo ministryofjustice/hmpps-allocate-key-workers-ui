@@ -49,10 +49,8 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
     ).filter(o => !o.hasHighComplexityOfNeeds)
 
     const missingAllocation = allowPartialAllocation
-      ? null
-      : records.filter(
-          prisoner => !recommendations.allocations.find(match => prisoner.personIdentifier === match.personIdentifier),
-        ).length
+      ? 0
+      : records.filter(o => !recommendations.allocations.find(x => o.personIdentifier === x.personIdentifier)).length
 
     if (missingAllocation) {
       const searchQuery = req.url.split('?')[1] || ''
@@ -68,17 +66,39 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
       })
     }
 
-    const dropdownOptions = this.getDropdownOptions(recommendations.staff, allocationOrder)
+    const dropdownStaff = [...recommendations.staff] as {
+      firstName: string
+      lastName: string
+      staffId: number
+      allocated: number
+      onlyFor?: string
+    }[]
+
+    records.forEach(o => {
+      const match = recommendations.allocations.find(a => a.personIdentifier === o.personIdentifier)
+      if (match) {
+        dropdownStaff.push({ ...match.staff, onlyFor: o.personIdentifier })
+      }
+    })
+
+    const dropdownOptions = this.getDropdownOptions(dropdownStaff, allocationOrder) as {
+      text: string
+      value: string
+      onlyFor?: string
+    }[]
 
     const matchedPrisoners = records.map(o => {
       const match = recommendations.allocations.find(a => a.personIdentifier === o.personIdentifier)
+      const kwDropdown = [...dropdownOptions]
 
       if (match) {
-        dropdownOptions.push({
-          text: `${lastNameCommaFirstName(match.staff)} (allocations: ${match.staff.allocated})`,
-          value: `allocate:${match.staff.staffId}:auto`,
-          onlyFor: o.personIdentifier,
-        })
+        const existingIndex = kwDropdown.findIndex(x => x.value.startsWith(`allocate:${match.staff.staffId}`))
+        if (existingIndex > -1) {
+          kwDropdown.splice(existingIndex, 1, {
+            ...kwDropdown[existingIndex]!,
+            value: `allocate:${match.staff.staffId}:auto`,
+          })
+        }
       }
 
       return {
@@ -86,7 +106,9 @@ export class RecommendStaffAutomaticallyController extends ChangeStaffController
         profileHref: prisonerProfileBacklink(req, res, o.personIdentifier),
         alertsHref: prisonerProfileBacklink(req, res, o.personIdentifier, '/alerts/active'),
         recommendation: match?.staff.staffId,
-        kwDropdown: dropdownOptions.filter(x => !x.onlyFor || x.onlyFor === o.personIdentifier),
+        kwDropdown: kwDropdown.filter(
+          x => !x.onlyFor || (x.onlyFor === o.personIdentifier && x.value.endsWith(':auto')),
+        ),
         recommendedText: match
           ? `${lastNameCommaFirstName(match!.staff)} (allocations: ${match!.staff.allocated})`
           : '',

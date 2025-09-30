@@ -42,6 +42,7 @@ export function initialiseDropdown(policyStaff, staff) {
 
       if (recommendedId && opt.value.includes(`:${recommendedId}`)) {
         opt.selected = true
+        opt.value = `${opt.value}:auto`
       }
 
       // Equal to mergePrisonerKeyworkerIds

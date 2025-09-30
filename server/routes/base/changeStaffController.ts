@@ -31,18 +31,29 @@ export class ChangeStaffController {
     }
   }
 
-  getDropdownOptions = <T extends { allocated: number; staffId: number; firstName: string; lastName: string }>(
+  getDropdownOptions = <
+    T extends { allocated: number; staffId: number; firstName: string; lastName: string; onlyFor?: string },
+  >(
     staff: T[],
     allocationOrder: components['schemas']['PrisonConfigResponse']['allocationOrder'],
   ) => {
-    const mappedOptions = staff.map(o => {
-      return {
-        text: `${lastNameCommaFirstName(o)} (allocations: ${o.allocated})`,
-        value: `allocate:${o.staffId}`,
-      } as { text: string; value: string; onlyFor?: string }
-    })
+    if (allocationOrder === 'BY_NAME') {
+      staff.sort((a, b) => lastNameCommaFirstName(a).localeCompare(lastNameCommaFirstName(b)))
+    }
 
-    return this.sortDropdownOptions(mappedOptions, allocationOrder)
+    if (allocationOrder === 'BY_ALLOCATIONS') {
+      staff.sort((a, b) =>
+        a.allocated === b.allocated
+          ? lastNameCommaFirstName(a).localeCompare(lastNameCommaFirstName(b))
+          : a.allocated - b.allocated,
+      )
+    }
+
+    return staff.map(o => ({
+      text: `${lastNameCommaFirstName(o)} (allocations: ${o.allocated})`,
+      value: `allocate:${o.staffId}`,
+      onlyFor: o.onlyFor,
+    }))
   }
 
   submitToApi =
@@ -109,29 +120,5 @@ export class ChangeStaffController {
       default:
         return (a, b) => -a.occurredAt.localeCompare(b.occurredAt)
     }
-  }
-
-  private sortDropdownOptions<T extends { text: string; value: string; onlyFor?: string }>(
-    options: T[],
-    allocationOrder: components['schemas']['PrisonConfigResponse']['allocationOrder'],
-  ): T[] {
-    const sortedStaff = [...options]
-
-    function extractAllocationCount(text: string): number {
-      const match = text.match(/\(allocations:\s*(\d+)\)/)
-      return match?.[1] ? parseInt(match[1], 10) : 0
-    }
-
-    if (allocationOrder === 'BY_NAME') {
-      return sortedStaff.sort((a, b) => a.text.localeCompare(b.text))
-    }
-    if (allocationOrder === 'BY_ALLOCATIONS') {
-      return sortedStaff.sort((a, b) => {
-        const aCount = extractAllocationCount(a.text)
-        const bCount = extractAllocationCount(b.text)
-        return aCount - bCount
-      })
-    }
-    return sortedStaff
   }
 }
