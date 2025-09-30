@@ -145,6 +145,26 @@
 {% endblock %}
 
 {% block bodyEnd %}
+  {% if sentry and sentry.loaderScriptId %}
+    <script nonce="{{ cspNonce }}">
+      window.sentryOnLoad = function () {
+        Sentry.init({
+          release: "hmpps-allocate-key-workers-ui@{{ version }}",
+          environment: "{{ sentry.environment }}",
+          tracesSampleRate: {{ sentry.tracesSampleRate }},
+          replaysSessionSampleRate: {{ sentry.replaySampleRate }},
+          replaysOnErrorSampleRate: {{ sentry.replayOnErrorSampleRate }},
+          initialScope: {
+            user: {
+              username: "{{ user.username }}",
+              activeCaseLoadId: "{{ user.activeCaseLoad.caseLoadId or "" }}"
+            }
+          }
+        });
+      };
+    </script>
+    <script src="https://js.sentry-cdn.com/{{ sentry.loaderScriptId }}.min.js" nonce="{{ cspNonce }}" crossorigin="anonymous"></script>
+  {% endif %}
   <script type="module" src="{{ '/assets/js/app.js' | assetMap }}"></script>
   <script nonce="{{ cspNonce }}">
     window.onload = function () {
