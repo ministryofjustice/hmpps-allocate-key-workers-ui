@@ -156,7 +156,8 @@
           replaysOnErrorSampleRate: {{ sentry.replayOnErrorSampleRate }},
           initialScope: {
             user: {
-              username: "{{ user.username }}"
+              username: "{{ user.username }}",
+              activeCaseLoadId: "{{ user.activeCaseLoad.caseLoadId or "" }}"
             }
           }
         });
