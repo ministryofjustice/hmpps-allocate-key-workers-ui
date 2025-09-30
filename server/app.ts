@@ -10,14 +10,13 @@ import './sentry'
 // @ts-expect-error Import untyped middleware for cypress coverage
 import cypressCoverage from '@cypress/code-coverage/middleware/express'
 
+import type { Services } from './services'
 import config from './config'
-
 import nunjucksSetup from './utils/nunjucksSetup'
 import logger from '../logger'
 import errorHandler from './errorHandler'
 import { appInsightsMiddleware } from './utils/azureAppInsights'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
-
 import setUpAuthentication from './middleware/setUpAuthentication'
 import setUpCsrf from './middleware/setUpCsrf'
 import setUpCurrentUser from './middleware/setUpCurrentUser'
@@ -26,9 +25,7 @@ import setUpStaticResources from './middleware/setUpStaticResources'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import setUpWebSecurity from './middleware/setUpWebSecurity'
 import setUpWebSession from './middleware/setUpWebSession'
-
 import routes from './routes'
-import type { Services } from './services'
 import populateClientToken from './middleware/populateSystemClientToken'
 import { handleApiError } from './middleware/handleApiError'
 import { auditPageViewMiddleware } from './middleware/audit/auditPageViewMiddleware'

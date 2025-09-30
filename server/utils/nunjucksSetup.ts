@@ -56,6 +56,7 @@ export default function nunjucksSetup(app: express.Express): void {
     res.locals.digitalPrisonServicesUrl = config.serviceUrls.digitalPrison
     res.locals.legacyKeyWorkersUiUrl = config.serviceUrls.legacyKeyWorkersUI
     res.locals['prisonerProfileUrl'] = config.serviceUrls.prisonerProfile
+    res.locals['sentry'] = config.sentry
     return next()
   })
 
