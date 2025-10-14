@@ -1,18 +1,16 @@
+{% from "dps/components/alert-flag/macro.njk" import alertFlag as dpsAlertFlag %}
+
 {% macro alertFlags(link, relevantAlerts, otherAlerts) %}
   <div>
     {% if relevantAlerts.length > 0 %}
       <ul class="alerts-list">
-        {% if 'XRF' in relevantAlerts %}
-          <li class="alert-status alert-status--security">
-            Risk to females
+        {% for relevantAlert in relevantAlerts %}
+          <li>
+            {{ dpsAlertFlag({
+              alert: { label: relevantAlert.label, classes: relevantAlert.classes }
+            }) }}
           </li>
-        {% endif %}
-
-        {% if 'RNO121' in relevantAlerts %}
-          <li class="alert-status alert-status--risk">
-            No one-to-one
-          </li>
-        {% endif %}
+        {% endfor %}
       </ul>
     {% endif %}
 
