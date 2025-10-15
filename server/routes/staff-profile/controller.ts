@@ -3,6 +3,7 @@ import { differenceInDays, format, subDays, subMonths } from 'date-fns'
 import { ChangeStaffController } from '../base/changeStaffController'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import { prisonerProfileBacklink } from '../../utils/utils'
+import { getAlertLabelsForCodes } from '../../utils/alertsUtils'
 
 export class StaffProfileController extends ChangeStaffController {
   GET_BASE =
@@ -45,6 +46,7 @@ export class StaffProfileController extends ChangeStaffController {
             ...a,
             profileHref: prisonerProfileBacklink(req, res, a.prisoner.prisonNumber),
             alertsHref: prisonerProfileBacklink(req, res, a.prisoner.prisonNumber, '/alerts/active'),
+            alertFlagLabels: getAlertLabelsForCodes(a.prisoner.relevantAlertCodes),
           }
         }),
         staffMember: { firstName: staffDetails.firstName, lastName: staffDetails.lastName },
