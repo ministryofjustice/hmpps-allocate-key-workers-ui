@@ -1,7 +1,14 @@
-import { alertFlagLabels } from '@ministryofjustice/hmpps-connect-dps-shared-items'
+import { getAlertFlagLabelsForAlerts } from '@ministryofjustice/hmpps-connect-dps-shared-items'
 
 export const getAlertLabelsForCodes = (relevantCodes: string[]) => {
-  return alertFlagLabels.filter(flagLabel => {
-    return flagLabel.alertCodes.some(alertCode => relevantCodes.includes(alertCode))
-  })
+  return getAlertFlagLabelsForAlerts(
+    relevantCodes.map(code => {
+      return {
+        alertType: '',
+        alertCode: code,
+        active: true,
+        expired: false,
+      }
+    }),
+  )
 }
