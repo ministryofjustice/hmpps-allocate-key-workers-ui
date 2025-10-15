@@ -9,6 +9,7 @@ $govuk-page-width: $moj-page-width;
 
 @import 'node_modules/@ministryofjustice/hmpps-connect-dps-components/dist/assets/footer';
 @import 'node_modules/@ministryofjustice/hmpps-connect-dps-components/dist/assets/header-bar';
+@import 'node_modules/@ministryofjustice/hmpps-connect-dps-shared-items/dist/assets/dps/components/alert-flag/alert-flag';
 
 @import './components/card';
 @import './components/horizontal-search-form';

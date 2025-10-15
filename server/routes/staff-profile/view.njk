@@ -57,7 +57,7 @@
             text: item.prisoner.cellLocation
           },
           {
-            html: alertFlags(item.alertsHref, item.prisoner.relevantAlertCodes, item.prisoner.remainingAlertCount),
+            html: alertFlags(item.alertsHref, item.alertFlagLabels, item.prisoner.remainingAlertCount),
             attributes: {
             "data-sort-value": item.prisoner | alertsSortValue
           }

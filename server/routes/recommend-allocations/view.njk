@@ -53,7 +53,7 @@
               text: item.location
             },
             {
-              html: alertFlags(item.alertsHref, item.relevantAlertCodes, item.remainingAlertCount),
+              html: alertFlags(item.alertsHref, item.alertFlagLabels, item.remainingAlertCount),
               attributes: {
                 "data-sort-value": item | alertsSortValue
               }

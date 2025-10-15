@@ -4,6 +4,7 @@ import { ChangeStaffController } from '../base/changeStaffController'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import { ResQuerySchemaType } from './schema'
 import { prisonerProfileBacklink } from '../../utils/utils'
+import { getAlertLabelsForCodes } from '../../utils/alertsUtils'
 
 export class POStaffProfileController extends ChangeStaffController {
   private getDateRange = (query?: ResQuerySchemaType) => {
@@ -75,6 +76,7 @@ export class POStaffProfileController extends ChangeStaffController {
             ...a,
             profileHref: prisonerProfileBacklink(req, res, a.prisoner.prisonNumber),
             alertsHref: prisonerProfileBacklink(req, res, a.prisoner.prisonNumber, '/alerts/active'),
+            alertFlagLabels: getAlertLabelsForCodes(a.prisoner.relevantAlertCodes),
           }
         }),
         staffMember: { firstName: staffDetails.firstName, lastName: staffDetails.lastName },

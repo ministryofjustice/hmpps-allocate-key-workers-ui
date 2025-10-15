@@ -370,12 +370,12 @@ context('/recommend-allocations', () => {
     const getRelevantAlertColumnForRow = (rowIndex: number) =>
       cy.get('.govuk-table__row').eq(rowIndex).children().eq(2).children().eq(0)
 
-    getRelevantAlertColumnForRow(1)
-      .invoke('text')
-      .should('match', /^\s+Risk to females\s+No one-to-one\s+\+1 active alert\s+$/gm)
-    getRelevantAlertColumnForRow(2)
-      .invoke('text')
-      .should('match', /^\s+Risk to females\s+No one-to-one\s+\+1 active alert\s+$/gm)
+    getRelevantAlertColumnForRow(1).find('.dps-alert-status--risk').should('contain', 'No one-to-one')
+    getRelevantAlertColumnForRow(1).find('.dps-alert-status--security').should('contain', 'Risk to females')
+    getRelevantAlertColumnForRow(1).find('a.govuk-link--no-visited-state').should('contain', '+1 active alert')
+    getRelevantAlertColumnForRow(2).find('.dps-alert-status--risk').should('contain', 'No one-to-one')
+    getRelevantAlertColumnForRow(2).find('.dps-alert-status--security').should('contain', 'Risk to females')
+    getRelevantAlertColumnForRow(2).find('a.govuk-link--no-visited-state').should('contain', '+1 active alert')
 
     // Prisoner profile back link
     cy.get('.govuk-table__row:nth-child(2) > :nth-child(1) > :nth-child(1)')
