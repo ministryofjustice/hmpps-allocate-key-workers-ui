@@ -6,6 +6,7 @@ import { schemaFactory } from './schema'
 import { FLASH_KEY__ALLOCATE_RESULT } from '../../utils/constants'
 import { deduplicateFieldErrors } from '../../middleware/validationMiddleware'
 import { prisonerProfileBacklink } from '../../utils/utils'
+import { getAlertLabelsForCodes } from '../../utils/alertsUtils'
 
 export class AllocateStaffController extends ChangeStaffController {
   constructor(
@@ -70,6 +71,7 @@ export class AllocateStaffController extends ChangeStaffController {
           ...o,
           profileHref: prisonerProfileBacklink(req, res, o.personIdentifier),
           alertsHref: prisonerProfileBacklink(req, res, o.personIdentifier, '/alerts/active'),
+          alertFlagLabels: getAlertLabelsForCodes(o.relevantAlertCodes),
         }
       }),
       searchQuery,
