@@ -100,7 +100,7 @@
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.883.0",
     "@cypress/code-coverage": "^3.14.6",
-    "@ministryofjustice/frontend": "^5.1.5",
+    "@ministryofjustice/frontend": "^6.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^0.0.3",
     "@ministryofjustice/hmpps-connect-dps-components": "^3.0.0",
     "@ministryofjustice/hmpps-connect-dps-shared-items": "^2.2.0",
