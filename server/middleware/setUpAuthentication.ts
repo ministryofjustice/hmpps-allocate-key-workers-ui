@@ -8,7 +8,6 @@ import tokenVerifier from '../data/tokenVerification'
 import { HmppsUser } from '../interfaces/hmppsUser'
 import generateOauthClientToken from '../authentication/clientCredentials'
 import logger from '../../logger'
-import { Services } from '../services'
 
 passport.serializeUser((user, done) => {
   // Not used but required for Passport
@@ -37,7 +36,7 @@ passport.use(
   ),
 )
 
-export default function setupAuthentication(services: Services) {
+export default function setupAuthentication() {
   const router = Router()
 
   router.use(passport.initialize())
@@ -51,7 +50,6 @@ export default function setupAuthentication(services: Services) {
       requestOptions: { includeSharedData: true },
       componentApiConfig: config.apis.componentApi,
       dpsUrl: config.serviceUrls.digitalPrison,
-      authenticationClient: services.authenticationClient,
     }),
     (_req, res) => {
       res.status(401)
