@@ -1,5 +1,4 @@
 import { Request, RequestHandler, Response } from 'express'
-import { v4 as uuidV4 } from 'uuid'
 import setUpJourneyData from './setUpJourneyData'
 import CacheInterface from '../../data/cache/cacheInterface'
 import { JourneyData } from '../../@types/express'
@@ -15,7 +14,7 @@ let journeyId: string
 const next = jest.fn()
 
 beforeEach(() => {
-  journeyId = uuidV4()
+  journeyId = Math.random().toString(36).slice(2)
 
   res = {
     locals: {},
