@@ -139,7 +139,7 @@
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@jgoz/esbuild-plugin-typecheck": "^4.0.4",
-    "@ministryofjustice/eslint-config-hmpps": "^0.0.5",
+    "@ministryofjustice/eslint-config-hmpps": "^1.0.1",
     "@testing-library/cypress": "^10.1.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
