@@ -256,22 +256,15 @@ context('test / homepage', () => {
     ])
   })
 
-  it('should show key worker beta banner', () => {
+  it('should not show key worker beta banner', () => {
     cy.task('stubSignIn')
     cy.task('stubEnabledPrison')
 
     cy.signIn({ failOnStatusCode: false })
     cy.visit('/key-worker', { failOnStatusCode: false })
 
-    cy.get('.govuk-phase-banner__text').should(
-      'contain',
-      'This is a new service - your feedback will help us to improve it. You can find out more on SharePoint.',
-    )
-    cy.findByRole('link', { name: 'SharePoint' }).should(
-      'have.attr',
-      'href',
-      'https://justiceuk.sharepoint.com/sites/prisons-digital/SitePages/Keyworker.aspx?ga=1',
-    )
+    cy.get('.govuk-phase-banner__text').should('have.length', 0)
+    cy.findByRole('link', { name: 'SharePoint' }).should('not.exist')
   })
 
   it('should show personal officer beta banner', () => {
