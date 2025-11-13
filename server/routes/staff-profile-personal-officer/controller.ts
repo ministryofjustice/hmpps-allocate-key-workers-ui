@@ -7,7 +7,9 @@ import { prisonerProfileBacklink } from '../../utils/utils'
 import { getAlertLabelsForCodes } from '../../utils/alertsUtils'
 
 export class POStaffProfileController extends ChangeStaffController {
-  private getDateRange = (query?: ResQuerySchemaType) => {
+  protected directory = 'staff-profile-personal-officer'
+
+  protected getDateRange = (query?: ResQuerySchemaType) => {
     if (query?.validated) {
       const { dateFrom, dateTo, compareDateFrom, compareDateTo } = query.validated
       if (dateFrom && dateTo && compareDateFrom && compareDateTo)
@@ -29,7 +31,7 @@ export class POStaffProfileController extends ChangeStaffController {
     return this.defaultDateRange()
   }
 
-  private defaultDateRange = () => {
+  protected defaultDateRange = () => {
     const lastDay = new Date()
     const firstDay = startOfMonth(lastDay)
     const previousMonth = subMonths(firstDay, 1)
@@ -69,7 +71,7 @@ export class POStaffProfileController extends ChangeStaffController {
 
       const basePath = req.path.length > 1 ? req.baseUrl + req.path : req.baseUrl
 
-      return res.render(view, {
+      return res.render(this.directory + view, {
         ...staffDetails,
         allocations: staffDetails.allocations.map(a => {
           return {
@@ -128,9 +130,9 @@ export class POStaffProfileController extends ChangeStaffController {
       })
     }
 
-  GET = this.GET_BASE('staff-profile-personal-officer/view', false)
+  GET = this.GET_BASE('/view', false)
 
-  GET_CASE_NOTES = this.GET_BASE('staff-profile-personal-officer/case-notes/view', true)
+  GET_CASE_NOTES = this.GET_BASE('/case-notes/view', true)
 
   POST = async (req: Request, res: Response) => res.redirect(req.get('Referrer')!)
 }

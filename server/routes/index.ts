@@ -1,7 +1,7 @@
 import type { Services } from '../services'
 import { HomePageController } from './controller'
 import { StaffMembersRoutes } from './manage/routes'
-import { StaffProfileRoutes } from './staff-profile/routes'
+import { KWStaffProfileRoutes } from './staff-profile/routes'
 import { AllocateStaffRoutes } from './allocate/routes'
 import { PrisonerAllocationHistoryRoutes } from './prisoner-allocation-history/routes'
 import removeTrailingSlashMiddleware from '../middleware/removeTrailingSlashMiddleware'
@@ -9,7 +9,7 @@ import insertJourneyIdentifier from '../middleware/journey/insertJourneyIdentifi
 import JourneyRoutes from './journeys/routes'
 import { EstablishmentSettingsRoutes } from './establishment-settings/routes'
 import { RecommendStaffAutomaticallyRoutes } from './recommend-allocations/routes'
-import { StaffDataRoutes } from './data/routes'
+import { KWStaffDataRoutes } from './data/routes'
 import { populateUserPermissionsAndPrisonConfig } from '../middleware/permissionsMiddleware'
 import { JourneyRouter } from './base/routes'
 import breadcrumbs from '../middleware/breadcrumbs'
@@ -77,13 +77,13 @@ export default function routes(services: Services) {
 
   router.use('/prisoner-allocation-history', minRequireSelfProfile, PrisonerAllocationHistoryRoutes(services))
   useForPolicies('/staff-profile/:staffId', minRequireSelfProfile, {
-    KEY_WORKER: StaffProfileRoutes(services),
+    KEY_WORKER: KWStaffProfileRoutes(services),
     PERSONAL_OFFICER: POStaffProfileRoutes(services),
   })
 
   router.use('/allocate', minRequireView, AllocateStaffRoutes(services))
   useForPolicies('/data', minRequireView, {
-    KEY_WORKER: StaffDataRoutes(services),
+    KEY_WORKER: KWStaffDataRoutes(services),
     PERSONAL_OFFICER: POStaffDataRoutes(services),
   })
   router.use('/manage', minRequireView, StaffMembersRoutes(services))

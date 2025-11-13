@@ -8,7 +8,9 @@ import { getEstablishmentData } from '../data/utils'
 export class POStaffDataController {
   constructor(protected readonly allocationsApiService: AllocationsApiService) {}
 
-  protected getDateAsIsoString = () => {
+  protected directory = 'data-personal-officer'
+
+  protected defaultDateRange = () => {
     const lastDay = subDays(new Date(), 1)
     const firstDay = startOfMonth(lastDay)
     const previousMonth = subMonths(firstDay, 1)
@@ -52,7 +54,7 @@ export class POStaffDataController {
 
   GET = async (req: Request, res: Response) => {
     const resQuery = res.locals['query'] as ResQuerySchemaType
-    const dateRange = resQuery?.validated ? this.addComparisonDates(resQuery.validated) : this.getDateAsIsoString()
+    const dateRange = resQuery?.validated ? this.addComparisonDates(resQuery.validated) : this.defaultDateRange()
     const prisonCode = res.locals.user.getActiveCaseloadId()!
     const stats = await this.allocationsApiService.getPrisonStats(
       req,
@@ -63,8 +65,9 @@ export class POStaffDataController {
       dateRange.compareDateTo,
     )
 
-    res.render('data-personal-officer/view', {
+    res.render(`${this.directory}/view`, {
       showBreadcrumbs: true,
+      stats,
       data: getEstablishmentData(stats, req),
       dateRange,
       dateFrom: resQuery?.dateFrom ?? formatDateConcise(dateRange.dateFrom),

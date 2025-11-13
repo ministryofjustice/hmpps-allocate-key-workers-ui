@@ -1,17 +1,17 @@
 import { validate, validateOnGET } from '../../middleware/validationMiddleware'
 import { Services } from '../../services'
 import { JourneyRouter } from '../base/routes'
-import { StaffProfileController } from './controller'
+import { KWStaffProfileController } from './controller'
 import { selectKeyworkerSchema } from '../base/selectKeyworkerSchema'
 import { requireRole } from '../../middleware/permissionsMiddleware'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import { Page } from '../../services/auditService'
 import { schema } from '../staff-profile-personal-officer/schema'
 
-export const StaffProfileRoutes = (services: Services) => {
+export const KWStaffProfileRoutes = (services: Services) => {
   const { allocationsApiService } = services
   const { router, get, post } = JourneyRouter()
-  const controller = new StaffProfileController(allocationsApiService)
+  const controller = new KWStaffProfileController(allocationsApiService)
 
   get(
     '/',
