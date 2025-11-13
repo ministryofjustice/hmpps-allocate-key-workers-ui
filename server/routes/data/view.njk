@@ -14,11 +14,12 @@
 
   <hr class="govuk-footer__section-break" />
 
-  <h2 class="govuk-heading-m">Select a date range to view</h2>
-
   <div class="govuk-!-margin-bottom-4">
-    <form method="post" class="date-search-form">
-        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+    <form method="post">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+      <h2 class="govuk-heading-m">Select a date range to view</h2>
+      <div class="date-search-form">
         {{ mojDatePicker({
           id: "dateFrom",
           name: "dateFrom",
@@ -41,9 +42,33 @@
           maxDate: yesterdayStringGBFormat()
         }) }}
 
-      {{ submitButton({
-        text: "View"
-      }) }}
+        {{ submitButton({
+          text: "View"
+        }) }}
+      </div>
+
+      <h2 class="govuk-heading-m">Select a custom date range to compare against (optional)</h2>
+      <div class="date-search-form">
+        {{ mojDatePicker({
+          id: "compareDateFrom",
+          name: "compareDateFrom",
+          label: {
+            text: "From"
+          },
+          value: compareDateFrom,
+          maxDate: yesterdayStringGBFormat()
+        }) }}
+
+        {{ mojDatePicker({
+          id: "compareDateTo",
+          name: "compareDateTo",
+          label: {
+            text: "To"
+          },
+          value: compareDateTo,
+          maxDate: yesterdayStringGBFormat()
+        }) }}
+      </div>
     </form>
   </div>
 
@@ -51,8 +76,7 @@
 
   {% if data.length %}
 
-    <p>Displaying statistics from {{ stats.current.from | dateString }} to {{ stats.current.to | dateString }}.
-      {% if stats.previous %}Comparing against statistics from {{ stats.previous.from | dateString }} to {{ stats.previous.to | dateString }}. {% endif %}</p>
+    <p>Displaying statistics from {{ dateRange.dateFrom | dateString }} to {{ dateRange.dateTo | dateString }}. Comparing against statistics from {{ dateRange.compareDateFrom | dateString }} to {{ dateRange.compareDateTo | dateString }}.</p>
 
     <p class="govuk-!-margin-top-6">Date updated: {{ dateUpdated | dateString }}</p>
 

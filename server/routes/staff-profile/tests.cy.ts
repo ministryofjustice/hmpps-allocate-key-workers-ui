@@ -343,7 +343,7 @@ context('Profile Info', () => {
       .should('have.length', readonly ? 6 : 7)
 
     if (readonly) {
-      cy.get('.govuk-button').should('not.exist')
+      cy.findByRole('button', { name: 'Save changes' }).should('not.exist')
     } else {
       cy.get('[data-sort-value="John, Doe"] > .govuk-link--no-visited-state')
         .should('have.attr', 'href')

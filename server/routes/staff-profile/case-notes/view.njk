@@ -75,6 +75,26 @@
           s.form.submit()
         })
       })
+
+      const filter = document.querySelector('[data-module="moj-filter"]')
+      filter && window.MojFrontend && new window.MojFrontend.FilterToggleButton(filter, {
+        bigModeMediaQuery: '(min-width: 48.063em)',
+        startHidden: {{ not showFilter }},
+        toggleButton: {
+          showText: 'Show date filter',
+          hideText: 'Hide date filter',
+          classes: 'govuk-button--primary'
+        },
+        toggleButtonContainer: {
+          selector: '.moj-action-bar__filter'
+        },
+        closeButton: {
+          text: 'Close'
+        },
+        closeButtonContainer: {
+          selector: '.moj-filter__header-action'
+        }
+      })
     }
   </script>
 {% endblock %}

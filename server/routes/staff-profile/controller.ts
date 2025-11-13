@@ -4,8 +4,45 @@ import { ChangeStaffController } from '../base/changeStaffController'
 import { UserPermissionLevel } from '../../interfaces/hmppsUser'
 import { prisonerProfileBacklink } from '../../utils/utils'
 import { getAlertLabelsForCodes } from '../../utils/alertsUtils'
+import { ResQuerySchemaType } from '../staff-profile-personal-officer/schema'
 
 export class StaffProfileController extends ChangeStaffController {
+  private getDateRange = (query?: ResQuerySchemaType) => {
+    if (query?.validated) {
+      const { dateFrom, dateTo, compareDateFrom, compareDateTo } = query.validated
+      if (dateFrom && dateTo && compareDateFrom && compareDateTo)
+        return { from: dateFrom, to: dateTo, comparisonFrom: compareDateFrom, comparisonTo: compareDateTo }
+      if (dateFrom && dateTo) {
+        const to = new Date(dateTo)
+        const from = new Date(dateFrom)
+        const comparisonTo = subDays(from, 1)
+        const comparisonFrom = subDays(comparisonTo, differenceInDays(to, from))
+        return {
+          to: format(to, 'yyyy-MM-dd'),
+          from: format(from, 'yyyy-MM-dd'),
+          comparisonTo: format(comparisonTo, 'yyyy-MM-dd'),
+          comparisonFrom: format(comparisonFrom, 'yyyy-MM-dd'),
+        }
+      }
+    }
+
+    return this.defaultDateRange()
+  }
+
+  private defaultDateRange = () => {
+    const to = new Date()
+    const from = subMonths(to, 1)
+    const comparisonTo = subDays(from, 1)
+    const comparisonFrom = subDays(comparisonTo, differenceInDays(to, from))
+
+    return {
+      to: format(to, 'yyyy-MM-dd'),
+      from: format(from, 'yyyy-MM-dd'),
+      comparisonTo: format(comparisonTo, 'yyyy-MM-dd'),
+      comparisonFrom: format(comparisonFrom, 'yyyy-MM-dd'),
+    }
+  }
+
   GET_BASE =
     (view: string, withCaseNotes: boolean) =>
     async (req: Request<{ staffId: string }>, res: Response): Promise<void> => {
@@ -19,17 +56,9 @@ export class StaffProfileController extends ChangeStaffController {
         return res.redirect(`/${res.locals.policyPath}/not-authorised`)
       }
 
-      const to = new Date()
-      const from = subMonths(to, 1)
-      const comparisonTo = subDays(from, 1)
-      const comparisonFrom = subDays(comparisonTo, differenceInDays(to, from))
+      const resQuery = res.locals['query'] as ResQuerySchemaType
 
-      const dateRange = {
-        to: format(to, 'yyyy-MM-dd'),
-        from: format(from, 'yyyy-MM-dd'),
-        comparisonTo: format(comparisonTo, 'yyyy-MM-dd'),
-        comparisonFrom: format(comparisonFrom, 'yyyy-MM-dd'),
-      }
+      const dateRange = this.getDateRange(resQuery)
 
       const staffDetails = await this.allocationsApiService.getStaffDetails(
         req,
@@ -38,6 +67,8 @@ export class StaffProfileController extends ChangeStaffController {
         true,
         dateRange,
       )
+
+      const basePath = req.path.length > 1 ? req.baseUrl + req.path : req.baseUrl
 
       return res.render(view, {
         ...staffDetails,
@@ -52,6 +83,30 @@ export class StaffProfileController extends ChangeStaffController {
         staffMember: { firstName: staffDetails.firstName, lastName: staffDetails.lastName },
         ...(await this.getChangeData(req, res)),
         showBreadcrumbs: true,
+        clearFilterUrl: `${basePath}?${new URLSearchParams({
+          ...(req.query['sort'] ? { sort: req.query['sort'] as string } : {}),
+          ...(req.query['history'] ? { history: req.query['history'] as string } : {}),
+        }).toString()}`,
+        clearDateRangeUrl:
+          resQuery?.compareDateFrom || resQuery?.compareDateTo
+            ? `${basePath}?${new URLSearchParams({
+                compareDateTo: resQuery.compareDateTo ?? '',
+                compareDateFrom: resQuery.compareDateFrom ?? '',
+                ...(req.query['sort'] ? { sort: req.query['sort'] as string } : {}),
+                ...(req.query['history'] ? { history: req.query['history'] as string } : {}),
+              }).toString()}`
+            : basePath,
+        clearCompareDateRangeUrl:
+          resQuery?.dateFrom || resQuery?.dateTo
+            ? `${basePath}?${new URLSearchParams({
+                dateFrom: resQuery.dateFrom ?? '',
+                dateTo: resQuery.dateTo ?? '',
+                ...(req.query['sort'] ? { sort: req.query['sort'] as string } : {}),
+                ...(req.query['history'] ? { history: req.query['history'] as string } : {}),
+              }).toString()}`
+            : basePath,
+        showFilter: !!resQuery,
+        ...resQuery,
         jsEnabled: req.query['js'] === 'true',
         sort: req.query['sort'],
         caseNotes:

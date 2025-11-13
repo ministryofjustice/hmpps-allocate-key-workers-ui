@@ -21,18 +21,18 @@ context('Key workers data', () => {
     cy.task('stubKeyworkerApiStats2025')
     cy.task('stubKeyworkerApiStats2024')
 
-    navigateToTestPage()
+    navigateToTestPage('?dateFrom=1/9/2025&dateTo=30/9/2025')
 
     cy.title().should('equal', 'View key worker data - Key workers - DPS')
     cy.findByRole('heading', { name: /^Key worker data for Leeds \(HMP\)$/i }).should('be.visible')
     cy.findByText('Select a date range to view')
 
-    cy.findByRole('textbox', { name: 'From' }).should('be.visible')
-    cy.findByRole('textbox', { name: 'To' }).should('be.visible')
+    cy.findAllByRole('textbox', { name: 'From' }).first().should('be.visible')
+    cy.findAllByRole('textbox', { name: 'To' }).first().should('be.visible')
     cy.findByRole('button', { name: 'View' })
 
     cy.findByText(
-      'Displaying statistics from 6 February 2025 to 28 February 2025. Comparing against statistics from 11 January 2025 to 11 January 2025.',
+      'Displaying statistics from 1 September 2025 to 30 September 2025. Comparing against statistics from 2 August 2025 to 31 August 2025.',
     )
 
     cy.findByText(`Date updated: ${getDateInReadableFormat(new Date().toISOString())}`)
@@ -120,18 +120,18 @@ context('Key workers data', () => {
     cy.task('stubKeyworkerApiStats2025')
     cy.task('stubKeyworkerApiStats2024')
 
-    navigateToTestPage()
+    navigateToTestPage('?dateFrom=6/2/2025&dateTo=28/2/2025')
 
     cy.title().should('equal', 'View key worker data - Key workers - DPS')
     cy.findByRole('heading', { name: /^Key worker data for Leeds \(HMP\)$/i }).should('be.visible')
     cy.findByText('Select a date range to view')
 
-    cy.findByRole('textbox', { name: 'From' }).should('be.visible')
-    cy.findByRole('textbox', { name: 'To' }).should('be.visible')
+    cy.findAllByRole('textbox', { name: 'From' }).first().should('be.visible')
+    cy.findAllByRole('textbox', { name: 'To' }).first().should('be.visible')
     cy.findByRole('button', { name: 'View' })
 
     cy.findByText(
-      'Displaying statistics from 6 February 2025 to 28 February 2025. Comparing against statistics from 11 January 2025 to 11 January 2025.',
+      'Displaying statistics from 6 February 2025 to 28 February 2025. Comparing against statistics from 14 January 2025 to 5 February 2025.',
     )
 
     cy.findByText(`Date updated: ${getDateInReadableFormat(new Date().toISOString())}`)
@@ -211,16 +211,16 @@ context('Key workers data', () => {
 
     cy.findByRole('heading', { name: /^Key worker data for Leeds \(HMP\)$/i }).should('be.visible')
 
-    cy.findByRole('textbox', { name: 'From' }).should('be.visible')
-    cy.findByRole('textbox', { name: 'To' }).should('be.visible')
+    cy.findAllByRole('textbox', { name: 'From' }).first().should('be.visible')
+    cy.findAllByRole('textbox', { name: 'To' }).first().should('be.visible')
     cy.findByRole('button', { name: 'View' })
 
     cy.findByText('There is no data for this period.').should('be.visible')
   })
 
   const verifyStatsChange = () => {
-    cy.findByRole('textbox', { name: /From/ }).clear().type('1/1/2024')
-    cy.findByRole('textbox', { name: /To/ }).clear().type('31/1/2024')
+    cy.findAllByRole('textbox', { name: /From/ }).first().clear().type('1/1/2024')
+    cy.findAllByRole('textbox', { name: /To/ }).first().clear().type('31/1/2024')
 
     cy.findByRole('button', { name: /View/ }).click()
 
@@ -402,8 +402,8 @@ context('Key workers data', () => {
   })
 
   const verifyErrorMessages = () => {
-    cy.findByRole('textbox', { name: /From/ }).clear().type('aa/bb/cccc')
-    cy.findByRole('textbox', { name: /To/ }).clear().type('32/1/2025')
+    cy.findAllByRole('textbox', { name: /From/ }).first().clear().type('aa/bb/cccc')
+    cy.findAllByRole('textbox', { name: /To/ }).first().clear().type('32/1/2025')
 
     cy.findByRole('button', { name: /View/ }).click()
 
@@ -411,9 +411,9 @@ context('Key workers data', () => {
     cy.findAllByText('To date must be a real date').should('have.length', 2)
   }
 
-  const navigateToTestPage = () => {
+  const navigateToTestPage = (query: string = '') => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/key-worker/data`, { failOnStatusCode: false })
+    cy.visit(`/key-worker/data${query}`, { failOnStatusCode: false })
     checkAxeAccessibility()
   }
 })

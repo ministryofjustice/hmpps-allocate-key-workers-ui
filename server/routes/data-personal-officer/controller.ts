@@ -6,9 +6,9 @@ import { ResQuerySchemaType } from './schema'
 import { getEstablishmentData } from '../data/utils'
 
 export class POStaffDataController {
-  constructor(private readonly allocationsApiService: AllocationsApiService) {}
+  constructor(protected readonly allocationsApiService: AllocationsApiService) {}
 
-  private getDateAsIsoString = () => {
+  protected getDateAsIsoString = () => {
     const lastDay = subDays(new Date(), 1)
     const firstDay = startOfMonth(lastDay)
     const previousMonth = subMonths(firstDay, 1)
@@ -21,7 +21,7 @@ export class POStaffDataController {
     }
   }
 
-  private addComparisonDates = ({
+  protected addComparisonDates = ({
     dateFrom,
     dateTo,
     compareDateFrom,
