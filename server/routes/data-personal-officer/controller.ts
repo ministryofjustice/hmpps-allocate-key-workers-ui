@@ -3,12 +3,10 @@ import { format, startOfMonth, subDays, endOfMonth, subMonths, differenceInDays 
 import AllocationsApiService from '../../services/allocationsApi/allocationsApiService'
 import { formatDateConcise } from '../../utils/datetimeUtils'
 import { ResQuerySchemaType } from './schema'
-import { getEstablishmentData } from '../data/utils'
+import { getEstablishmentData } from '../data-key-worker/utils'
 
 export class POStaffDataController {
   constructor(protected readonly allocationsApiService: AllocationsApiService) {}
-
-  protected directory = 'data-personal-officer'
 
   protected defaultDateRange = () => {
     const lastDay = subDays(new Date(), 1)
@@ -65,7 +63,7 @@ export class POStaffDataController {
       dateRange.compareDateTo,
     )
 
-    res.render(`${this.directory}/view`, {
+    res.render('data-personal-officer/view', {
       showBreadcrumbs: true,
       stats,
       data: getEstablishmentData(stats, req),

@@ -2,8 +2,6 @@ import { format, lastDayOfMonth, startOfMonth, subMonths, isLastDayOfMonth, endO
 import { POStaffDataController } from '../data-personal-officer/controller'
 
 export class KWStaffDataController extends POStaffDataController {
-  protected override directory = 'data'
-
   protected override defaultDateRange = () => {
     const today = new Date()
     const lastDay = isLastDayOfMonth(today) ? today : lastDayOfMonth(subMonths(today, 1))
