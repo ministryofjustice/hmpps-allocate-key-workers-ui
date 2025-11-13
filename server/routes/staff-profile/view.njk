@@ -29,7 +29,7 @@
         </a>
       </li>
       <li class="govuk-tabs__list-item">
-        <a class="govuk-tabs__tab" href="{{ staffId }}/case-notes">
+        <a class="govuk-tabs__tab" href="{{ staffId }}/case-notes{{ query | getQueryEntries(['dateFrom', 'dateTo', 'compareDateFrom', 'compareDateTo', 'js', 'history']) | toQueryString }}">
           View recent case notes
         </a>
       </li>
