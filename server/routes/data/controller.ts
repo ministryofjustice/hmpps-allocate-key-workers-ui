@@ -1,14 +1,38 @@
 import { Request, Response } from 'express'
-import { format, startOfMonth, subDays, endOfMonth, subMonths, differenceInDays } from 'date-fns'
+import {
+  format,
+  startOfMonth,
+  subDays,
+  endOfMonth,
+  subMonths,
+  differenceInDays,
+  isLastDayOfMonth,
+  lastDayOfMonth,
+} from 'date-fns'
 import AllocationsApiService from '../../services/allocationsApi/allocationsApiService'
 import { formatDateConcise } from '../../utils/datetimeUtils'
 import { ResQuerySchemaType } from './schema'
-import { getEstablishmentData } from '../data-key-worker/utils'
+import { getEstablishmentData } from './utils'
+import { PolicyType } from '../../@types/policyType'
 
-export class POStaffDataController {
+export class StaffDataController {
   constructor(protected readonly allocationsApiService: AllocationsApiService) {}
 
-  protected defaultDateRange = () => {
+  protected defaultDateRange = (policy: PolicyType | undefined) => {
+    if (policy === 'KEY_WORKER') {
+      const today = new Date()
+      const lastDay = isLastDayOfMonth(today) ? today : lastDayOfMonth(subMonths(today, 1))
+      const firstDay = startOfMonth(lastDay)
+      const previousMonth = subMonths(firstDay, 1)
+
+      return {
+        dateFrom: format(firstDay, 'yyyy-MM-dd'),
+        dateTo: format(lastDay, 'yyyy-MM-dd'),
+        compareDateFrom: format(startOfMonth(previousMonth), 'yyyy-MM-dd'),
+        compareDateTo: format(endOfMonth(previousMonth), 'yyyy-MM-dd'),
+      }
+    }
+
     const lastDay = subDays(new Date(), 1)
     const firstDay = startOfMonth(lastDay)
     const previousMonth = subMonths(firstDay, 1)
@@ -52,7 +76,9 @@ export class POStaffDataController {
 
   GET = async (req: Request, res: Response) => {
     const resQuery = res.locals['query'] as ResQuerySchemaType
-    const dateRange = resQuery?.validated ? this.addComparisonDates(resQuery.validated) : this.defaultDateRange()
+    const dateRange = resQuery?.validated
+      ? this.addComparisonDates(resQuery.validated)
+      : this.defaultDateRange(req.middleware?.policy)
     const prisonCode = res.locals.user.getActiveCaseloadId()!
     const stats = await this.allocationsApiService.getPrisonStats(
       req,
@@ -63,7 +89,7 @@ export class POStaffDataController {
       dateRange.compareDateTo,
     )
 
-    res.render('data-personal-officer/view', {
+    res.render('data/view', {
       showBreadcrumbs: true,
       stats,
       data: getEstablishmentData(stats, req),

@@ -15,7 +15,7 @@
 
     <ul class="govuk-tabs__list govuk-body govuk-!-margin-bottom-6">
       <li class="govuk-tabs__list-item">
-        <a class="govuk-tabs__tab" href="../{{ staffId }}{{ query | getQueryEntries(['dateFrom', 'dateTo', 'compareDateFrom', 'compareDateTo', 'js', 'history']) | toQueryString }}">
+        <a class="govuk-tabs__tab" href="../{{ staffId }}{{ query | getQueryEntries(['dateFrom', 'dateTo', 'compareDateFrom', 'compareDateTo', 'js']) | toQueryString }}">
           View current allocations
         </a>
       </li>

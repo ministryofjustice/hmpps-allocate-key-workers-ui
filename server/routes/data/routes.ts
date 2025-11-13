@@ -1,13 +1,13 @@
 import { Services } from '../../services'
 import { JourneyRouter } from '../base/routes'
 import { validateOnGET } from '../../middleware/validationMiddleware'
-import { POStaffDataController } from './controller'
+import { StaffDataController } from './controller'
 import { schema } from './schema'
 import { Page } from '../../services/auditService'
 
-export const POStaffDataRoutes = ({ allocationsApiService }: Services) => {
+export const StaffDataRoutes = ({ allocationsApiService }: Services) => {
   const { router, get, post } = JourneyRouter()
-  const controller = new POStaffDataController(allocationsApiService)
+  const controller = new StaffDataController(allocationsApiService)
 
   get(
     '/',

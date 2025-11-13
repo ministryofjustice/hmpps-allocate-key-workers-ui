@@ -9,13 +9,12 @@ import insertJourneyIdentifier from '../middleware/journey/insertJourneyIdentifi
 import JourneyRoutes from './journeys/routes'
 import { EstablishmentSettingsRoutes } from './establishment-settings/routes'
 import { RecommendStaffAutomaticallyRoutes } from './recommend-allocations/routes'
-import { KWStaffDataRoutes } from './data-key-worker/routes'
 import { populateUserPermissionsAndPrisonConfig } from '../middleware/permissionsMiddleware'
 import { JourneyRouter } from './base/routes'
 import breadcrumbs from '../middleware/breadcrumbs'
 import { ManageRolesRoutes } from './manage-roles/routes'
 import { Page } from '../services/auditService'
-import { POStaffDataRoutes } from './data-personal-officer/routes'
+import { StaffDataRoutes } from './data/routes'
 import { historyMiddleware } from '../middleware/historyMiddleware'
 import { POStaffProfileRoutes } from './staff-profile-personal-officer/routes'
 import {
@@ -82,10 +81,7 @@ export default function routes(services: Services) {
   })
 
   router.use('/allocate', minRequireView, AllocateStaffRoutes(services))
-  useForPolicies('/data', minRequireView, {
-    KEY_WORKER: KWStaffDataRoutes(services),
-    PERSONAL_OFFICER: POStaffDataRoutes(services),
-  })
+  router.use('/data', minRequireView, StaffDataRoutes(services))
   router.use('/manage', minRequireView, StaffMembersRoutes(services))
 
   router.use('/manage-roles', minRequireAllocate, ManageRolesRoutes())
