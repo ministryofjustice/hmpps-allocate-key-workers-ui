@@ -14,7 +14,7 @@
 
     <ul class="govuk-tabs__list govuk-body govuk-!-margin-bottom-6">
       <li class="govuk-tabs__list-item">
-        <a class="govuk-tabs__tab" href="../{{ staffId }}">
+        <a class="govuk-tabs__tab" href="../{{ staffId }}{{ query | getQueryEntries(['dateFrom', 'dateTo', 'compareDateFrom', 'compareDateTo', 'js']) | toQueryString }}">
           View current allocations
         </a>
       </li>
@@ -75,6 +75,8 @@
           s.form.submit()
         })
       })
+
+      window.initMojFilter({{ not showFilter }}, 'Show date filter', 'Hide date filter')
     }
   </script>
 {% endblock %}

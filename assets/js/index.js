@@ -4,12 +4,14 @@ import Card from './card'
 import { nodeListForEach } from './utils'
 import { initialiseDropdown } from './allocation-dropdown'
 import { initAllocateStickyAction } from './allocation-sticky-action'
+import { initMojFilter } from './init-moj-filter'
 
 govukFrontend.initAll()
 mojFrontend.initAll()
 window.MojFrontend = mojFrontend
 window.initialiseDropdown = initialiseDropdown
 window.initAllocateStickyAction = initAllocateStickyAction
+window.initMojFilter = initMojFilter
 
 var $cards = document.querySelectorAll('.card--clickable')
 nodeListForEach($cards, function ($card) {

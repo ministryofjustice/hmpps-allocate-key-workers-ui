@@ -1,7 +1,7 @@
 import type { Services } from '../services'
 import { HomePageController } from './controller'
 import { StaffMembersRoutes } from './manage/routes'
-import { StaffProfileRoutes } from './staff-profile/routes'
+import { KWStaffProfileRoutes } from './staff-profile-key-worker/routes'
 import { AllocateStaffRoutes } from './allocate/routes'
 import { PrisonerAllocationHistoryRoutes } from './prisoner-allocation-history/routes'
 import removeTrailingSlashMiddleware from '../middleware/removeTrailingSlashMiddleware'
@@ -9,13 +9,12 @@ import insertJourneyIdentifier from '../middleware/journey/insertJourneyIdentifi
 import JourneyRoutes from './journeys/routes'
 import { EstablishmentSettingsRoutes } from './establishment-settings/routes'
 import { RecommendStaffAutomaticallyRoutes } from './recommend-allocations/routes'
-import { StaffDataRoutes } from './data/routes'
 import { populateUserPermissionsAndPrisonConfig } from '../middleware/permissionsMiddleware'
 import { JourneyRouter } from './base/routes'
 import breadcrumbs from '../middleware/breadcrumbs'
 import { ManageRolesRoutes } from './manage-roles/routes'
 import { Page } from '../services/auditService'
-import { POStaffDataRoutes } from './data-personal-officer/routes'
+import { StaffDataRoutes } from './data/routes'
 import { historyMiddleware } from '../middleware/historyMiddleware'
 import { POStaffProfileRoutes } from './staff-profile-personal-officer/routes'
 import {
@@ -77,15 +76,12 @@ export default function routes(services: Services) {
 
   router.use('/prisoner-allocation-history', minRequireSelfProfile, PrisonerAllocationHistoryRoutes(services))
   useForPolicies('/staff-profile/:staffId', minRequireSelfProfile, {
-    KEY_WORKER: StaffProfileRoutes(services),
+    KEY_WORKER: KWStaffProfileRoutes(services),
     PERSONAL_OFFICER: POStaffProfileRoutes(services),
   })
 
   router.use('/allocate', minRequireView, AllocateStaffRoutes(services))
-  useForPolicies('/data', minRequireView, {
-    KEY_WORKER: StaffDataRoutes(services),
-    PERSONAL_OFFICER: POStaffDataRoutes(services),
-  })
+  router.use('/data', minRequireView, StaffDataRoutes(services))
   router.use('/manage', minRequireView, StaffMembersRoutes(services))
 
   router.use('/manage-roles', minRequireAllocate, ManageRolesRoutes())
