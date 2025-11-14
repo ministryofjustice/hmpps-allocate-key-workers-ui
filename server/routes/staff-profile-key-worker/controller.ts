@@ -1,7 +1,7 @@
 import { differenceInDays, format, subDays, subMonths } from 'date-fns'
-import { POStaffProfileController } from '../staff-profile-personal-officer/controller'
+import { StaffProfileController } from '../staff-profile/abstractController'
 
-export class KWStaffProfileController extends POStaffProfileController {
+export class KWStaffProfileController extends StaffProfileController {
   protected override directory = 'staff-profile-key-worker'
 
   protected override defaultDateRange = () => {
