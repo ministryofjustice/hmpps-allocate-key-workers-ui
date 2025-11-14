@@ -172,25 +172,7 @@
 {% block pageScripts %}
   <script nonce="{{ cspNonce }}">
     window.onload = function () {
-      const filter = document.querySelector('[data-module="moj-filter"]')
-      filter && window.MojFrontend && new window.MojFrontend.FilterToggleButton(filter, {
-          bigModeMediaQuery: '(min-width: 48.063em)',
-          startHidden: {{ not showFilter }},
-          toggleButton: {
-            showText: 'Show date filter',
-            hideText: 'Hide date filter',
-            classes: 'govuk-button--primary'
-          },
-          toggleButtonContainer: {
-            selector: '.moj-action-bar__filter'
-          },
-          closeButton: {
-            text: 'Close'
-          },
-          closeButtonContainer: {
-            selector: '.moj-filter__header-action'
-          }
-        })
+      window.initMojFilter({{ not showFilter }}, 'Show date filter', 'Hide date filter')
 
       {% if jsEnabled %}
         window.initialiseDropdown?.('{{ policyStaff }}', {{ staff | dump | safe }})
