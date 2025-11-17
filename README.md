@@ -1,4 +1,4 @@
-# HMPPS Allocate Key Workers UI
+# HMPPS Allocate Key Workers and Personal Officers UI
 
 [![Ministry of Justice Repository Compliance Badge](https://github-community.service.justice.gov.uk/repository-standards/api/hmpps-allocate-key-workers-ui/badge?style=flat)](https://github-community.service.justice.gov.uk/repository-standards/hmpps-allocate-key-workers-ui)
 [![codecov](https://codecov.io/github/ministryofjustice/hmpps-allocate-key-workers-ui/graph/badge.svg?token=Y9DDNQZ1J1)](https://codecov.io/github/ministryofjustice/hmpps-allocate-key-workers-ui)
