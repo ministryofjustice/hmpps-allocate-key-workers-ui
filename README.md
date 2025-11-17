@@ -10,7 +10,6 @@ A frontend application for HMPPS prison staff to manage key worker and personal 
 
 This service allows prison staff to:
 - View and manage key worker and personal officer allocations
-- Handle personal officer assignments
 - View prisoner allocation history
 - Access staff profiles and case notes
 - Configure establishment-specific settings
