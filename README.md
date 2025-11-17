@@ -27,7 +27,7 @@ This service allows prison staff to:
 
 ## Prerequisites
 
-- Node.js 20.x (see `.nvmrc`)
+- Node.js 22.x
 - Docker
 
 ## Getting Started
@@ -66,6 +66,11 @@ npm run build
 
 ### Run Tests
 ```bash
+# Unit tests
+npm run test
+
+# Integration tests
+npm run start-feature:dev
 npm run int-test-ui
 ```
 
@@ -78,7 +83,7 @@ npm run lint-fix
 
 ### Syncing API Types With Swagger
 
-Run `npm run swagger` to pull the latest typedefs from the api backend.
+Run `npm run swagger-keyworker` to pull the latest typedefs from the api backend.
 
 ## Deployment
 This application is deployed to the Cloud Platform using Helm charts located in `helm_deploy/`.
