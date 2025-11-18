@@ -175,7 +175,7 @@
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-plugin-manifest": "^1.0.5",
     "esbuild-sass-plugin": "^3.3.1",
-    "glob": "^11.0.3",
+    "glob": "^11.1.0",
     "jest": "^30.2.0",
     "jest-fixed-jsdom": "^0.0.10",
     "jest-html-reporter": "^4.3.0",
@@ -191,5 +191,9 @@
     "supertest": "^7.1.4",
     "ts-jest": "^29.4.5",
     "typescript": "^5.9.3"
+  },
+  "overrides": {
+    "glob": "^11.1.0",
+    "js-yaml": "4.1.1"
   }
 }
