@@ -25,7 +25,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Run rename-project script
         run: ./rename-project.bash ${{ github.event.repository.name }} ${{ inputs.slack_releases_channel }} ${{ inputs.security_alerts_slack_channel_id }} ${{ inputs.non_prod_alerts_prometheus_severity_label }} ${{ inputs.prod_alerts_prometheus_severity_label }} ${{ inputs.product_id }}
