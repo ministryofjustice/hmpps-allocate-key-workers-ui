@@ -7,5 +7,6 @@ if (config.sentry.dsn) {
     environment: config.sentry.environment,
     tracesSampleRate: config.sentry.tracesSampleRate,
     skipOpenTelemetrySetup: true,
+    integrations: [Sentry.httpIntegration({ spans: false })],
   })
 }
