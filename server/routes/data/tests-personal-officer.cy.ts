@@ -182,7 +182,7 @@ context('Personal officer data', () => {
 
   const navigateToTestPage = () => {
     cy.signIn({ failOnStatusCode: false })
-    cy.visit(`/personal-officer/data`, { failOnStatusCode: false })
+    cy.visit(`/personal-officer/data?dateFrom=1/9/2025&dateTo=30/9/2025`, { failOnStatusCode: false })
     checkAxeAccessibility()
   }
 })

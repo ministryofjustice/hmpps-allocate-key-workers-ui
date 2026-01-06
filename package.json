@@ -168,7 +168,7 @@
     "chai": "^6.2.1",
     "chokidar": "^3.6.0",
     "concurrently": "^9.2.1",
-    "cypress": "^15.8.0",
+    "cypress": "^15.8.1",
     "cypress-ctrf-json-reporter": "^0.0.13",
     "cypress-diff": "^0.0.6",
     "cypress-multi-reporters": "^2.0.5",
@@ -200,6 +200,7 @@
       "js-yaml": "3.14.2"
     },
     "cypress": {
+      "@cypress/request": "v3.0.10",
       "systeminformation": "5.27.14"
     }
   }
