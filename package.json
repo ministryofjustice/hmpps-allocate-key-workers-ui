@@ -107,7 +107,7 @@
     "@ministryofjustice/hmpps-connect-dps-shared-items": "^3.1.1",
     "@ministryofjustice/hmpps-monitoring": "^1.0.0",
     "@ministryofjustice/hmpps-precommit-hooks": "^1.0.2",
-    "@ministryofjustice/hmpps-prison-permissions-lib": "^0.5.0",
+    "@ministryofjustice/hmpps-prison-permissions-lib": "^1.1.0",
     "@sentry/node": "^10.25.0",
     "@types/cypress__code-coverage": "^3.10.2",
     "agentkeepalive": "^4.6.0",
