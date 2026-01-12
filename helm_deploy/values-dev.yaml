@@ -30,5 +30,5 @@ generic-service:
       - accessibility-testing-1
 
 generic-prometheus-alerts:
-  alertSeverity: hmpps-alerts-api-non-prod
+  alertSeverity: maintenance-alerts-non-prod-warning
   businessHoursOnly: true

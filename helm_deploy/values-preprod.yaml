@@ -22,5 +22,5 @@ generic-service:
     PRISON_CONFIG_CACHE_TIMEOUT: 3600
 
 generic-prometheus-alerts:
-  alertSeverity: hmpps-alerts-api-non-prod
+  alertSeverity: maintenance-alerts-non-prod-warning
   businessHoursOnly: true
