@@ -29,7 +29,6 @@ context('/update-capacity-status-and-working-pattern/update-working-pattern', ()
     cy.verifyLastAPICall(
       { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
       {
-        capacity: 6,
         status: 'ACTIVE',
         staffRole: {
           position: 'PRO',

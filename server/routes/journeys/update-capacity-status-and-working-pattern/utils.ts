@@ -1,7 +1,6 @@
 import { components } from '../../../@types/keyWorker'
 
 export const parseStaffDetails = (details: components['schemas']['StaffDetails']) => ({
-  ...(details.capacity === undefined || details.capacity === null ? {} : { capacity: details.capacity }),
   status: details.status.code,
   staffRole: {
     position: details.staffRole!.position.code,
