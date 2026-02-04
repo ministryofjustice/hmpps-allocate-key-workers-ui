@@ -130,6 +130,9 @@ const stubKeyworkerPrisonConfig = (
     },
   })
 
+const stubKeyworkerApiStatsCurrentYear = () =>
+  createKeyworkerStatsStub(`${new Date().getFullYear()}.+`, '.+', keyworkerStatisticsResponse)
+
 const stubKeyworkerApiStats2025 = () => createKeyworkerStatsStub('2025.+', '.+', keyworkerStatisticsResponse)
 
 const stubKeyworkerApiStats2024 = () => createKeyworkerStatsStub('2024.+', '.+', keyworkerStatisticsResponse)
@@ -868,6 +871,7 @@ const defaultPrisonerAllocations = [
 
 export default {
   stubKeyworkerApiHealth,
+  stubKeyworkerApiStatsCurrentYear,
   stubKeyworkerApiStats2025,
   stubKeyworkerApiStats2024,
   stubKeyworkerApiStatsNoData,

@@ -12,7 +12,10 @@ export class UpdateCapacityController {
   GET = async (req: Request, res: Response) => {
     res.render('journeys/update-capacity-status-and-working-pattern/update-capacity/view', {
       ...req.journeyData.staffDetails!,
-      capacity: res.locals.formResponses?.['capacity'] ?? req.journeyData.staffDetails!.capacity,
+      capacity:
+        res.locals.formResponses?.['capacity'] ??
+        req.journeyData.staffDetails!.capacity ??
+        req.middleware!.prisonConfiguration!.capacity,
       backUrl: '../update-capacity-status-and-working-pattern',
     })
   }

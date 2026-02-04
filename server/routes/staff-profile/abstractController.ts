@@ -57,6 +57,9 @@ export abstract class StaffProfileController extends ChangeStaffController {
         true,
         dateRange,
       )
+      if (staffDetails.capacity === undefined || staffDetails.capacity === null) {
+        staffDetails.capacity = req.middleware!.prisonConfiguration!.capacity
+      }
 
       const basePath = req.path.length > 1 ? req.baseUrl + req.path : req.baseUrl
 

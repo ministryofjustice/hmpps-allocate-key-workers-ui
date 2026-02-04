@@ -699,7 +699,7 @@ export interface components {
       status: components['schemas']['CodedDescription']
       prison: components['schemas']['CodedDescription']
       /** Format: int32 */
-      capacity: number
+      capacity?: number
       /** Format: int32 */
       allocated: number
       allocations: components['schemas']['Allocation'][]

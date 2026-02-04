@@ -18,6 +18,7 @@ context('Key workers data', () => {
 
   it('shows stats - key worker - high complexity', () => {
     cy.task('stubEnabledPrisonWithHighComplexityNeedsPrisoners')
+    cy.task('stubKeyworkerApiStatsCurrentYear')
     cy.task('stubKeyworkerApiStats2025')
     cy.task('stubKeyworkerApiStats2024')
 
