@@ -4,6 +4,7 @@ import AllocationsApiService from '../../../../services/allocationsApi/allocatio
 import { SchemaType } from '../../manage-roles/assign/working-pattern/schema'
 import { startNewJourney } from '../common/utils'
 import { possessiveComma } from '../../../../utils/formatUtils'
+import { parseStaffDetails } from '../utils'
 
 export class UpdateWorkingPatternController {
   constructor(private readonly allocationsApiService: AllocationsApiService) {}
@@ -21,11 +22,15 @@ export class UpdateWorkingPatternController {
     const staffDetails = req.journeyData.staffDetails!
 
     try {
+      const requestBody = parseStaffDetails(req.journeyData.staffDetails!)
       await this.allocationsApiService.upsertStaffDetails(req as Request, res, staffDetails.staffId, {
+        ...requestBody,
         staffRole: {
+          ...requestBody.staffRole,
           scheduleType: scheduleType.code,
           hoursPerWeek: scheduleType.hoursPerWeek,
         },
+        deactivateActiveAllocations: false,
       })
       req.flash(
         FLASH_KEY__SUCCESS_MESSAGE,

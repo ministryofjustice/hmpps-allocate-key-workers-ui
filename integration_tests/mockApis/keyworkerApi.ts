@@ -291,6 +291,8 @@ const stubPrisonerAllocations = (
 
 const stubUpsertStaffDetails = () => createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/staff/.*', 200, {})
 
+const stubDeleteStaffDetails = () => createBasicHttpStub('DELETE', '/keyworker-api/prisons/.*/staff/.*', 200, {})
+
 const stubAllocationRecommendations = (allocationRecommendations: components['schemas']['RecommendedAllocations']) =>
   createBasicHttpStub(
     'GET',
@@ -904,6 +906,7 @@ export default {
   stubPutAllocationRecommendationSuccess,
   stubKeyworkerPrisonConfigNoAutoAllocation: () => stubKeyworkerPrisonConfig(true, false, false),
   stubUpsertStaffDetails,
+  stubDeleteStaffDetails,
   stubGetPolicies,
   stubPutPolicies,
   stubKeyWorkerStatsWithNullCurrentValues,

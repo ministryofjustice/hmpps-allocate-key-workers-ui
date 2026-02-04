@@ -4,6 +4,7 @@ import AllocationsApiService from '../../../../services/allocationsApi/allocatio
 import { startNewJourney } from '../common/utils'
 import { SchemaType } from './schema'
 import { possessiveComma } from '../../../../utils/formatUtils'
+import { parseStaffDetails } from '../utils'
 
 export class UpdateCapacityController {
   constructor(private readonly allocationsApiService: AllocationsApiService) {}
@@ -21,7 +22,11 @@ export class UpdateCapacityController {
     const staffDetails = req.journeyData.staffDetails!
 
     try {
-      await this.allocationsApiService.upsertStaffDetails(req as Request, res, staffDetails.staffId, { capacity })
+      await this.allocationsApiService.upsertStaffDetails(req as Request, res, staffDetails.staffId, {
+        ...parseStaffDetails(req.journeyData.staffDetails!),
+        capacity,
+        deactivateActiveAllocations: false,
+      })
       req.flash(
         FLASH_KEY__SUCCESS_MESSAGE,
         `You have updated this ${possessiveComma(res.locals.policyStaff!)} maximum capacity.`,

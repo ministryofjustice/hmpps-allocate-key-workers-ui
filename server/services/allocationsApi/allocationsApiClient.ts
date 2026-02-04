@@ -3,7 +3,6 @@ import { Response as SuperAgentResponse } from 'superagent'
 import AuditedRestClient from '../../data/auditedRestClient'
 import config from '../../config'
 import type { components, operations } from '../../@types/keyWorker'
-import { MakeNullable } from '../../utils/utils'
 
 export interface ServiceConfigInfo {
   git: {
@@ -28,10 +27,7 @@ export interface ServiceConfigInfo {
   productId: string
 }
 
-export type StaffDetailsRequest = MakeNullable<
-  components['schemas']['StaffDetailsRequest'],
-  'reactivateOn' | 'staffRole'
->
+export type StaffDetailsRequest = components['schemas']['StaffDetailsRequest']
 
 export default class AllocationsApiClient {
   private readonly restClient: AuditedRestClient
@@ -211,6 +207,12 @@ export default class AllocationsApiClient {
       path: `/prisons/${prisonCode}/staff/${staffId}`,
       data: requestBody,
       retry: true,
+    })
+  }
+
+  async deleteStaffDetails(prisonCode: string, staffId: string | number) {
+    await this.restClient.delete({
+      path: `/prisons/${prisonCode}/staff/${staffId}`,
     })
   }
 

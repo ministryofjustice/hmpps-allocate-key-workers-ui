@@ -3,6 +3,7 @@ import AllocationsApiService from '../../../../services/allocationsApi/allocatio
 import { FLASH_KEY__SUCCESS_MESSAGE } from '../../../../utils/constants'
 import { possessiveComma } from '../../../../utils/formatUtils'
 import { startNewJourney } from '../common/utils'
+import { parseStaffDetails } from '../utils'
 
 export class UpdateStatusCheckAnswersController {
   constructor(private readonly allocationsApiService: AllocationsApiService) {}
@@ -23,28 +24,21 @@ export class UpdateStatusCheckAnswersController {
 
   submitToApi = async (req: Request, res: Response, next: NextFunction) => {
     const { status, deactivateActiveAllocations, reactivateOn } = req.journeyData.updateStaffDetails!
+    const staffDetails = req.journeyData.staffDetails!
     try {
       if (status!.code === 'ACTIVE') {
-        await this.allocationsApiService.upsertStaffDetails(
-          req as Request,
-          res,
-          req.journeyData.staffDetails!.staffId,
-          {
-            status: status!.code,
-            reactivateOn: null,
-          },
-        )
+        await this.allocationsApiService.upsertStaffDetails(req as Request, res, staffDetails.staffId, {
+          ...parseStaffDetails(staffDetails),
+          status: status!.code,
+          deactivateActiveAllocations: false,
+        })
       } else {
-        await this.allocationsApiService.upsertStaffDetails(
-          req as Request,
-          res,
-          req.journeyData.staffDetails!.staffId,
-          {
-            status: status!.code,
-            deactivateActiveAllocations: deactivateActiveAllocations!,
-            reactivateOn: status?.code === 'UNAVAILABLE_ANNUAL_LEAVE' ? reactivateOn! : null,
-          },
-        )
+        await this.allocationsApiService.upsertStaffDetails(req as Request, res, staffDetails.staffId, {
+          ...parseStaffDetails(staffDetails),
+          status: status!.code,
+          deactivateActiveAllocations: deactivateActiveAllocations!,
+          ...(status?.code === 'UNAVAILABLE_ANNUAL_LEAVE' ? { reactivateOn: reactivateOn! } : {}),
+        })
       }
 
       req.flash(

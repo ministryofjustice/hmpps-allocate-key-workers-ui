@@ -50,9 +50,6 @@ export const policyAware = (text: string | Record<string, string[]>, policy: str
 
 export const policyString = (policyPath: keyof typeof POLICIES, key: keyof Policy) => POLICIES[policyPath]?.[key]
 
-// @ts-expect-error T[P] index error
-export type MakeNullable<T, K extends PropertyKey> = Pick<T, Exclude<keyof T, K>> & { [P in K]?: T[P] | null }
-
 export const prisonerProfileBacklink = (req: Request, res: Response, personIdentifier: string, suffix: string = '') => {
   const searchParams = new URLSearchParams({
     service: `allocate-${res.locals.policyPath}s`,

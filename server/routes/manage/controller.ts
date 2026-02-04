@@ -34,7 +34,7 @@ export class ManageController {
 
     const searchOptions = {
       query: query.query,
-      status: query.status as components['schemas']['StaffSearchRequest']['status'],
+      status: query.status as components['schemas']['AllocatableSearchRequest']['status'],
       hasPolicyStaffRole: true,
     }
 

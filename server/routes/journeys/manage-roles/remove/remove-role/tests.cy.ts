@@ -10,7 +10,7 @@ context('/manage-roles/remove/remove-role', () => {
     cy.task('stubComponents')
     cy.task('stubSignIn')
     cy.task('stubEnabledPrison')
-    cy.task('stubUpsertStaffDetails')
+    cy.task('stubDeleteStaffDetails')
   })
 
   it('should try all cases for key worker', () => {
