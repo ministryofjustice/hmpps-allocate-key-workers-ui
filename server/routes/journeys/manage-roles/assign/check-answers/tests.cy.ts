@@ -65,7 +65,10 @@ context('/manage-roles/assign/check-answers', () => {
             position: 'PRO',
             scheduleType: 'FT',
             hoursPerWeek: 35,
+            fromDate: '2026-02-04',
           },
+          deactivateActiveAllocations: false,
+          status: 'ACTIVE',
         },
       )
     })

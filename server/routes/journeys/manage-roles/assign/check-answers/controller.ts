@@ -26,7 +26,7 @@ export class AssignRoleCheckAnswersController {
 
     await this.allocationsApiService.upsertStaffDetails(req, res, staff!.staffId, {
       deactivateActiveAllocations: false,
-      status: '',
+      status: 'ACTIVE',
       ...(capacity !== req.middleware!.prisonConfiguration!.capacity ? { capacity } : {}),
       staffRole: {
         position: 'PRO',

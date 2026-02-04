@@ -26,8 +26,14 @@ context('/update-capacity-status-and-working-pattern/update-status-inactive', ()
     cy.verifyLastAPICall(
       { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
       {
+        capacity: 6,
         status: 'INACTIVE',
-        reactivateOn: null,
+        staffRole: {
+          position: 'PRO',
+          scheduleType: 'FT',
+          hoursPerWeek: 35,
+          fromDate: '2024-12-18',
+        },
         deactivateActiveAllocations: true,
       },
     )

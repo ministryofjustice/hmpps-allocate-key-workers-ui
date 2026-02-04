@@ -132,7 +132,10 @@ context('/manage-roles/assign/** journey', () => {
           position: 'PRO',
           scheduleType: 'PT',
           hoursPerWeek: 6,
+          fromDate: '2026-02-04',
         },
+        deactivateActiveAllocations: false,
+        status: 'ACTIVE',
       },
     )
   })
@@ -164,7 +167,10 @@ context('/manage-roles/assign/** journey', () => {
           position: 'PRO',
           scheduleType: 'FT',
           hoursPerWeek: 35,
+          fromDate: '2026-02-04',
         },
+        deactivateActiveAllocations: false,
+        status: 'ACTIVE',
       },
     )
   })
@@ -208,7 +214,10 @@ context('/manage-roles/assign/** journey', () => {
           position: 'PRO',
           scheduleType: 'PT',
           hoursPerWeek: 6,
+          fromDate: '2026-02-04',
         },
+        deactivateActiveAllocations: false,
+        status: 'ACTIVE',
       },
     )
   })

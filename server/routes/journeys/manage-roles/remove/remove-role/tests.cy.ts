@@ -24,12 +24,7 @@ context('/manage-roles/remove/remove-role', () => {
 
     proceedToNextPage()
 
-    cy.verifyLastAPICall(
-      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/1001' },
-      {
-        staffRole: null,
-      },
-    )
+    cy.verifyAPIWasCalled({ method: 'DELETE', urlPath: '/keyworker-api/prisons/LEI/staff/1001' }, 1)
   })
 
   it('should skip content about deallocating prisoners if the staff has no assigned prisoner', () => {
