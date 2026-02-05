@@ -44,6 +44,7 @@ context('/update-capacity-status-and-working-pattern/** journey', () => {
     cy.verifyLastAPICall(
       { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
       {
+        capacity: 6,
         status: 'ACTIVE',
         staffRole: {
           position: 'PRO',
@@ -73,6 +74,7 @@ context('/update-capacity-status-and-working-pattern/** journey', () => {
     cy.verifyLastAPICall(
       { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
       {
+        capacity: 6,
         status: 'INACTIVE',
         staffRole: {
           position: 'PRO',
@@ -115,6 +117,7 @@ context('/update-capacity-status-and-working-pattern/** journey', () => {
     cy.verifyLastAPICall(
       { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
       {
+        capacity: 6,
         status: 'UNAVAILABLE_LONG_TERM_ABSENCE',
         staffRole: {
           position: 'PRO',
@@ -160,6 +163,7 @@ context('/update-capacity-status-and-working-pattern/** journey', () => {
     cy.verifyLastAPICall(
       { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
       {
+        capacity: 6,
         status: 'UNAVAILABLE_ANNUAL_LEAVE',
         staffRole: {
           position: 'PRO',
