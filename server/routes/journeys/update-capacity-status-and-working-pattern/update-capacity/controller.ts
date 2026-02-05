@@ -26,7 +26,7 @@ export class UpdateCapacityController {
 
     try {
       await this.allocationsApiService.upsertStaffDetails(req as Request, res, staffDetails.staffId, {
-        ...parseStaffDetails(req.journeyData.staffDetails!),
+        ...parseStaffDetails(req.journeyData.staffDetails!, true),
         capacity,
         deactivateActiveAllocations: false,
       })

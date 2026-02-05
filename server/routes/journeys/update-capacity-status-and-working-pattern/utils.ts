@@ -1,6 +1,9 @@
 import { components } from '../../../@types/keyWorker'
 
-export const parseStaffDetails = (details: components['schemas']['StaffDetails']) => ({
+export const parseStaffDetails = (
+  details: components['schemas']['StaffDetails'],
+  withReactivateOn: boolean = false,
+) => ({
   capacity: details.capacity,
   status: details.status.code,
   staffRole: {
@@ -9,4 +12,5 @@ export const parseStaffDetails = (details: components['schemas']['StaffDetails']
     hoursPerWeek: details.staffRole!.hoursPerWeek,
     fromDate: details.staffRole!.fromDate,
   },
+  ...(withReactivateOn && details.reactivateOn ? { reactivateOn: details.reactivateOn } : {}),
 })

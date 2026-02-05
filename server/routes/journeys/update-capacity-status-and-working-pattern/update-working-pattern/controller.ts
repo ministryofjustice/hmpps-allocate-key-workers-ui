@@ -22,7 +22,7 @@ export class UpdateWorkingPatternController {
     const staffDetails = req.journeyData.staffDetails!
 
     try {
-      const requestBody = parseStaffDetails(req.journeyData.staffDetails!)
+      const requestBody = parseStaffDetails(req.journeyData.staffDetails!, true)
       await this.allocationsApiService.upsertStaffDetails(req as Request, res, staffDetails.staffId, {
         ...requestBody,
         staffRole: {
