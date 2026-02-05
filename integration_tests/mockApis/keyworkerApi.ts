@@ -130,6 +130,9 @@ const stubKeyworkerPrisonConfig = (
     },
   })
 
+const stubKeyworkerApiStatsCurrentYear = () =>
+  createKeyworkerStatsStub(`${new Date().getFullYear()}.+`, '.+', keyworkerStatisticsResponse)
+
 const stubKeyworkerApiStats2025 = () => createKeyworkerStatsStub('2025.+', '.+', keyworkerStatisticsResponse)
 
 const stubKeyworkerApiStats2024 = () => createKeyworkerStatsStub('2024.+', '.+', keyworkerStatisticsResponse)
@@ -290,6 +293,8 @@ const stubPrisonerAllocations = (
   createBasicHttpStub('GET', '/keyworker-api/prisoners/A9965EA/allocations', 200, { allocations: prisonerAllocations })
 
 const stubUpsertStaffDetails = () => createBasicHttpStub('PUT', '/keyworker-api/prisons/.*/staff/.*', 200, {})
+
+const stubDeleteStaffDetails = () => createBasicHttpStub('DELETE', '/keyworker-api/prisons/.*/staff/.*', 200, {})
 
 const stubAllocationRecommendations = (allocationRecommendations: components['schemas']['RecommendedAllocations']) =>
   createBasicHttpStub(
@@ -866,6 +871,7 @@ const defaultPrisonerAllocations = [
 
 export default {
   stubKeyworkerApiHealth,
+  stubKeyworkerApiStatsCurrentYear,
   stubKeyworkerApiStats2025,
   stubKeyworkerApiStats2024,
   stubKeyworkerApiStatsNoData,
@@ -904,6 +910,7 @@ export default {
   stubPutAllocationRecommendationSuccess,
   stubKeyworkerPrisonConfigNoAutoAllocation: () => stubKeyworkerPrisonConfig(true, false, false),
   stubUpsertStaffDetails,
+  stubDeleteStaffDetails,
   stubGetPolicies,
   stubPutPolicies,
   stubKeyWorkerStatsWithNullCurrentValues,

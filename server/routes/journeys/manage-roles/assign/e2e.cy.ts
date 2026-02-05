@@ -132,39 +132,10 @@ context('/manage-roles/assign/** journey', () => {
           position: 'PRO',
           scheduleType: 'PT',
           hoursPerWeek: 6,
+          fromDate: new Date().toISOString().substring(0, 10),
         },
-      },
-    )
-  })
-
-  it('should not submit capacity if it is the same as default prison settings', () => {
-    beginJourney()
-
-    getSearchInput().type('Joe')
-    getSearchButton().click()
-    cy.findByRole('link', { name: 'Doe, Joe' }).click()
-
-    yesRadio().click()
-    continueButton().click()
-
-    fullTimeRadio().click()
-    continueButton().click()
-
-    continueButton().click()
-
-    // Confirm and submit
-    cy.findByRole('button', { name: 'Confirm and submit' }).click()
-
-    cy.findByText('You have successfully made Doe, Joe a key worker').should('be.visible')
-
-    cy.verifyLastAPICall(
-      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/1001' },
-      {
-        staffRole: {
-          position: 'PRO',
-          scheduleType: 'FT',
-          hoursPerWeek: 35,
-        },
+        deactivateActiveAllocations: false,
+        status: 'ACTIVE',
       },
     )
   })
@@ -208,7 +179,10 @@ context('/manage-roles/assign/** journey', () => {
           position: 'PRO',
           scheduleType: 'PT',
           hoursPerWeek: 6,
+          fromDate: new Date().toISOString().substring(0, 10),
         },
+        deactivateActiveAllocations: false,
+        status: 'ACTIVE',
       },
     )
   })

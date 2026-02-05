@@ -44,13 +44,20 @@ context('/update-capacity-status-and-working-pattern/** journey', () => {
     cy.verifyLastAPICall(
       { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
       {
+        capacity: 6,
         status: 'ACTIVE',
-        reactivateOn: null,
+        staffRole: {
+          position: 'PRO',
+          scheduleType: 'FT',
+          hoursPerWeek: 35,
+          fromDate: '2024-12-18',
+        },
+        deactivateActiveAllocations: false,
       },
     )
   })
 
-  it('should update inactive status and capacity', () => {
+  it('should update inactive status', () => {
     beginJourney()
 
     cy.findByRole('link', { name: 'Update status' }).click()
@@ -67,14 +74,20 @@ context('/update-capacity-status-and-working-pattern/** journey', () => {
     cy.verifyLastAPICall(
       { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
       {
+        capacity: 6,
         status: 'INACTIVE',
-        reactivateOn: null,
+        staffRole: {
+          position: 'PRO',
+          scheduleType: 'FT',
+          hoursPerWeek: 35,
+          fromDate: '2024-12-18',
+        },
         deactivateActiveAllocations: true,
       },
     )
   })
 
-  it('should update unavailable (non annual leave) status and capacity', () => {
+  it('should update unavailable (non annual leave) status', () => {
     beginJourney()
 
     cy.findByRole('link', { name: 'Update status' }).click()
@@ -104,14 +117,20 @@ context('/update-capacity-status-and-working-pattern/** journey', () => {
     cy.verifyLastAPICall(
       { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
       {
+        capacity: 6,
         status: 'UNAVAILABLE_LONG_TERM_ABSENCE',
+        staffRole: {
+          position: 'PRO',
+          scheduleType: 'FT',
+          hoursPerWeek: 35,
+          fromDate: '2024-12-18',
+        },
         deactivateActiveAllocations: false,
-        reactivateOn: null,
       },
     )
   })
 
-  it('should update unavailable (annual leave) status and capacity', () => {
+  it('should update unavailable (annual leave) status', () => {
     beginJourney()
 
     cy.findByRole('link', { name: 'Update status' }).click()
@@ -144,7 +163,14 @@ context('/update-capacity-status-and-working-pattern/** journey', () => {
     cy.verifyLastAPICall(
       { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/488095' },
       {
+        capacity: 6,
         status: 'UNAVAILABLE_ANNUAL_LEAVE',
+        staffRole: {
+          position: 'PRO',
+          scheduleType: 'FT',
+          hoursPerWeek: 35,
+          fromDate: '2024-12-18',
+        },
         deactivateActiveAllocations: true,
         reactivateOn: '2071-09-09T00:00:00.000Z',
       },

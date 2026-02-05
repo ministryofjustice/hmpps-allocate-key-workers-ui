@@ -3,6 +3,7 @@ import AllocationsApiService from '../../../../services/allocationsApi/allocatio
 import { FLASH_KEY__SUCCESS_MESSAGE } from '../../../../utils/constants'
 import { startNewJourney } from '../common/utils'
 import { possessiveComma } from '../../../../utils/formatUtils'
+import { parseStaffDetails } from '../utils'
 
 export class UpdateStatusInactiveController {
   constructor(private readonly allocationsApiService: AllocationsApiService) {}
@@ -17,8 +18,8 @@ export class UpdateStatusInactiveController {
   submitToApi = async (req: Request, res: Response, next: NextFunction) => {
     try {
       await this.allocationsApiService.upsertStaffDetails(req as Request, res, req.journeyData.staffDetails!.staffId, {
+        ...parseStaffDetails(req.journeyData.staffDetails!),
         status: req.journeyData.updateStaffDetails!.status!.code,
-        reactivateOn: null,
         deactivateActiveAllocations: true,
       })
 

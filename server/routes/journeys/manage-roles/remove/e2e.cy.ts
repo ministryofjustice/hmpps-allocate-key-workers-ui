@@ -29,7 +29,7 @@ context('/manage-roles/remove/** journey', () => {
         },
       },
     ])
-    cy.task('stubUpsertStaffDetails')
+    cy.task('stubDeleteStaffDetails')
   })
 
   describe('Role based access', () => {
@@ -47,12 +47,7 @@ context('/manage-roles/remove/** journey', () => {
 
     cy.findByText('You have successfully removed the key worker role from Doe, Joe').should('be.visible')
 
-    cy.verifyLastAPICall(
-      { method: 'PUT', urlPath: '/keyworker-api/prisons/LEI/staff/1001' },
-      {
-        staffRole: null,
-      },
-    )
+    cy.verifyAPIWasCalled({ method: 'DELETE', urlPath: '/keyworker-api/prisons/LEI/staff/1001' }, 1)
   })
 
   const beginJourney = () => {

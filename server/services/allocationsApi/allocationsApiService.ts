@@ -168,6 +168,10 @@ export default class AllocationsApiService {
     )
   }
 
+  deleteStaffDetails(req: Request, res: Response, staffId: string | number) {
+    return this.keyworkerApiClientBuilder(req, res).deleteStaffDetails(res.locals.user.getActiveCaseloadId()!, staffId)
+  }
+
   allocationRecommendations(req: Request, prisonCode: string) {
     return this.keyworkerApiClientBuilder(req).allocationRecommendations(prisonCode)
   }
