@@ -352,7 +352,7 @@ export interface components {
     /** @description Request to patch the configuration for a staff. */
     StaffDetailsRequest: {
       status: string
-      capacity?: number
+      capacity: number
       /** @example 1980-01-01 */
       reactivateOn?: string
       staffRole: components['schemas']['StaffRoleRequest']
