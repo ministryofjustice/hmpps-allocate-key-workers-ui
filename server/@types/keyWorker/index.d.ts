@@ -26,7 +26,7 @@ export interface paths {
      *     Requires one of the following roles:
      *     * ROLE_ALLOCATIONS__ALLOCATIONS_UI
      */
-    put: operations['modifyStaffDetails']
+    put: operations['mergeStaffDetails']
     post?: never
     /**
      * Delete staff details for a specific staff member.
@@ -352,8 +352,9 @@ export interface components {
     /** @description Request to patch the configuration for a staff. */
     StaffDetailsRequest: {
       status: string
+      /** Format: int32 */
       capacity: number
-      /** @example 1980-01-01 */
+      /** Format: date */
       reactivateOn?: string
       staffRole: components['schemas']['StaffRoleRequest']
       deactivateActiveAllocations: boolean
@@ -362,8 +363,10 @@ export interface components {
       position: string
       scheduleType: string
       hoursPerWeek: number
-      /** @example 1980-01-01 */
+      /** Format: date */
       fromDate: string
+      /** Format: date */
+      toDate?: string
     }
     ErrorResponse: {
       /** Format: int32 */
@@ -955,7 +958,7 @@ export interface operations {
       }
     }
   }
-  modifyStaffDetails: {
+  mergeStaffDetails: {
     parameters: {
       query?: never
       header: {
