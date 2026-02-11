@@ -201,7 +201,7 @@
     },
     "cypress": {
       "@cypress/request": "v3.0.10",
-      "systeminformation": "5.30.5"
+      "systeminformation": "5.30.7"
     }
   }
 }
