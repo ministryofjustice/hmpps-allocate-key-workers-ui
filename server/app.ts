@@ -7,7 +7,6 @@ import {
 import * as Sentry from '@sentry/node'
 import './sentry'
 
-// @ts-expect-error Import untyped middleware for cypress coverage
 import cypressCoverage from '@cypress/code-coverage/middleware/express'
 
 import type { Services } from './services'
