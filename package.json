@@ -200,7 +200,7 @@
       "js-yaml": "4.1.1"
     },
     "cypress": {
-      "@cypress/request": "v3.0.10"
+      "@cypress/request": "4.0.0"
     },
     "diff": "^8.0.3",
     "serialize-javascript": "^7.0.4"
