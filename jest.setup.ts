@@ -1,7 +1,10 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import '@testing-library/jest-dom'
 
-globalThis.setImmediate = globalThis.setImmediate || ((fn, ...args) => global.setTimeout(fn, 0, ...args))
+globalThis.setImmediate =
+  globalThis.setImmediate ||
+  (((fn: (...args: unknown[]) => void, ...args: unknown[]) =>
+    global.setTimeout(fn, 0, ...args)) as unknown as typeof setImmediate)
 
 // Reset JSDOM
 

@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2020",
     "noEmit": true,
-    "lib": ["es5", "dom", "es2015.promise"],
-    "types": ["cypress", "express", "express-session", "@testing-library/cypress"],
+    "lib": ["es2020", "dom"],
+    "types": ["cypress", "cypress-axe", "express", "express-session", "@testing-library/cypress"],
     "esModuleInterop": true,
     "skipLibCheck": true
   },

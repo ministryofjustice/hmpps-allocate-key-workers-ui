@@ -1,8 +1,10 @@
 {
-  "extends": "@tsconfig/node22/tsconfig.json",
+  "extends": "@tsconfig/node24/tsconfig.json",
   "compileOnSave": true,
   "compilerOptions": {
+    "isolatedModules": true,
     "outDir": "./dist",
+    "rootDir": ".",
     "sourceMap": true,
     "skipLibCheck": true,
     "noEmit": false,
