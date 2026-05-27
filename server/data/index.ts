@@ -51,4 +51,5 @@ export const dataAccess = () => {
 
 export type DataAccess = ReturnType<typeof dataAccess>
 
-export { HmppsAuthClient, RestClientBuilder, EnhancedRestClientBuilder, HmppsAuditClient }
+export { HmppsAuthClient, HmppsAuditClient }
+export type { RestClientBuilder, EnhancedRestClientBuilder }

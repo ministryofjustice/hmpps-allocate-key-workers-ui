@@ -3,7 +3,7 @@ import { stubFor } from './wiremock'
 const createHttpStub = (
   method: string,
   urlPathPattern: string,
-  queryParameters: object,
+  queryParameters: object | undefined,
   bodyPatterns: Array<object> | undefined,
   status: number,
   jsonBody?: object,

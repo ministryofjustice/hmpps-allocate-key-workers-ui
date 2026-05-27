@@ -207,7 +207,7 @@ export default {
       token(userToken),
       tokenVerification.stubVerifyToken(),
       stubGetCaseLoads(),
-      stubAllocationJobResponsibilities(userToken.hasAllocationJobResponsibilities),
+      stubAllocationJobResponsibilities(userToken.hasAllocationJobResponsibilities ?? true),
       stubAuditSqs(),
     ]),
 }
