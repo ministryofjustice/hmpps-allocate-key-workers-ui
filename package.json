@@ -100,8 +100,8 @@
     "@cypress/code-coverage": "^4.0.3",
     "@ministryofjustice/frontend": "^8.0.1",
     "@ministryofjustice/hmpps-auth-clients": "^2.0.0",
-    "@ministryofjustice/hmpps-connect-dps-components": "^5.5.0",
-    "@ministryofjustice/hmpps-connect-dps-shared-items": "^3.7.4",
+    "@ministryofjustice/hmpps-connect-dps-components": "^6.0.0",
+    "@ministryofjustice/hmpps-connect-dps-shared-items": "^4.0.0",
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
     "@ministryofjustice/hmpps-prison-permissions-lib": "^3.0.0",
     "@sentry/node": "^10.52.0",
@@ -203,7 +203,7 @@
         "uuid": "^11.1.1"
       }
     },
-    "diff": "^8.0.3",
+    "diff": "^9.0.0",
     "fast-uri": "^3.1.2",
     "istanbul-lib-processinfo": {
       "uuid": "^11.1.1"
