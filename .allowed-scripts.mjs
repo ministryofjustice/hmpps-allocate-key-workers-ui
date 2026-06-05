@@ -12,6 +12,6 @@ export default configureAllowedScripts({
     'node_modules/fsevents@2.3.3': 'ALLOW',
     // Native solution to quickly resolve module paths, used by jest and eslint
     'node_modules/unrs-resolver@1.11.1': 'ALLOW',
-    'node_modules/cypress@15.14.2': 'ALLOW',
+    'node_modules/cypress@15.16.0': 'ALLOW',
   },
 })
