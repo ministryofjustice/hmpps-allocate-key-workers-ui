@@ -100,10 +100,10 @@
     "@cypress/code-coverage": "^4.0.3",
     "@ministryofjustice/frontend": "^8.0.1",
     "@ministryofjustice/hmpps-auth-clients": "^2.0.0",
-    "@ministryofjustice/hmpps-connect-dps-components": "^5.5.0",
-    "@ministryofjustice/hmpps-connect-dps-shared-items": "^3.7.4",
+    "@ministryofjustice/hmpps-connect-dps-components": "^6.1.0",
+    "@ministryofjustice/hmpps-connect-dps-shared-items": "^4.1.0",
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
-    "@ministryofjustice/hmpps-prison-permissions-lib": "^2.6.0",
+    "@ministryofjustice/hmpps-prison-permissions-lib": "^3.0.0",
     "@sentry/node": "^10.55.0",
     "@types/cypress__code-coverage": "^3.10.2",
     "agentkeepalive": "^4.6.0",
@@ -195,13 +195,6 @@
     "@babel/plugin-transform-modules-systemjs": "^7.29.7",
     "@cypress/code-coverage": {
       "js-yaml": "4.1.1"
-    },
-    "cypress": {
-      "@cypress/request": {
-        ".": "v3.0.10",
-        "qs": "^6.15.2",
-        "uuid": "^14.0.0"
-      }
     },
     "diff": "^8.0.4",
     "fast-uri": "^3.1.2",
