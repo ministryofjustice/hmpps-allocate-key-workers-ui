@@ -96,7 +96,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.1057.0",
+    "@aws-sdk/client-sqs": "^3.1060.0",
     "@cypress/code-coverage": "^4.0.3",
     "@ministryofjustice/frontend": "^9.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^2.0.0",
@@ -104,11 +104,11 @@
     "@ministryofjustice/hmpps-connect-dps-shared-items": "^4.1.0",
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
     "@ministryofjustice/hmpps-prison-permissions-lib": "^3.0.0",
-    "@sentry/node": "^10.55.0",
+    "@sentry/node": "^10.56.0",
     "@types/cypress__code-coverage": "^3.10.2",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^2.9.8",
-    "axe-core": "^4.11.4",
+    "axe-core": "^4.12.0",
     "body-parser": "^2.2.2",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
@@ -158,13 +158,13 @@
     "@types/passport-oauth2": "^1.8.0",
     "@types/superagent": "^8.1.10",
     "@types/supertest": "^7.2.0",
-    "@typescript-eslint/eslint-plugin": "^8.60.0",
-    "@typescript-eslint/parser": "^8.60.0",
+    "@typescript-eslint/eslint-plugin": "^8.60.1",
+    "@typescript-eslint/parser": "^8.60.1",
     "audit-ci": "^7.1.0",
     "aws-sdk-client-mock": "^4.1.0",
     "chai": "^6.2.2",
     "chokidar": "^3.6.0",
-    "concurrently": "^10.0.1",
+    "concurrently": "^10.0.3",
     "cypress": "^15.16.0",
     "cypress-ctrf-json-reporter": "^0.0.14",
     "cypress-diff": "^0.0.6",
@@ -194,7 +194,7 @@
   "overrides": {
     "@babel/plugin-transform-modules-systemjs": "^7.29.7",
     "@cypress/code-coverage": {
-      "js-yaml": "4.1.1"
+      "js-yaml": "4.2.0"
     },
     "diff": "^8.0.4",
     "fast-uri": "^3.1.2",
