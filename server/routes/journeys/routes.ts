@@ -30,6 +30,7 @@ export default function JourneyRoutes(services: Services) {
     /* eslint-disable no-param-reassign */
     const mergeObjects = <T extends Record<string, unknown>>(destination: T, source: Partial<T>) => {
       Object.entries(source).forEach(([key, value]) => {
+        if (key === '__proto__' || key === 'constructor') return
         if (typeof value === 'object' && !Array.isArray(value)) {
           if (!destination[key]) {
             // @ts-expect-error set up object for future recursive writes

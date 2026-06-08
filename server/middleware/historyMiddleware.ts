@@ -119,7 +119,7 @@ export function historyMiddleware(
       }
 
       res.setAuditDetails.suppress(true)
-      return res.redirect(`${req.originalUrl.split('?')[0]}?${str}`)
+      return res.redirect(`${req.middleware!.safeOriginalUrl!.split('?')[0]}?${str}`)
     }
 
     const history = pruneHistory(req.originalUrl, queryHistory)

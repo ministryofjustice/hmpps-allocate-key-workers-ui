@@ -97,7 +97,9 @@ export declare global {
       middleware?: {
         prisonerData?: Prisoner
         policy?: PolicyType
+        policyPath?: string
         prisonConfiguration?: components['schemas']['PrisonConfigResponse']
+        safeOriginalUrl?: string
       }
     }
 

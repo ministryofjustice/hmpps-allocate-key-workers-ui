@@ -56,7 +56,7 @@ export const requirePermissionsAndConfig =
       case PermissionResult.ALLOW:
         return next()
       case PermissionResult.NOT_AUTHORISED:
-        return res.redirect(`/${req.params['policy']}/not-authorised`)
+        return res.redirect(`/${req.middleware!.policyPath}/not-authorised`)
       case PermissionResult.SERVICE_NOT_ENABLED:
       default:
         return res.render('pages/service-not-enabled')
@@ -78,6 +78,7 @@ export function populateUserPermissionsAndPrisonConfig({ allocationsApiService }
       }
 
       req.middleware.policy = policyConfig.jobResponsibility
+      req.middleware.policyPath = policy
       res.locals.policyStaff = policyConfig.staff
       res.locals.policyStaffs = policyConfig.staffs
       res.locals.policyPath = policyConfig.path

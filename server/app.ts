@@ -67,8 +67,16 @@ export default function createApp(services: Services): express.Application {
       dpsUrl: config.serviceUrls.digitalPrison,
     }),
   )
-  app.use((_req, res, next) => {
+  app.use((req, res, next) => {
     res.notFound = () => res.status(404).render('pages/not-found')
+
+    if (req.originalUrl.length > 2048) {
+      throw new Error(`Abnormal long url of length ${req.originalUrl.length} received`)
+    }
+
+    req.middleware ??= {}
+    req.middleware.safeOriginalUrl = req.originalUrl
+
     next()
   })
 

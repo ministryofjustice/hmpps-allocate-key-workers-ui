@@ -56,6 +56,7 @@ describe('historyMiddleware', () => {
     req.headers = { referer: 'http://0.0.0.0:3000/key-worker' }
     req.query = {}
     req.originalUrl = '/key-worker/allocate'
+    req.middleware = { safeOriginalUrl: '/key-worker/allocate' }
     req.method = 'GET'
     middleware(req, res, next)
 
@@ -69,6 +70,7 @@ describe('historyMiddleware', () => {
 
     req.query = { history: historyToBase64(['/key-worker']) }
     req.originalUrl = `/key-worker/allocate?history=${historyToBase64(['/key-worker'])}`
+    req.middleware = { safeOriginalUrl: `/key-worker/allocate?history=${historyToBase64(['/key-worker'])}` }
     req.method = 'PUT'
     middleware(req, res, next)
 
@@ -81,6 +83,7 @@ describe('historyMiddleware', () => {
 
     req.query = { history: historyToBase64(['/key-worker']) }
     req.originalUrl = `/key-worker/allocate?history=${historyToBase64(['/key-worker'])}`
+    req.middleware = { safeOriginalUrl: `/key-worker/allocate?history=${historyToBase64(['/key-worker'])}` }
     req.method = 'GET'
     historyMiddleware(mockGetLandmarks, /\/key-worker\/allocate/)(req, res, next)
 
@@ -100,6 +103,9 @@ describe('historyMiddleware', () => {
       ]),
     }
     req.originalUrl = `/key-worker/prisoner-allocation-history/A0262EA?history=${req.query['history']}}`
+    req.middleware = {
+      safeOriginalUrl: `/key-worker/prisoner-allocation-history/A0262EA?history=${req.query['history']}}`,
+    }
     req.method = 'GET'
     middleware(req, res, next)
 
@@ -154,6 +160,7 @@ describe('historyMiddleware', () => {
     }
 
     req.originalUrl = `/key-worker/allocate`
+    req.middleware = { safeOriginalUrl: `/key-worker/allocate` }
     req.method = 'GET'
     req.get = jest.fn().mockReturnValue('localhost')
 
@@ -189,6 +196,7 @@ describe('historyMiddleware', () => {
     }
 
     req.originalUrl = `/key-worker/staff-profile/488095/case-notes`
+    req.middleware = { safeOriginalUrl: `/key-worker/staff-profile/488095/case-notes` }
     req.method = 'GET'
     req.get = jest.fn().mockReturnValue('localhost')
     req.query = { history: historyToBase64(history) }
