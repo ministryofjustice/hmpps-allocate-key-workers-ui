@@ -164,7 +164,7 @@
     "aws-sdk-client-mock": "^4.1.0",
     "chai": "^6.2.2",
     "chokidar": "^3.6.0",
-    "concurrently": "^9.2.1",
+    "concurrently": "^10.0.1",
     "cypress": "^15.16.0",
     "cypress-ctrf-json-reporter": "^0.0.14",
     "cypress-diff": "^0.0.6",
