@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
 
 export default function removeTrailingSlashMiddleware(req: Request, res: Response, next: NextFunction) {
+  if (req.originalUrl.length > 2048) throw new Error(`Invalid url with length ${req.originalUrl.length}`)
+
   // remove trailing slash before query string, such as /add-any-alert/?alertType=D
   if (req.originalUrl.match(/\/\?/)) {
     return res.redirect(req.originalUrl.replace(/\/\?/g, '?'))
