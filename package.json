@@ -169,7 +169,7 @@
     "cypress-ctrf-json-reporter": "^0.0.14",
     "cypress-diff": "^0.0.6",
     "cypress-multi-reporters": "^2.0.5",
-    "esbuild": "^0.28.0",
+    "esbuild": "^0.28.1",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-plugin-manifest": "^1.0.5",
