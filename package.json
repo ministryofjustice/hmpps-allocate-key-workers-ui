@@ -99,7 +99,7 @@
     "@aws-sdk/client-sqs": "^3.1068.0",
     "@cypress/code-coverage": "^4.0.3",
     "@ministryofjustice/frontend": "^9.0.0",
-    "@ministryofjustice/hmpps-auth-clients": "^2.0.0",
+    "@ministryofjustice/hmpps-auth-clients": "^3.0.0",
     "@ministryofjustice/hmpps-connect-dps-components": "^6.1.0",
     "@ministryofjustice/hmpps-connect-dps-shared-items": "^4.1.1",
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
@@ -169,7 +169,7 @@
     "cypress-ctrf-json-reporter": "^0.0.14",
     "cypress-diff": "^0.0.6",
     "cypress-multi-reporters": "^2.0.5",
-    "esbuild": "^0.28.0",
+    "esbuild": "^0.28.1",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-plugin-manifest": "^1.0.5",
@@ -197,7 +197,6 @@
       "js-yaml": "4.2.0"
     },
     "diff": "^9.0.0",
-    "fast-uri": "^3.1.2",
     "istanbul-lib-processinfo": {
       "uuid": "^14.0.0"
     },
