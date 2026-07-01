@@ -192,18 +192,7 @@
     "typescript": "^6.0.3"
   },
   "overrides": {
-    "@babel/plugin-transform-modules-systemjs": "^7.29.7",
-    "@cypress/code-coverage": {
-      "js-yaml": "4.2.0"
-    },
     "diff": "^9.0.0",
-    "istanbul-lib-processinfo": {
-      "uuid": "^14.0.1"
-    },
-    "qs": "^6.15.3",
-    "serialize-javascript": "^7.0.6",
-    "systeminformation": "^5.31.11",
-    "tmp": "^0.2.7",
-    "ws": "^8.21.0"
+    "serialize-javascript": "^7.0.6"
   }
 }
