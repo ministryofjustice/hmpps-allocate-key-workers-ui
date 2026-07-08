@@ -1,16 +1,3 @@
-/* eslint-disable import/first */
-/*
- * Do appinsights first as it does some magic instrumentation work, i.e. it affects other 'require's
- * In particular, applicationinsights automatically collects bunyan logs
- */
-import { initialiseAppInsights, buildAppInsightsClient } from '../utils/azureAppInsights'
-import applicationInfoSupplier from '../applicationInfo'
-
-const applicationInfo = applicationInfoSupplier()
-initialiseAppInsights()
-const telemetryClient = buildAppInsightsClient(applicationInfo)!
-
-// eslint-disable-next-line import/order
 import { Request, Response } from 'express'
 import HmppsAuthClient from './hmppsAuthClient'
 import { createRedisClient } from './redisClient'
@@ -25,6 +12,9 @@ import PrisonerSearchApiRestClient from '../services/prisonerSearch/prisonerSear
 import RedisCache from './cache/redisCache'
 import InMemoryCache from './cache/inMemoryCache'
 import CacheInterface from './cache/cacheInterface'
+import applicationInfoSupplier from '../applicationInfo'
+
+const applicationInfo = applicationInfoSupplier()
 
 type RestClientBuilder<T> = (token: string) => T
 type EnhancedRestClientBuilder<T> = (req: Request, res?: Response) => T
@@ -43,7 +33,6 @@ export const dataAccess = () => {
     locationsWithinPrisonApiClient: (token: string) => new LocationsInsidePrisonApiRestClient(token),
     prisonerSearchApiClient: (token: string) => new PrisonerSearchApiRestClient(token),
     tokenStore,
-    telemetryClient,
     cacheStore: <T>(prefix: string): CacheInterface<T> =>
       redisClient ? new RedisCache<T>(redisClient, prefix) : new InMemoryCache<T>(prefix),
   }
