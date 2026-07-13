@@ -5,7 +5,6 @@ import {
   retrieveAllocationJobResponsibilities,
 } from '@ministryofjustice/hmpps-connect-dps-components'
 import * as Sentry from '@sentry/node'
-import './sentry'
 
 import cypressCoverage from '@cypress/code-coverage/middleware/express'
 
@@ -29,6 +28,7 @@ import { handleApiError } from './middleware/handleApiError'
 import { auditPageViewMiddleware } from './middleware/audit/auditPageViewMiddleware'
 import { auditApiCallMiddleware } from './middleware/audit/auditApiCallMiddleware'
 import { AccessibilityStatementRoutes } from './routes/accessibility-statement/routes'
+import addUsernameAndCaseloadToTelemetry from './utils/azureAppInsights'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -83,6 +83,8 @@ export default function createApp(services: Services): express.Application {
       authenticationClient: services.authenticationClient,
     }),
   )
+
+  app.use(addUsernameAndCaseloadToTelemetry())
 
   app.get('/:policy/not-authorised', (req, res) => {
     res.status(403)
