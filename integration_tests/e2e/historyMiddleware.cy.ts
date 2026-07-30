@@ -150,7 +150,7 @@ context('historyMiddleware', () => {
       .shouldContainHistoryParam([
         '/key-worker',
         /\/key-worker\/allocate\?query=&cellLocationPrefix=&excludeActiveAllocations=true/,
-        /\/key-worker\/recommend-allocations\?allowPartialAllocation=true/,
+        /\/key-worker\/recommend-allocations/,
       ])
   })
 
