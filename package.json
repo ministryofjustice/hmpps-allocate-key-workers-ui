@@ -114,7 +114,7 @@
     "bunyan-format": "^0.2.1",
     "compression": "^1.8.1",
     "connect-flash": "^0.1.1",
-    "connect-redis": "^9.0.0",
+    "connect-redis": "^10.0.0",
     "csrf-sync": "^4.2.1",
     "cypress-axe": "^1.7.0",
     "date-fns": "^4.4.0",
