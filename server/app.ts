@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { Request } from 'express'
 import {
   getFrontendComponents,
   retrieveCaseLoadData,
@@ -6,6 +6,7 @@ import {
 } from '@ministryofjustice/hmpps-connect-dps-components'
 import * as Sentry from '@sentry/node'
 
+import { telemetryMiddleware } from '@ministryofjustice/hmpps-azure-telemetry'
 import type { Services } from './services'
 import config from './config'
 import nunjucksSetup from './utils/nunjucksSetup'
@@ -26,7 +27,6 @@ import { handleApiError } from './middleware/handleApiError'
 import { auditPageViewMiddleware } from './middleware/audit/auditPageViewMiddleware'
 import { auditApiCallMiddleware } from './middleware/audit/auditApiCallMiddleware'
 import { AccessibilityStatementRoutes } from './routes/accessibility-statement/routes'
-import addUsernameAndCaseloadToTelemetry from './utils/azureAppInsights'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -78,7 +78,11 @@ export default function createApp(services: Services): express.Application {
     }),
   )
 
-  app.use(addUsernameAndCaseloadToTelemetry())
+  app.use(
+    telemetryMiddleware.addUserMetadataToTelemetry({
+      getAttributes: (req: Request) => ({ username: req.user?.username }),
+    }),
+  )
 
   app.get('/:policy/not-authorised', (req, res) => {
     res.status(403)

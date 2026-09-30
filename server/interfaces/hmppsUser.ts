@@ -1,3 +1,4 @@
+import { UUID } from 'crypto'
 import { CaseLoad } from './caseLoad'
 import { PolicyType } from '../@types/policyType'
 
@@ -9,7 +10,8 @@ export type AuthSource = 'nomis' | 'delius' | 'external' | 'azuread'
 export interface BaseUser {
   authSource: AuthSource
   username: string
-  userId: string | undefined
+  userId: string | undefined // This is an id specific to the authSource, for example for NOMIS users this is the staffId
+  userUuid: UUID | undefined // This is a UUID created by HMPPS Auth upon first user login that is unique to the user across all authSources
   name: string | undefined
   displayName: string
   userRoles: string[]
