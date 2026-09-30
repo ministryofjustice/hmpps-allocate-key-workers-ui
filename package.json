@@ -10,14 +10,14 @@
     "build": "node esbuild/esbuild.config.js --build",
     "start": "node $NODE_OPTIONS dist/server.js | bunyan -o short",
     "start:dev": "concurrently -k -p \"[{name}]\" -n \"ESBuild,Node\" -c \"yellow.bold,cyan.bold\" \"node esbuild/esbuild.config.js --build --watch\" \"node esbuild/esbuild.config.js --dev-server\"",
-    "start-feature": "npx nyc instrument dist --nycrc-path ./.nycrc && node $NODE_DEBUG_OPTION --env-file=feature.env dist/server.js | bunyan -o short",
+    "start-feature": "node $NODE_DEBUG_OPTION --env-file=feature.env dist/server.js | bunyan -o short",
     "start-e2e": "npm run start-feature",
     "start-feature:dev": "concurrently -k -p \"[{name}]\" -n \"ESBuild,Node\" -c \"yellow.bold,cyan.bold\" \"node esbuild/esbuild.config.js  --build --watch \" \"node esbuild/esbuild.config.js --dev-test-server\"",
     "lint": "eslint . --cache --max-warnings 0",
     "lint-fix": "eslint . --cache --max-warnings 0 --fix",
     "typecheck": "tsc && tsc -p integration_tests && tsc -p server/routes",
     "test": "jest",
-    "test:ci": "jest --runInBand && rm -rf test_results/jest/lcov-report/file:",
+    "test:ci": "jest --runInBand",
     "security_audit": "npx audit-ci --config audit-ci.json",
     "int-test": "cypress run --config video=false",
     "int-test-ui": "cypress open --e2e --browser chrome",
@@ -41,15 +41,6 @@
         }
       ]
     },
-    "collectCoverage": true,
-    "collectCoverageFrom": [
-      "server/**/*.{ts,js,jsx,mjs}"
-    ],
-    "coverageDirectory": "test_results/jest/",
-    "coverageReporters": [
-      "json",
-      "lcov"
-    ],
     "testMatch": [
       "<rootDir>/(server|job)/**/?(*.)(test).{ts,js,jsx,mjs}"
     ],
@@ -75,15 +66,6 @@
       "json",
       "node",
       "ts"
-    ],
-    "coveragePathIgnorePatterns": [
-      ".*.test.ts",
-      "node_modules",
-      "server/@types",
-      ".*jest.config.js",
-      "server/app.ts",
-      "server/index.ts",
-      ".*.cy.ts"
     ]
   },
   "lint-staged": {
@@ -97,7 +79,6 @@
   },
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.1140.0",
-    "@cypress/code-coverage": "^4.0.3",
     "@ministryofjustice/frontend": "^11.1.0",
     "@ministryofjustice/hmpps-auth-clients": "^3.0.0",
     "@ministryofjustice/hmpps-azure-telemetry": "1.1.0",
@@ -106,7 +87,6 @@
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
     "@ministryofjustice/hmpps-prison-permissions-lib": "^4.4.0",
     "@sentry/node": "^10.75.3",
-    "@types/cypress__code-coverage": "^3.10.2",
     "agentkeepalive": "^4.6.0",
     "axe-core": "^4.13.0",
     "body-parser": "^2.3.0",
@@ -136,7 +116,6 @@
   "devDependencies": {
     "@emnapi/core": "1.11.3",
     "@emnapi/runtime": "1.11.3",
-    "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@jgoz/esbuild-plugin-typecheck": "^5.0.0",
     "@ministryofjustice/eslint-config-hmpps": "^1.0.3",
     "@ministryofjustice/hmpps-precommit-hooks": "3.0.2",
