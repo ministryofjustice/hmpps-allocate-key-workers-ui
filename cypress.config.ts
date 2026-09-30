@@ -1,5 +1,4 @@
 import { defineConfig } from 'cypress'
-import coverageTask from '@cypress/code-coverage/task'
 import { GenerateCtrfReport } from 'cypress-ctrf-json-reporter'
 import { gunzipSync, gzipSync } from 'zlib'
 import { resetStubs } from './integration_tests/mockApis/wiremock'
@@ -24,7 +23,6 @@ export default defineConfig({
   taskTimeout: 60000,
   e2e: {
     setupNodeEvents(on, config) {
-      coverageTask(on, config)
       on('task', {
         reset: resetStubs,
         ...auth,
@@ -57,11 +55,6 @@ export default defineConfig({
     specPattern: '**/*.cy.{js,jsx,ts,tsx}',
     supportFile: 'integration_tests/support/index.ts',
     experimentalRunAllSpecs: true,
-    env: {
-      codeCoverage: {
-        url: 'http://localhost:3007/__coverage__',
-      },
-    },
     retries: {
       runMode: 2,
     },

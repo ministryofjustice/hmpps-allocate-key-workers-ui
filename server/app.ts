@@ -6,8 +6,6 @@ import {
 } from '@ministryofjustice/hmpps-connect-dps-components'
 import * as Sentry from '@sentry/node'
 
-import cypressCoverage from '@cypress/code-coverage/middleware/express'
-
 import type { Services } from './services'
 import config from './config'
 import nunjucksSetup from './utils/nunjucksSetup'
@@ -32,10 +30,6 @@ import addUsernameAndCaseloadToTelemetry from './utils/azureAppInsights'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
-
-  if (process.env.NODE_ENV === 'e2e-test') {
-    cypressCoverage(app)
-  }
 
   app.set('json spaces', 2)
   app.set('trust proxy', true)

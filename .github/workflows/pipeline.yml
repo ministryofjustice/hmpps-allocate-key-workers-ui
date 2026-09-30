@@ -49,6 +49,7 @@ jobs:
     secrets: inherit
     with:
       install_command: 'npm run setup'
+      npm_version: '12'
   # generic node unit tests - feel free to override with local tests if required
   node_unit_tests:
     name: node unit tests
@@ -80,10 +81,6 @@ jobs:
         npx github-actions-ctrf failed-folded artifacts/npm_unit_test_artifacts/jest/ctrf.json
         npx github-actions-ctrf tests artifacts/npm_integration_test_artifacts/ctrf/ctrf-report.json
         npx github-actions-ctrf failed-folded artifacts/npm_integration_test_artifacts/ctrf/ctrf-report.json
-    - name: Upload coverage results to Codecov
-      uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     needs:
       - node_integration_tests
       - node_unit_tests

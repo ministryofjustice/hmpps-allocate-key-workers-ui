@@ -1,7 +1,6 @@
 # HMPPS Allocate Key Workers and Personal Officers UI
 
 [![Ministry of Justice Repository Compliance Badge](https://github-community.service.justice.gov.uk/repository-standards/api/hmpps-allocate-key-workers-ui/badge?style=flat)](https://github-community.service.justice.gov.uk/repository-standards/hmpps-allocate-key-workers-ui)
-[![codecov](https://codecov.io/github/ministryofjustice/hmpps-allocate-key-workers-ui/graph/badge.svg?token=Y9DDNQZ1J1)](https://codecov.io/github/ministryofjustice/hmpps-allocate-key-workers-ui)
 [![Docker Repository on ghcr](https://img.shields.io/badge/ghcr.io-repository-2496ED.svg?logo=docker)](https://ghcr.io/ministryofjustice/hmpps-allocate-key-workers-ui)
 
 A frontend application for HMPPS prison staff to manage key worker and personal officer allocations to prisoners.
