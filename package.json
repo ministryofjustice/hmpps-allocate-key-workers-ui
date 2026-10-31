@@ -78,7 +78,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.1152.0",
+    "@aws-sdk/client-sqs": "^3.1156.0",
     "@ministryofjustice/frontend": "^11.1.0",
     "@ministryofjustice/hmpps-auth-clients": "^3.0.0",
     "@ministryofjustice/hmpps-azure-telemetry": "1.1.0",
@@ -86,7 +86,7 @@
     "@ministryofjustice/hmpps-connect-dps-shared-items": "^5.3.2",
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
     "@ministryofjustice/hmpps-prison-permissions-lib": "^5.3.0",
-    "@sentry/node": "^11.8.0",
+    "@sentry/node": "^11.9.0",
     "agentkeepalive": "^4.6.0",
     "axe-core": "^4.14.0",
     "body-parser": "^2.3.0",
@@ -138,8 +138,8 @@
     "@types/passport-oauth2": "^1.8.0",
     "@types/superagent": "^8.1.11",
     "@types/supertest": "^7.2.1",
-    "@typescript-eslint/eslint-plugin": "^8.71.2",
-    "@typescript-eslint/parser": "^8.71.2",
+    "@typescript-eslint/eslint-plugin": "^8.72.0",
+    "@typescript-eslint/parser": "^8.72.0",
     "audit-ci": "^7.1.0",
     "aws-sdk-client-mock": "^4.1.0",
     "chai": "^6.3.0",
@@ -166,7 +166,7 @@
     "nyc": "^18.0.0",
     "prettier": "^3.9.10",
     "prettier-plugin-jinja-template": "^2.2.0",
-    "sass-embedded": "^1.105.2",
+    "sass-embedded": "^1.106.1",
     "supertest": "^7.3.1",
     "ts-jest": "^29.4.15",
     "typescript": "^6.0.3"
@@ -174,7 +174,7 @@
   "overrides": {
     "@opentelemetry/core": "2.12.0",
     "diff": "^9.0.0",
-    "serialize-javascript": "^7.1.2"
+    "serialize-javascript": "^7.1.4"
   },
   "allowScripts": {
     "@parcel/watcher@2.6.0": true,
